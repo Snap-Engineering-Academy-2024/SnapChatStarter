@@ -12,9 +12,25 @@ export default function UserChat({ chatId }) {
   const { user, userData } = useAuthentication();
 
   useEffect(() => {
-    let unsubscribeFromNewSnapshots = onSnapshot(chatRef, (doc) => {
-      console.log("New Snapshot (chat sent or received)!");
-      setMessages(doc.data().messages);
+    let unsubscribeFromNewSnapshots = onSnapshot(chatRef, (snapshot) => {
+      const dbMessages = snapshot.data().messages;
+
+      // if we've already seen the most recent message, don't refresh
+      if (
+        dbMessages.length > 0 &&
+        messages.length > 0 &&
+        dbMessages.slice(-1).createdAt == messages.slice(-1).createdAt
+      )
+        return;
+
+      let fixTimestampMessages = dbMessages.map((obj) => {
+        return {
+          ...obj,
+          createdAt: obj.createdAt.toDate(),
+        };
+      });
+
+      setMessages(fixTimestampMessages.reverse());
     });
 
     return function cleanupBeforeUnmounting() {
@@ -22,15 +38,21 @@ export default function UserChat({ chatId }) {
     };
   }, []);
 
-  const onSend = useCallback((messages = []) => {
+  const onSend = useCallback((newMessages = []) => {
     updateDoc(chatRef, {
       // arrayUnion appends the message to the existing array
-      messages: arrayUnion(messages[0]),
+      messages: arrayUnion(newMessages[0]),
+    });
+
+    setMessages((previousMessages) => {
+      // console.log("PREVIOUS MESSAGES:", previousMessages);
+      // console.log("NEW MESSAGE:", newMessages);
+      return GiftedChat.append(previousMessages, newMessages);
     });
   }, []);
 
   // if the user or user data doesn't exist, don't load da chat
-  if (!user || !userData || chatRef) {
+  if (!user || !userData || !chatRef) {
     return (
       <View>
         <Text>Missing user data or chat ref</Text>
@@ -43,11 +65,12 @@ export default function UserChat({ chatId }) {
       messages={messages}
       onSend={(messages) => onSend(messages)}
       user={{
-        _id: user.uid,
-        name: userData.name,
+        // current "blue bubble" user
+        _id: user ? user.uid : "anon-user-id",
+        name: userData ? userData.name : "Anonymous",
+        // avatar: "https://placeimg.com/140/140/any",
       }}
-      inverted={false}
-      showUserAvatar={true}
+      // showUserAvatar={true}
       renderUsernameOnMessage={true}
     />
   );
