@@ -44,6 +44,7 @@ export default function LoginScreen({ navigation }) {
         console.log(errorMessage, "<--- error message");
         if (errorCode=="auth/email-already-in-use"){
           setAlreadyInUseButton(true)
+          //if the error code says there's already an existing account, set the varibale to that
           setAlreadyInUseMessage("That email is already associated with a username")
           console.log("alreadyInUseButton: ", alreadyInUseButton)
         }
@@ -51,6 +52,7 @@ export default function LoginScreen({ navigation }) {
           setAlreadyInUseMessage("")
         }
 
+        
       });
   }
 
