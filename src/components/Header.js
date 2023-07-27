@@ -2,14 +2,24 @@ import { Text, View, StyleSheet, Button } from "react-native";
 import { colors } from "../../assets/themes/colors";
 import { fontHeader } from "../../assets/themes/font";
 import { Followers, More, Search } from "../../assets/snapchat/HeaderIcons";
+import { createStackNavigator } from "@react-navigation/stack";
+import ProfileScreen from "../screens/ProfileScreen";
+import { Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+const Stack = createStackNavigator();
 
 export default function Header({ title }) {
+  const navigation = useNavigation();
   return (
+
     <View style={styles.container}>
       <View style={styles.headerLeft}>
-        <View style={[styles.profile, styles.buttons]}>
-          {/* INSERT PROFILE AVATAR */}
-        </View>
+        <Pressable style={[styles.profile, styles.buttons]} 
+          onPress={() => {
+          navigation.navigate("Test")
+        }}
+        >
+        </Pressable>
         <View style={[styles.search, styles.buttons]}>
           <Search />
         </View>

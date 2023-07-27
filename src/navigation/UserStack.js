@@ -26,6 +26,7 @@ import MapScreen from "../screens/MapScreen";
 import CameraScreen from "../screens/CameraScreen";
 import StoriesScreen from "../screens/StoriesScreen";
 import SpotlightScreen from "../screens/SpotlightScreen";
+import ChatScreen from "../screens/ChatScreen";
 
 // Stacks
 import ChatStack from "./ChatStack";
@@ -33,7 +34,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 
-export default function UserStack({ route }) {
+export default function UserStack({ route, navigation }) {
   const auth = getAuth();
   const user = auth.currentUser;
 
@@ -58,7 +59,7 @@ export default function UserStack({ route }) {
   };
 
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <Tab.Navigator
         tabBar={(props) => <CustomTabBar {...props} />}
         activeColor="#f0edf6"
@@ -96,7 +97,7 @@ export default function UserStack({ route }) {
           options={screenOptions}
         />
       </Tab.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 }
 

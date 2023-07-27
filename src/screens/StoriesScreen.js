@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import Header from "../components/Header";
 
-export default function StoriesScreen() {
+export default function StoriesScreen({route, navigation}) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
 
@@ -25,6 +25,7 @@ export default function StoriesScreen() {
     >
       <Header title="Stories" />
       <Text>Stories Screen</Text>
+      <Pressable onPress={() => navigation.navigate("Test")}><Text>I'm Pressable</Text></Pressable>
     </View>
   );
 }
