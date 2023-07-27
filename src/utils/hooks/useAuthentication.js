@@ -25,7 +25,9 @@ export function useAuthentication() {
               setUserData(userData.data());
             })
             .catch((error) => {
-              console.log("Error getting document:", error);
+              console.log("Error getting user data:", error);
+              console.log("setting user data to dummy obj");
+              setUserData({ name: "No username found" });
             });
         } else {
           // User is signed out

@@ -10,7 +10,6 @@ const CHATBOT_USER_OBJ = {
 };
 
 export default function BasicChatbot() {
-  console.log("hello");
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
