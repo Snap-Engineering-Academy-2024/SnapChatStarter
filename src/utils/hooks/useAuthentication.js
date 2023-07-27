@@ -9,6 +9,20 @@ export function useAuthentication() {
   const [user, setUser] = useState();
   const [userData, setUserData] = useState();
 
+  const getUserData = async (userAuthObj) => {
+    // get Doc from User collection
+    const docRef = doc(db, "Users", userAuthObj.uid);
+    const userData = await getDoc(docRef).catch((error) => {
+      console.log("error getting userData", error);
+    });
+    if (userData.exists()) {
+      setUserData(userData.data());
+    } else {
+      console.log("Error getting user data, setting to dummy obj");
+      setUserData({ name: "No username found" });
+    }
+  };
+
   useEffect(() => {
     const unsubscribeFromAuthStatusChanged = onAuthStateChanged(
       auth,
@@ -18,17 +32,7 @@ export function useAuthentication() {
           // https://firebase.google.com/docs/reference/js/firebase.User
           setUser(user);
 
-          // get Doc from User collection
-          getDoc(doc(db, "Users", user.uid))
-            .then((userData) => {
-              // console.log("User Doc", userData.data());
-              setUserData(userData.data());
-            })
-            .catch((error) => {
-              console.log("Error getting user data:", error);
-              console.log("setting user data to dummy obj");
-              setUserData({ name: "No username found" });
-            });
+          getUserData(user);
         } else {
           // User is signed out
           setUser(undefined);
