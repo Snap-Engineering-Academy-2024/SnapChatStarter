@@ -25,7 +25,8 @@ export default function LoginScreen({ navigation }) {
       name: email,
     });
   }
-
+  const [alreadyInUseButton, setAlreadyInUseButton]= useState(false);
+  const [alreadyInUseMessage, setAlreadyInUseMessage]= useState("");
   async function handleSubmit() {
     console.log("handle submit envoked!!");
 
@@ -41,14 +42,26 @@ export default function LoginScreen({ navigation }) {
         const errorMessage = error.message;
         console.log(errorCode, "<---- error code");
         console.log(errorMessage, "<--- error message");
+        if (errorCode=="auth/email-already-in-use"){
+          setAlreadyInUseButton(true)
+          setAlreadyInUseMessage("That email is already associated with a username")
+          console.log("alreadyInUseButton: ", alreadyInUseButton)
+        }
+        else{
+          setAlreadyInUseMessage("")
+        }
+
       });
   }
 
+  
   return (
     <View style={styles.signUpScreen}>
       <ReturnButton navigation={navigation} returnName={"AuthHome"} />
       <Text style={styles.signUpTitle}>Sign Up</Text>
+     
       <View style={styles.signUpFields}>
+        <Text style={styles.accountExistsText}>{alreadyInUseMessage}</Text>
         <Text style={styles.inputText}>USERNAME OR EMAIL</Text>
         <TextInput
           style={styles.inputField}
@@ -94,6 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "500",
     letterSpacing: 2,
+ 
   },
   signUpFields: {
     width: 250,
@@ -115,7 +129,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   disclaimerText: {
-    position: "absolute",
+    //position: "absolute",
     top: 135,
     fontSize: 12,
   },
@@ -135,5 +149,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#FFF",
+  },
+  accountExistsText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "red",
+    padding: 5,
+    textAlign: "center"
   },
 });
