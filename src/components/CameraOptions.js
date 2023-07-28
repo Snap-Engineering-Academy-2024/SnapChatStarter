@@ -36,7 +36,7 @@ export default function CameraOptions({ flipCamera, switchFlash }) {
       <TouchableOpacity>
         <Ionicons
           style={styles.videoIcon}
-          name="ios-film-outline"
+          name="ios-videocam"
           size={30}
           color="white"
         />
