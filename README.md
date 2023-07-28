@@ -18,4 +18,4 @@ Pick something you want to fix/add about the starter code, put it in the Slack a
 
 ## 4. Create your pull request
 
-More instructions to come.
+Making these instructions now!
