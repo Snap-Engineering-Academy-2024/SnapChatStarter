@@ -53,7 +53,7 @@ export default function PostcaptureOptions({ savePhoto, deletePhoto }) {
         </TouchableOpacity>
         <TouchableOpacity>
           <Ionicons
-            style={styles.nightModeIcon}
+            style={styles.musicIcon}
             name="musical-notes"
             size={30}
             color="white"
@@ -61,7 +61,7 @@ export default function PostcaptureOptions({ savePhoto, deletePhoto }) {
         </TouchableOpacity>
         <TouchableOpacity>
           <Ionicons
-            style={styles.nightModeIcon}
+            style={styles.musicIcon}
             name="search"
             size={30}
             color="white"
@@ -69,7 +69,7 @@ export default function PostcaptureOptions({ savePhoto, deletePhoto }) {
         </TouchableOpacity>
         <TouchableOpacity onPress={deletePhoto}>
           <Ionicons
-            style={styles.nightModeIcon}
+            style={styles.musicIcon}
             name="download-outline"
             size={30}
             color="white"
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     transform: [{ rotate: "10deg" }],
   },
-  nightModeIcon: {
+  musicIcon: {
     marginTop: 20,
   },
 });
