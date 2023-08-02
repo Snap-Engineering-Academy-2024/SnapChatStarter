@@ -36,7 +36,7 @@ export default function CameraOptions({ flipCamera, switchFlash }) {
       <TouchableOpacity>
         <Ionicons
           style={styles.videoIcon}
-          name="ios-film-outline"
+          name="ios-videocam"
           size={30}
           color="white"
         />
@@ -71,19 +71,19 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   flipIcon: {
-    marginTop: 5,
+    marginTop: 10,
     transform: [{ rotate: "90deg" }],
   },
   flashIcon: {
-    marginTop: 10,
+    marginTop: 20,
   },
   videoIcon: {
-    marginTop: 10,
+    marginTop: 20,
   },
   musicIcon: {
-    marginTop: 10,
+    marginTop: 20,
   },
   nightModeIcon: {
-    marginTop: 10,
+    marginTop: 20,
   },
 });
