@@ -1,9 +1,8 @@
 import React from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
-import UserStack from "./UserStack";
 import AuthStack from "./AuthStack";
-import UserRealStack from "./UserRealStack";
+import UserStack from "./UserStack";
 
 export default function RootNavigation() {
   const { user } = useAuthentication();
@@ -13,7 +12,7 @@ export default function RootNavigation() {
     devAutoLogin(auth);
   }
 
-  return user ? <UserRealStack /> : <AuthStack />;
+  return user ? <UserStack /> : <AuthStack />;
 }
 
 async function devAutoLogin(auth) {
