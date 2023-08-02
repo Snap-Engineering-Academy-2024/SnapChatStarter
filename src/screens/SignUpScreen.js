@@ -4,32 +4,27 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import db from "../../firebase";
-
 // Components
 import ReturnButton from "../components/ReturnButton";
-
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
   const auth = getAuth();
-
   function createUser(email, uid) {
     setDoc(doc(db, "Users", uid), {
       _id: uid,
       name: email,
     });
   }
-  const [alreadyInUseButton, setAlreadyInUseButton]= useState(false);
-  const [alreadyInUseMessage, setAlreadyInUseMessage]= useState("");
+
   async function handleSubmit() {
     console.log("handle submit envoked!!");
-
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // creates user using setDoc firebase
@@ -42,26 +37,24 @@ export default function LoginScreen({ navigation }) {
         const errorMessage = error.message;
         console.log(errorCode, "<---- error code");
         console.log(errorMessage, "<--- error message");
-        if (errorCode=="auth/email-already-in-use"){
-          setAlreadyInUseButton(true)
+        if (errorCode == "auth/email-already-in-use") {
+          setAlreadyInUseButton(true);
           //if the error code says there's already an existing account, set the varibale to that
-          setAlreadyInUseMessage("That email is already associated with a username")
-          console.log("alreadyInUseButton: ", alreadyInUseButton)
+          setAlreadyInUseMessage(
+            "That email is already associated with a username"
+          );
+          console.log("alreadyInUseButton: ", alreadyInUseButton);
+        } else {
+          setAlreadyInUseMessage("");
         }
-        else{
-          setAlreadyInUseMessage("")
-        }
-
-        
       });
   }
 
-  
   return (
     <View style={styles.signUpScreen}>
       <ReturnButton navigation={navigation} returnName={"AuthHome"} />
       <Text style={styles.signUpTitle}>Sign Up</Text>
-     
+
       <View style={styles.signUpFields}>
         <Text style={styles.accountExistsText}>{alreadyInUseMessage}</Text>
         <Text style={styles.inputText}>USERNAME OR EMAIL</Text>
@@ -80,8 +73,23 @@ export default function LoginScreen({ navigation }) {
         />
         <Text style={styles.disclaimerText}>
           By tapping Sign Up & Accept, you acknowledge that you have read the{" "}
-          <Text style={styles.blueText}>Privacy Policy</Text> and agree to the{" "}
-          <Text style={styles.blueText}>Terms of Service</Text>.
+          <TouchableOpacity
+            styles={styles.blueText}
+            onPress={() =>
+              Linking.openURL(
+                "https://values.snap.com/privacy/privacy-policy#:~:text=We%20may%20collect%20information%20about%20you%20from%20other%20users%2C%20our,how%20you%20use%20that%20service."
+              )
+            }
+          >
+            <Text style={styles.blueText}>Privacy Policy</Text>
+          </TouchableOpacity>{" "}
+          and agree to the{" "}
+          <TouchableOpacity
+            onPress={() => Linking.openURL("https://snap.com/en-US/terms")}
+          >
+            <Text style={styles.blueText}>Terms of Service</Text>
+          </TouchableOpacity>
+          .
         </Text>
       </View>
       <TouchableOpacity
@@ -95,7 +103,6 @@ export default function LoginScreen({ navigation }) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   signUpScreen: {
     backgroundColor: "#FFF",
@@ -109,7 +116,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "500",
     letterSpacing: 2,
- 
   },
   signUpFields: {
     width: 250,
@@ -119,13 +125,13 @@ const styles = StyleSheet.create({
   },
   inputText: {
     marginBottom: 20,
-    color: "#b1b1b1",
+    color: "#B1B1B1",
     fontSize: 12,
     fontWeight: "700",
     letterSpacing: 1,
   },
   inputField: {
-    borderBottomColor: "#aeb5bf",
+    borderBottomColor: "#AEB5BF",
     borderBottomWidth: 1,
     marginBottom: 20,
     fontWeight: "600",
@@ -136,11 +142,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   blueText: {
-    color: "#2b83b3",
+    color: "#2B83B3",
+    fontSize: 12,
+    paddingTop: 2,
   },
   signUpButton: {
     padding: 15,
-    backgroundColor: "#aeb5bf",
+    backgroundColor: "#AEB5BF",
     width: 250,
     alignItems: "center",
     borderRadius: 25,
@@ -157,6 +165,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "red",
     padding: 5,
-    textAlign: "center"
+    textAlign: "center",
   },
 });

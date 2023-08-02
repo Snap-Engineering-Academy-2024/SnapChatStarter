@@ -22,8 +22,8 @@ export default function MapScreen({ navigation }) {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const [currentRegion, setCurrentRegion] = useState({
-    latitude: 34.021216555498675,
-    longitude: -118.45007599325494,
+    latitude: 34.0211573,
+    longitude:  -118.4503864,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
