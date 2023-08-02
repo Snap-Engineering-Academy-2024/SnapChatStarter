@@ -23,7 +23,7 @@ export default function DiscoverFeed() {
           uri: "https://eccles.utah.edu/wp-content/uploads/2017/02/snapchat.jpg",
         }}
       >
-        <Text style={styles.FeedText}>Hello My Name Is Chillah</Text>
+        <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
       </ImageBackground>
     </View>
     // </View>
