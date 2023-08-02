@@ -29,7 +29,6 @@ import SpotlightScreen from "../screens/SpotlightScreen";
 import ChatScreen from "../screens/ChatScreen";
 
 // Stacks
-import ChatStack from "./ChatStack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
@@ -59,52 +58,48 @@ export default function UserStack({ route, navigation }) {
   };
 
   return (
-    // <NavigationContainer>
-      <Tab.Navigator
-        tabBar={(props) => <CustomTabBar {...props} />}
-        activeColor="#f0edf6"
-        inactiveColor="#3e2465"
-        barStyle={{
-          backgroundColor: "black",
-        }}
-        initialRouteName="Camera"
-      >
-        <Tab.Screen
-          name="Map"
-          component={MapScreen}
-          options={{ ...screenOptions, headerShown: false }}
-        />
-        <Tab.Screen
-          name="ChatStack"
-          component={ChatStack}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Tab.Screen
-          name="Camera"
-          component={CameraScreen}
-          options={{ ...screenOptions, headerShown: false }}
-        />
-        <Tab.Screen
-          name="Stories"
-          component={StoriesScreen}
-          options={(screenOptions, { headerShown: false })}
-        />
-        <Tab.Screen
-          name="Spotlight"
-          component={SpotlightScreen}
-          options={screenOptions}
-        />
-      </Tab.Navigator>
-    // </NavigationContainer>
+    <Tab.Navigator
+      tabBar={(props) => <CustomTabBar {...props} />}
+      activeColor="#f0edf6"
+      inactiveColor="#3e2465"
+      barStyle={{
+        backgroundColor: "black",
+      }}
+      initialRouteName="Camera"
+    >
+      <Tab.Screen
+        name="Map"
+        component={MapScreen}
+        options={{ ...screenOptions, headerShown: false }}
+      />
+      <Tab.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={(screenOptions, { headerShown: false })}
+      />
+      <Tab.Screen
+        name="Camera"
+        component={CameraScreen}
+        options={{ ...screenOptions, headerShown: false }}
+      />
+      <Tab.Screen
+        name="Stories"
+        component={StoriesScreen}
+        options={(screenOptions, { headerShown: false })}
+      />
+      <Tab.Screen
+        name="Spotlight"
+        component={SpotlightScreen}
+        options={screenOptions}
+      />
+    </Tab.Navigator>
   );
 }
 
 const getTabIcon = (routeName, focused) => {
   if (routeName == "Map") {
     return focused ? <MapPinFill /> : <MapPinOutline />;
-  } else if (routeName === "ChatStack") {
+  } else if (routeName === "Chat") {
     return focused ? <ChatFill /> : <ChatOutline />;
   } else if (routeName === "Camera") {
     return focused ? <LensSearchFill /> : <CameraOutline />;
@@ -118,13 +113,6 @@ const getTabIcon = (routeName, focused) => {
 const CustomTabBar = (props) => {
   const { state, descriptors, navigation } = props;
   const insets = useSafeAreaInsets();
-
-  // Hide tab navigator if we're in the conversation screen of the Chat tab
-  // Will prevent tab navigator from being displayed in any screens that are
-  // not part of the tab navigator (is kinda sus)
-  if (state.index == 1 && state.routes[1]?.state?.index == 1) {
-    return null;
-  }
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>

@@ -16,6 +16,11 @@ export default function () {
           component={ProfileScreen}
           options={{ headerShown: true }}
         />
+        <Stack.Screen
+          name="Conversation"
+          component={ConversationScreen}
+          options={{ headerShown: true }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
