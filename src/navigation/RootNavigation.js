@@ -3,6 +3,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import UserStack from "./UserStack";
 import AuthStack from "./AuthStack";
+import UserRealStack from "./UserRealStack";
 
 export default function RootNavigation() {
   const { user } = useAuthentication();
@@ -12,7 +13,7 @@ export default function RootNavigation() {
     devAutoLogin(auth);
   }
 
-  return user ? <UserStack /> : <AuthStack />;
+  return user ? <UserRealStack /> : <AuthStack />;
 }
 
 async function devAutoLogin(auth) {
