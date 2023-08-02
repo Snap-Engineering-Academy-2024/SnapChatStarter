@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.interactionGraySubtle,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
   },
   profileImage: {
     width: "100%",
