@@ -48,7 +48,7 @@ export default function StoriesScreen({ route, navigation }) {
         </View>
       </ScrollView>
       <Text style={styles.Friends}>Discover</Text>
-      <ScrollView>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.DiscoveryContainer}>
           <DiscoverFeed />
           <DiscoverFeed />
