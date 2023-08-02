@@ -1,15 +1,29 @@
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, Image } from "react-native";
 import { colors } from "../../assets/themes/colors";
 import { fontHeader } from "../../assets/themes/font";
 import { Followers, More, Search } from "../../assets/snapchat/HeaderIcons";
+import { createStackNavigator } from "@react-navigation/stack";
+import ProfileScreen from "../screens/ProfileScreen";
+import { Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+const Stack = createStackNavigator();
 
 export default function Header({ title }) {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>
-        <View style={[styles.profile, styles.buttons]}>
-          {/* INSERT PROFILE AVATAR */}
-        </View>
+        <Pressable
+          style={[styles.profile, styles.buttons]}
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}
+        >
+          <Image
+            style={styles.profileImage}
+            source={require("../../assets/snapchat/defaultprofile.png")}
+          />
+        </Pressable>
         <View style={[styles.search, styles.buttons]}>
           <Search />
         </View>
@@ -78,5 +92,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.interactionGraySubtle,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
+  },
+  profileImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
   },
 });

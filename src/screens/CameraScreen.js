@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import CameraActions from "../components/CameraActions";
 import CameraOptions from "../components/CameraOptions";
+import PostcaptureOptions from "../components/PostcaptureActions";
 
 export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -88,16 +89,39 @@ export default function CameraScreen({ navigation, focused }) {
     };
 
     return (
-      <>
-        <Image
-          style={styles.preview}
-          source={{ uri: "data:image/jpg;base64," + photo.base64 }}
-        />
+      <View
+        style={[
+          styles.container,
+          {
+            marginBottom: tabBarHeight,
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+          },
+        ]}
+      >
+        {type === CameraType.front ? (
+          <Image
+            style={styles.frontPreview}
+            source={{ uri: "data:image/jpg;base64," + photo.base64 }}
+          />
+        ) : (
+          <Image
+            style={styles.preview}
+            source={{ uri: "data:image/jpg;base64," + photo.base64 }}
+          />
+        )}
         {hasMediaLibraryPermission ? (
-          <Button title="Save" onPress={savePhoto} />
-        ) : undefined}
-        <Button title="Discard" onPress={() => setPhoto(undefined)} />
-      </>
+          <PostcaptureOptions
+            deletePhoto={() => setPhoto(undefined)}
+            savePhoto={savePhoto}
+          ></PostcaptureOptions>
+        ) : (
+          <PostcaptureOptions
+            deletePhoto={() => setPhoto(undefined)}
+            savePhoto={undefined}
+          ></PostcaptureOptions>
+        )}
+      </View>
     );
   }
 
@@ -105,7 +129,11 @@ export default function CameraScreen({ navigation, focused }) {
     <View
       style={[
         styles.container,
-        { marginBottom: tabBarHeight, paddingTop: insets.top },
+        {
+          marginBottom: tabBarHeight,
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+        },
       ]}
     >
       <Camera style={styles.camera} type={type} ref={cameraRef} />
@@ -118,16 +146,23 @@ export default function CameraScreen({ navigation, focused }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "black",
   },
   camera: {
+    overflow: "hidden",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 16,
-    marginBottom: -16,
   },
   preview: {
-    height: "80%",
-    width: "100%",
+    flex: 1,
+    borderRadius: 16,
+    // transform: [{ scaleX: -1 }],
+  },
+  frontPreview: {
+    flex: 1,
+    borderRadius: 16,
+    transform: [{ scaleX: -1 }],
   },
 });
