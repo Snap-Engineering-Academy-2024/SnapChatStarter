@@ -1,7 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import UserTab from "./UserTab";
-import TestScreen from "../screens/TestScreen";
 import ConversationScreen from "../screens/ConversationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 

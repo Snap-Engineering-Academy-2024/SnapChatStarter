@@ -5,7 +5,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import Header from "../components/Header";
 
-export default function StoriesScreen({route, navigation}) {
+export default function StoriesScreen({ route, navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
 
@@ -25,7 +25,6 @@ export default function StoriesScreen({route, navigation}) {
     >
       <Header title="Stories" />
       <Text>Stories Screen</Text>
-      <Pressable onPress={() => navigation.navigate("Test")}><Text>I'm Pressable</Text></Pressable>
     </View>
   );
 }
