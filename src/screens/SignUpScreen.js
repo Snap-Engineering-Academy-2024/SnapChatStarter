@@ -23,6 +23,9 @@ export default function LoginScreen({ navigation }) {
     });
   }
 
+  const [alreadyInUseButton, setAlreadyInUseButton] = useState(false);
+  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState("");
+
   async function handleSubmit() {
     console.log("handle submit envoked!!");
     await createUserWithEmailAndPassword(auth, email, password)
