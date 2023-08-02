@@ -16,7 +16,7 @@ export default function Header({ title }) {
       <View style={styles.headerLeft}>
         <Pressable style={[styles.profile, styles.buttons]} 
           onPress={() => {
-          navigation.navigate("Test")
+          navigation.navigate("Profile")
         }}
         >
         </Pressable>
