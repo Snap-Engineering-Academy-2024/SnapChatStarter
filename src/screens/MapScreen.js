@@ -12,7 +12,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import * as Location from "expo-location";
-import Modal from "react-native-modal";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function MapScreen({ navigation }) {
@@ -23,7 +23,7 @@ export default function MapScreen({ navigation }) {
 
   const [currentRegion, setCurrentRegion] = useState({
     latitude: 34.0211573,
-    longitude: -118.4503864,
+    longitude:  -118.4503864,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -89,15 +89,6 @@ export default function MapScreen({ navigation }) {
             />
             <View style={styles.bitmojiTextContainer}>
               <Text style={styles.bitmojiText}>Places</Text>
-            </View>
-          </View>
-          <View style={styles.opportunities}>
-            <Image
-              style={styles.bitmojiImage}
-              source={require("../../assets/snapchat/personalBitmoji.png")}
-            />
-            <View style={styles.bitmojiTextContainer}>
-              <Text style={styles.bitmojiText}>Opportunities</Text>
             </View>
           </View>
           <View style={styles.myFriends}>
@@ -170,7 +161,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   myBitmoji: {
-    width: 80,
+    width: 70,
     height: 70,
     alignItems: "center",
     justifyContent: "center",
@@ -190,19 +181,13 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   places: {
-    width: 80,
+    width: 70,
     height: 70,
     alignItems: "center",
     justifyContent: "center",
   },
   myFriends: {
-    width: 80,
-    height: 70,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  opportunities: {
-    width: 80,
+    width: 70,
     height: 70,
     alignItems: "center",
     justifyContent: "center",
