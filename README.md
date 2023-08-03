@@ -74,7 +74,7 @@ The instructors will likely handle most of this process, consulting with the cre
 <br/>
 
 <details>
-<summary>Baker needs to add to this with his slack messages</summary>
+<summary>Notes for upgrading Expo and Firebase</summary>
 
 This is mostly meant for instructors in future years, but scholars may use too.
 
