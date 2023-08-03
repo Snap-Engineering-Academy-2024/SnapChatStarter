@@ -16,7 +16,7 @@ export default function Header({ title }) {
         <Pressable
           style={[styles.profile, styles.buttons]}
           onPress={() => {
-            navigation.navigate("Profile");
+            navigation.navigate("Aura");
           }}
         >
           <Image
