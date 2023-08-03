@@ -52,7 +52,6 @@ export default function LoginScreen({ navigation }) {
         }
       });
   }
-
   return (
     <View style={styles.signUpScreen}>
       <ReturnButton navigation={navigation} returnName={"AuthHome"} />
