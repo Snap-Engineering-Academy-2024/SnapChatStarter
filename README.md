@@ -63,9 +63,11 @@ The instructors will likely handle most of this process, consulting with the cre
 
 <br/>
 
+## 6. Making your own fork
 <details>
-<summary>Some information about updating expo and firebase</summary>
+<summary>Baker needs to add to this with his slack messages</summary>
 
+</details>
 
 This is mostly meant for instructors in future years, but scholars may use too.
 
