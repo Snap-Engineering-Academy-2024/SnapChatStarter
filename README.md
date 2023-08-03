@@ -69,6 +69,13 @@ The instructors will likely handle most of this process, consulting with the cre
 
 </details>
 
+<br/>
+
+<br/>
+
+<details>
+<summary>Baker needs to add to this with his slack messages</summary>
+
 This is mostly meant for instructors in future years, but scholars may use too.
 
 Updating Expo to the latest minor version changes (e.g. `49.0.0` to `49.0.6`) can be done with:
