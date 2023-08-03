@@ -73,15 +73,6 @@ export default function StoriesScreen({ route, navigation }) {
           </ScrollView>
         </View>
         <View style={styles.discoverContent}>
-          <Text style={styles.sectionHeader}>Discover your Aura</Text>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("Aura");
-            }}
-          >
-            <Text>I'm pressable!</Text>
-          </Pressable>
-
           <Text style={styles.sectionHeader}>Discover</Text>
           <FlatList
             data={DATA}

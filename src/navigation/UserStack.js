@@ -3,7 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import UserTab from "./UserTab";
 import ConversationScreen from "../screens/ConversationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import AuraScreen from "../screens/AuraScreen";
 
 const Stack = createStackNavigator();
 
@@ -20,11 +19,6 @@ export default function () {
         <Stack.Screen
           name="Conversation"
           component={ConversationScreen}
-          options={{ headerShown: true }}
-        />
-        <Stack.Screen
-          name="Aura"
-          component={AuraScreen}
           options={{ headerShown: true }}
         />
       </Stack.Navigator>
