@@ -1,10 +1,4 @@
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 
@@ -14,11 +8,12 @@ import ReturnButton from "../components/ReturnButton";
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [passwordLength, setPasswordLength] = useState(0); // New state variable for password length
 
   const auth = getAuth();
 
   async function handleSubmit() {
-    console.log("handle submit envoked!!");
+    console.log("handle submit invoked!!");
 
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -47,17 +42,17 @@ export default function LoginScreen({ navigation }) {
           style={styles.inputField}
           secureTextEntry={true}
           autoCapitalize="none"
-          onChangeText={(password) => setPassword(password)}
+          onChangeText={(password) => {
+            setPassword(password);
+            setPasswordLength(password.length); // Update password length
+          }}
         />
       </View>
-      <TouchableOpacity
-        style={styles.logInBtn}
-        onPress={() => {
-          handleSubmit();
-        }}
-      >
-        <Text style={styles.logInText}>Log In</Text>
-      </TouchableOpacity>
+      {passwordLength >= 4 && ( // Conditionally render the button
+        <TouchableOpacity style={styles.logInBtn} onPress={() => handleSubmit()}>
+          <Text style={styles.logInText}>Log In</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
