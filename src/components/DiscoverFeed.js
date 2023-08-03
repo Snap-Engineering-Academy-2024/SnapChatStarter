@@ -14,7 +14,6 @@ import { colors } from "../../assets/themes/colors";
 
 export default function DiscoverFeed() {
   return (
-    // <View style={styles.FeedContainer}>
     <View style={styles.Square}>
       <ImageBackground
         style={styles.FeedImage}
@@ -26,7 +25,6 @@ export default function DiscoverFeed() {
         <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
       </ImageBackground>
     </View>
-    // </View>
   );
 }
 
@@ -35,7 +33,12 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     width: "100%",
   },
-  Square: { flexDirection: "row" },
+  Square: {
+    width: "49%",
+    alignItems: "center",
+    backgroundColor: colors.secondary,
+    borderRadius: 4,
+  },
   FeedImage: {
     width: 180,
     height: 320,

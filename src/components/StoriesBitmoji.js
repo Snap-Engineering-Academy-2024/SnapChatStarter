@@ -24,23 +24,9 @@ export default function StoriesBitmoji() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  bitmojiContainer: {
-    width: "100%",
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    // justifyContent: "space-between",
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-  },
   myBitmoji: {
-    width: 70,
-    height: 70,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 5,
   },
   bitmojiImage: {
     width: 60,

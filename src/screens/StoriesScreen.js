@@ -6,6 +6,7 @@ import {
   Pressable,
   Image,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
@@ -15,6 +16,25 @@ import StoriesBitmoji from "../components/StoriesBitmoji";
 import DiscoverFeed from "../components/DiscoverFeed";
 
 import Header from "../components/Header";
+
+/* Discover FlatList will render a component in the list
+ * for each object in the array DATA. This is just an example I took
+ * from the FlatList documentation, so feel free to change the contents.
+ */
+const DATA = [
+  {
+    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+    title: "First Item",
+  },
+  {
+    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+    title: "Second Item",
+  },
+  {
+    id: "58694a0f-3da1-471f-bd96-145571e29d72",
+    title: "Third Item",
+  },
+];
 
 export default function StoriesScreen({ route, navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -35,76 +55,75 @@ export default function StoriesScreen({ route, navigation }) {
       ]}
     >
       <Header title="Stories" />
-      <Text style={styles.Friends}>Friends</Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={[styles.bitmojiContainer, styles.shadow]}>
-          <StoriesBitmoji />
-          <StoriesBitmoji />
-          <StoriesBitmoji />
-          <StoriesBitmoji />
-          <StoriesBitmoji />
-          <StoriesBitmoji />
-          <StoriesBitmoji />
+      <View style={styles.contentContainer}>
+        <View style={styles.storyBar}>
+          <Text style={styles.sectionHeader}>Friends</Text>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.stories}
+          >
+            <StoriesBitmoji />
+            <StoriesBitmoji />
+            <StoriesBitmoji />
+            <StoriesBitmoji />
+            <StoriesBitmoji />
+            <StoriesBitmoji />
+            <StoriesBitmoji />
+          </ScrollView>
         </View>
-      </ScrollView>
-      <Text style={styles.Friends}>Discover</Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={styles.DiscoveryContainer}>
-          <DiscoverFeed />
-          <DiscoverFeed />
-          <DiscoverFeed />
-          <DiscoverFeed />
-          <DiscoverFeed />
-          <DiscoverFeed />
+        <View style={styles.discoverContent}>
+          <Text style={styles.sectionHeader}>Discover</Text>
+          <FlatList
+            data={DATA}
+            horizontal={false}
+            numColumns={2}
+            ItemSeparatorComponent={() => <View style={{ height: "1%" }} />}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            renderItem={({ item }) => <DiscoverFeed title={item.title} />}
+            keyExtractor={(item) => item.id}
+          />
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0,
+    flex: 1,
   },
-  bitmojiContainer: {
+  contentContainer: {
+    padding: 12,
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
+  },
+  storyBar: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: 4,
+  },
+  discoverContent: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  stories: {
+    display: "flex",
+    gap: 12,
     width: "100%",
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    // justifyContent: "space-between",
-    paddingBottom: 20,
-    paddingHorizontal: 20,
   },
   DiscoveryContainer: {
     flexDirection: "row",
-    flex: "wrap",
+    flexWrap: "wrap",
   },
-  myBitmoji: {
-    width: 70,
-    height: 70,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 5,
-  },
-  bitmojiImage: {
-    width: 50,
-    height: 50,
-  },
-  bitmojiTextContainer: {
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 4,
-  },
-  bitmojiText: {
-    fontSize: 10,
-    fontWeight: "700",
-  },
-  Friends: {
+  sectionHeader: {
     textAlign: "left",
-    paddingLeft: 15,
-    paddingBottom: 15,
+    paddingVertical: 4,
     color: colors.primary,
     fontSize: fontHeader.fontSize,
     fontFamily: fontHeader.fontFamily,
-    fontWeight: "700",
+    fontWeight: fontHeader.fontWeight,
   },
 });
