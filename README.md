@@ -58,3 +58,33 @@ example from Felicia.
 After you've created a pull request, it can merged into the main branch!
 
 The instructors will likely handle most of this process, consulting with the creator of each pull request as needed.
+
+<br/>
+
+<br/>
+
+<details>
+<summary>Some information about updating expo and firebase</summary>
+
+
+This is mostly meant for instructors in future years, but scholars may use too.
+
+Updating Expo to the latest minor version changes (e.g. `49.0.0` to `49.0.6`) can be done with:
+
+```console
+yarn add expo@latest
+```
+
+Updating firebase to the latest version (major or minor, e.g. `9.9.1` to `10.1.0`) is done with:
+
+```console
+yarn expo install firebase@latest
+```
+
+After doing either of these, it also seems to be good practice to run `yarn expo install --fix`
+
+If Expo needs a major version update, that needs to be done manually and incrementally. (e.g. separate steps for `47.X.X`>`48.X.X` and `48.X.X`>`49.X.X`) See this link: https://docs.expo.dev/workflow/upgrading-expo-sdk-walkthrough/
+
+*Baker and Jenna in 2023 were able to do major version updates with that process without having to make a brand new expo project, which is nice. (When updating the React starter code, it was easier to make a whole new project and copy files in)*
+
+</details>
