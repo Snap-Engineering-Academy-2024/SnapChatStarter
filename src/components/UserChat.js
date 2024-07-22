@@ -1,58 +1,75 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
-import db from "../../firebase";
-import { doc, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore";
+import { supabase } from "../utils/hooks/supabase";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { View, Text } from "react-native";
 
 export default function UserChat({ chatId }) {
   const [messages, setMessages] = useState([]);
-  const chatRef = doc(db, "Chats", chatId);
-
   const { user, userData } = useAuthentication();
 
   useEffect(() => {
-    let unsubscribeFromNewSnapshots = onSnapshot(chatRef, (snapshot) => {
-      const dbMessages = snapshot.data().messages;
+    async function fetchMessages() {
+      const { data, error } = await supabase
+        .from('Chats')
+        .select('messages')
+        .eq('id', chatId)
+        .single();
 
-      // if we've already seen the most recent message, don't refresh
-      if (
-        dbMessages.length > 0 &&
-        messages.length > 0 &&
-        dbMessages.slice(-1).createdAt == messages.slice(-1).createdAt
-      )
+      if (error) {
+        console.error("Error fetching messages:", error);
         return;
+      }
 
-      let fixTimestampMessages = dbMessages.map((obj) => {
-        return {
+      if (data) {
+        const dbMessages = data.messages;
+        const fixTimestampMessages = dbMessages.map((obj) => ({
           ...obj,
-          createdAt: obj.createdAt.toDate(),
-        };
-      });
+          createdAt: new Date(obj.createdAt),
+        }));
 
-      setMessages(fixTimestampMessages.reverse());
-    });
+        setMessages(fixTimestampMessages.reverse());
+      }
+    }
 
-    return function cleanupBeforeUnmounting() {
-      unsubscribeFromNewSnapshots();
+    fetchMessages();
+
+    const subscription = supabase
+      .channel('public:Chats')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'Chats', filter: `id=eq.${chatId}` }, (payload) => {
+        const updatedMessages = payload.new.messages;
+        const fixTimestampMessages = updatedMessages.map((obj) => ({
+          ...obj,
+          createdAt: new Date(obj.createdAt),
+        }));
+
+        setMessages(fixTimestampMessages.reverse());
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
     };
-  }, []);
+  }, [chatId]);
 
-  const onSend = useCallback((newMessages = []) => {
-    updateDoc(chatRef, {
-      // arrayUnion appends the message to the existing array
-      messages: arrayUnion(newMessages[0]),
-    });
+  const onSend = useCallback(async (newMessages = []) => {
+    const newMessage = newMessages[0];
+    const { error } = await supabase
+      .from('Chats')
+      .update({
+        messages: supabase.raw('array_append(messages, $1)', [newMessage])
+      })
+      .eq('id', chatId);
 
-    setMessages((previousMessages) => {
-      // console.log("PREVIOUS MESSAGES:", previousMessages);
-      // console.log("NEW MESSAGE:", newMessages);
-      return GiftedChat.append(previousMessages, newMessages);
-    });
-  }, []);
+    if (error) {
+      console.error("Error updating messages:", error);
+      return;
+    }
 
-  // if the user or user data doesn't exist, don't load da chat
-  if (!user || !userData || !chatRef) {
+    setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
+  }, [chatId]);
+
+  if (!user || !userData || !chatId) {
     return (
       <View>
         <Text>Missing user data or chat ref</Text>
@@ -65,12 +82,9 @@ export default function UserChat({ chatId }) {
       messages={messages}
       onSend={(messages) => onSend(messages)}
       user={{
-        // current "blue bubble" user
-        _id: user ? user.uid : "anon-user-id",
-        name: userData ? userData.name : "Anonymous",
-        // avatar: "https://placeimg.com/140/140/any",
+        _id: user.id,
+        name: userData.name || "Anonymous",
       }}
-      // showUserAvatar={true}
       renderUsernameOnMessage={true}
     />
   );

@@ -1,50 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import db from "../../../firebase";
-import { doc, getDoc } from "firebase/firestore";
-
-const auth = getAuth();
+import { useEffect, useState } from "react";
+import { supabase } from './supabase';
 
 export function useAuthentication() {
-  const [user, setUser] = useState();
-  const [userData, setUserData] = useState();
-
-  const getUserData = async (userAuthObj) => {
-    // get Doc from User collection
-    const docRef = doc(db, "Users", userAuthObj.uid);
-    const userData = await getDoc(docRef).catch((error) => {
-      console.log("error getting userData", error);
-    });
-    if (userData.exists()) {
-      setUserData(userData.data());
-    } else {
-      console.log("Error getting user data, setting to dummy obj");
-      setUserData({ name: "No username found" });
-    }
-  };
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribeFromAuthStatusChanged = onAuthStateChanged(
-      auth,
-      (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-          setUser(user);
+    // Retrieve the current session
+    console.log('Supabase client:', supabase); // Debugging line
 
-          getUserData(user);
-        } else {
-          // User is signed out
-          setUser(undefined);
-        }
-      }
-    );
+    const fetchSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+    };
 
-    return unsubscribeFromAuthStatusChanged;
+    fetchSession();
+
+    // Set up an auth state change listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  return {
-    user,
-    userData,
-  };
+  return { user };
 }

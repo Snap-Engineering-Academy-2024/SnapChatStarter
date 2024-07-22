@@ -1,9 +1,6 @@
 import React from "react";
 import "react-native-gesture-handler";
-
-// Firebase
-import "./firebase";
-
+import './src/utils/hooks/supabase'
 // Importing Root Component
 import RootNavigation from "./src/navigation/RootNavigation";
 import { SafeAreaProvider } from "react-native-safe-area-context";

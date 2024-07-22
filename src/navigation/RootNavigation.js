@@ -1,21 +1,20 @@
 import React from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import AuthStack from "./AuthStack";
 import UserStack from "./UserStack";
+import supabase from '../utils/hooks/supabase';
 
 export default function RootNavigation() {
   const { user } = useAuthentication();
-  const auth = getAuth();
 
-  if (!user && process.env.EXPO_PUBLIC_ENVIRONMENT == "dev") {
-    devAutoLogin(auth);
+  if (!user && process.env.EXPO_PUBLIC_ENVIRONMENT === "dev") {
+    devAutoLogin();
   }
 
   return user ? <UserStack /> : <AuthStack />;
 }
 
-async function devAutoLogin(auth) {
+async function devAutoLogin() {
   console.log("Developer environment, signing in automatically");
 
   // Only works if you make a file called ".env" with contents:
@@ -23,16 +22,14 @@ async function devAutoLogin(auth) {
   // EXPO_PUBLIC_DEV_EMAIL=youremail
   // EXPO_PUBLIC_DEV_PASSWORD=yourpassword
 
-  await signInWithEmailAndPassword(
-    auth,
-    process.env.EXPO_PUBLIC_DEV_EMAIL,
-    process.env.EXPO_PUBLIC_DEV_PASSWORD
-  )
-    .then((userCredential) => {
-      const user = userCredential.user;
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
+  const { user, error } = await supabase.auth.signInWithPassword({
+    email: process.env.EXPO_PUBLIC_DEV_EMAIL,
+    password: process.env.EXPO_PUBLIC_DEV_PASSWORD,
+  });
+
+  if (error) {
+    console.error("Error logging in:", error.message);
+  } else {
+    console.log("User signed in:", user);
+  }
 }

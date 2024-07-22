@@ -1,28 +1,29 @@
 import { Text, View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
+import {supabase} from '../utils/hooks/supabase';
 
 // Components
 import ReturnButton from "../components/ReturnButton";
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [passwordLength, setPasswordLength] = useState(0); // New state variable for password length
-
-  const auth = getAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordLength, setPasswordLength] = useState(0);
 
   async function handleSubmit() {
     console.log("handle submit invoked!!");
+    
+    const { user, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+    if (error) {
+      console.error("Error logging in:", error.message);
+    } else {
+      console.log("User signed in:", user);
+      // Navigate to a different screen or handle successful login
+    }
   }
 
   return (
@@ -44,12 +45,12 @@ export default function LoginScreen({ navigation }) {
           autoCapitalize="none"
           onChangeText={(password) => {
             setPassword(password);
-            setPasswordLength(password.length); // Update password length
+            setPasswordLength(password.length);
           }}
         />
       </View>
-      {passwordLength >= 4 && ( // Conditionally render the button
-        <TouchableOpacity style={styles.logInBtn} onPress={() => handleSubmit()}>
+      {passwordLength >= 4 && (
+        <TouchableOpacity style={styles.logInBtn} onPress={handleSubmit}>
           <Text style={styles.logInText}>Log In</Text>
         </TouchableOpacity>
       )}

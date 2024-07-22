@@ -4,7 +4,7 @@ import { StyleSheet, Platform, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import UserChat from "../components/UserChat";
 import BasicChatbot from "../chatbots/BasicChatbot";
-import BakersChatbot from "../chatbots/BakersChatbot";
+
 
 // prettier-ignore
 export const CHATBOTS = {
@@ -12,11 +12,6 @@ export const CHATBOTS = {
     name: "React Native Chatbot",
     imageUrl: "https://loremflickr.com/140/140",
     component: BasicChatbot,
-  },
-  "BakersChatbot": {
-    name: "Baker's Dog Trivia",
-    imageUrl: "https://img.freepik.com/free-vector/cute-dog-robot-cartoon-character-animal-technology-isolated_138676-3143.jpg?w=150",
-    component: BakersChatbot,
   }
 }
 

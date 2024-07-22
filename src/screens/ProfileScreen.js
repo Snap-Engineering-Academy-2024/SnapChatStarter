@@ -9,7 +9,7 @@ return(
     />
     <Text 
         styles={{justifyContents:"center"}}>
-        BLAH BLAH NAME
+        User Name Would Go Here
     </Text>
     </View>
 );

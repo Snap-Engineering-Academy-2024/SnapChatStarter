@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, Image } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -6,7 +6,6 @@ import { shareAsync } from "expo-sharing";
 import * as ImagePicker from "expo-image-picker";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import CameraActions from "../components/CameraActions";
 import CameraOptions from "../components/CameraOptions";
 import PostcaptureOptions from "../components/PostcaptureActions";
@@ -14,77 +13,68 @@ import PostcaptureOptions from "../components/PostcaptureActions";
 export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
-  let cameraRef = useRef();
-  const [hasCameraPermission, setHasCameraPermission] = useState();
-  const [type, setType] = useState(CameraType.back);
-  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
-  const [photo, setPhoto] = useState();
-
+  const cameraRef = useRef(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [type, setType] = useState("back");
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
+  const [photo, setPhoto] = useState(null);
   const [image, setImage] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const cameraPermission = await Camera.requestCameraPermissionsAsync();
-      const mediaLibraryPermission =
-        await MediaLibrary.requestPermissionsAsync();
-      setHasCameraPermission(cameraPermission.status === "granted");
-      setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
+      // Request camera permissions
+      const { status: cameraStatus } = await Camera.requestPermissionsAsync();
+      setHasCameraPermission(cameraStatus === 'granted');
+      
+      // Request media library permissions
+      const { status: mediaLibraryStatus } = await MediaLibrary.requestPermissionsAsync();
+      setHasMediaLibraryPermission(mediaLibraryStatus === 'granted');
     })();
   }, []);
 
-  if (hasCameraPermission === undefined) {
+  if (hasCameraPermission === null || hasMediaLibraryPermission === null) {
     return <Text>Requesting permissions...</Text>;
   } else if (!hasCameraPermission) {
-    return (
-      <Text>
-        Permission for camera not granted. Please change this in settings.
-      </Text>
-    );
+    return <Text>Permission for camera not granted. Please change this in settings.</Text>;
   }
 
   function flipCamera() {
     setType(type === CameraType.back ? CameraType.front : CameraType.back);
   }
 
-  function switchFlash() {
-    setType(type === FlashMode.off ? FlashMode.on : FlashMode.off);
-  }
-
   async function checkGallery() {
-    let permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (permissionResult.granted === false) {
+    if (!permissionResult.granted) {
       alert("Permission to access camera roll is required!");
       return;
     }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    const pickerResult = await ImagePicker.launchImageLibraryAsync();
     console.log(pickerResult);
+    if (!pickerResult.canceled) {
+      setImage(pickerResult.uri);
+    }
   }
 
   async function takePhoto() {
-    console.log("Just took photo!");
-    let options = {
-      quality: 1,
-      base64: true,
-      exif: false,
-    };
-
-    let newPhoto = await cameraRef.current.takePictureAsync(options);
-    setPhoto(newPhoto);
+    if (cameraRef.current) {
+      const options = { quality: 1, base64: true, exif: false };
+      const newPhoto = await cameraRef.current.takePictureAsync(options);
+      setPhoto(newPhoto);
+    }
   }
 
   function savePhoto() {
     MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
-      setPhoto(undefined);
+      setPhoto(null);
     });
   }
 
   if (photo) {
-    let sharePic = () => {
+    const sharePic = () => {
       shareAsync(photo.uri).then(() => {
-        setPhoto(undefined);
+        setPhoto(null);
       });
     };
 
@@ -99,27 +89,12 @@ export default function CameraScreen({ navigation, focused }) {
           },
         ]}
       >
-        {type === CameraType.front ? (
-          <Image
-            style={styles.frontPreview}
-            source={{ uri: "data:image/jpg;base64," + photo.base64 }}
-          />
-        ) : (
-          <Image
-            style={styles.preview}
-            source={{ uri: "data:image/jpg;base64," + photo.base64 }}
-          />
-        )}
-        {hasMediaLibraryPermission ? (
-          <PostcaptureOptions
-            deletePhoto={() => setPhoto(undefined)}
-            savePhoto={savePhoto}
-          ></PostcaptureOptions>
-        ) : (
-          <PostcaptureOptions
-            deletePhoto={() => setPhoto(undefined)}
-            savePhoto={undefined}
-          ></PostcaptureOptions>
+        <Image
+          style={type === CameraType.front ? styles.frontPreview : styles.preview}
+          source={{ uri: "data:image/jpg;base64," + photo.base64 }}
+        />
+        {hasMediaLibraryPermission && (
+          <PostcaptureOptions deletePhoto={() => setPhoto(null)} savePhoto={savePhoto} />
         )}
       </View>
     );
@@ -158,7 +133,6 @@ const styles = StyleSheet.create({
   preview: {
     flex: 1,
     borderRadius: 16,
-    // transform: [{ scaleX: -1 }],
   },
   frontPreview: {
     flex: 1,

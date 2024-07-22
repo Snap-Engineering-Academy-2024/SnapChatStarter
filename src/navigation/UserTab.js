@@ -1,7 +1,18 @@
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, StyleSheet, Pressable, Text } from "react-native";
+import { View, StyleSheet, Pressable, Text, Button } from "react-native";
+import { supabase } from '../utils/hooks/supabase'; // Import the Supabase client
+
+// Screens
+import MapScreen from "../screens/MapScreen";
+import CameraScreen from "../screens/CameraScreen";
+import StoriesScreen from "../screens/StoriesScreen";
+import SpotlightScreen from "../screens/SpotlightScreen";
+import ChatScreen from "../screens/ChatScreen";
+
+// Stacks
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
   CameraOutline,
@@ -17,43 +28,29 @@ import {
 } from "../../assets/snapchat/NavigationIcons";
 import { colors } from "../../assets/themes/colors";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Button } from "react-native";
 
-import { getAuth, signOut } from "firebase/auth";
-
-// Screens
-import MapScreen from "../screens/MapScreen";
-import CameraScreen from "../screens/CameraScreen";
-import StoriesScreen from "../screens/StoriesScreen";
-import SpotlightScreen from "../screens/SpotlightScreen";
-import ChatScreen from "../screens/ChatScreen";
-
-// Stacks
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 
 export default function UserStack({ route, navigation }) {
-  const auth = getAuth();
-  const user = auth.currentUser;
+  // Sign-out logic using Supabase
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Error signing out:", error.message);
+      } else {
+        // Handle successful sign out (e.g., redirect to login screen)
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  };
 
-  let screenOptions = {
+  const screenOptions = {
     tabBarShowLabel: false,
     headerLeft: () => (
-      <Button
-        onPress={() => {
-          signOut(auth)
-            .then(() => {
-              // Sign-out successful.
-              user = null;
-            })
-            .catch((error) => {
-              // An error happened.
-              // should we do something with that error??
-            });
-        }}
-        title="Log Out"
-      />
+      <Button onPress={handleSignOut} title="Log Out" />
     ),
   };
 
@@ -62,9 +59,7 @@ export default function UserStack({ route, navigation }) {
       tabBar={(props) => <CustomTabBar {...props} />}
       activeColor="#f0edf6"
       inactiveColor="#3e2465"
-      barStyle={{
-        backgroundColor: "black",
-      }}
+      barStyle={{ backgroundColor: "black" }}
       initialRouteName="Camera"
     >
       <Tab.Screen
@@ -75,7 +70,7 @@ export default function UserStack({ route, navigation }) {
       <Tab.Screen
         name="Chat"
         component={ChatScreen}
-        options={(screenOptions, { headerShown: false })}
+        options={{ ...screenOptions, headerShown: false }}
       />
       <Tab.Screen
         name="Camera"
@@ -85,7 +80,7 @@ export default function UserStack({ route, navigation }) {
       <Tab.Screen
         name="Stories"
         component={StoriesScreen}
-        options={(screenOptions, { headerShown: false })}
+        options={{ ...screenOptions, headerShown: false }}
       />
       <Tab.Screen
         name="Spotlight"
@@ -97,16 +92,19 @@ export default function UserStack({ route, navigation }) {
 }
 
 const getTabIcon = (routeName, focused) => {
-  if (routeName == "Map") {
-    return focused ? <MapPinFill /> : <MapPinOutline />;
-  } else if (routeName === "Chat") {
-    return focused ? <ChatFill /> : <ChatOutline />;
-  } else if (routeName === "Camera") {
-    return focused ? <LensSearchFill /> : <CameraOutline />;
-  } else if (routeName === "Stories") {
-    return focused ? <GroupFill /> : <GroupOutline />;
-  } else if (routeName === "Spotlight") {
-    return focused ? <PlayFill /> : <PlayOutline />;
+  switch (routeName) {
+    case "Map":
+      return focused ? <MapPinFill /> : <MapPinOutline />;
+    case "Chat":
+      return focused ? <ChatFill /> : <ChatOutline />;
+    case "Camera":
+      return focused ? <LensSearchFill /> : <CameraOutline />;
+    case "Stories":
+      return focused ? <GroupFill /> : <GroupOutline />;
+    case "Spotlight":
+      return focused ? <PlayFill /> : <PlayOutline />;
+    default:
+      return null;
   }
 };
 
@@ -121,7 +119,6 @@ const CustomTabBar = (props) => {
           const { options } = descriptors[route.key];
           const label = options.tabBarLabel || options.title || route.name;
 
-          // Customize the active tab style
           const isActive = state.index === index;
           const tabStyle = isActive ? styles.activeTab : styles.inactiveTab;
 
@@ -160,5 +157,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: "center",
     justifyContent: "center",
+  },
+  activeTab: {
+    // Add styles for active tab if needed
+  },
+  inactiveTab: {
+    // Add styles for inactive tab if needed
   },
 });

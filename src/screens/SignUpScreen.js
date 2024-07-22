@@ -1,62 +1,49 @@
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from "react-native";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { Text, View, TextInput, StyleSheet, TouchableOpacity, Linking } from "react-native";
 import { useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
-import db from "../../firebase";
+import {supabase} from '../utils/hooks/supabase';
+
 // Components
 import ReturnButton from "../components/ReturnButton";
-export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const auth = getAuth();
-  function createUser(email, uid) {
-    setDoc(doc(db, "Users", uid), {
-      _id: uid,
-      name: email,
-    });
-  }
 
+export default function SignupScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [alreadyInUseButton, setAlreadyInUseButton] = useState(false);
-  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState("");
+  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState('');
 
+
+  //major dubbing here to figure out why auth doesnt work
   async function handleSubmit() {
-    console.log("handle submit envoked!!");
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // creates user using setDoc firebase
-        createUser(userCredential.user.email, userCredential.user.uid);
-        const user = userCredential.user;
-        auth.currentUser = user;
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, "<---- error code");
-        console.log(errorMessage, "<--- error message");
-        if (errorCode == "auth/email-already-in-use") {
-          setAlreadyInUseButton(true);
-          //if the error code says there's already an existing account, set the varibale to that
-          setAlreadyInUseMessage(
-            "That email is already associated with a username"
-          );
-          console.log("alreadyInUseButton: ", alreadyInUseButton);
-        } else {
-          setAlreadyInUseMessage("");
-        }
+    console.log("handle submit invoked!!");
+  
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
       });
+  
+      if (error) {
+        console.error("Error signing up:", error.message);
+        if (error.message.includes("User already registered")) {
+          setAlreadyInUseButton(true);
+          setAlreadyInUseMessage("That email is already associated with a username");
+        } else {
+          setAlreadyInUseMessage('');
+        }
+      } else {
+        console.log("User signed up:", data);
+        // Navigate to a different screen or handle successful signup
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
   }
+  
+
   return (
     <View style={styles.signUpScreen}>
-      <ReturnButton navigation={navigation} returnName={"AuthHome"} />
+      <ReturnButton navigation={navigation} returnName="AuthHome" />
       <Text style={styles.signUpTitle}>Sign Up</Text>
-
       <View style={styles.signUpFields}>
         <Text style={styles.accountExistsText}>{alreadyInUseMessage}</Text>
         <Text style={styles.inputText}>USERNAME OR EMAIL</Text>
@@ -86,25 +73,19 @@ export default function LoginScreen({ navigation }) {
             <Text style={styles.blueText}>Privacy Policy</Text>
           </TouchableOpacity>{" "}
           and agree to the{" "}
-          <TouchableOpacity
-            onPress={() => Linking.openURL("https://snap.com/en-US/terms")}
-          >
+          <TouchableOpacity onPress={() => Linking.openURL("https://snap.com/en-US/terms")}>
             <Text style={styles.blueText}>Terms of Service</Text>
           </TouchableOpacity>
           .
         </Text>
       </View>
-      <TouchableOpacity
-        style={styles.signUpButton}
-        onPress={() => {
-          handleSubmit();
-        }}
-      >
+      <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
         <Text style={styles.signUpText}>{"Sign Up & Accept"}</Text>
       </TouchableOpacity>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   signUpScreen: {
     backgroundColor: "#FFF",
@@ -139,7 +120,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   disclaimerText: {
-    //position: "absolute",
     top: 135,
     fontSize: 12,
   },

@@ -2,11 +2,12 @@ import React, { useState, useCallback, useEffect } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, SafeAreaView, Platform } from "react-native";
+import defaultProfileImage from "../../assets/snapchat/defaultprofile12.png";
 
 const CHATBOT_USER_OBJ = {
   _id: 2,
   name: "React Native Chatbot",
-  avatar: "https://loremflickr.com/140/140",
+  avatar: defaultProfileImage,
 };
 
 export default function BasicChatbot() {
@@ -47,7 +48,7 @@ export default function BasicChatbot() {
 
     // Simple chatbot logic (aka Checkpoint 2 onwards) here!
 
-    addBotMessage("I am da response!");
+    addBotMessage("Welcome to a recreated version of SnapChat");
   };
 
   const onSend = useCallback((messages = []) => {
@@ -63,7 +64,7 @@ export default function BasicChatbot() {
       }}
       user={{
         _id: 1,
-        name: "Baker",
+        name: "Alexis",
       }}
       renderUsernameOnMessage={true}
     />
