@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "../screens/ProfileScreen";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import SearchScreen from "../screens/SearchScreen";
 const Stack = createStackNavigator();
 
 export default function Header({ title }) {
@@ -24,9 +25,14 @@ export default function Header({ title }) {
             source={require("../../assets/snapchat/defaultprofile.png")}
           />
         </Pressable>
-        <View style={[styles.search, styles.buttons]}>
+        <Pressable
+        style={[styles.search, styles.buttons]}
+        onPress= {()=>{
+          navigation.navigate("Search");
+        }}
+        >
           <Search />
-        </View>
+        </Pressable>
       </View>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.headerRight}>
