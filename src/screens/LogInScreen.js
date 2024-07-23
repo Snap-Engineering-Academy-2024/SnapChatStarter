@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   logInBtn: {
     padding: 15,
-    backgroundColor: "#aeb5bf",
+    backgroundColor: "#65b5ff",
     width: 250,
     alignItems: "center",
     borderRadius: 25,
