@@ -4,6 +4,8 @@ import { fontHeader } from "../../assets/themes/font";
 import { Followers, More, Search } from "../../assets/snapchat/HeaderIcons";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "../screens/ProfileScreen";
+import AddFriendScreen from "../screens/AddFriendScreen";
+
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 const Stack = createStackNavigator();
@@ -30,9 +32,13 @@ export default function Header({ title }) {
       </View>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.headerRight}>
-        <View style={[styles.followers, styles.buttons]}>
+
+        <Pressable style={[styles.followers, styles.buttons]}
+        onPress={() => {
+          navigation.navigate("AddFriend"); }}>
           <Followers />
-        </View>
+        </Pressable>
+
         <View style={[styles.more, styles.buttons]}>
           <More />
         </View>

@@ -64,7 +64,7 @@ export default function ChatScreen({ navigation }) {
         },
       ]}
     >
-      <Header title="Chat" />
+      <Header title="Chattt" />
       <View>
         {chats?.map((chat) => {
           return (
