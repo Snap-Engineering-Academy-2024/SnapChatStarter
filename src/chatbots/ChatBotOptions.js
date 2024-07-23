@@ -10,12 +10,7 @@ import {
   import { useNavigation } from "@react-navigation/native";
   
   
-  //index={index}
-  // imageUrl={item.imageUrl}
-  // chatBotName={item.name}
-  // developer={[{ name: "developer" }]}
-  // theme={item.id}
-  
+
   const ChatBotOption = ({ index, imageUrl, chatBotName, developer, gameName }) => {
     const navigation = useNavigation();
   
