@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import UserTab from "./UserTab";
 import ConversationScreen from "../screens/ConversationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import SearchScreen from "../screens/SearchScreen";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,11 @@ export default function () {
           name="Conversation"
           component={ConversationScreen}
           options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="Search"
+          component={SearchScreen}
+          options={{ headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
