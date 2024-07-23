@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, SafeAreaView } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -33,9 +33,13 @@ export default function CameraScreen({ navigation, focused }) {
   }, []);
 
   if (hasCameraPermission === null || hasMediaLibraryPermission === null) {
-    return <Text>Requesting permissions...</Text>;
+    return  <SafeAreaView>
+              <Text>Requesting permissions...</Text>
+            </SafeAreaView>;
   } else if (!hasCameraPermission) {
-    return <Text>Permission for camera not granted. Please change this in settings.</Text>;
+    return  <SafeAreaView>
+              <Text>Permission for camera not granted. Please change this in settings.</Text>
+            </SafeAreaView>;
   }
 
   function flipCamera() {
