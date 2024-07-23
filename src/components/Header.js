@@ -30,9 +30,16 @@ export default function Header({ title }) {
       </View>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.headerRight}>
-        <View style={[styles.followers, styles.buttons]}>
-          <Followers />
-        </View>
+        <Pressable
+            style={[styles.profile, styles.buttons]}
+            onPress={() => {
+              navigation.navigate("FriendAddingScreen");
+            }}
+          >
+          <View style={[styles.followers, styles.buttons]}>
+            <Followers />
+          </View>
+        </Pressable>
         <View style={[styles.more, styles.buttons]}>
           <More />
         </View>
