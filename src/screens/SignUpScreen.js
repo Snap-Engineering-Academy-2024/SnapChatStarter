@@ -76,12 +76,13 @@ export default function SignupScreen({ navigation }) {
           <TouchableOpacity onPress={() => Linking.openURL("https://snap.com/en-US/terms")}>
             <Text style={styles.blueText}>Terms of Service</Text>
           </TouchableOpacity>
-          .
         </Text>
       </View>
-      <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
-        <Text style={styles.signUpText}>{"Sign Up & Accept"}</Text>
-      </TouchableOpacity>
+        {password.length >= 4 && (
+        <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
+          <Text style={styles.signUpText}>{"Sign Up & Accept"}</Text>
+        </TouchableOpacity>
+        )}
     </View>
   );
 }
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     padding: 15,
-    backgroundColor: "#AEB5BF",
+    backgroundColor: "#65b5ff",
     width: 250,
     alignItems: "center",
     borderRadius: 25,
