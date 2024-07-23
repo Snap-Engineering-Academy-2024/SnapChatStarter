@@ -14,59 +14,78 @@ import { colors } from "../../assets/themes/colors";
 
 export default function DiscoverFeed() {
   return (
-    <View style={styles.Square}>
-      <ImageBackground
-        style={styles.FeedImage}
-        imageStyle={{ borderRadius: 20 }}
-        source={{
-          uri: "https://eccles.utah.edu/wp-content/uploads/2017/02/snapchat.jpg",
-        }}
-      >
-        <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
-      </ImageBackground>
+    <View style = {styles.FeedContainer}>
+
+      <View style={styles.Square}>
+        <ImageBackground
+          style={styles.FeedImage}
+          imageStyle={{ borderRadius: 20 }}
+          source={{
+            uri: "https://eccles.utah.edu/wp-content/uploads/2017/02/snapchat.jpg",
+          }}
+        >
+          <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
+        </ImageBackground>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   FeedContainer: {
-    paddingLeft: 20,
-    width: "100%",
+    width:"100%",
+    display:"flex",
+    flex:2,
+    gap:10,
+    justifyContent:"space-between",
+    flexWrap: "wrap",
+
+    
   },
   Square: {
-    width: "49%",
+    display:"flex",
+    
+    flexDirection:"row",
+    justifyContent:"space-around",
+    gap:20,
+    width: "100%",
     alignItems: "center",
-    backgroundColor: colors.secondary,
-    borderRadius: 4,
+    // backgroundColor: "pink",
+    alignItems:"center",
+    borderRadius: 20,
+    flexWrap: "wrap",
+
+
   },
   FeedImage: {
-    width: 180,
+    width: 165,
     height: 320,
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    display:"flex",
+    justifyContent:"center",
+    // borderRadius: 50,
+    // backgroundColor:"blue",
+    // borderRadius:20,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
     elevation: 5,
   },
   FeedText: {
     padding: 8,
-    fontWeight: "700",
+    fontWeight: "900",
     fontSize: 14,
     color: "white",
     position: "absolute",
     right: 15,
     bottom: 15,
-    textShadowColor: "#000",
-    textShadowOffset: {
-      width: -1,
-      height: -1,
-    },
-    textShadowRadius: 1,
-    textShadowOpacity: 1,
+    textShadowColor: "#292929",
+  
+    textShadowRadius: 5,
+    textShadowOpacity: 0,
   },
   smallFeedText: {},
 });
