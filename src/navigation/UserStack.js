@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import UserTab from "./UserTab";
 import ConversationScreen from "../screens/ConversationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import DiscoverCard from "../components/DiscoverCard";
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,11 @@ export default function () {
         <Stack.Screen
           name="Conversation"
           component={ConversationScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="DiscoverCard"
+          component={DiscoverCard}
           options={{ headerShown: true }}
         />
       </Stack.Navigator>
