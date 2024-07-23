@@ -44,7 +44,7 @@ export default function BasicChatbot() {
   };
 
   const respondToUser = (userMessages) => {
-    console.log("User message text:", userMessages[0].text);
+    // console.log("User message text:", userMessages[0].text);
 
     // Simple chatbot logic (aka Checkpoint 2 onwards) here!
 

@@ -21,7 +21,7 @@ export default function Header({ title }) {
         >
           <Image
             style={styles.profileImage}
-            source={require("../../assets/snapchat/defaultprofile.png")}
+            source={require("../../assets/snapchat/profilePicture-Cindy.png")}
           />
         </Pressable>
         <View style={[styles.search, styles.buttons]}>
