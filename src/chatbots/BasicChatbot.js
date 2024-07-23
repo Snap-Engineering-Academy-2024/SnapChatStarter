@@ -2,34 +2,102 @@ import React, { useState, useCallback, useEffect } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, SafeAreaView, Platform } from "react-native";
-import defaultProfileImage from "../../assets/snapchat/defaultprofile12.png";
+import { getChat } from "/Users/christian/VsCodeProjects/SnapChatStarterCode/src/utils/hooks/getGPT.js";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
+import { supabase } from "../utils/hooks/supabase";
 
 const CHATBOT_USER_OBJ = {
   _id: 2,
   name: "React Native Chatbot",
-  avatar: defaultProfileImage,
+  avatar: "https://loremflickr.com/140/140",
 };
+const TEST_VARS = {
+  convoID: "testConvo",
+};
+const prompt = [
+  {
+    role: "assistant",
+    content: " Can you just translate whatever I say to french and english?"
+  },
+];
 
 export default function BasicChatbot() {
   const [messages, setMessages] = useState([]);
+  const [userEmail, setUserEmail] = useState();
+  const [convoKey, setConvoKey] = useState();
 
+  async function fetchUserEmail() {
+    const userObj = await useAuthentication();
+    setUserEmail(userObj.email);
+    console.log("User Email from Chatbot: ", userEmail);
+    let uniqueKey = userEmail + CHATBOT_USER_OBJ.name;
+    setConvoKey(uniqueKey);
+    console.log("Unique Key: ", uniqueKey);
+  }
+  async function fetchInitialMessage() {
+    const response = await getChat(prompt);
+    const message = response.choices[0].message;
+    const content = response.choices[0].message.content;
+    addBotMessage(content);
+  }
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello, welcome to simple trivia! Say 'Yes' when you're ready to play!",
-        createdAt: new Date(),
-        user: CHATBOT_USER_OBJ,
-      },
-    ]);
+    fetchUserEmail();
+    getSupaHistory();
+    fetchInitialMessage();
   }, []);
 
+  async function fetchReply(messageHistory) {
+    const response = await getChat([prompt[0], ...messageHistory]);
+    if (response != null) {
+      const message = response.choices[0].message;
+      const content = response.choices[0].message.content;
+
+      addBotMessage(content);
+
+    }
+  }
+  async function getSupaHistory() {
+    const { data, error } = await supabase
+      .from("conversations")
+      .select("messages")
+      .eq("id", "testConvo")
+      .single();
+    if (error) {
+      let { insertError } = await supabase
+        .from("conversations")
+        .insert({ id: "testConvo", messages: {} });
+    }
+    if (data) {
+      console.log("Fetched Supa is :", data.messages);
+      setMessages(data.messages);
+    }
+  }
+
+  async function updateSupa(messages) {
+    console.log("Setting supa" , messages);
+    try {
+      const { data, error } = await supabase
+        .from("conversations")
+        .update({ messages: messages })
+        .eq("id", 'testConvo');
+
+      if (error) {
+        console.error("Error updating conversation:", error);
+      } else {
+        console.log("Conversation updated successfully:", data);
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
+  }
+
   const addNewMessage = (newMessages) => {
+    console.log(" from add new message / Messages object: ", messages);
     setMessages((previousMessages) => {
-      // console.log("PREVIOUS MESSAGES:", previousMessages);
-      // console.log("NEW MESSAGE:", newMessages);
+
       return GiftedChat.append(previousMessages, newMessages);
     });
+    
   };
 
   const addBotMessage = (text) => {
@@ -44,27 +112,47 @@ export default function BasicChatbot() {
   };
 
   const respondToUser = (userMessages) => {
-    console.log("User message text:", userMessages[0].text);
+    const allMessages = [userMessages[0], ...messages].reverse(); // Add the user message to the front of the array
+   
+    console.log("Messages looks like", messages)
+    const temp = {};
+    console.log("all messages: ", allMessages);
+    updateSupa([userMessages[0], ...messages])
+  
+    const gptMessages = allMessages.map((entry) => {
+      let temp = {};
 
-    // Simple chatbot logic (aka Checkpoint 2 onwards) here!
+      if (entry.user.name === "React Native Chatbot") {
+        temp["role"] = "assistant";
+      } else {
+        temp["role"] = "user";
+      }
+      temp["content"] = entry.text;
 
-    addBotMessage("Welcome to a recreated version of SnapChat");
+      return temp;
+    });
+    fetchReply(gptMessages);
   };
 
-  const onSend = useCallback((messages = []) => {
-    addNewMessage(messages);
+  // Messages is most recent not the state variable
+  const onSend = useCallback((newestMessage = []) => {
+
+    addNewMessage(newestMessage);
+
+    updateSupa()
+
   }, []);
 
   return (
     <GiftedChat
       messages={messages}
-      onSend={(messages) => {
-        onSend(messages);
-        setTimeout(() => respondToUser(messages), 1000);
+      onSend={(mostRecentMessages) => {
+        onSend(mostRecentMessages);
+        setTimeout(() => respondToUser(mostRecentMessages), 1000);
       }}
       user={{
         _id: 1,
-        name: "Alexis",
+        name: "Baker", // Change this later
       }}
       renderUsernameOnMessage={true}
     />
