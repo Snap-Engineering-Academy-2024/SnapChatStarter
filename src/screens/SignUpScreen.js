@@ -14,7 +14,7 @@ export default function SignupScreen({ navigation }) {
 
   //major dubbing here to figure out why auth doesnt work
   async function handleSubmit() {
-    console.log("handle submit invoked!!");
+    // console.log("handle submit invoked!!");
   
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -31,7 +31,7 @@ export default function SignupScreen({ navigation }) {
           setAlreadyInUseMessage('');
         }
       } else {
-        console.log("User signed up:", data);
+        // console.log("User signed up:", data);
         // Navigate to a different screen or handle successful signup
       }
     } catch (error) {

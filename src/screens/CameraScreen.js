@@ -51,7 +51,7 @@ export default function CameraScreen({ navigation, focused }) {
     }
 
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
-    console.log(pickerResult);
+    // console.log(pickerResult);
     if (!pickerResult.canceled) {
       setImage(pickerResult.uri);
     }

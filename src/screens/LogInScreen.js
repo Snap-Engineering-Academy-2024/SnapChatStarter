@@ -11,7 +11,7 @@ export default function LoginScreen({ navigation }) {
   const [passwordLength, setPasswordLength] = useState(0);
 
   async function handleSubmit() {
-    console.log("handle submit invoked!!");
+    // console.log("handle submit invoked!!");
     
     const { user, error } = await supabase.auth.signInWithPassword({
       email,
@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation }) {
     if (error) {
       console.error("Error logging in:", error.message);
     } else {
-      console.log("User signed in:", user);
+      // console.log("User signed in:", user);
       // Navigate to a different screen or handle successful login
     }
   }
