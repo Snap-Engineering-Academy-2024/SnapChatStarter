@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import UserTab from "./UserTab";
 import ConversationScreen from "../screens/ConversationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import FriendAddingScreen from "../screens/FriendAddingScreen";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,11 @@ export default function () {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="FriendAddingScreen"
+          component={FriendAddingScreen}
           options={{ headerShown: true }}
         />
         <Stack.Screen
