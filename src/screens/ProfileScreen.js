@@ -1,16 +1,31 @@
-import { Image , Text, View} from "react-native";
+import { Image, Text, View, StyleSheet } from "react-native";
 
-export default function ProfileScreen(){
-return(
-    <View styles={{alignItems:"center"}}>
-    <Image 
-    source={{uri:"https://loremflickr.com/cache/resized/65535_52294428543_2d04971c12_n_320_240_nofilter.jpg"}}
-    style={{width: 400, height: 400, borderRadius: 400/ 2}} 
-    />
-    <Text 
-        styles={{justifyContents:"center"}}>
-        User Name Would Go Here
-    </Text>
-    </View>
-);
+export default function ProfileScreen() {
+    return (
+        <View style={styles.container}>
+            <Image
+                source={require("../../assets/snapchat/defaultprofile.png")}
+                style={styles.avatar}
+            />
+            <Text
+                style={{ justifyContents: "center"}}>
+                User Name Would Go Here
+            </Text>
+        </View>
+    );
 };
+
+
+const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    avatar: {
+        width: 150,
+        height: 150,
+        borderRadius: 150 / 2,
+        alignItems: "center",
+    }
+})
