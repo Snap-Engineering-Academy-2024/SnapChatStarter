@@ -11,7 +11,6 @@ export default function EventScreen({ route, navigation }) {
 
     function toggleComponent (){
         setVisible(!visible)
-        console.log(visible)
     }
     return (
     <View style = {styles.EventScreen}>

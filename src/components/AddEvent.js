@@ -12,8 +12,8 @@ import { Dialog } from "@rneui/themed";
 
 export default function AddEvent({ isVisible, onClose }) {
   return (
-    <Dialog isVisible={isVisible} onBackdropPress={onClose}>
-      <Text style={styles.eventText}>CREATE EVENT</Text>
+    <Dialog overlayStyle= {styles.DialogueBox} isVisible={isVisible} onBackdropPress={onClose}>
+      <Text style={styles.eventText}>Event Details</Text>
       <TextInput style={styles.inputFields} placeholder="Title"></TextInput>
       <TextInput
         style={styles.descriptionField}
@@ -21,11 +21,10 @@ export default function AddEvent({ isVisible, onClose }) {
       ></TextInput>
       <TextInput style={styles.inputFields} placeholder="Time"></TextInput>
       <TextInput style={styles.inputFields} placeholder="Location"></TextInput>
-
-      <Dialog.Title title="Dialog Title" />
-      <Text>This is a dialog message.</Text>
+      <Button title = "Upload pic"> </Button>
       <Dialog.Actions>
-        <Button title="CLOSE" onPress={onClose} />
+        <Button title="Create Event" />
+        <Button title="Close" onPress={onClose} />
       </Dialog.Actions>
     </Dialog>
   );
@@ -43,6 +42,11 @@ const styles = StyleSheet.create({
     top: "20%",
     borderRadius: 20,
     padding: 20,
+  },
+  DialogueBox:{
+    height: "60%",
+    borderRadius:20,
+    backgroundColor :"red"
   },
   eventText: {
     textAlign: "center",
