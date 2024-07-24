@@ -14,6 +14,7 @@ import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
 import StoriesBitmoji from "../components/StoriesBitmoji";
 import DiscoverFeed from "../components/DiscoverFeed";
+import { useNavigation } from "@react-navigation/native";
 
 import Header from "../components/Header";
 
@@ -63,7 +64,7 @@ export default function StoriesScreen({ route, navigation }) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.stories}
           >
-            <StoriesBitmoji />
+            <StoriesBitmoji onPress={console.log("bit moooooo")}/>
             <StoriesBitmoji />
             <StoriesBitmoji />
             <StoriesBitmoji />
