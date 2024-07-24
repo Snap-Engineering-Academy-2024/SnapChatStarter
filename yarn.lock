@@ -1766,7 +1766,7 @@
     serve-static "^1.13.1"
     ws "^6.2.2"
 
-"@react-native-community/cli-tools@13.6.9":
+"@react-native-community/cli-tools@13.6.9", "@react-native-community/cli-tools@^13.6.9":
   version "13.6.9"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-tools/-/cli-tools-13.6.9.tgz#2baee279358ba1a863e737b2fa9f45659ad91929"
   integrity sha512-OXaSjoN0mZVw3nrAwcY1PC0uMfyTd9fz7Cy06dh+EJc+h0wikABsVRzV8cIOPrVV+PPEEXE0DBrH20T2puZzgQ==
@@ -1812,6 +1812,22 @@
     graceful-fs "^4.1.3"
     prompts "^2.4.2"
     semver "^7.5.2"
+
+"@react-native-vector-icons/common@^0.0.1-alpha.11":
+  version "0.0.1-alpha.11"
+  resolved "https://registry.yarnpkg.com/@react-native-vector-icons/common/-/common-0.0.1-alpha.11.tgz#4ab47546f739d3666dd0426f023d53d0790cf2cf"
+  integrity sha512-q5A48HiwPbAbUUZ3IKXm6dnNGGEbV2buk4hzSdEQgom1thSVMKJ+qJyT02Rz8jbrvzeaqFde3zZmv+b6hpJ+AA==
+  dependencies:
+    "@react-native-community/cli-tools" "^13.6.9"
+    prop-types "^15.8.1"
+    yargs "^17.7.2"
+
+"@react-native-vector-icons/ionicons@^7.4.0-alpha.16":
+  version "7.4.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/@react-native-vector-icons/ionicons/-/ionicons-7.4.0-alpha.16.tgz#5a1ade609123f93f884e0cda5b608cec8e799280"
+  integrity sha512-7EIhuFdumcaLFKvEWySjCcHksilf3jI7kVH4wOfu2U48twpDDTJahUEg1XB3TBbwpXKseynLoZyfNiA1iIPzOQ==
+  dependencies:
+    "@react-native-vector-icons/common" "^0.0.1-alpha.11"
 
 "@react-native/assets-registry@0.74.85":
   version "0.74.85"
@@ -7200,7 +7216,7 @@ yargs@^15.1.0:
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
 
-yargs@^17.6.2:
+yargs@^17.6.2, yargs@^17.7.2:
   version "17.7.2"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.7.2.tgz#991df39aca675a192b816e1e0363f9d75d2aa269"
   integrity sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==
