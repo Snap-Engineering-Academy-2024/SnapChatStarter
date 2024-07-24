@@ -1,16 +1,47 @@
-import { Image , Text, View} from "react-native";
+import { Image, Text, View, Button } from "react-native";
+import { supabase } from "../utils/hooks/supabase";
+import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 
-export default function ProfileScreen(){
-return(
-    <View styles={{alignItems:"center"}}>
-    <Image 
-    source={{uri:"https://loremflickr.com/cache/resized/65535_52294428543_2d04971c12_n_320_240_nofilter.jpg"}}
-    style={{width: 400, height: 400, borderRadius: 400/ 2}} 
-    />
-    <Text 
-        styles={{justifyContents:"center"}}>
-        User Name Would Go Here
-    </Text>
-    </View>
-);
+const handleSignOut = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error.message);
+    } else {
+      // Handle successful sign out (e.g., redirect to login screen)
+    }
+  } catch (error) {
+    console.error("Unexpected error:", error);
+  }
 };
+
+export default function ProfileScreen() {
+  const navigation = useNavigation();
+  const [astrology, setAstrology] = useState("Pisces");
+  const userSign = findAstrologySign()
+
+  useEffect(()=>{
+    setAstrology(userSign.sign)
+  }),[]
+
+  return (
+    <View style={{ alignItems: "center" }}>
+      <Image
+        source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
+        style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
+      />
+      <Text style={{ justifyContents: "center" }}>User Name Would Go Here</Text>
+      <Button
+        onPress={() => {
+          navigation.navigate("Astrology");
+        }}
+        title={astrology}
+        color="#841584"
+        accessibilityLabel="Learn more about this purple button"
+      />
+      <Button onPress={handleSignOut} title="Log Out" />
+    </View>
+  );
+}

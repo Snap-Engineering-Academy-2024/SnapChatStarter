@@ -6,24 +6,42 @@ import {
   Image,
   ScrollView,
   ImageBackground,
+  Pressable,
+  useState
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function DiscoverFeed() {
+  const navigation = useNavigation();
+//  const [discoverCard, setDiscoverCard] = useState(false);
+//  const handlePress = () => {
+//   setDiscoverCard(true);
+// };
+
+// const handleClose = () => {
+//   setDiscoverCard(false);
+// };
   return (
     <View style={styles.Square}>
-      <ImageBackground
-        style={styles.FeedImage}
-        imageStyle={{ borderRadius: 20 }}
-        source={{
-          uri: "https://eccles.utah.edu/wp-content/uploads/2017/02/snapchat.jpg",
-        }}
-      >
-        <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
-      </ImageBackground>
+      {/* <Pressable onPress={() => console.log("I was clicked")}> */}
+      <Pressable onPress={() => {
+            navigation.navigate("DiscoverCard");
+          }}>
+        <ImageBackground
+          style={styles.FeedImage}
+          imageStyle={{ borderRadius: 20 }}
+          source={{
+            uri: "https://eccles.utah.edu/wp-content/uploads/2017/02/snapchat.jpg",
+          }}
+        >
+          <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
+        </ImageBackground>
+      </Pressable>
     </View>
   );
 }
