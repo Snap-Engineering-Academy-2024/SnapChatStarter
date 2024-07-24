@@ -75,7 +75,7 @@ export default function EventScreen({ route, navigation }) {
         icon={{ name: "add", color: "white" }}
         color="#FF3386"
         />
-        {visible && <AddEvent/>}
+        { <AddEvent isVisible={visible} onClose={toggleComponent}/>}
 
     </View>
   )

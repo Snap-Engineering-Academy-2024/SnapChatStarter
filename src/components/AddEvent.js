@@ -1,16 +1,31 @@
-import React from 'react'
-import { View, Text, StyleSheet, TextInput, Image, Button, TouchableOpacity } from "react-native";
+import React from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  Button,
+  TouchableOpacity,
+} from "react-native";
+import { Dialog } from "@rneui/themed";
 
-export default function AddEvent() {
+export default function AddEvent({ isVisible, onClose }) {
   return (
-    <View style = {styles.userInfo}>
-       <Text style = {styles.eventText}>CREATE EVENT</Text> 
-       <TextInput style = {styles.inputFields} placeholder = "Title"></TextInput>
-       <TextInput style = {styles.descriptionField} placeholder = "Description"></TextInput>
-       <TextInput style = {styles.inputFields} placeholder = "Time"></TextInput>
-       <TextInput style = {styles.inputFields} placeholder = "Location"></TextInput>
-       <Button style = {{backgroundColor:"pink"}} title = "Upload Picture"/>
-    </View>
+    <Dialog isVisible={isVisible} onBackdropPress={onClose}>
+    <Text style={styles.eventText}>CREATE EVENT</Text>
+    <TextInput style={styles.inputFields} placeholder="Title"></TextInput>
+    <TextInput
+      style={styles.descriptionField}
+      placeholder="Description"
+    ></TextInput>
+    <TextInput style={styles.inputFields} placeholder="Time"></TextInput>
+    <TextInput style={styles.inputFields} placeholder="Location"></TextInput>
+
+    <Dialog.Actions>
+      <Button title="CLOSE" onPress={onClose} />
+    </Dialog.Actions>
+  </Dialog>
   )
 }
 const styles = StyleSheet.create({
