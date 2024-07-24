@@ -30,11 +30,6 @@ export default function SignupScreen({ navigation }) {
       const { data, error } = await supabase.auth.signUp({
         email: email,
         password: password,
-        options: {
-          data: {
-            birthday: birthday,
-          },
-        },
       });
 
       if (error) {
@@ -48,8 +43,32 @@ export default function SignupScreen({ navigation }) {
           setAlreadyInUseMessage("");
         }
       } else {
-        console.log("User signed up:", data);
         // Navigate to a different screen or handle successful signup
+
+        console.log("User signed up:", JSON.stringify(data, null, 4));
+
+        try {
+          console.log("Now updating profile with birthday");
+          const updates = {
+            id: data.user.id,
+            username: data.user.email,
+            birthday: birthday,
+            updated_at: new Date(),
+          };
+
+          const { error } = await supabase.from("profiles").upsert(updates);
+
+          if (error) {
+            console.log("Error caught");
+            throw error;
+          } else {
+            console.log("User profile updated.");
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            Alert.alert(error.message);
+          }
+        }
       }
     } catch (error) {
       console.error("Unexpected error:", error);
