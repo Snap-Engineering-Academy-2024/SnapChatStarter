@@ -15,7 +15,6 @@ const Stack = createStackNavigator();
 export default function Header({ title }) {
   const navigation = useNavigation();
 
-  const [loading, setLoading] = useState(true);
   const [profilePicUrl, setProfilePicUrl] = useState(
     "https://i.imgur.com/FxsJ3xy.jpg"
   );
