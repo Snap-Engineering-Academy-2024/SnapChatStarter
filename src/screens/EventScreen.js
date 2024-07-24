@@ -1,61 +1,83 @@
 import React from 'react'
-import { Card } from '@rneui/themed';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useState } from "react";
+
+import { Card, FAB } from '@rneui/themed';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from "react-native";
 import { ScrollView } from 'react-native-gesture-handler';
+import AddEvent from "../components/AddEvent";
 
 export default function EventScreen({ route, navigation }) {
+    const [visible, setVisible] = useState(false)
+
+    function toggleComponent (){
+        setVisible(!visible)
+        console.log(visible)
+    }
     return (
-    <ScrollView>
-    <View style = {styles.Events}>
-        <View style={styles.container}>
-            <View style = {styles.friends}>
-                <Text style = {styles.friendsText}>3 friends going</Text>
+    <View style = {styles.EventScreen}>
+        
+        <ScrollView>
+        <View style = {styles.Events}>
+            <View style={styles.container}>
+                <View style = {styles.friends}>
+                    <Text style = {styles.friendsText}>3 friends going</Text>
+                </View>
+                <Image
+                    style={{width:"100%", aspectRatio:1, borderRadius:20}}
+                    resizeMode="contain"
+                    source={{ uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4" }}
+                    />
+                <Card.Title style = {styles.title}>Sona's Birthday</Card.Title>
+                <View style = {styles.userInfo}>
+                    <Image style = {styles.bitmojiUser} source = {{uri:"https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww"}}/>
+                    <Text style = {styles.username}>username</Text>
+                </View>
             </View>
-            <Image
-                style={{width:"100%", aspectRatio:1, borderRadius:20}}
-                resizeMode="contain"
-                source={{ uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4" }}
-                />
-            <Card.Title style = {styles.title}>Sona's Birthday</Card.Title>
-            <View style = {styles.userInfo}>
-                <Image style = {styles.bitmojiUser} source = {{uri:"https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww"}}/>
-                <Text style = {styles.username}>username</Text>
-            </View>
-         </View>
 
-         <View style={styles.container}>
-            <View style = {styles.friends}>
-                <Text style = {styles.friendsText}>3 friends going</Text>
+            <View style={styles.container}>
+                <View style = {styles.friends}>
+                    <Text style = {styles.friendsText}>3 friends going</Text>
+                </View>
+                <Image
+                    style={{width:"100%", aspectRatio:1, borderRadius:20}}
+                    resizeMode="contain"
+                    source={{ uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4" }}
+                    />
+                <Card.Title style = {styles.title}>Sona's Birthday</Card.Title>
+                <View style = {styles.userInfo}>
+                    <Image style = {styles.bitmojiUser} source = {{uri:"https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww"}}/>
+                    <Text style = {styles.username}>username</Text>
+                </View>
             </View>
-            <Image
-                style={{width:"100%", aspectRatio:1, borderRadius:20}}
-                resizeMode="contain"
-                source={{ uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4" }}
-                />
-            <Card.Title style = {styles.title}>Sona's Birthday</Card.Title>
-            <View style = {styles.userInfo}>
-                <Image style = {styles.bitmojiUser} source = {{uri:"https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww"}}/>
-                <Text style = {styles.username}>username</Text>
-            </View>
-         </View>
 
-         <View style={styles.container}>
-            <View style = {styles.friends}>
-                <Text style = {styles.friendsText}>3 friends going</Text>
+            <View style={styles.container}>
+                <View style = {styles.friends}>
+                    <Text style = {styles.friendsText}>3 friends going</Text>
+                </View>
+                <Image
+                    style={{width:"100%", aspectRatio:1, borderRadius:20}}
+                    resizeMode="contain"
+                    source={{ uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4" }}
+                    />
+                <Card.Title style = {styles.title}>Sona's Birthday</Card.Title>
+                <View style = {styles.userInfo}>
+                    <Image style = {styles.bitmojiUser} source = {{uri:"https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww"}}/>
+                    <Text style = {styles.username}>username</Text>
+                </View>
             </View>
-            <Image
-                style={{width:"100%", aspectRatio:1, borderRadius:20}}
-                resizeMode="contain"
-                source={{ uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4" }}
-                />
-            <Card.Title style = {styles.title}>Sona's Birthday</Card.Title>
-            <View style = {styles.userInfo}>
-                <Image style = {styles.bitmojiUser} source = {{uri:"https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww"}}/>
-                <Text style = {styles.username}>username</Text>
-            </View>
-         </View>
+        </View>
+
+        </ScrollView>
+        <FAB
+        onPress={toggleComponent}
+        style = {styles.addButton}
+        visible={true}
+        icon={{ name: "add", color: "white" }}
+        color="#FF3386"
+        />
+        {visible && <AddEvent/>}
+
     </View>
-    </ScrollView>
   )
 }
 
@@ -126,5 +148,13 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         color:"#575757"
 
+    },
+    addButton:{
+        position:"absolute",
+        bottom:80,
+        right:20,
+    },
+    EventScreen:{
+        height:"100%",
     }
 })
