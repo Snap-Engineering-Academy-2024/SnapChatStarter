@@ -9,7 +9,7 @@ export default function AddEvent() {
        <TextInput style = {styles.descriptionField} placeholder = "Description"></TextInput>
        <TextInput style = {styles.inputFields} placeholder = "Time"></TextInput>
        <TextInput style = {styles.inputFields} placeholder = "Location"></TextInput>
-
+       <Button style = {styles.uploadButton} title = "Upload Picture"/>
     </View>
   )
 }
@@ -45,5 +45,11 @@ const styles = StyleSheet.create({
         padding:5,
         borderRadius:5,
         paddingBottom:30,
+    },
+    uploadButton:{
+        backgroundColor:"blue",
+        color:"white",
+        padding:20,
+        marginTop:20,
     }
 })
