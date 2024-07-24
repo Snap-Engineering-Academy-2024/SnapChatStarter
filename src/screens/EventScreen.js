@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
         backgroundColor:"grey",
     },
     userInfo:{
-        display:"flex"
+        display:"flex",
+        flexDirection:""
     }
 })
