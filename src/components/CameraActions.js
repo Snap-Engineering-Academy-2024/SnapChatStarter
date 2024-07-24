@@ -9,13 +9,13 @@ export default function CameraActions({ checkGallery, takePhoto }) {
     <View style={styles.cameraActions}>
       <View style={styles.cameraButtons}>
         <TouchableOpacity onPress={checkGallery} style={styles.photosIcon}>
-          <Ionicons name="ios-copy-outline" size={25} color="white" />
+          <Ionicons name="copy-outline" size={25} color="white" />
         </TouchableOpacity>
         <TouchableOpacity onPress={takePhoto} style={styles.pictureIcon}>
           <Ionicons name="ellipse-outline" size={80} color="white" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.lensesIcon}>
-          <Ionicons name="ios-happy-outline" size={25} color="white" />
+          <Ionicons name="happy-outline" size={25} color="white" />
         </TouchableOpacity>
       </View>
     </View>
