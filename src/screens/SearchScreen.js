@@ -1,4 +1,4 @@
-import { color } from "@rneui/base";
+// import { color } from "@rneui/base";
 import { Image , Platform, Text, View} from "react-native";
 import { SearchBar } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
