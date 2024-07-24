@@ -9,7 +9,7 @@ export default function AddEvent() {
        <TextInput style = {styles.descriptionField} placeholder = "Description"></TextInput>
        <TextInput style = {styles.inputFields} placeholder = "Time"></TextInput>
        <TextInput style = {styles.inputFields} placeholder = "Location"></TextInput>
-       <Button style = {styles.uploadButton} title = "Upload Picture"/>
+       <Button style = {{backgroundColor:"pink"}} title = "Upload Picture"/>
     </View>
   )
 }
