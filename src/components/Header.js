@@ -7,6 +7,9 @@ import ProfileScreen from "../screens/ProfileScreen";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import SearchScreen from "../screens/SearchScreen";
+import { useState, useEffect } from "react";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
+import { supabase } from "../utils/hooks/supabase";
 const Stack = createStackNavigator();
 
 export default function Header({ title }) {
