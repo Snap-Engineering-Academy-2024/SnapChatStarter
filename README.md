@@ -15,6 +15,12 @@ $ git clone https://github.com/your-username/repository-name.git
 ```
 4. Navigate to the repository directory
 
+# Install Yarn
+1. Run the following command to be able to run your program.
+```js
+$ git yarn install
+```
+
 # Set Up the Upstream Remote
 1. Add the original repository as a remote: This allows you to pull in updates from the original repository.
 ```js
