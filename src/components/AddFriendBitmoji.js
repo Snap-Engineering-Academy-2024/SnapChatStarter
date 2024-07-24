@@ -1,58 +1,89 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, ScrollView, Pressable} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { fontHeader } from "../../assets/themes/font";
-import { colors } from "../../assets/themes/colors";
-// import { useNavigation } from "@react-navigation/native";
-
-// import StoriesBitmoji from "../components/StoriesBitmoji";
-
-import Header from "../components/Header";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Image, Pressable } from "react-native";
+import { supabase } from '../utils/hooks/supabase';
 
 export default function AddFriendBitmoji() {
-    // const navigation = useNavigation();
+  const [usersToAdd, setUsersToAdd] = useState([]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const { data, error } = await supabase
+          .from('usersToAdd') 
+          .select('*')
+          // .limit(1);
+
+        if (error) {
+          console.error('Error fetching users:', error.message);
+          return;
+        }
+        if (data) {
+          setUsersToAdd(data);
+          console.log(data);
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error.message);
+      }
+    }
+
+    fetchUsers();
+  }, []);
 
   return (
-    <View style={styles.myBitmoji}>
-      <Image
-        style={styles.bitmojiImage}
-        source={require("../../assets/snapchat/personalBitmoji.png")}
-      />
-      <View style={styles.bitmojiTextContainer}>
-        <Text style={styles.bitmojiText}>Name</Text>
-        <Text style={styles.usernameText}>Username</Text>
-      </View>
-      <View>
-        <Pressable
-        onPress={() => {
-            alert("New Friend Added!"); }}>
-        
-        <Text style={styles.addButtonText}>Quick Add</Text>
-
-        </Pressable>
-      </View>
+    <View style={styles.container}>
+      {usersToAdd.map((user, index) => (
+        <View key={index} style={styles.myBitmoji}>
+          <Image
+            style={styles.bitmojiImage}
+            source={{ uri: user.profile_picture }}
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.bitmojiText}>
+              {user.name}
+              <Text style={styles.usernameText}> {user.username}</Text>
+            </Text>
+            <Pressable
+              style={styles.addButton}
+              onPress={() => {
+                alert(`Added ${user.name} as a friend!`);
+              }}
+            >
+              <Text style={styles.addButtonText}>Quick Add</Text>
+            </Pressable>
+          </View>
+        </View>
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
   myBitmoji: {
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 15,
   },
   bitmojiImage: {
     width: 60,
     height: 60,
+    borderRadius: 30,
+    marginBottom: 10,
   },
-  bitmojiTextContainer: {
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 4,
+  textContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
   },
   bitmojiText: {
-    alignSelf: "center",
-    fontSize: 12,
+    fontSize: 15,
     fontWeight: "700",
   },
   usernameText: {
@@ -60,18 +91,16 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     opacity: 0.5,
   },
+  addButton: {
+    backgroundColor: "#FFFF00",
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginLeft: 10,
+  },
   addButtonText: {
     fontSize: 13,
     fontWeight: "700",
-    opacity: 0.5,
-  },
-  Friends: {
-    textAlign: "left",
-    paddingLeft: 20,
-    paddingBottom: 20,
-    color: colors.primary,
-    fontSize: fontHeader.fontSize,
-    fontFamily: fontHeader.fontFamily,
-    fontWeight: fontHeader.fontWeight,
+    color: "black",
   },
 });
