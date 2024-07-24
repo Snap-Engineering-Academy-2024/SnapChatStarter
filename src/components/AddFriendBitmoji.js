@@ -26,9 +26,9 @@ export default function AddFriendBitmoji() {
       <View>
         <Pressable
         onPress={() => {
-            navigation.navigate("Profile");
-          }}>
-        <Text style={styles.addButtonText}>Username</Text>
+            alert("New Friend Added!"); }}>
+        
+        <Text style={styles.addButtonText}>Quick Add</Text>
 
         </Pressable>
       </View>
