@@ -1,34 +1,51 @@
-import { Text, View, TextInput, StyleSheet, TouchableOpacity, Linking } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { useState } from "react";
-import {supabase} from '../utils/hooks/supabase';
+import { supabase } from "../utils/hooks/supabase";
 
 // Components
 import ReturnButton from "../components/ReturnButton";
 
 export default function SignupScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [birthday, setBirthday] = useState("");
   const [alreadyInUseButton, setAlreadyInUseButton] = useState(false);
-  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState('');
-
+  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState("");
 
   //major dubbing here to figure out why auth doesnt work
   async function handleSubmit() {
     console.log("handle submit invoked!!");
-  
+
     try {
+      // sign up with additional user metadata
+      // https://supabase.com/docs/reference/javascript/auth-signup
+
       const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
+        email: email,
+        password: password,
+        options: {
+          data: {
+            birthday: birthday,
+          },
+        },
       });
-  
+
       if (error) {
         console.error("Error signing up:", error.message);
         if (error.message.includes("User already registered")) {
           setAlreadyInUseButton(true);
-          setAlreadyInUseMessage("That email is already associated with a username");
+          setAlreadyInUseMessage(
+            "That email is already associated with a username"
+          );
         } else {
-          setAlreadyInUseMessage('');
+          setAlreadyInUseMessage("");
         }
       } else {
         console.log("User signed up:", data);
@@ -38,7 +55,6 @@ export default function SignupScreen({ navigation }) {
       console.error("Unexpected error:", error);
     }
   }
-  
 
   return (
     <View style={styles.signUpScreen}>
@@ -60,6 +76,13 @@ export default function SignupScreen({ navigation }) {
           autoCapitalize="none"
           onChangeText={(password) => setPassword(password)}
         />
+        <Text style={styles.inputText}>BIRTHDAY (MM/DD/YYYY)</Text>
+        <TextInput
+          style={styles.inputField}
+          secureTextEntry={false}
+          autoCapitalize="none"
+          onChangeText={(birthday) => setBirthday(birthday)}
+        />
         <Text style={styles.disclaimerText}>
           By tapping Sign Up & Accept, you acknowledge that you have read the{" "}
           <TouchableOpacity
@@ -73,16 +96,18 @@ export default function SignupScreen({ navigation }) {
             <Text style={styles.blueText}>Privacy Policy</Text>
           </TouchableOpacity>{" "}
           and agree to the{" "}
-          <TouchableOpacity onPress={() => Linking.openURL("https://snap.com/en-US/terms")}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL("https://snap.com/en-US/terms")}
+          >
             <Text style={styles.blueText}>Terms of Service</Text>
           </TouchableOpacity>
         </Text>
       </View>
-        {password.length >= 4 && (
+      {email.length >= 1 && password.length >= 4 && birthday.length == 10 && (
         <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
           <Text style={styles.signUpText}>{"Sign Up & Accept"}</Text>
         </TouchableOpacity>
-        )}
+      )}
     </View>
   );
 }
