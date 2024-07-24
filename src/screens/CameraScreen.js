@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, Image, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, Image, SafeAreaView, Button, TouchableOpacity } from "react-native";
 import { useEffect, useRef, useState } from "react";
-import { Camera, CameraType } from "expo-camera";
+import { Camera, CameraType } from 'expo-camera/legacy';
 import * as MediaLibrary from "expo-media-library";
 import { shareAsync } from "expo-sharing";
 import * as ImagePicker from "expo-image-picker";
@@ -14,8 +14,8 @@ export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const cameraRef = useRef(null);
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [type, setType] = useState("back");
+  const [hasCameraPermission, setHasCameraPermission] = Camera.useCameraPermissions();
+  const [type, setType] = useState(CameraType.back);
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [image, setImage] = useState(null);
