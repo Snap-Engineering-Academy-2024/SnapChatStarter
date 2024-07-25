@@ -38,6 +38,11 @@ const DATA = [
   },
 ];
 
+const { data: galleryPhotos, error } = await supabase.from("gallery").select("photo");
+if (error) {
+    console.error("Error fetching gallery photos:", error);
+  }
+
 export default function StoriesScreen({ route, navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
