@@ -145,9 +145,6 @@ export default function SearchScreen() {
         // ItemSeparatorComponent={() => <View style={{height: -50, width:"50%", gap:10}} />}
         
       />
-      <Text styles={{ justifyContents: "center" }}>Search results</Text>
-      {/* <Text> {usersToAdd[0].name} 
-      </Text> */}
 
 
       {recents.length > 0 ? (
