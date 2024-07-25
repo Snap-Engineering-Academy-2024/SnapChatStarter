@@ -9,6 +9,7 @@ export default function CameraActions({ galleryMenu, checkGallery, takePhoto }) 
       <View style={styles.cameraButtons}>
         <TouchableOpacity onPress={galleryMenu} style={styles.photosIcon}>
           <Ionicons name="copy-outline" size={25} color="white" />
+
         </TouchableOpacity>
         <TouchableOpacity onPress={takePhoto} style={styles.pictureIcon}>
           <Ionicons name="ellipse-outline" size={80} color="white" />
