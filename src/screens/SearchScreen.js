@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Button } from "react-native-elements";
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import { Pressable, FlatList, Item} from "react-native";
 import {supabase} from '../utils/hooks/supabase';
 import { SmallChatFill } from "../../assets/snapchat/NavigationIcons";
@@ -16,7 +16,6 @@ const Stack = createStackNavigator();
 export default function SearchScreen() {
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
-
   const [usersToAdd, setUsersToAdd] = useState([]);
 
   const [recents, setRecents] = useState([]);
@@ -26,7 +25,8 @@ export default function SearchScreen() {
       try {
           const { data, error } = await supabase
           .from('usersToAdd')
-          .select('*');
+          .select('*')
+          .limit(8);
           if (error) {
             console.error('Error fetching users:', error.message);
           return;
@@ -47,15 +47,22 @@ export default function SearchScreen() {
     <View style={{backgroundColor: "#fff",
         borderRadius: 10,
         padding: 10,
-        margin: 10,
+        margin: 4,
         alignItems: "center",
-        width: "45%",}}>
-      <Image source={item.ProfilePic}/>
-      <Text >{item.Name}</Text>
-      <Text >{item.Username}</Text>
-      <Text >{item.Starsign}</Text>
+        width: "50%",
+        flexDirection:"row",
+        height: 50,
+        gap: 10,
+        }}>
+      <Image 
+      source={{uri: item.profile_picture}}
+      style={{width:50, height:50, borderRadius:50,}}
+      />
+      <Text >{item.name}</Text>
     </View>
   );
+
+
 
   const renderRecentItem = ({ item }) => (
     <View style={{alignItems: "center", backgroundColor: "white", width: 90, borderRadius: 10, gap: 10, paddingVertical: 10}}>
@@ -124,6 +131,25 @@ export default function SearchScreen() {
         </View>
       </SafeAreaView>
 
+      
+      <Text style={{paddingLeft:10, fontWeight:"bold"}}>Best Friends</Text>
+      <FlatList
+        style={{marginLeft:10, marginRight:10}}
+        data={usersToAdd}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.Username}
+        numColumns={2}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        contentContainerStyle={{alignItems: "center"}}
+        scrollEnabled={false}
+        // ItemSeparatorComponent={() => <View style={{height: -50, width:"50%", gap:10}} />}
+        
+      />
+      <Text styles={{ justifyContents: "center" }}>Search results</Text>
+      {/* <Text> {usersToAdd[0].name} 
+      </Text> */}
+
+
       {recents.length > 0 ? (
         <>
           <View style={{justifyContent: "space-between", flexDirection:"row", paddingHorizontal: 20}}>
@@ -157,6 +183,7 @@ export default function SearchScreen() {
         // horizontal={true}
         contentContainerStyle={{alignItems: "center", paddingTop: 10}}
       />
+
 
     </View>
   );
