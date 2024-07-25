@@ -13,6 +13,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import AddEvent from "../components/AddEvent";
 import EventInfo from "../components/EventInfo";
 import { supabase } from "../utils/hooks/supabase";
+import { Dialog } from "@rneui/base";
 
 export default function EventScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
@@ -20,7 +21,7 @@ export default function EventScreen({ route, navigation }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [refreshing, setRefreshing] = React.useState(false);
   const [events, setEvents] = useState([]);
-  
+
 
   function toggleComponent() {
     setVisible(!visible);
@@ -29,7 +30,7 @@ export default function EventScreen({ route, navigation }) {
 
   function handleCardTouch(event){
     console.log("press")
-    setDetailsVisible(!detailsVisible)
+    setDetailsVisible(true)
     console.log(detailsVisible)
     setSelectedEvent(event)
 
@@ -117,6 +118,12 @@ export default function EventScreen({ route, navigation }) {
           refreshEvents();
         }}
       />
+    
+       <EventInfo
+          isVisible={detailsVisible}
+          event={selectedEvent}
+          onClose={() => setDetailsVisible(false)}
+        />
     </View>
   );
 }

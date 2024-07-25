@@ -2,8 +2,8 @@ import React from 'react'
 import { View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity} from "react-native";
 import { Card, FAB } from "@rneui/themed";
 
-export default function EventInfo({ event, onClose }) {
-    if (!event) return null;
+export default function EventInfo({ isVisible, event, onClose }) {
+    if (!event || !isVisible)  return null;
   
     return (
       <View style={styles.EventInfo}>
