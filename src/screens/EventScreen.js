@@ -28,7 +28,7 @@ export default function EventScreen({ route, navigation }) {
 
     const fetchData = async () => {
         try {
-            const { data, error } = await supabase.from('event_tbl').select('*');
+            const { data, error } = await supabase.from('event_table').select('*');
             if (error) {
                 console.error("Error fetching data:", error);
             } else {
@@ -68,7 +68,7 @@ export default function EventScreen({ route, navigation }) {
                     <Image
                     style={styles.bitmojiUser}
                     source={{
-                        uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
+                        uri: "https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
                     }}
                     />
                     <Text style={styles.username}>{event.host}</Text>
@@ -93,7 +93,6 @@ export default function EventScreen({ route, navigation }) {
             event={selectedEvent}
             onClose={() => setDetailsVisible(false)}
         />
-        {/* <EventInfo isVisible = {detailsVisible} onClose={handleCardTouch}/> */}
     </View>
   );
 }
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
     top: 15,
     left: 15,
     zIndex: 100,
-    backgroundColor: "pink",
+    backgroundColor: "#fffc00",
     margin: 0,
     borderRadius: 20,
     padding: 10,
@@ -161,8 +160,8 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 80,
-    right: 20,
+    bottom: 110,
+    right: 30,
   },
   EventScreen: {
     height: "100%",

@@ -11,11 +11,24 @@ export default function AddEvent({ isVisible, onClose }) {
     const [descr, setDescr] = useState('');
     const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
+    const [imageURL, setImageURL] = useState('');
 
     const [event, setEvent] = useState({})
 
+    const fallbackImageURL = "https://interactive-examples.mdn.mozilla.net/media/examples/plumeria.jpg";
+
+    function isValidUrl(url) {
+        try {
+            new URL(url);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
     //we want to use this function to send information to Supabse when Submit button is clicked
     function submitToSupabase(){  
+        const validImageURL = isValidUrl(imageURL) ? imageURL : fallbackImageURL;
+
         let object = {
             id: btoa(title + time + new Date().toISOString()),
             title:title,
@@ -23,7 +36,7 @@ export default function AddEvent({ isVisible, onClose }) {
             time:time,
             location:location,
             host:"someUsername",
-            imageURL:"https://interactive-examples.mdn.mozilla.net/media/examples/plumeria.jpg",
+            imageURL: validImageURL,
             attending:0,
             private:false,
             created_at: new Date().toISOString(),
@@ -33,13 +46,14 @@ export default function AddEvent({ isVisible, onClose }) {
 
     const insertData = async () => {
         if(title!="" && time!="" && location!=""){
+
             const eventData = submitToSupabase()
             console.log(eventData)
 
             onClose()
             try {
             const { data, error } = await supabase
-                .from("event_tbl") // 
+                .from("event_table") // 
                 .insert([eventData]); // Insert the event data
         
             if (error) {
@@ -56,14 +70,15 @@ export default function AddEvent({ isVisible, onClose }) {
   return (
     <Dialog overlayStyle= {styles.DialogueBox} isVisible={isVisible} onBackdropPress={onClose}>
       <Text style={styles.eventText}>Event Details</Text>
-      <TextInput onChangeText={text => setTitle(text)} style={styles.inputFields} placeholder="Title"></TextInput>
+      <TextInput onChangeText={text => setTitle(text)} style={styles.inputFields} placeholder="Title (required)"></TextInput>
       <TextInput
         onChangeText={text => setDescr(text)} 
         style={styles.descriptionField}
         placeholder="Description"
       ></TextInput>
-      <TextInput onChangeText={text => setTime(text)}  id = "time" style={styles.inputFields} placeholder="Time"></TextInput>
-      <TextInput onChangeText={text => setLocation(text)}  style={styles.inputFields} placeholder="Location"></TextInput>
+      <TextInput onChangeText={text => setTime(text)}  id = "time" style={styles.inputFields} placeholder="Time (required)"></TextInput>
+      <TextInput onChangeText={text => setLocation(text)}  style={styles.inputFields} placeholder="Location (required)"></TextInput>
+      <TextInput onChangeText={text => setImageURL(text)}  style={styles.inputFields} placeholder="Picture Url"></TextInput>
 
       <FAB
         icon={{ name: "upload", color: "white" }}
@@ -75,6 +90,7 @@ export default function AddEvent({ isVisible, onClose }) {
         color = {"none"}
         icon={{ name: "close", color: "black" }}
     />
+
 
     <FAB
         style = {styles.uploadButton}
@@ -91,7 +107,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "yellow",
     width: "80%",
-    aspectRatio: 1,
+    // aspectRatio: 1,
     position: "absolute",
     alignSelf: "center",
     top: "20%",
@@ -99,7 +115,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   DialogueBox:{
-    height: "60%",
+    // height: "60%",
     borderRadius:20,
   },
   eventText: {
