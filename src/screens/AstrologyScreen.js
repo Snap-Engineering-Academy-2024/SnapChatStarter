@@ -1,5 +1,4 @@
 import { Image, Text, View, StyleSheet } from "react-native";
-import { supabase } from "../utils/hooks/supabase";
 import { useState, useEffect } from "react";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 
