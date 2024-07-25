@@ -21,7 +21,6 @@ export default function AstrologyScreen() {
   useEffect(() => {
     if (astrology === null) return;
     getHoroscope();
-    console.log(horoscope);
   }),
     [astrology];
 
