@@ -58,7 +58,7 @@ const SectionListBasics = () => {
     <View style={styles.container}>
         <Text style= {{textAlign: "center", fontSize:25, marginTop: 20}}>Quick Add</Text>
         <ScrollView
-            horizontal={true}
+            horizontal={false}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.stories}
           >
