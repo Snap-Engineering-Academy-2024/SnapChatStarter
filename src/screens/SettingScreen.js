@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, StyleSheet, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Text, View, Button, StyleSheet, TextInput, Image } from 'react-native';
 import { supabase } from '../utils/hooks/supabase';
 import { useAuthentication } from '../utils/hooks/useAuthentication';
 
@@ -10,94 +9,127 @@ export default function SettingsScreen() {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('01/01/1998'); // Default random date
+  const [profilePictureUrl, setProfilePictureUrl] = useState('');
   const [initialDisplayName, setInitialDisplayName] = useState('');
   const [initialEmail, setInitialEmail] = useState('');
+  const [initialProfilePictureUrl, setInitialProfilePictureUrl] = useState('');
   const [editingDisplayName, setEditingDisplayName] = useState(false);
   const [editingEmail, setEditingEmail] = useState(false);
   const [editingDateOfBirth, setEditingDateOfBirth] = useState(false);
-  const [userData, setUserData] = useState(null);
-  const fetchUserData = async () => {
-    if (user) {
-      const { data, error } = await supabase
-        .from('profiles') // Replace with your table name
-        .select('*') // this nis where I can do sql funnies
-        .eq('id', user.id); // Adjust the column name if necessary
-
-      if (error) {
-        console.error('Error fetching user data:', error);
-      } else {
-        setUserData(data[0] ?? null);
-      }
-      setLoading(false);
-    }
-  };
-  //will write to table, ensure proper syntax beforehand?
-  // can rewrite this to include different fields (email, username, DOB, etc.)
-  const updateUserEmail = async (newEmail) => {
-    if (user) {
-      try {
-        const { data, error } = await supabase
-          .from('profiles') // Replace with your table name
-          .update({ email: newEmail }) // Update the email column
-          .eq('id', user.id); // Match the user ID
-  
-        if (error) {
-          console.error('Error updating user email:', error);
-        } else {
-          console.log('User email updated:', data);
-        }
-      } catch (error) {
-        console.error('Error:', error.message);
-      }
-    }
-  };
-  const updateUsername = async (newUsername) => {
-    if (user) {
-      try {
-        const { data, error } = await supabase
-          .from('profiles') // Replace with your table name
-          .update({ username: newUsername }) // Update the email column
-          .eq('id', user.id); // Match the user ID
-  
-        if (error) {
-          console.error('Error updating username:', error);
-        } else {
-          console.log('User username updated:', data);
-        }
-      } catch (error) {
-        console.error('Error:', error.message);
-      }
-    }
-  };  
-  const updateUserDOB = async (newDOB) => {
-    if (user) {
-      try {
-        const { data, error } = await supabase
-          .from('profiles') // Replace with your table name
-          .update({ dob: newDOB }) // Update the email column
-          .eq('id', user.id); // Match the user ID
-  
-        if (error) {
-          console.error('Error updating user DOB:', error);
-        } else {
-          console.log('User DOB updated:', data);
-        }
-      } catch (error) {
-        console.error('Error:', error.message);
-      }
-    }
-  };
+  const [editingProfilePicture, setEditingProfilePicture] = useState(false);
 
   useEffect(() => {
     if (user !== null) {
-      setLoading(false);
-      setDisplayName(user.email.split('@')[0]); // Initialize display name
-      setEmail(user.email); // Initialize email
-      setInitialDisplayName(user.email.split('@')[0]); // Store initial display name
-      setInitialEmail(user.email); // Store initial email
-      updateUserEmail("powerfulattack96@gmail.com");
+      fetchUserData();
     }
   }, [user]);
+
+  const fetchUserData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles') // Replace with your table name
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+
+      setDisplayName(data.username || user.email.split('@')[0]);
+      setEmail(data.email || user.email);
+      setDateOfBirth(data.dob || '01/01/1998');
+      setProfilePictureUrl(data.profile_picture_url || 'https://example.com/default-profile-picture.jpg'); // Default URL
+      setInitialDisplayName(data.username || user.email.split('@')[0]);
+      setInitialEmail(data.email || user.email);
+      setInitialProfilePictureUrl(data.profile_picture_url || 'https://example.com/default-profile-picture.jpg');
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching user data:', error.message);
+      setLoading(false);
+    }
+  };
+
+  const saveProfilePicture = async () => {
+    try {
+      const { error } = await supabase
+        .from('profiles') // Replace with your table name
+        .update({ profile_picture_url: profilePictureUrl })
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      setEditingProfilePicture(false);
+      setInitialProfilePictureUrl(profilePictureUrl);
+    } catch (error) {
+      console.error('Error updating profile picture URL:', error.message);
+    }
+  };
+
+  const saveDisplayName = async () => {
+    try {
+      const { error } = await supabase
+        .from('profiles') // Replace with your table name
+        .update({ username: displayName })
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      setEditingDisplayName(false);
+      setInitialDisplayName(displayName);
+    } catch (error) {
+      console.error('Error updating display name:', error.message);
+    }
+  };
+
+  const saveEmail = async () => {
+    try {
+      const { error } = await supabase
+        .from('profiles') // Replace with your table name
+        .update({ email })
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      setEditingEmail(false);
+      setInitialEmail(email);
+    } catch (error) {
+      console.error('Error updating email:', error.message);
+    }
+  };
+
+  const saveDateOfBirth = async () => {
+    try {
+      const { error } = await supabase
+        .from('profiles') // Replace with your table name
+        .update({ dob: dateOfBirth })
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      setEditingDateOfBirth(false);
+    } catch (error) {
+      console.error('Error updating date of birth:', error.message);
+    }
+  };
+
+  const cancelEditProfilePicture = () => {
+    setProfilePictureUrl(initialProfilePictureUrl);
+    setEditingProfilePicture(false);
+  };
+
+  const cancelEditDisplayName = () => {
+    setDisplayName(initialDisplayName);
+    setEditingDisplayName(false);
+  };
+
+  const cancelEditEmail = () => {
+    setEmail(initialEmail);
+    setEditingEmail(false);
+  };
+
+  const cancelEditDateOfBirth = () => {
+    setDateOfBirth('01/01/1998');
+    setEditingDateOfBirth(false);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -112,125 +144,117 @@ export default function SettingsScreen() {
     }
   };
 
-  const saveDisplayName = async () => {
-    // Placeholder for saving display name to backend (Supabase or other)
-    setEditingDisplayName(false); // Exit editing mode
-    setInitialDisplayName(displayName); // Update initial value
-  };
-
-  const saveEmail = async () => {
-    // Placeholder for saving email to backend (Supabase or other)
-    setEditingEmail(false); // Exit editing mode
-    setInitialEmail(email); // Update initial value
-  };
-
-  const saveDateOfBirth = async () => {
-    // Placeholder for saving date of birth to backend (Supabase or other)
-    setEditingDateOfBirth(false); // Exit editing mode
-  };
-
-  const cancelEditDisplayName = () => {
-    // Cancel editing display name and revert to initial value
-    setDisplayName(initialDisplayName);
-    setEditingDisplayName(false);
-  };
-
-  const cancelEditEmail = () => {
-    // Cancel editing email and revert to initial value
-    setEmail(initialEmail);
-    setEditingEmail(false);
-  };
-
-  const cancelEditDateOfBirth = () => {
-    // Cancel editing date of birth and revert to initial value
-    setDateOfBirth('01/01/1998');
-    setEditingDateOfBirth(false);
-  };
-
-  if (!loading) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Account Settings</Text>
-
-        {/* Display Name */}
-        <View style={styles.settingBar}>
-          <Text>Display Name</Text>
-          {editingDisplayName ? (
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                value={displayName}
-                onChangeText={setDisplayName}
-                placeholder="Enter your display name"
-              />
-              <View style={styles.buttonContainer}>
-                <Button onPress={saveDisplayName} title="Save" />
-                <Button onPress={cancelEditDisplayName} title="Cancel" />
-              </View>
-            </View>
-          ) : (
-            <Text style={styles.databaseData}>{displayName}</Text>
-          )}
-          {!editingDisplayName && (
-            <Button onPress={() => setEditingDisplayName(true)} title="Edit" />
-          )}
-        </View>
-
-        {/* Email */}
-        <View style={styles.settingBar}>
-          <Text>Email</Text>
-          {editingEmail ? (
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="Enter your email"
-              />
-              <View style={styles.buttonContainer}>
-                <Button onPress={saveEmail} title="Save" />
-                <Button onPress={cancelEditEmail} title="Cancel" />
-              </View>
-            </View>
-          ) : (
-            <Text style={styles.databaseData}>{email}</Text>
-          )}
-          {!editingEmail && (
-            <Button onPress={() => setEditingEmail(true)} title="Edit" />
-          )}
-        </View>
-
-        {/* Date of Birth */}
-        <View style={styles.settingBar}>
-          <Text>Date of Birth</Text>
-          {editingDateOfBirth ? (
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                value={dateOfBirth}
-                onChangeText={setDateOfBirth}
-                placeholder="MM/DD/YYYY"
-              />
-              <View style={styles.buttonContainer}>
-                <Button onPress={saveDateOfBirth} title="Save" />
-                <Button onPress={cancelEditDateOfBirth} title="Cancel" />
-              </View>
-            </View>
-          ) : (
-            <Text style={styles.databaseData}>{dateOfBirth}</Text>
-          )}
-          {!editingDateOfBirth && (
-            <Button onPress={() => setEditingDateOfBirth(true)} title="Edit" />
-          )}
-        </View>
-
-        {/* Log Out Button */}
-        <Button onPress={handleSignOut} title="Log Out" style={styles.button} />
-      </View>
-    );
-  } else {
+  if (loading) {
     return <Text>Loading...</Text>;
   }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Account Settings</Text>
+
+      {/* Profile Picture */}
+      <View style={styles.settingBar}>
+        <Text>Profile Picture</Text>
+        {editingProfilePicture ? (
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={profilePictureUrl}
+              onChangeText={setProfilePictureUrl}
+              placeholder="Enter profile picture URL"
+            />
+            <View style={styles.buttonContainer}>
+              <Button onPress={saveProfilePicture} title="Save" />
+              <Button onPress={cancelEditProfilePicture} title="Cancel" />
+            </View>
+          </View>
+        ) : (
+          <View style={styles.profilePictureContainer}>
+            <Image
+              source={{ uri: profilePictureUrl }}
+              style={styles.profilePicture}
+            />
+            <Button onPress={() => setEditingProfilePicture(true)} title="Edit" />
+          </View>
+        )}
+      </View>
+
+      {/* Display Name */}
+      <View style={styles.settingBar}>
+        <Text>Display Name</Text>
+        {editingDisplayName ? (
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={displayName}
+              onChangeText={setDisplayName}
+              placeholder="Enter your display name"
+            />
+            <View style={styles.buttonContainer}>
+              <Button onPress={saveDisplayName} title="Save" />
+              <Button onPress={cancelEditDisplayName} title="Cancel" />
+            </View>
+          </View>
+        ) : (
+          <Text style={styles.databaseData}>{displayName}</Text>
+        )}
+        {!editingDisplayName && (
+          <Button onPress={() => setEditingDisplayName(true)} title="Edit" />
+        )}
+      </View>
+
+      {/* Email */}
+      <View style={styles.settingBar}>
+        <Text>Email</Text>
+        {editingEmail ? (
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter your email"
+            />
+            <View style={styles.buttonContainer}>
+              <Button onPress={saveEmail} title="Save" />
+              <Button onPress={cancelEditEmail} title="Cancel" />
+            </View>
+          </View>
+        ) : (
+          <Text style={styles.databaseData}>{email}</Text>
+        )}
+        {!editingEmail && (
+          <Button onPress={() => setEditingEmail(true)} title="Edit" />
+        )}
+      </View>
+
+      {/* Date of Birth */}
+      <View style={styles.settingBar}>
+        <Text>Date of Birth</Text>
+        {editingDateOfBirth ? (
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={dateOfBirth}
+              onChangeText={setDateOfBirth}
+              placeholder="MM/DD/YYYY"
+            />
+            <View style={styles.buttonContainer}>
+              <Button onPress={saveDateOfBirth} title="Save" />
+              <Button onPress={cancelEditDateOfBirth} title="Cancel" />
+            </View>
+          </View>
+        ) : (
+          <Text style={styles.databaseData}>{dateOfBirth}</Text>
+        )}
+        {!editingDateOfBirth && (
+          <Button onPress={() => setEditingDateOfBirth(true)} title="Edit" />
+        )}
+      </View>
+
+      {/* Log Out Button */}
+      <Button onPress={handleSignOut} title="Log Out" style={styles.button} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -268,5 +292,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
+  },
+  profilePictureContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  profilePicture: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
   },
 });
