@@ -95,28 +95,28 @@ export default function CameraScreen({ navigation, focused }) {
     }
   }
 
-  async function uploadImage (photoUri) {
-    // console.log("1")
-    const response = await fetch(photoUri);
+  // async function uploadImage (photoUri) {
+  //   // console.log("1")
+  //   const response = await fetch(photoUri);
   
-    const blob = await response.blob();
+  //   const blob = await response.blob();
 
-    const arrayBuffer = await new Response(blob).arrayBuffer();
-    // console.log("2")
-    const fileName = `public/${Date.now()}.jpg`;
-    const { error1} = await supabase
-      .storage
-      .from('pictureStorage')
-      .upload(fileName, arrayBuffer, { contentType: 'image/jpeg', upsert: false });
-    // console.log("3")
-    if (error1) {
-      console.error('Error uploading image:', error1.message);
-    } else {
-      console.log('Image successfully uploaded:', data);
-    }
+  //   const arrayBuffer = await new Response(blob).arrayBuffer();
+  //   // console.log("2")
+  //   const fileName = `public/${Date.now()}.jpg`;
+  //   const { error1} = await supabase
+  //     .storage
+  //     .from('pictureStorage')
+  //     .upload(fileName, arrayBuffer, { contentType: 'image/jpeg', upsert: false });
+  //   // console.log("3")
+  //   if (error1) {
+  //     console.error('Error uploading image:', error1.message);
+  //   } else {
+  //     console.log('Image successfully uploaded:', data);
+  //   }
 
 
-  }
+  // }
 
   function savePhoto() {
     MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
