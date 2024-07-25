@@ -10,6 +10,28 @@ import {
 } from "react-native";
 import { Dialog, FAB } from "@rneui/themed";
 export default function AddEvent({ isVisible, onClose }) {
+
+    function submitToSupabase(){  //we want to use this function to send information to Supabse when Submit button is clicked
+        let title = document.getElementById("title").value;
+        let  descr = document.getElementById("description").value;
+        let time = document.getElementById("time").value;
+        let location = document.getElementById("location").value;
+
+        let object = {
+            title:title,
+            description:descr,
+            time:time,
+            location:location,
+            username:"someUsername",
+            imageUrl:"https://interactive-examples.mdn.mozilla.net/media/examples/plumeria.jpg"
+        }
+
+        //submit object to supabase
+
+
+    }
+
+
   return (
     <Dialog overlayStyle= {styles.DialogueBox} isVisible={isVisible} onBackdropPress={onClose}>
       <Text style={styles.eventText}>Event Details</Text>
@@ -18,7 +40,7 @@ export default function AddEvent({ isVisible, onClose }) {
         style={styles.descriptionField}
         placeholder="Description"
       ></TextInput>
-      <TextInput value = "hello" style={styles.inputFields} placeholder="Time"></TextInput>
+      <TextInput id = "time" value = "hello" style={styles.inputFields} placeholder="Time"></TextInput>
       <TextInput style={styles.inputFields} placeholder="Location"></TextInput>
 
       <FAB
