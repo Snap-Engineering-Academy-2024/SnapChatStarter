@@ -6,7 +6,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import DiscoverCard from "../components/DiscoverCard";
 import SearchScreen from "../screens/SearchScreen";
 import SettingsScreen from "../screens/SettingScreen";
-import FriendStory from "../screens/FriendStory";import SettingsScreen from "../screens/SettingsScreen";
+import FriendStory from "../screens/FriendStory";
 
 const Stack = createStackNavigator();
 

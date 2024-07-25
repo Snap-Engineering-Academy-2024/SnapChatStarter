@@ -15,6 +15,78 @@ export default function SettingsScreen() {
   const [editingDisplayName, setEditingDisplayName] = useState(false);
   const [editingEmail, setEditingEmail] = useState(false);
   const [editingDateOfBirth, setEditingDateOfBirth] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const fetchUserData = async () => {
+    if (user) {
+      const { data, error } = await supabase
+        .from('profiles') // Replace with your table name
+        .select('*') // this nis where I can do sql funnies
+        .eq('id', user.id); // Adjust the column name if necessary
+
+      if (error) {
+        console.error('Error fetching user data:', error);
+      } else {
+        setUserData(data[0] ?? null);
+      }
+      setLoading(false);
+    }
+  };
+  //will write to table, ensure proper syntax beforehand?
+  // can rewrite this to include different fields (email, username, DOB, etc.)
+  const updateUserEmail = async (newEmail) => {
+    if (user) {
+      try {
+        const { data, error } = await supabase
+          .from('profiles') // Replace with your table name
+          .update({ email: newEmail }) // Update the email column
+          .eq('id', user.id); // Match the user ID
+  
+        if (error) {
+          console.error('Error updating user email:', error);
+        } else {
+          console.log('User email updated:', data);
+        }
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    }
+  };
+  const updateUsername = async (newUsername) => {
+    if (user) {
+      try {
+        const { data, error } = await supabase
+          .from('profiles') // Replace with your table name
+          .update({ username: newUsername }) // Update the email column
+          .eq('id', user.id); // Match the user ID
+  
+        if (error) {
+          console.error('Error updating username:', error);
+        } else {
+          console.log('User username updated:', data);
+        }
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    }
+  };  
+  const updateUserDOB = async (newDOB) => {
+    if (user) {
+      try {
+        const { data, error } = await supabase
+          .from('profiles') // Replace with your table name
+          .update({ dob: newDOB }) // Update the email column
+          .eq('id', user.id); // Match the user ID
+  
+        if (error) {
+          console.error('Error updating user DOB:', error);
+        } else {
+          console.log('User DOB updated:', data);
+        }
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    }
+  };
 
   useEffect(() => {
     if (user !== null) {
@@ -23,6 +95,7 @@ export default function SettingsScreen() {
       setEmail(user.email); // Initialize email
       setInitialDisplayName(user.email.split('@')[0]); // Store initial display name
       setInitialEmail(user.email); // Store initial email
+      updateUserEmail("powerfulattack96@gmail.com");
     }
   }, [user]);
 

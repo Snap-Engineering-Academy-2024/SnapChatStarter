@@ -14,7 +14,7 @@ const handleSignOut = async () => {
     }
   };
 
-export default function ProfileScreen({ navigation }{ navigation }){
+export default function ProfileScreen({ navigation }){
 return(
     <View styles={{alignItems:"center"}}>
     <Image 
