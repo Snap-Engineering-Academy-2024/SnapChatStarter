@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity, Modal } from "react-native";
+import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity, Modal, Pressable } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -151,27 +151,28 @@ export default function CameraScreen({ navigation, focused }) {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={styles.buttonStyle}>
-              <Button
-                onPress={checkGallery}
-                title="Phone Gallery"
-              />
-            </View>
-            <View style={styles.buttonStyle}>
-              <Button
-                onPress={checkGallery}
-                title="ChatSnap Memories"
-              />
-            </View>
-            <View style={styles.buttonStyle}>
-              <Button
-                theme={{ 
-                  colors: { primary: 'red' } 
-                }}
-                onPress={galleryMenu}
-                title="Close"
-              />
-            </View>
+            <Pressable
+              onPress={checkGallery}
+              style={({ pressed }) => [
+                  { backgroundColor: pressed ? 'blue' : 'transparent' },
+                  styles.buttonStyle
+              ]}
+              // style={styles.buttonStyle}
+            >
+              <Text style={styles.buttonText}>Phone Gallery</Text>
+            </Pressable>
+            <Pressable
+              onPress={checkGallery}
+              style={styles.buttonStyle}
+            >
+              <Text style={styles.buttonText}>ChatSnap Memories</Text>
+            </Pressable>
+            <Pressable
+              onPress={galleryMenu}
+              style={styles.closeButtonStyle}
+            >
+              <Text style={styles.buttonText}>Close</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -235,6 +236,29 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
     margin: 5,
-  }
+    paddingVertical: 20,
+    paddingHorizontal: 32,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#2196F3',
+  },
+  closeButtonStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 5,
+    paddingVertical: 20,
+    paddingHorizontal: 32,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: 'red',
+  },
+  buttonText: {
+    fontSize: 20,
+    lineHeight: 21,
+    letterSpacing: 0.5,
+    color: 'white',
+  },
 });
