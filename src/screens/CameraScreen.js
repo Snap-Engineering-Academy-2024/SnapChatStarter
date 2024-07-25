@@ -9,6 +9,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CameraActions from "../components/CameraActions";
 import CameraOptions from "../components/CameraOptions";
 import PostcaptureOptions from "../components/PostcaptureActions";
+// Add supabase to store:
+import {supabase} from '../utils/hooks/supabase';
 
 export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -69,6 +71,12 @@ export default function CameraScreen({ navigation, focused }) {
       const options = { quality: 1, base64: true, exif: false };
       const newPhoto = await cameraRef.current.takePictureAsync(options);
       setPhoto(newPhoto);
+
+      // I add this to insert the uri of the new photo taken to supabase table "gallery"
+      const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });    
+      if (error) {
+        console.error('Error inserting photo:', error.message);
+      } 
     }
   }
 
@@ -98,7 +106,9 @@ export default function CameraScreen({ navigation, focused }) {
       >
         <Image
           style={facing === "front" ? styles.frontPreview : styles.preview}
-          source={{ uri: "data:image/jpg;base64," + photo.base64 }}
+          //source={{ uri: "data:image/jpg;base64," + photo.base64 }}
+          // We don't need that base64 thing, just uri is good
+          source={{ uri: photo.uri }}
         />
         {hasMediaLibraryPermission && (
           <PostcaptureOptions deletePhoto={() => setPhoto(null)} savePhoto={savePhoto} />
