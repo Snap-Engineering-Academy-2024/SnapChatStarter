@@ -12,10 +12,12 @@ export default function AddEvent({ isVisible, onClose }) {
     const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
 
+    const [event, setEvent] = useState({})
+
     //we want to use this function to send information to Supabse when Submit button is clicked
     function submitToSupabase(){  
         let object = {
-            id:`${title}${time}`,
+            id: btoa(title + time + new Date().toISOString()),
             title:title,
             description:descr,
             time:time,
@@ -30,21 +32,24 @@ export default function AddEvent({ isVisible, onClose }) {
     }
 
     const insertData = async () => {
-        const eventData = submitToSupabase()
-        console.log(eventData)
-    
-        try {
-          const { data, error } = await supabase
-            .from("event_tbl") // 
-            .insert([eventData]); // Insert the event data
-    
-          if (error) {
-            console.error("Event already exists:", error);
-          } else {
-            console.log("Data inserted:", data);
-          }
-        } catch (error) {
-          console.error("Unexpected error:", error);
+        if(title!="" && time!="" && location!=""){
+            const eventData = submitToSupabase()
+            console.log(eventData)
+
+            onClose()
+            try {
+            const { data, error } = await supabase
+                .from("event_tbl") // 
+                .insert([eventData]); // Insert the event data
+        
+            if (error) {
+                console.error("Event already exists:", error);
+            } else {
+                console.log("Data inserted:", data);
+            }
+            } catch (error) {
+            console.error("Unexpected error:", error);
+            }
         }
       };
 
