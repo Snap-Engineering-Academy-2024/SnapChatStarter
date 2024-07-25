@@ -22,7 +22,7 @@ export default function CameraScreen({ navigation, focused }) {
   const [permission, requestPermission] = useCameraPermissions();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const [image, setImage] = useState(null);
+  //const [image, setImage] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
 
   useEffect(() => {
@@ -59,19 +59,19 @@ export default function CameraScreen({ navigation, focused }) {
     // return <CameraGalleryMenu />
     setShowGalleryMenu(!showGalleryMenu);
   }
-
   async function checkGallery() {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
     if (!permissionResult.granted) {
       alert("Permission to access camera roll is required!");
       return;
     }
-
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
     console.log(pickerResult);
+    setShowGalleryMenu(false); //By Ryan
+    console.log(pickerResult.assets[0].uri);
     if (!pickerResult.canceled) {
-      setImage(pickerResult.uri);
+      //setImage(pickerResult.uri);
+      setPhoto(pickerResult.assets[0]) //By Ryan
     }
   }
 
@@ -90,7 +90,7 @@ export default function CameraScreen({ navigation, focused }) {
         console.error('Error inserting photo:', error.message);
       }
       // This part is to store images in a folder bucket named "pictureStorage"
-      uploadImage(newPhoto.uri);
+      //uploadImage(newPhoto.uri);
       
     }
   }
@@ -191,7 +191,10 @@ export default function CameraScreen({ navigation, focused }) {
               <Text style={styles.buttonText}>Phone Gallery</Text>
             </Pressable>
             <Pressable
-              onPress={checkGallery}
+              onPress={() =>{
+                navigation.navigate('MemoryScreen')
+              }
+              }
               style={styles.buttonStyle}
             >
               <Text style={styles.buttonText}>ChatSnap Memories</Text>
