@@ -56,11 +56,7 @@ export default function SignupScreen({ navigation }) {
           style={styles.inputField}
           secureTextEntry={false}
           autoCapitalize="none"
-          onChangeText={(email) => {
-          setEmail(email)
-          setDisplayName(email)}
-  
-        }
+          onChangeText={(email) => setEmail(email)}
         />
         <Text style={styles.inputText}>PASSWORD</Text>
         <TextInput
