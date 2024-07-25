@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity, Modal } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -55,7 +55,7 @@ export default function CameraScreen({ navigation, focused }) {
   }
 
   function galleryMenu(){
-    console.log("HELLO I AM HERE!")
+    // console.log("HELLO, is the gallery menu being shown?\n", !showGalleryMenu)
     // return <CameraGalleryMenu />
     setShowGalleryMenu(!showGalleryMenu);
   }
@@ -128,13 +128,45 @@ export default function CameraScreen({ navigation, focused }) {
 
   if(showGalleryMenu){
     return (
-      <>
-        <CameraGalleryMenu />
-        <Button
-          onPress={galleryMenu}
-          title="Close"
-        />
-      </>
+      <View
+      style={[
+        styles.container,
+        {
+          marginBottom: tabBarHeight,
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+        },
+      ]}
+    >
+      <CameraView style={styles.camera} facing={facing} ref={cameraRef} /> 
+      <CameraOptions flipCamera={flipCamera} />
+      <CameraActions galleryMenu={galleryMenu} checkGallery={checkGallery} takePhoto={takePhoto} />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showGalleryMenu}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Button
+              onPress={checkGallery}
+              title="See Phone Gallery"
+            />
+            <Button
+              onPress={checkGallery}
+              title="See ChatSnap Memories"
+            />
+            <Button
+              onPress={galleryMenu}
+              title="Close"
+            />
+          </View>
+        </View>
+      </Modal>
+    </View>
     )
   }
 
@@ -176,5 +208,21 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 16,
     transform: [{ scaleX: -1 }],
+  },
+  modalView: {
+    margin: 20,
+    marginTop: 300,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
