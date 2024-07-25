@@ -19,7 +19,7 @@ const zodiac = [
 
 export function findAstrologySign() {
 
-  const [birthday, setBirthday] = useState("");
+  const [birthday, setBirthday] = useState("git");
   const [sign, setSign] = useState("");
   const day = parseInt(birthday[1]);
   const { user } = useAuthentication();
