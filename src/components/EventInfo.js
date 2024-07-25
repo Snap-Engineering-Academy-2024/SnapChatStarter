@@ -2,8 +2,8 @@ import React from 'react'
 import { View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity} from "react-native";
 import { Card, FAB } from "@rneui/themed";
 
-export default function EventInfo({ event, onClose }) {
-    if (!event) return null;
+export default function EventInfo({ isVisible, event, onClose }) {
+    if (!event || !isVisible) return null;
   
     return (
       <View style={styles.EventInfo}>
@@ -17,11 +17,13 @@ export default function EventInfo({ event, onClose }) {
           color="#FF3386"
           onPress={() => console.log('Interested')}
         />
-        <FAB
-          title="Close"
-          color="gray"
-          onPress={onClose}
-        />
+        <Text style={styles.locationText}>Interested in Attending?</Text>
+
+        <FAB style = {styles.closeIcon} onPress={onClose}
+        color = {"none"}
+        icon={{ name: "close", color: "black" }}
+    />
+    
       </View>
     );
   }
@@ -57,7 +59,12 @@ const styles = StyleSheet.create({
 
     },
     locationText:{
-        textAlign:"center"
-
-    }
+        textAlign:"center",
+        marginBottom:15,
+    },
+    closeIcon:{
+        position:"absolute",
+        top:0,
+        right:0,
+      }
 })

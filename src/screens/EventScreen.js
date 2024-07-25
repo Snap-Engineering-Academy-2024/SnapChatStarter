@@ -20,8 +20,7 @@ export default function EventScreen({ route, navigation }) {
     }
 
     function handleCardTouch(event){
-        console.log("press")
-        setDetailsVisible(!detailsVisible)
+        setDetailsVisible(true)
         console.log(detailsVisible)
         setSelectedEvent(event)
     }
@@ -91,8 +90,8 @@ export default function EventScreen({ route, navigation }) {
         }} />
         <EventInfo
             isVisible={detailsVisible}
-          event={selectedEvent}
-          onClose={() => setDetailsVisible(false)}
+            event={selectedEvent}
+            onClose={() => setDetailsVisible(false)}
         />
         {/* <EventInfo isVisible = {detailsVisible} onClose={handleCardTouch}/> */}
     </View>
