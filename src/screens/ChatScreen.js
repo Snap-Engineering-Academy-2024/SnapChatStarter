@@ -47,7 +47,7 @@ export default function ChatScreen({ navigation }) {
   useEffect(() => {
     if (chats.length < 1) {
       getChatbots();
-      getUserChats();
+      // getUserChats();
     }
   }, [chats.length]);
 
@@ -80,14 +80,14 @@ export default function ChatScreen({ navigation }) {
             >
               <Ionicons
                 style={styles.userIcon}
-                name="ios-person-outline"
+                name="person-outline"
                 size={36}
                 color="lightgrey"
               />
               <Text style={styles.userName}> {chat.chatId} </Text>
               <Ionicons
                 style={styles.userCamera}
-                name="ios-camera-outline"
+                name="camera-outline"
                 size={24}
                 color="lightgrey"
               />
