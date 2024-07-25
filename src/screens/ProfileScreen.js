@@ -3,12 +3,13 @@ import { Image , Text, View, ActivityIndicator } from "react-native";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 
 export default function ProfileScreen(){
-    const { user } = useAuthentication() 
+    const { user } = useAuthentication()
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (user !==  null) {
             setLoading(false);
+            console.log("USER", user)
         }
     }, [user]); // rerenders when user is updated, when getting user data loading is true and buffering sign is returned, when user data is obtained loading is updated to false and username output is returned
 
