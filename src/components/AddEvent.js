@@ -18,13 +18,13 @@ export default function AddEvent({ isVisible, onClose }) {
         style={styles.descriptionField}
         placeholder="Description"
       ></TextInput>
-      <TextInput style={styles.inputFields} placeholder="Time"></TextInput>
+      <TextInput value = "hello" style={styles.inputFields} placeholder="Time"></TextInput>
       <TextInput style={styles.inputFields} placeholder="Location"></TextInput>
 
       <FAB
         icon={{ name: "upload", color: "white" }}
         style = {styles.uploadButton}
-        title="Upload Button"
+        title="Upload Picture"
         color = "#65BEFF"
       />
     <FAB style = {styles.closeIcon} onPress={onClose}

@@ -9,6 +9,30 @@ import AddEvent from "../components/AddEvent";
 export default function EventScreen({ route, navigation }) {
     const [visible, setVisible] = useState(false)
 
+    const [eventsArray, setEventsArray] = useState([])
+
+    //Example structure of the eventsArray
+    // [
+    //     {
+    //         title: "someTitle",
+    //         description: "someDescription",
+    //         time: "someTime",
+    //         location: "someLocation",
+    //         pictureUrl: "somePicUrl",
+    //     },
+    //     {
+    //         title: "someTitle",
+    //         description: "someDescription",
+    //         time: "someTime",
+    //         location: "someLocation",
+    //         pictureUrl: "somePicUrl",
+    //     },
+    // ] 
+
+    function displayEvents(arrayEvents){
+
+    }
+
     function toggleComponent (){
         setVisible(!visible)
         console.log(visible)
