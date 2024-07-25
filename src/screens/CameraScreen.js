@@ -178,18 +178,27 @@ export default function CameraScreen({ navigation, focused }) {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Button
-              onPress={checkGallery}
-              title="See Phone Gallery"
-            />
-            <Button
-              onPress={checkGallery}
-              title="See ChatSnap Memories"
-            />
-            <Button
-              onPress={galleryMenu}
-              title="Close"
-            />
+            <View style={styles.buttonStyle}>
+              <Button
+                onPress={checkGallery}
+                title="Phone Gallery"
+              />
+            </View>
+            <View style={styles.buttonStyle}>
+              <Button
+                onPress={checkGallery}
+                title="ChatSnap Memories"
+              />
+            </View>
+            <View style={styles.buttonStyle}>
+              <Button
+                theme={{ 
+                  colors: { primary: 'red' } 
+                }}
+                onPress={galleryMenu}
+                title="Close"
+              />
+            </View>
           </View>
         </View>
       </Modal>
@@ -238,10 +247,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    marginTop: 300,
+    marginTop: 400,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
+    padding: 15,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -252,4 +261,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  buttonStyle: {
+    margin: 5,
+  }
 });
