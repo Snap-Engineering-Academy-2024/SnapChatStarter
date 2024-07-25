@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, Button, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity } from "react-native";
 import { useEffect, useRef, useState } from "react";
-import { Camera, CameraType } from 'expo-camera/legacy';
+import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { shareAsync } from "expo-sharing";
 import * as ImagePicker from "expo-image-picker";
@@ -9,41 +9,46 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CameraActions from "../components/CameraActions";
 import CameraOptions from "../components/CameraOptions";
 import PostcaptureOptions from "../components/PostcaptureActions";
-// CINDY COMMENT
+// Add supabase to store:
+import {supabase} from '../utils/hooks/supabase';
+
 export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const cameraRef = useRef(null);
-  const [hasCameraPermission, setHasCameraPermission] = Camera.useCameraPermissions();
-  const [type, setType] = useState(CameraType.back);
+  const [facing, setFacing] = useState("back"); 
+  const [permission, requestPermission] = useCameraPermissions();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [image, setImage] = useState(null);
 
   useEffect(() => {
     (async () => {
-      // Request camera permissions
-      const { status: cameraStatus } = await Camera.requestPermissionsAsync();
-      setHasCameraPermission(cameraStatus === 'granted');
-      
       // Request media library permissions
       const { status: mediaLibraryStatus } = await MediaLibrary.requestPermissionsAsync();
       setHasMediaLibraryPermission(mediaLibraryStatus === 'granted');
     })();
   }, []);
 
-  if (hasCameraPermission === null || hasMediaLibraryPermission === null) {
-    return  <SafeAreaView>
-              <Text>Requesting permissions...</Text>
-            </SafeAreaView>;
-  } else if (!hasCameraPermission) {
-    return  <SafeAreaView>
-              <Text>Permission for camera not granted. Please change this in settings.</Text>
-            </SafeAreaView>;
+  if (!permission) {
+    // Camera permissions are still loading.
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>We need your permission to show the camera.</Text>
+        <TouchableOpacity onPress={requestPermission} style={styles.button}>
+          <Text style={styles.text}>Grant Permission</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   function flipCamera() {
-    setType(type === CameraType.back ? CameraType.front : CameraType.back);
+    setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
   async function checkGallery() {
@@ -68,6 +73,12 @@ export default function CameraScreen({ navigation, focused }) {
       const options = { quality: 1, base64: true, exif: false };
       const newPhoto = await cameraRef.current.takePictureAsync(options);
       setPhoto(newPhoto);
+
+      // I add this to insert the uri of the new photo taken to supabase table "gallery"
+      const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });    
+      if (error) {
+        console.error('Error inserting photo:', error.message);
+      } 
     }
   }
 
@@ -96,8 +107,10 @@ export default function CameraScreen({ navigation, focused }) {
         ]}
       >
         <Image
-          style={type === CameraType.front ? styles.frontPreview : styles.preview}
-          source={{ uri: "data:image/jpg;base64," + photo.base64 }}
+          style={facing === "front" ? styles.frontPreview : styles.preview}
+          //source={{ uri: "data:image/jpg;base64," + photo.base64 }}
+          // We don't need that base64 thing, just uri is good
+          source={{ uri: photo.uri }}
         />
         {hasMediaLibraryPermission && (
           <PostcaptureOptions deletePhoto={() => setPhoto(null)} savePhoto={savePhoto} />
@@ -117,7 +130,7 @@ export default function CameraScreen({ navigation, focused }) {
         },
       ]}
     >
-      <Camera style={styles.camera} type={type} ref={cameraRef} />
+      <CameraView style={styles.camera} facing={facing} ref={cameraRef} /> 
       <CameraOptions flipCamera={flipCamera} />
       <CameraActions checkGallery={checkGallery} takePhoto={takePhoto} />
     </View>
