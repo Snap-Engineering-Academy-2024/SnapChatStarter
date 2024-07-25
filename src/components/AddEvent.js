@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Dialog } from "@rneui/themed";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
+
+
+const {user} = useAuthentication();
+
+useEffect (() => {
+  //async function 
+}
+ )
 
 export default function AddEvent({ isVisible, onClose }) {
   return (
@@ -29,7 +38,6 @@ export default function AddEvent({ isVisible, onClose }) {
     </Dialog>
   );
 }
-
 const styles = StyleSheet.create({
   userInfo: {
     backgroundColor: "white",
@@ -46,7 +54,7 @@ const styles = StyleSheet.create({
   DialogueBox:{
     height: "60%",
     borderRadius:20,
-    backgroundColor :"red"
+    // backgroundColor :"red"
   },
   eventText: {
     textAlign: "center",
