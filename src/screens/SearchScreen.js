@@ -185,9 +185,6 @@ export default function SearchScreen() {
           contentContainerStyle={{ alignItems: "center", paddingTop: 10 }}
         />
       </SafeAreaView>
-
-
-
     </View>
   );
 }
