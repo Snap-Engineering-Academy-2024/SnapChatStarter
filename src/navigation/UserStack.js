@@ -5,7 +5,8 @@ import ConversationScreen from "../screens/ConversationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import DiscoverCard from "../components/DiscoverCard";
 import SearchScreen from "../screens/SearchScreen";
-import SettingsScreen from "../screens/SettingsScreen";
+import SettingsScreen from "../screens/SettingScreen";
+import FriendStory from "../screens/FriendStory";import SettingsScreen from "../screens/SettingsScreen";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,11 @@ export default function () {
           options={{ headerShown: true }}
         />
         <Stack.Screen
+          name="FriendStory"
+          component={FriendStory}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
           name="Conversation"
           component={ConversationScreen}
           options={{ headerShown: true }}
@@ -29,21 +35,17 @@ export default function () {
           name="DiscoverCard"
           component={DiscoverCard}
           options={{ headerShown: true }}
-
-
         />
-        <Stack.Screen
+        <Stack.Screen  
           name="Search"
           component={SearchScreen}
-          options={{ headerShown: false}}
-        />
-        
-        <Stack.Screen 
-        name="Settings" 
-        component={SettingsScreen} 
-        options={{headerShown: false}}
-        />
-        
+          options={{ headerShown: false}}/>
+
+          <Stack.Screen
+          name="Settings" 
+          component={SettingsScreen} 
+          options={{headerShown: true}}
+          />
       </Stack.Navigator>
     </NavigationContainer>
   );

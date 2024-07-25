@@ -1,4 +1,4 @@
-import { Image , Text, View, Button} from "react-native";
+import { Image , Text, View, Button, Pressable, StyleSheet} from "react-native";
 import { supabase } from '../utils/hooks/supabase';
 
 const handleSignOut = async () => {
@@ -14,7 +14,7 @@ const handleSignOut = async () => {
     }
   };
 
-export default function ProfileScreen({ navigation }){
+export default function ProfileScreen({ navigation }{ navigation }){
 return(
     <View styles={{alignItems:"center"}}>
     <Image 
@@ -26,12 +26,13 @@ return(
         User Name Would Go Here
     </Text>
     <Button onPress={handleSignOut} title="Log Out" />
-    <Button onPress={() => {
-                navigation.navigate("Settings", {
-                });
-              }}
-            title="SettingsScreen"
-    />
+    <Pressable>
+      <Button onPress={() => {
+        navigation.navigate("Settings", { });
+        }}
+        title="Settings"
+      />
+    </Pressable>
     </View>
 );
 };

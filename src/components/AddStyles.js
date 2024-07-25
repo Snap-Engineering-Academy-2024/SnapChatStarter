@@ -6,65 +6,52 @@ import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
+import styles from "./StoriesBitmoji"
 
 // import StoriesBitmoji from "../components/StoriesBitmoji";
 
 import Header from "../components/Header";
+import StoriesBitmoji from "./StoriesBitmoji";
 
-export default function StoriesBitmoji() {
+export default function AddStyles() {
   const navigation = useNavigation();
   return (
-    <View style={styles.myBitmoji}>
+    <View style={addstorystyles.addstory}>
       <Pressable //added a presable to give the story interaction
       style={[styles.profile, styles.buttons]}
       onPress={() => {
         navigation.navigate("FriendStory");
       }}>
         <Image
-          style={styles.bitmojiImage}
+          style={addstorystyles.addstoryImage}
           source={require("../../assets/snapchat/personalBitmoji.png")}
         />
       </Pressable>
-      <View style={styles.bitmojiTextContainer}>
-        <Text style={styles.bitmojiText}>Name</Text>
-        <Text style={styles.usernameText}>Username</Text>
+      <View style={addstorystyles.addstoryTextContainer}>
+        <Text style={addstorystyles.addstoryText}>Add To Story</Text>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  myBitmoji: {
+const addstorystyles = StyleSheet.create({
+  addstory: {
     alignItems: "center",
     justifyContent: "center",
     paddingRight: 10,
+    paddingBottom: 10,
   },
-  bitmojiImage: {
+  addstoryImage: {
     width: 60,
     height: 60,
   },
-  bitmojiTextContainer: {
-    backgroundColor: "white",
+  addstoryTextContainer: {
     borderRadius: 20,
     padding: 4,
   },
-  bitmojiText: {
+  addstoryText: {
     alignSelf: "center",
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "700",
-  },
-  usernameText: {
-    fontSize: 8,
-    fontWeight: "700",
-    opacity: 0.5,
-  },
-  Friends: {
-    textAlign: "left",
-    paddingLeft: 20,
-    paddingBottom: 20,
-    color: colors.primary,
-    fontSize: fontHeader.fontSize,
-    fontFamily: fontHeader.fontFamily,
-    fontWeight: fontHeader.fontWeight,
   },
 });

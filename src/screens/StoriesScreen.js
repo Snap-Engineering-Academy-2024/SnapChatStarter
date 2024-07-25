@@ -15,6 +15,7 @@ import { colors } from "../../assets/themes/colors";
 import StoriesBitmoji from "../components/StoriesBitmoji";
 import DiscoverFeed from "../components/DiscoverFeed";
 import { useNavigation } from "@react-navigation/native";
+import AddStyles from "../components/AddStyles";
 
 import Header from "../components/Header";
 
@@ -62,9 +63,15 @@ export default function StoriesScreen({ route, navigation }) {
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.stories}
+            
+            //contentContainerStyle={styles.stories} commented this out because it prevented story scrolling felt unintuitive
           >
             <StoriesBitmoji onPress={console.log("bit moooooo")}/>
+            <AddStyles/>
+            <StoriesBitmoji />
+            <StoriesBitmoji />
+            <StoriesBitmoji />
+            <StoriesBitmoji />
             <StoriesBitmoji />
             <StoriesBitmoji />
             <StoriesBitmoji />
