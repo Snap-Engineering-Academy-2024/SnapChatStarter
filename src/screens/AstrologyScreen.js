@@ -1,10 +1,25 @@
-import { Image, Text, View, StyleSheet } from "react-native";
+import { Image, Text, View, StyleSheet, ScrollView } from "react-native";
 import { useState, useEffect } from "react";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 
 const requestOptions = {
   method: "GET",
   redirect: "follow",
+};
+
+const zodiacImages = {
+  Aquarius: require("../../assets/sign-images/aquarius.png"),
+  Aries: require("../../assets/sign-images/aries.png"),
+  Cancer: require("../../assets/sign-images/cancer.png"),
+  Capricorn: require("../../assets/sign-images/capricorn.png"),
+  Gemini: require("../../assets/sign-images/gemini.png"),
+  Leo: require("../../assets/sign-images/leo.png"),
+  Libra: require("../../assets/sign-images/libra.png"),
+  Pisces: require("../../assets/sign-images/pisces.png"),
+  Sagittarius: require("../../assets/sign-images/sagittarius.png"),
+  Scorpio: require("../../assets/sign-images/scorpio.png"),
+  Taurus: require("../../assets/sign-images/taurus.png"),
+  Virgo: require("../../assets/sign-images/virgo.png"),
 };
 
 export default function AstrologyScreen() {
@@ -14,9 +29,11 @@ export default function AstrologyScreen() {
   const [signElement, setSignElement] = useState();
   const [signCompatibility, setSignCompatibility] = useState();
   const userSign = findAstrologySign();
+  const [imageUrl, setImageUrl] = useState("")
 
   useEffect(() => {
     setAstrology(userSign.sign);
+    setImageUrl(zodiacImages[userSign.sign])
   }),
     [];
 
@@ -52,7 +69,7 @@ export default function AstrologyScreen() {
     fetch(url, options)
       .then((response) => response.json())
       .then((result) => {
-        setSignAbout(result.about);
+        setSignAbout(result.about.split(`\n`)[0]);
         setSignElement(result.element);
         setSignCompatibility(result.compatibility);
       })
@@ -60,20 +77,22 @@ export default function AstrologyScreen() {
   }
 
   return (
-    <View style={styles.page}>
-      <View style={{ alignItems: "center", paddingTop: 25 }}>
-        <Text style={styles.contentTitles}>Your Sign</Text>
+    <ScrollView style={{ backgroundColor: "purple" }}>
+      <View style={styles.page}>
+        <Image
+          source={imageUrl}
+        />
         <Text style={styles.sign}>{astrology}</Text>
-        <Text style={styles.contentTitles}>Element</Text>
-        <Text style={styles.contentText}>{signElement}</Text>
-        <Text style={styles.contentTitles}>About</Text>
-        <Text style={styles.contentText}>{signAbout}</Text>
-        <Text style={styles.contentTitles}>Compatible Signs</Text>
-        <Text style={styles.contentText}>{signCompatibility}</Text>
         <Text style={styles.contentTitles}>Today's Horoscope</Text>
         <Text style={styles.contentText}>{horoscope}</Text>
+        <Text style={styles.contentTitles}>About</Text>
+        <Text style={styles.contentText}>{signAbout}</Text>
+        <Text style={styles.contentTitles}>Element</Text>
+        <Text style={styles.contentText}>{signElement}</Text>
+        <Text style={styles.contentTitles}>Compatible Signs</Text>
+        <Text style={styles.contentText}>{signCompatibility}</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -81,6 +100,9 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     backgroundColor: "purple",
+    alignItems: "center",
+    paddingTop: 25,
+    margin: 20,
   },
   contentTitles: {
     justifyContents: "center",
@@ -90,10 +112,10 @@ const styles = StyleSheet.create({
     color: "gold",
   },
   sign: {
-    paddingTop: 30,
+    paddingTop: 0,
     paddingBottom: 30,
     fontFamily: "Papyrus",
-    fontSize: 25,
+    fontSize: 40,
     color: "lightyellow",
   },
   contentText: {
