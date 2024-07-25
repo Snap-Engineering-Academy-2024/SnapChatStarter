@@ -11,17 +11,22 @@ const requestOptions = {
 export default function AstrologyScreen() {
   const [astrology, setAstrology] = useState(null);
   const [horoscope, setHoroscope] = useState();
-  const userSign = findAstrologySign()
+  const [signAbout, setSignAbout] = useState();
+  const [signElement, setSignElement] = useState();
+  const [signCompatibility, setSignCompatibility] = useState();
+  const userSign = findAstrologySign();
 
-  useEffect(()=>{
-    setAstrology(userSign.sign)
-  }),[]
+  useEffect(() => {
+    setAstrology(userSign.sign);
+  }),
+    [];
 
-  useEffect(()=>{
-    if(astrology === null) return
+  useEffect(() => {
+    if (astrology === null) return;
     getHoroscope();
-    console.log(horoscope)
-  }),[astrology]
+    getSignDescription();
+  }),
+    [astrology];
 
   async function getHoroscope() {
     fetch(
@@ -33,6 +38,28 @@ export default function AstrologyScreen() {
       .catch((error) => console.error(error));
   }
 
+  async function getSignDescription() {
+    const myHeaders = new Headers();
+    myHeaders.append("x-rapidapi-host", "horoscope-astrology.p.rapidapi.com");
+    myHeaders.append("x-rapidapi-key", process.env.EXPO_PUBLIC_X_RAPIDAPI_KEY);
+
+    const url = `https://horoscope-astrology.p.rapidapi.com/sign?s=${astrology.toLowerCase()}`;
+    const options = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(url, options)
+      .then((response) => response.json())
+      .then((result) => {
+        setSignAbout(result.about);
+        setSignElement(result.element);
+        setSignCompatibility(result.compatibility);
+      })
+      .catch((error) => console.error("Error message:", error));
+  }
+
   return (
     <View style={{ alignItems: "center", paddingTop: 50 }}>
       <Text style={{ justifyContents: "center", paddingTop: 50 }}>
@@ -40,6 +67,15 @@ export default function AstrologyScreen() {
       </Text>
       <Text style={{ justifyContents: "center", paddingTop: 50 }}>
         {horoscope}
+      </Text>
+      <Text style={{ justifyContents: "center", paddingTop: 50 }}>
+        {signAbout}
+      </Text>
+      <Text style={{ justifyContents: "center", paddingTop: 50 }}>
+        Element: {signElement}
+      </Text>
+      <Text style={{ justifyContents: "center", paddingTop: 50 }}>
+        Compatible signs: {signCompatibility}
       </Text>
     </View>
   );
