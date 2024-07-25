@@ -38,6 +38,11 @@ const DATA = [
   },
 ];
 
+const { data: galleryPhotos, error } = await supabase.from("gallery").select("photo");
+if (error) {
+    console.error("Error fetching gallery photos:", error);
+  }
+
 export default function StoriesScreen({ route, navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
@@ -56,27 +61,9 @@ export default function StoriesScreen({ route, navigation }) {
         },
       ]}
     >
-
       <Header title="Stories" />
       <View style={styles.contentContainer}>
-        <View style={styles.storyBar}>
-          <Text style={styles.sectionHeader}>Friends</Text>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.stories}
-          >
-            <StoriesBitmoji onPress={console.log("bit moooooo")}/>
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-          </ScrollView>
-        </View>
         <View style={styles.discoverContent}>
-          <Text style={styles.sectionHeader}>Discover</Text>
           <FlatList
             data={DATA}
             horizontal={false}
