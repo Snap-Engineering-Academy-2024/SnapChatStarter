@@ -7,6 +7,7 @@ import { useAuthentication } from "../utils/hooks/useAuthentication";
 export default function AddFriendBitmoji() {
   const [usersToAdd, setUsersToAdd] = useState([]);
   const { user } = useAuthentication();
+  const [currentFriends, setCurrentFriends] = useState([]);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -35,7 +36,22 @@ export default function AddFriendBitmoji() {
       }
     }
 
+    async function fetchCurrentFriends () {
+      const { data, error } = await supabase
+      .from("profiles")
+      .select("friend_ids")
+      .eq("id", user.id)
+      .single();
+
+    if (!data.friend_ids) {
+      data.friend_ids = [];
+    }
+    setCurrentFriends(data.friend_ids)
+    }
+
+    
     fetchUsers();
+    fetchCurrentFriends();
   }, []);
 
   async function addFriend(userToAdd) {
@@ -59,11 +75,14 @@ export default function AddFriendBitmoji() {
       .eq("id", user.id);
 
     alert(`Added ${userToAdd.name} as a friend!`);
+    setCurrentFriends(data.friend_ids);
   }
+
+
 
   return (
     <View style={styles.container}>
-      {usersToAdd.map((user, index) => (
+      {usersToAdd.filter(usersToAdd => !currentFriends.includes(usersToAdd.id)).map((user, index) => (
         <View key={index} style={styles.myBitmoji}>
           <Image style={styles.bitmojiImage} source={defaultPhoto} />
           <View style={styles.textContainer}>
