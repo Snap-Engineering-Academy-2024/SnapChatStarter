@@ -77,6 +77,8 @@ export default function CameraScreen({ navigation, focused }) {
 
   async function takePhoto() {
     if (cameraRef.current) {
+
+
       const options = { quality: 1, base64: true, exif: false };
       const newPhoto = await cameraRef.current.takePictureAsync(options);
       setPhoto(newPhoto);
