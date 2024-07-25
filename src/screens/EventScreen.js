@@ -16,6 +16,7 @@ import { supabase } from "../utils/hooks/supabase";
 export default function EventScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [events, setEvents] = useState([]);
 
   function toggleComponent() {
     setVisible(!visible);
@@ -46,12 +47,12 @@ export default function EventScreen({ route, navigation }) {
   const fetchData = async () => {
     try {
       const { data, error } = await supabase
-        .from("event_tbl")
-        .select("*")
-        .eq("id", "0");
+        .from('event_tbl')
+        .select('*');
       if (error) {
         console.error("Error fetching data:", error);
       } else {
+        setEvents(data);
         console.log("Data:", data);
       }
     } catch (error) {
@@ -59,87 +60,38 @@ export default function EventScreen({ route, navigation }) {
     }
   };
   useEffect(() => {
-  
     fetchData();
   }, []);
 
   return (
-    <View style={styles.EventScreen}>
-      <ScrollView
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
-      >
+    <View style = {styles.EventScreen}>
+        
+        <ScrollView>
         <View style={styles.Events}>
-          <View style={styles.container}>
-            <View style={styles.friends}>
-              <Text style={styles.friendsText}>3 friends going</Text>
-            </View>
-            <Image
-              style={{ width: "100%", aspectRatio: 1, borderRadius: 20 }}
-              resizeMode="contain"
-              source={{
-                uri: "https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
-              }}
-            />
-            <Card.Title style={styles.title}>Sona's Birthday</Card.Title>
-            <View style={styles.userInfo}>
+          {events.map((event) => (
+            <View style={styles.container} key={event.id}>
+              <View style={styles.friends}>
+                <Text style={styles.friendsText}>{event.attending} friends going</Text>
+              </View>
               <Image
-                style={styles.bitmojiUser}
-                source={{
-                  uri: "https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
-                }}
+                style={{ width: "100%", aspectRatio: 1, borderRadius: 20, objectFit:"cover" }}
+                resizeMode="contain"
+                source={{ uri: event.imageURL }}
               />
-              <Text style={styles.username}>username</Text>
+              <Card.Title style={styles.title}>{event.title}</Card.Title>
+              <View style={styles.userInfo}>
+                <Image
+                  style={styles.bitmojiUser}
+                  source={{
+                    uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
+                  }}
+                />
+                <Text style={styles.username}>{event.host}</Text>
+              </View>
             </View>
-          </View>
-
-          <View style={styles.container}>
-            <View style={styles.friends}>
-              <Text style={styles.friendsText}>3 friends going</Text>
-            </View>
-            <Image
-              style={{ width: "100%", aspectRatio: 1, borderRadius: 20 }}
-              resizeMode="contain"
-              source={{
-                uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4",
-              }}
-            />
-            <Card.Title style={styles.title}>Sona's Birthday</Card.Title>
-            <View style={styles.userInfo}>
-              <Image
-                style={styles.bitmojiUser}
-                source={{
-                  uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
-                }}
-              />
-              <Text style={styles.username}>username</Text>
-            </View>
-          </View>
-
-          <View style={styles.container}>
-            <View style={styles.friends}>
-              <Text style={styles.friendsText}>3 friends going</Text>
-            </View>
-            <Image
-              style={{ width: "100%", aspectRatio: 1, borderRadius: 20 }}
-              resizeMode="contain"
-              source={{
-                uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4",
-              }}
-            />
-            <Card.Title style={styles.title}>Sona's Birthday</Card.Title>
-            <View style={styles.userInfo}>
-              <Image
-                style={styles.bitmojiUser}
-                source={{
-                  uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
-                }}
-              />
-              <Text style={styles.username}>username</Text>
-            </View>
-          </View>
+          ))}
         </View>
+        
       </ScrollView>
       <FAB
         onPress={toggleComponent}
@@ -148,7 +100,9 @@ export default function EventScreen({ route, navigation }) {
         icon={{ name: "add", color: "white" }}
         color="#FF3386"
       />
-      {<AddEvent isVisible={visible} onClose={toggleComponent} />}
+      {<AddEvent isVisible={visible} onClose={() => {
+        toggleComponent();
+        refreshEvents();}} />}
     </View>
   );
 }

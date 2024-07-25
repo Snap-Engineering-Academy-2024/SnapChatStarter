@@ -15,13 +15,13 @@ export default function AddEvent({ isVisible, onClose }) {
     //we want to use this function to send information to Supabse when Submit button is clicked
     function submitToSupabase(){  
         let object = {
-            id:btoa(time + title),
+            id:`${title}${time}`,
             title:title,
             description:descr,
             time:time,
             location:location,
             host:"someUsername",
-            imageURL:"https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
+            imageURL:"https://interactive-examples.mdn.mozilla.net/media/examples/plumeria.jpg",
             attending:0,
             private:false,
             created_at: new Date().toISOString(),
