@@ -82,13 +82,40 @@ export default function CameraScreen({ navigation, focused }) {
       const options = { quality: 1, base64: true, exif: false };
       const newPhoto = await cameraRef.current.takePictureAsync(options);
       setPhoto(newPhoto);
-
-      // I add this to insert the uri of the new photo taken to supabase table "gallery"
+      // This part is to insert URI to "gallery" table
+      console.log(" Before Insert to table!")
       const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });    
+      console.log("After Insert to table!")
       if (error) {
         console.error('Error inserting photo:', error.message);
-      } 
+      }
+      // This part is to store images in a folder bucket named "pictureStorage"
+      uploadImage(newPhoto.uri);
+      
     }
+  }
+
+  async function uploadImage (photoUri) {
+    // console.log("1")
+    const response = await fetch(photoUri);
+  
+    const blob = await response.blob();
+
+    const arrayBuffer = await new Response(blob).arrayBuffer();
+    // console.log("2")
+    const fileName = `public/${Date.now()}.jpg`;
+    const { error1} = await supabase
+      .storage
+      .from('pictureStorage')
+      .upload(fileName, arrayBuffer, { contentType: 'image/jpeg', upsert: false });
+    // console.log("3")
+    if (error1) {
+      console.error('Error uploading image:', error1.message);
+    } else {
+      console.log('Image successfully uploaded:', data);
+    }
+
+
   }
 
   function savePhoto() {
