@@ -27,6 +27,13 @@ export default function SettingsScreen() {
         console.error('Error fetching user data:', error);
       } else {
         setUserData(data[0] ?? null);
+        if (userData.username!== null)
+          setDisplayName(userData.username);
+        
+        if (userData.email !== null)
+          setEmail(userData.email);
+        if (userData.dob !== null)  
+          setDateOfBirth(userData.dob);
       }
       setLoading(false);
     }
@@ -95,9 +102,24 @@ export default function SettingsScreen() {
       setEmail(user.email); // Initialize email
       setInitialDisplayName(user.email.split('@')[0]); // Store initial display name
       setInitialEmail(user.email); // Store initial email
-      updateUserEmail("powerfulattack96@gmail.com");
+      console.log(JSON.stringify(user, null, 4))
+      console.log(user.email);
     }
   }, [user]);
+//   useEffect(() => {
+//     if (user !==  null) {
+//         setLoading(false);
+//         fetchUserData();
+        
+//         // for (const [key, value] of Object.entries(user)) {
+//         //     console.log(`${key}: ${value}`);
+//         //   }
+//         // console.log("hi");
+//         console.log(JSON.stringify(userData, null, 4))
+
+//         }   
+
+// }, [user]);
 
   const handleSignOut = async () => {
     try {
@@ -114,19 +136,24 @@ export default function SettingsScreen() {
 
   const saveDisplayName = async () => {
     // Placeholder for saving display name to backend (Supabase or other)
+    
     setEditingDisplayName(false); // Exit editing mode
     setInitialDisplayName(displayName); // Update initial value
+    updateUsername(displayName);
   };
 
   const saveEmail = async () => {
     // Placeholder for saving email to backend (Supabase or other)
     setEditingEmail(false); // Exit editing mode
     setInitialEmail(email); // Update initial value
+    updateUserEmail(email);
   };
 
   const saveDateOfBirth = async () => {
     // Placeholder for saving date of birth to backend (Supabase or other)
     setEditingDateOfBirth(false); // Exit editing mode
+    setDateOfBirth(dateOfBirth);
+    updateUserDOB(dateOfBirth);
   };
 
   const cancelEditDisplayName = () => {

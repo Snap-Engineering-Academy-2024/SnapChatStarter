@@ -55,7 +55,6 @@ export default function SettingsScreen() {
     useEffect(() => {
         if (user !==  null) {
             setLoading(false);
-            updateUserEmail("test420@gmail.com");
             fetchUserData();
 
             // let copy = userData;
