@@ -1,49 +1,71 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
-import { supabase } from '../utils/hooks/supabase';
-import defaultPhoto from '../../assets/snapchat/defaultprofile.png'
+import { supabase } from "../utils/hooks/supabase";
+import defaultPhoto from "../../assets/snapchat/defaultprofile.png";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
 
 export default function AddFriendBitmoji() {
   const [usersToAdd, setUsersToAdd] = useState([]);
+  const { user } = useAuthentication();
 
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const { data, error } = await supabase
-          .from('profiles') 
-          .select('id')
-          // .limit(1);
+        const { data, error } = await supabase.from("profiles").select("id");
+        // .limit(1);
 
         if (error) {
-          console.error('Error fetching users:', error.message);
+          console.error("Error fetching users:", error.message);
           return;
         }
         if (data) {
-          setUsersToAdd(data.map(user => {
-            return {
-              name: user.id.slice(0, 6) + "-name",
-              username: user.id.slice(0, 6) + "-username"
-            }
-
-          }));
+          setUsersToAdd(
+            data.map((user) => {
+              return {
+                id: user.id,
+                name: user.id.slice(0, 6) + "-name",
+                username: user.id.slice(0, 6) + "-username",
+              };
+            })
+          );
           console.log(data);
         }
       } catch (error) {
-        console.error('Error fetching users:', error.message);
+        console.error("Error fetching users:", error.message);
       }
     }
 
     fetchUsers();
   }, []);
 
+  async function addFriend(userToAdd) {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("friend_ids")
+      .eq("id", user.id)
+      .single();
+
+    if (!data.friend_ids) {
+      data.friend_ids = [];
+    }
+
+    if (!data.friend_ids.includes(userToAdd.id)) {
+      data.friend_ids.push(userToAdd.id)
+    }
+    
+    await supabase
+      .from("profiles")
+      .update({ friend_ids: data.friend_ids })
+      .eq("id", user.id);
+
+    alert(`Added ${userToAdd.name} as a friend!`);
+  }
+
   return (
     <View style={styles.container}>
       {usersToAdd.map((user, index) => (
         <View key={index} style={styles.myBitmoji}>
-          <Image
-            style={styles.bitmojiImage}
-            source={defaultPhoto}
-          />
+          <Image style={styles.bitmojiImage} source={defaultPhoto} />
           <View style={styles.textContainer}>
             <Text style={styles.bitmojiText}>
               {user.name}
@@ -51,8 +73,8 @@ export default function AddFriendBitmoji() {
             </Text>
             <Pressable
               style={styles.addButton}
-              onPress={() => {
-                alert(`Added ${user.name} as a friend!`);
+              onPress={async () => {
+                await addFriend(user);
               }}
             >
               <Text style={styles.addButtonText}>Quick Add</Text>
@@ -74,7 +96,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     marginBottom: 15,
   },
   bitmojiImage: {
