@@ -9,13 +9,19 @@ const requestOptions = {
 };
 
 export default function AstrologyScreen() {
-  const [astrology, setAstrology] = useState("Pisces");
+  const [astrology, setAstrology] = useState(null);
   const [horoscope, setHoroscope] = useState();
   const userSign = findAstrologySign()
 
   useEffect(()=>{
     setAstrology(userSign.sign)
   }),[]
+
+  useEffect(()=>{
+    if(astrology === null) return
+    getHoroscope();
+    console.log(horoscope)
+  }),[astrology]
 
   async function getHoroscope() {
     fetch(
@@ -26,9 +32,6 @@ export default function AstrologyScreen() {
       .then((result) => setHoroscope(result.data.horoscope_data))
       .catch((error) => console.error(error));
   }
-  useEffect(() => {
-    getHoroscope();
-  }, []);
 
   return (
     <View style={{ alignItems: "center", paddingTop: 50 }}>
