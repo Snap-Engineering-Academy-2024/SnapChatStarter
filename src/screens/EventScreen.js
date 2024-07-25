@@ -15,97 +15,65 @@ import { supabase } from "../utils/hooks/supabase";
 
 export default function EventScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [events, setEvents] = useState([]);
 
-<<<<<<< HEAD
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchData()
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 700);
+  }, []);
+
   function toggleComponent() {
     setVisible(!visible);
     console.log(visible);
   }
 
-  const loadData = async () => {
-    // Simulate a data fetch
-    setIsRefreshing(true);
-    setTimeout(() => {
-      setIsRefreshing(false);
-    }, 1500);
-  };
-  const onRefresh = useCallback(() => {
-    fetchData();
-  }, []);
-
-  const handleScroll = (event) => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const contentHeight = event.nativeEvent.contentSize.height;
-    const layoutHeight = event.nativeEvent.layoutMeasurement.height;
-
-    if (offsetY + layoutHeight >= contentHeight - 20) {
-      // Trigger reload when scrolled to the bottom
-      loadData();
-    }
-  };
   const fetchData = async () => {
     try {
-      const { data, error } = await supabase
-        .from('event_tbl')
-        .select('*');
+      const { data, error } = await supabase.from("event_tbl").select("*");
       if (error) {
         console.error("Error fetching data:", error);
       } else {
         setEvents(data);
-        console.log("Data:", data);
       }
     } catch (error) {
       console.error("Unexpected error:", error);
     }
   };
+
+  const refreshEvents = async () => {
+    await fetchData();
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
-=======
-    function toggleComponent (){
-        setVisible(!visible)
-        console.log(visible)
-    }
-
-
-    const fetchData = async () => {
-        try {
-            const { data, error } = await supabase.from('event_tbl').select('*');
-            if (error) {
-                console.error("Error fetching data:", error);
-            } else {
-                setEvents(data);
-            }
-        } catch (error) {
-            console.error("Unexpected error:", error);
+    <View style={styles.EventScreen}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-    };
-
-    const refreshEvents = async () => {
-        await fetchData();
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    return (
->>>>>>> origin/sona-branch
-    <View style = {styles.EventScreen}>
-        
-        <ScrollView>
+      >
         <View style={styles.Events}>
           {events.map((event) => (
             <View style={styles.container} key={event.id}>
               <View style={styles.friends}>
-                <Text style={styles.friendsText}>{event.attending} friends going</Text>
+                <Text style={styles.friendsText}>
+                  {event.attending} friends going
+                </Text>
               </View>
               <Image
-                style={{ width: "100%", aspectRatio: 1, borderRadius: 20, objectFit:"cover" }}
+                style={{
+                  width: "100%",
+                  aspectRatio: 1,
+                  borderRadius: 20,
+                  objectFit: "cover",
+                }}
                 resizeMode="contain"
                 source={{ uri: event.imageURL }}
               />
@@ -122,7 +90,6 @@ export default function EventScreen({ route, navigation }) {
             </View>
           ))}
         </View>
-        
       </ScrollView>
       <FAB
         onPress={toggleComponent}
@@ -131,10 +98,13 @@ export default function EventScreen({ route, navigation }) {
         icon={{ name: "add", color: "white" }}
         color="#FF3386"
       />
-      <AddEvent isVisible={visible} onClose={() => {
-                toggleComponent();
-                refreshEvents();
-            }} />
+      <AddEvent
+        isVisible={visible}
+        onClose={() => {
+          toggleComponent();
+          refreshEvents();
+        }}
+      />
     </View>
   );
 }
