@@ -1,6 +1,4 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-
+import React, { useEffect, useCallback, useState } from "react";
 import { Card, FAB } from "@rneui/themed";
 import {
   View,
@@ -9,6 +7,7 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import AddEvent from "../components/AddEvent";
@@ -16,35 +15,61 @@ import { supabase } from "../utils/hooks/supabase";
 
 export default function EventScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   function toggleComponent() {
     setVisible(!visible);
+    console.log(visible);
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('event_tbl') 
-          .select('*')
-          // .eq('id', '0')
-        if (error) {
-          console.error("Error fetching data:", error);
-        } else {
-          console.log("Data Is: ");
-          console.log(JSON.stringify(data, null, 4))
-        }
-      } catch (error) {
-        console.error("Unexpected error:", error);
-      }
-    };
+  const loadData = async () => {
+    // Simulate a data fetch
+    setIsRefreshing(true);
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1500);
+  };
+  const onRefresh = useCallback(() => {
+    fetchData();
+  }, []);
 
+  const handleScroll = (event) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const contentHeight = event.nativeEvent.contentSize.height;
+    const layoutHeight = event.nativeEvent.layoutMeasurement.height;
+
+    if (offsetY + layoutHeight >= contentHeight - 20) {
+      // Trigger reload when scrolled to the bottom
+      loadData();
+    }
+  };
+  const fetchData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("event_tbl")
+        .select("*")
+        .eq("id", "0");
+      if (error) {
+        console.error("Error fetching data:", error);
+      } else {
+        console.log("Data:", data);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  };
+  useEffect(() => {
+  
     fetchData();
   }, []);
 
   return (
     <View style={styles.EventScreen}>
-      <ScrollView>
+      <ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+      >
         <View style={styles.Events}>
           <View style={styles.container}>
             <View style={styles.friends}>
@@ -54,7 +79,7 @@ export default function EventScreen({ route, navigation }) {
               style={{ width: "100%", aspectRatio: 1, borderRadius: 20 }}
               resizeMode="contain"
               source={{
-                uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4",
+                uri: "https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
               }}
             />
             <Card.Title style={styles.title}>Sona's Birthday</Card.Title>
@@ -62,7 +87,7 @@ export default function EventScreen({ route, navigation }) {
               <Image
                 style={styles.bitmojiUser}
                 source={{
-                  uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
+                  uri: "https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
                 }}
               />
               <Text style={styles.username}>username</Text>

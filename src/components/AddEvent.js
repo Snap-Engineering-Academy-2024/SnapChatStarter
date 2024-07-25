@@ -1,103 +1,81 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Image,
-  Button,
-  TouchableOpacity,
-} from "react-native";
-import { Dialog, FAB } from "@rneui/themed";
+import React from "react";
+import { useState } from "react";
+
+import { View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity} from "react-native";
 import { supabase } from "../utils/hooks/supabase";
-
-
+import { Dialog, FAB } from "@rneui/themed";
 
 
 export default function AddEvent({ isVisible, onClose }) {
-  const insertData = async () => {
-    const eventData = {
-      id: btoa(title + time),
-      title: title,
-      description: description,
-      location: location,
-      time: time,
-      imageURL:
-        "https://sdk.bitmoji.com/render/panel/20087589-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=2",
-      host: {"userName":"","imageURL":"https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1"},
-      attending: [{"userName":"","imageURL":""},{"userName":"","imageURL":""},{"userName":"","imageURL":""}],
-      private: "true",
-      created_at: new Date().toISOString(),
-    };
+    const [title, setTitle] = useState('');
+    const [descr, setDescr] = useState('');
+    const [time, setTime] = useState('');
+    const [location, setLocation] = useState('');
 
-    try {
-      const { data, error } = await supabase
-        .from("event_tbl") //
-        .insert([eventData]); // Insert the event data
-
-      if (error) {
-        console.error("Error inserting data:", error);
-      } else {
-        console.log(JSON.stringify(data));
-      }
-    } catch (error) {
-      console.error("Unexpected error:", error);
+    //we want to use this function to send information to Supabse when Submit button is clicked
+    function submitToSupabase(){  
+        let object = {
+            id:btoa(time + title),
+            title:title,
+            description:descr,
+            time:time,
+            location:location,
+            host:"someUsername",
+            imageURL:"https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
+            attending:0,
+            private:false,
+            created_at: new Date().toISOString(),
+        }
+        return object
     }
-  };
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
-  const [time, setTime] = useState("");
+
+    const insertData = async () => {
+        const eventData = submitToSupabase()
+        console.log(eventData)
+    
+        try {
+          const { data, error } = await supabase
+            .from("event_tbl") // 
+            .insert([eventData]); // Insert the event data
+    
+          if (error) {
+            console.error("Event already exists:", error);
+          } else {
+            console.log("Data inserted:", data);
+          }
+        } catch (error) {
+          console.error("Unexpected error:", error);
+        }
+      };
 
   return (
-    <Dialog
-      overlayStyle={styles.DialogueBox}
-      isVisible={isVisible}
-      onBackdropPress={onClose}
-    >
+    <Dialog overlayStyle= {styles.DialogueBox} isVisible={isVisible} onBackdropPress={onClose}>
       <Text style={styles.eventText}>Event Details</Text>
+      <TextInput onChangeText={text => setTitle(text)} style={styles.inputFields} placeholder="Title"></TextInput>
       <TextInput
-        style={styles.inputFields}
-        placeholder="Title"
-        onChangeText={(newText) => setTitle(newText)}
-        defaultValue={title}
-      />
-      <TextInput
+        onChangeText={text => setDescr(text)} 
         style={styles.descriptionField}
         placeholder="Description"
-        onChangeText={(newText) => setDescription(newText)}
-        defaultValue={description}
-      />
-      <TextInput
-        style={styles.inputFields}
-        placeholder="Time"
-        onChangeText={(newText) => setTime(newText)}
-        defaultValue={time}
-      />
-      <TextInput
-        style={styles.inputFields}
-        placeholder="Location"
-        onChangeText={(newText) => setLocation(newText)}
-        defaultValue={location}
-      />
-      <FAB
-        icon={{ name: "upload", color: "white" }}
-        style={styles.uploadButton}
-        title="Upload Button"
-        color="#65BEFF"
-      />
-      <FAB
-        style={styles.closeIcon}
-        onPress={onClose}
-        color={"none"}
-        icon={{ name: "close", color: "black" }}
-      />
+      ></TextInput>
+      <TextInput onChangeText={text => setTime(text)}  id = "time" style={styles.inputFields} placeholder="Time"></TextInput>
+      <TextInput onChangeText={text => setLocation(text)}  style={styles.inputFields} placeholder="Location"></TextInput>
 
       <FAB
-        style={styles.uploadButton}
+        icon={{ name: "upload", color: "white" }}
+        style = {styles.uploadButton}
+        title="Upload Picture"
+        color = "#65BEFF"
+      />
+    <FAB style = {styles.closeIcon} onPress={onClose}
+        color = {"none"}
+        icon={{ name: "close", color: "black" }}
+    />
+
+    <FAB
+        style = {styles.uploadButton}
         title="Submit"
-        color="#289CF1"
-        onPress={insertData}
+        onPress = {insertData}
+        color = "#289CF1"
       />
     </Dialog>
   );
@@ -115,9 +93,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
   },
-  DialogueBox: {
+  DialogueBox:{
     height: "60%",
-    borderRadius: 20,
+    borderRadius:20,
   },
   eventText: {
     textAlign: "center",
@@ -137,19 +115,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingBottom: 30,
   },
-  otherButtons: {
-    backgroundColor: "yellow",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    flexWrap: "wrap",
+  otherButtons:{
+    backgroundColor:"yellow",
+    display:"flex",
+    flexDirection:"row",
+    justifyContent:"space-around",
+    flexWrap:"wrap"
   },
-  uploadButton: {
-    marginTop: 16,
+  uploadButton:{
+    marginTop:16,
+    
   },
-  closeIcon: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-  },
+  closeIcon:{
+    position:"absolute",
+    top:0,
+    right:0,
+  }
 });
