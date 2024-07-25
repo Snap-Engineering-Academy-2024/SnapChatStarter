@@ -13,7 +13,6 @@ export default function AddFriendBitmoji() {
     async function fetchUsers() {
       try {
         const { data, error } = await supabase.from("profiles").select("id");
-        // .limit(1);
 
         if (error) {
           console.error("Error fetching users:", error.message);
@@ -36,71 +35,91 @@ export default function AddFriendBitmoji() {
       }
     }
 
-    async function fetchCurrentFriends () {
-      const { data, error } = await supabase
-      .from("profiles")
-      .select("friend_ids")
-      .eq("id", user.id)
-      .single();
+    async function fetchCurrentFriends() {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("friend_ids")
+          .eq("id", user.id)
+          .single();
 
-    if (!data.friend_ids) {
-      data.friend_ids = [];
-    }
-    setCurrentFriends(data.friend_ids)
+        if (error) {
+          console.error("Error fetching current friends:", error.message);
+          return;
+        }
+        if (data) {
+          setCurrentFriends(data.friend_ids || []);
+        }
+      } catch (error) {
+        console.error("Error fetching current friends:", error.message);
+      }
     }
 
-    
-    fetchUsers();
-    fetchCurrentFriends();
-  }, []);
+    if (user) {
+      fetchCurrentFriends();
+      fetchUsers();
+    }
+  }, [user]);
 
   async function addFriend(userToAdd) {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("friend_ids")
-      .eq("id", user.id)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("friend_ids")
+        .eq("id", user.id)
+        .single();
 
-    if (!data.friend_ids) {
-      data.friend_ids = [];
+      if (error) {
+        console.error("Error adding friend:", error.message);
+        return;
+      }
+
+      let friend_ids = data.friend_ids || [];
+
+      if (!friend_ids.includes(userToAdd.id)) {
+        friend_ids.push(userToAdd.id);
+      }
+
+      const { updateError } = await supabase
+        .from("profiles")
+        .update({ friend_ids })
+        .eq("id", user.id);
+
+      if (updateError) {
+        console.error("Error updating friend list:", updateError.message);
+        return;
+      }
+
+      alert(`Added ${userToAdd.name} as a friend!`);
+      setCurrentFriends(friend_ids);
+    } catch (error) {
+      console.error("Error adding friend:", error.message);
     }
-
-    if (!data.friend_ids.includes(userToAdd.id)) {
-      data.friend_ids.push(userToAdd.id)
-    }
-    
-    await supabase
-      .from("profiles")
-      .update({ friend_ids: data.friend_ids })
-      .eq("id", user.id);
-
-    alert(`Added ${userToAdd.name} as a friend!`);
-    setCurrentFriends(data.friend_ids);
   }
-
-
 
   return (
     <View style={styles.container}>
-      {usersToAdd.filter(usersToAdd => !currentFriends.includes(usersToAdd.id)).map((user, index) => (
-        <View key={index} style={styles.myBitmoji}>
-          <Image style={styles.bitmojiImage} source={defaultPhoto} />
-          <View style={styles.textContainer}>
-            <Text style={styles.bitmojiText}>
-              {user.name}
-              <Text style={styles.usernameText}> {user.username}</Text>
-            </Text>
-            <Pressable
-              style={styles.addButton}
-              onPress={async () => {
-                await addFriend(user);
-              }}
-            >
-              <Text style={styles.addButtonText}>Quick Add</Text>
-            </Pressable>
+      {usersToAdd
+        .filter((userToAdd) => !currentFriends.includes(userToAdd.id))
+        .map((user, index) => (
+          <View key={index} style={styles.myBitmoji}>
+            <Image style={styles.bitmojiImage} source={defaultPhoto} />
+            <View style={styles.textContainer}>
+              <Text style={styles.bitmojiText}>
+                {user.name}
+                <Text style={styles.usernameText}> {user.username}</Text>
+              </Text>
+              <Pressable
+                style={styles.addButton}
+                onPress={async () => {
+                  await addFriend(user);
+                }}
+              >
+                <Text style={styles.addButtonText}>Quick Add</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      ))}
+        ))}
     </View>
   );
 }
