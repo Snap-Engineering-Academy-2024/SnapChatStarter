@@ -94,7 +94,7 @@ export default function ConversationScreen({ route, navigation }) {
 
 const handleInserts = (payload) => {
   console.log('Change received!', JSON.stringify(payload, null, 4))
-  addNewMessage(payload.new.messages[0])
+  // addNewMessage(payload[0].text)
 }
 // Listen to inserts
 supabase
