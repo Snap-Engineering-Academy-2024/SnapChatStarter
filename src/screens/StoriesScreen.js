@@ -37,7 +37,6 @@ const DATA = [
     title: "Third Item",
   },
 ];
-//const { data: galleryPhotos, error } = await supabase.from("gallery").select();
 
 export default function StoriesScreen({ route, navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
