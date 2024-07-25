@@ -8,6 +8,7 @@ import { Button } from "react-native-elements";
 import { useState, useEffect } from "react";
 import { Pressable, FlatList, Item} from "react-native";
 import {supabase} from '../utils/hooks/supabase';
+import { SmallChatFill } from "../../assets/snapchat/NavigationIcons";
 
 
 const Stack = createStackNavigator();
@@ -17,26 +18,28 @@ export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [usersToAdd, setUsersToAdd] = useState([]);
+
+  const [recents, setRecents] = useState([]);
+
   useEffect(() => {
-      // Function to fetch todos
       async function fetchUsers() {
       try {
           const { data, error } = await supabase
           .from('usersToAdd')
           .select('*');
           if (error) {
-          console.error('Error fetching users:', error.message);
+            console.error('Error fetching users:', error.message);
           return;
           }
-          if (data) {
+          if(data) {
               setUsersToAdd(data);
-              console.log(data)
+              setRecents(data.slice(-6));
           }
       } catch (error) {
           console.error('Error fetching users:', error.message);
       }
       }
-      // Call the fetchTodos function
+      
       fetchUsers();
   }, []);
 
@@ -53,6 +56,35 @@ export default function SearchScreen() {
       <Text >{item.Starsign}</Text>
     </View>
   );
+
+  const renderRecentItem = ({ item }) => (
+    <View style={{alignItems: "center", backgroundColor: "white", width: 90, borderRadius: 10, gap: 10, paddingVertical: 10}}>
+      <Image
+      source={{uri: item.profile_picture}}
+      style={{width: 40, height: 40, borderRadius: 40/ 2, backgroundColor:"#EBECEE"}}
+      />
+      <Text>{item.name}</Text>
+      <View style={{flexDirection: "row", alignItems: "center", gap: 2, backgroundColor:"#EBECEE", paddingHorizontal: 10, paddingVertical: 2, borderRadius: 50}}>
+          <SmallChatFill width={15} height={15} />
+          <Text style={{fontWeight:"bold", fontSize: 12}}>Chat</Text>
+      </View>
+    </View>
+  );
+
+  const renderSnapStar = ({ item }) => (
+    <View style={{alignItems: "center", backgroundColor: "white", width: 90, borderRadius: 10, gap: 10, paddingVertical: 10, margin: 5}}>
+      <Image
+      source={item.profile_picture}
+      style={{width: 40, height: 40, borderRadius: 40/ 2, backgroundColor:"#EBECEE"}}
+      />
+      <Text>{item.name}</Text>
+      <View style={{flexDirection: "row", alignItems: "center", gap: 2, backgroundColor:"#EBECEE", paddingHorizontal: 10, paddingVertical: 2, borderRadius: 50}}>
+          <SmallChatFill width={15} height={15} />
+          <Text style={{fontWeight:"bold", fontSize: 12}}>Chat</Text>
+      </View>
+    </View>
+  );
+
   return (
     <View styles={{ alignItems: "center" }}>
       <SafeAreaView>
@@ -91,38 +123,43 @@ export default function SearchScreen() {
           </Pressable>
         </View>
       </SafeAreaView>
-      {/* <Image
-        source={Fakeusers[0].ProfilePic}
-        style={{ width: 400, height: 400, borderRadius: 400 / 2 }}
-      /> */}
+
+      {recents.length > 0 ? (
+        <>
+          <View style={{justifyContent: "space-between", flexDirection:"row", paddingHorizontal: 20}}>
+            <Text style={{fontWeight:"bold"}}>Recents</Text>
+            <Pressable
+              onPress={() => {
+                setRecents([]);
+              }}
+            >
+              <Text>Clear All &gt;</Text>
+            </Pressable>
+          </View>
+
+          <FlatList
+            data={recents}
+            renderItem={renderRecentItem}
+            keyExtractor={(item) => item.name}
+            horizontal={true}
+            contentContainerStyle={{alignItems: "center", gap: 10, paddingHorizontal: 20, paddingTop: 10}}
+          />
+        </>
+      ) : null}
+
+      <Text style={{fontWeight:"bold", paddingLeft: 20, paddingTop: 20}}>Follow a Snap Star</Text>
+
       <FlatList
-        data={Fakeusers}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.Username}
-        numColumns={2}
-        contentContainerStyle={{alignItems: "center",}}
+        data={snapStars}
+        renderItem={renderSnapStar}
+        keyExtractor={(item) => item.name}
+        numColumns={4}
+        // horizontal={true}
+        contentContainerStyle={{alignItems: "center", paddingTop: 10}}
       />
-      <Text styles={{ justifyContents: "center" }}>Search results</Text>
-      <Text> {Fakeusers[0].Name} 
-      </Text>
+
     </View>
   );
 }
- let Fakeusers = [
-    { Name: "Julissa", Username: "Julissahhh", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Pisces" },
-    { Name: "Kyle", Username: "KyleisBrittish", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Sagittarius" },
-    { Name: "Allison", Username: "allyhua", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Leo" },
-    { Name: "Demani", Username: "Demanigames", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Gemini" },
-    { Name: "Malena", Username: "malena_lodi", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Cancer" },
-    { Name: "Alexis", Username: "Coach_Alexis", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Leo" },
-    { Name: "Phoenix", Username: "Arizona", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Libra" },
-    { Name: "Bee", Username: "Buzzing_Bee", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Libra" },
-    { Name: "Jay", Username: "Jaysitoe", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Aries" },
-    { Name: "Cindy", Username: "cindya_who", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Sagittarius" },
-    { Name: "Luis", Username: "Lulu_boba", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Virgo" },
-    { Name: "Sedrick", Username: "seddiemac", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Pisces" },
-    { Name: "Sona", Username: "son-sar", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Sagittarius" },
-    { Name: "Masiel", Username: "mmasiell", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Cancer" },
-    { Name: "Areli", Username: "simplyarelia", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Leo" },
-    { Name: "Christian", Username: "o-1starscream", ProfilePic: require("../../assets/snapchat/defaultprofile.png"), Starsign: "Libra" },
-  ];
+
+const snapStars = [{name: "Lindsey", profile_picture: require('../../assets/snapchat/defaultprofile.png')}, {name: "Lara", profile_picture: require('../../assets/snapchat/defaultprofile.png')},  {name: "Nallely", profile_picture: require('../../assets/snapchat/defaultprofile.png')},  {name: "Liz", profile_picture: require('../../assets/snapchat/defaultprofile.png')}, {name: "Cole", profile_picture: require('../../assets/snapchat/defaultprofile.png')}, {name: "Sergio", profile_picture: require('../../assets/snapchat/defaultprofile.png')},  {name: "Winston", profile_picture: require('../../assets/snapchat/defaultprofile.png')},  {name: "Carlos", profile_picture: require('../../assets/snapchat/defaultprofile.png')}, {name: "Gio", profile_picture: require('../../assets/snapchat/defaultprofile.png')}, {name: "Reggie", profile_picture: require('../../assets/snapchat/defaultprofile.png')},  {name: "Gloria", profile_picture: require('../../assets/snapchat/defaultprofile.png')},  {name: "Jenny", profile_picture: require('../../assets/snapchat/defaultprofile.png')}]
