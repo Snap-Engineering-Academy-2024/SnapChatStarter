@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase";
+import { useAuthentication } from "./useAuthentication";
 
 const zodiac = [
   ["Capricorn", "Aquarius"],
@@ -17,10 +18,35 @@ const zodiac = [
 ];
 
 export function findAstrologySign() {
-  const birthday = ["05", "01"];
+  const [birthday, setBirthday] = useState(["05", "01"]);
   const [sign, setSign] = useState("");
   const day = parseInt(birthday[1]);
+  const { user } = useAuthentication();
 
+  useEffect(() => {
+    async function fetchUserBirthday() {
+      if (user === null) {
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("birthday")
+        .eq("id", user.id)
+        .single();
+
+      if (error) {
+        console.log("Birthday fetch failure");
+      } else if (data.birthday) {
+        // setBirthday(data.birthday);
+        console.log(data.birthday)
+      }
+    }
+
+    fetchUserBirthday();
+  }, [user]);
+
+  //   determine the sign based on birthday
   useEffect(() => {
     switch (birthday[0]) {
       case "01":
