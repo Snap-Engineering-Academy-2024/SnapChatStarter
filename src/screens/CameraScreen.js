@@ -71,13 +71,40 @@ export default function CameraScreen({ navigation, focused }) {
       const options = { quality: 1, base64: true, exif: false };
       const newPhoto = await cameraRef.current.takePictureAsync(options);
       setPhoto(newPhoto);
-
-      // I add this to insert the uri of the new photo taken to supabase table "gallery"
+      // This part is to insert URI to "gallery" table
+      console.log(" Before Insert to table!")
       const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });    
+      console.log("After Insert to table!")
       if (error) {
         console.error('Error inserting photo:', error.message);
-      } 
+      }
+      // This part is to store images in a folder bucket named "pictureStorage"
+      uploadImage(newPhoto.uri);
+      
     }
+  }
+
+  async function uploadImage (photoUri) {
+    // console.log("1")
+    const response = await fetch(photoUri);
+  
+    const blob = await response.blob();
+
+    const arrayBuffer = await new Response(blob).arrayBuffer();
+    // console.log("2")
+    const fileName = `public/${Date.now()}.jpg`;
+    const { error1} = await supabase
+      .storage
+      .from('pictureStorage')
+      .upload(fileName, arrayBuffer, { contentType: 'image/jpeg', upsert: false });
+    // console.log("3")
+    if (error1) {
+      console.error('Error uploading image:', error1.message);
+    } else {
+      console.log('Image successfully uploaded:', data);
+    }
+
+
   }
 
   function savePhoto() {
@@ -108,7 +135,7 @@ export default function CameraScreen({ navigation, focused }) {
           style={facing === "front" ? styles.frontPreview : styles.preview}
           //source={{ uri: "data:image/jpg;base64," + photo.base64 }}
           // We don't need that base64 thing, just uri is good
-          source={{ uri: photo.uri }}
+          source={{ uri: "file:///var/mobile/Containers/Data/Application/CF05F08E-8F78-4CEA-8A92-B092A5505765/Library/Caches/ExponentExperienceData/@anonymous/chatsnap-c59d517a-6d48-4777-ad0f-718efa4cc1b0/Camera/DAEF7FB1-8167-483D-B99A-4A8D742D9A05.jpg" }}
         />
         {hasMediaLibraryPermission && (
           <PostcaptureOptions deletePhoto={() => setPhoto(null)} savePhoto={savePhoto} />
