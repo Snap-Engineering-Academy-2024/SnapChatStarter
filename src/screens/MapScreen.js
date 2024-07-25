@@ -69,7 +69,7 @@ export default function MapScreen({ navigation }) {
               setCurrentRegion({ ...currentRegion, latitude, longitude });
             }}
           >
-            <Ionicons name="ios-navigate" size={15} color="black" />
+            <Ionicons name="navigate" size={15} color="black" />
           </TouchableOpacity>
         </View>
         <View style={[styles.bitmojiContainer, styles.shadow]}>

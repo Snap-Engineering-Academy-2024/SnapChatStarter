@@ -4,11 +4,12 @@ import UserTab from "./UserTab";
 import ConversationScreen from "../screens/ConversationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import AddFriendScreen from "../screens/AddFriendScreen";
-
+import DiscoverCard from "../components/DiscoverCard";
+import SearchScreen from "../screens/SearchScreen";
 
 const Stack = createStackNavigator();
 
-export default function () {
+export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -27,6 +28,16 @@ export default function () {
           name="Conversation"
           component={ConversationScreen}
           options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="DiscoverCard"
+          component={DiscoverCard}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="Search"
+          component={SearchScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
