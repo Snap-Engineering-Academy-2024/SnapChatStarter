@@ -1,94 +1,65 @@
-import React, { useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Image,
-  Button,
-  TouchableOpacity,
-} from "react-native";
-<<<<<<< HEAD
+import React from "react";
+import { useState } from "react";
+
+import { View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity} from "react-native";
+import { supabase } from "../utils/hooks/supabase";
 import { Dialog, FAB } from "@rneui/themed";
+
+let count = 30;
+
 export default function AddEvent({ isVisible, onClose }) {
+    const [title, setTitle] = useState('');
+    const [descr, setDescr] = useState('');
+    const [time, setTime] = useState('');
+    const [location, setLocation] = useState('');
 
-    function submitToSupabase(){  //we want to use this function to send information to Supabse when Submit button is clicked
-        let title = document.getElementById("title").value;
-        let  descr = document.getElementById("description").value;
-        let time = document.getElementById("time").value;
-        let location = document.getElementById("location").value;
-
+    //we want to use this function to send information to Supabse when Submit button is clicked
+    function submitToSupabase(){  
         let object = {
+            id:++count,
             title:title,
             description:descr,
             time:time,
             location:location,
-            username:"someUsername",
-            imageUrl:"https://interactive-examples.mdn.mozilla.net/media/examples/plumeria.jpg"
+            host:"someUsername",
+            imageURL:"https://interactive-examples.mdn.mozilla.net/media/examples/plumeria.jpg",
+            attending:0,
+            private:false,
+            created_at: new Date().toISOString(),
         }
-
-        //submit object to supabase
-
-
+        return object
     }
 
+    const insertData = async () => {
+        const eventData = submitToSupabase()
+        console.log(eventData)
+    
+        try {
+          const { data, error } = await supabase
+            .from("event_tbl") // 
+            .insert([eventData]); // Insert the event data
+    
+          if (error) {
+            console.error("Error inserting data:", error);
+          } else {
+            console.log("Data inserted:", data);
+          }
+        } catch (error) {
+          console.error("Unexpected error:", error);
+        }
+      };
 
   return (
     <Dialog overlayStyle= {styles.DialogueBox} isVisible={isVisible} onBackdropPress={onClose}>
-=======
-import { Dialog } from "@rneui/themed";
-import { supabase } from "../utils/hooks/supabase";
-
-
-export default function AddEvent({ isVisible, onClose }) {
-
-  const insertData = async () => {
-    const eventData = {
-      id: "20",
-      title: "Sona's Birthday",
-      description: "Come celebrate the 2nd coolest birthday ever!",
-      location: "Santa Monica, CA",
-      time: "2024-12-07 03:30:00+00",
-      imageURL:
-        "https://sdk.bitmoji.com/render/panel/20087589-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=2",
-      host: '{"userName":"","imageURL":"https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1"}',
-      attending:
-        '[{"userName":"","imageURL":""},{"userName":"","imageURL":""},{"userName":"","imageURL":""}]',
-      private: "true",
-      created_at: new Date().toISOString(),
-    };
-
-    try {
-      const { data, error } = await supabase
-        .from("event_tbl") // 
-        .insert([eventData]); // Insert the event data
-
-      if (error) {
-        console.error("Error inserting data:", error);
-      } else {
-        console.log("Data inserted:", data);
-      }
-    } catch (error) {
-      console.error("Unexpected error:", error);
-    }
-  };
-
-  return (
-    <Dialog
-      overlayStyle={styles.DialogueBox}
-      isVisible={isVisible}
-      onBackdropPress={onClose}
-    >
->>>>>>> origin/ChristianBranch
       <Text style={styles.eventText}>Event Details</Text>
-      <TextInput style={styles.inputFields} placeholder="Title"></TextInput>
+      <TextInput onChangeText={text => setTitle(text)} style={styles.inputFields} placeholder="Title"></TextInput>
       <TextInput
+        onChangeText={text => setDescr(text)} 
         style={styles.descriptionField}
         placeholder="Description"
       ></TextInput>
-<<<<<<< HEAD
-      <TextInput id = "time" value = "hello" style={styles.inputFields} placeholder="Time"></TextInput>
-      <TextInput style={styles.inputFields} placeholder="Location"></TextInput>
+      <TextInput onChangeText={text => setTime(text)}  id = "time" style={styles.inputFields} placeholder="Time"></TextInput>
+      <TextInput onChangeText={text => setLocation(text)}  style={styles.inputFields} placeholder="Location"></TextInput>
 
       <FAB
         icon={{ name: "upload", color: "white" }}
@@ -104,17 +75,9 @@ export default function AddEvent({ isVisible, onClose }) {
     <FAB
         style = {styles.uploadButton}
         title="Submit"
+        onPress = {insertData}
         color = "#289CF1"
       />
-=======
-      <TextInput style={styles.inputFields} placeholder="Time"></TextInput>
-      <TextInput style={styles.inputFields} placeholder="Location"></TextInput>
-      <Button title="Upload pic"> </Button>
-      <Dialog.Actions>
-        <Button title="Create Event" onPress={insertData} />
-        <Button title="Close" onPress={onClose} />
-      </Dialog.Actions>
->>>>>>> origin/ChristianBranch
     </Dialog>
   );
 }
@@ -131,16 +94,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
   },
-<<<<<<< HEAD
   DialogueBox:{
     height: "60%",
     borderRadius:20,
-=======
-  DialogueBox: {
-    height: "60%",
-    borderRadius: 20,
-    // backgroundColor :"red"
->>>>>>> origin/ChristianBranch
   },
   eventText: {
     textAlign: "center",
@@ -150,17 +106,12 @@ const styles = StyleSheet.create({
   inputFields: {
     marginTop: 10,
     backgroundColor: "#F0F0F0",
-<<<<<<< HEAD
     padding: 8,
-=======
-    padding: 5,
->>>>>>> origin/ChristianBranch
     borderRadius: 5,
   },
   descriptionField: {
     marginTop: 10,
     backgroundColor: "#F0F0F0",
-<<<<<<< HEAD
     padding: 8,
     borderRadius: 5,
     paddingBottom: 30,
@@ -182,10 +133,3 @@ const styles = StyleSheet.create({
     right:0,
   }
 });
-=======
-    padding: 5,
-    borderRadius: 5,
-    paddingBottom: 30,
-  },
-});
->>>>>>> origin/ChristianBranch
