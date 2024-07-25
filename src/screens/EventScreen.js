@@ -5,15 +5,25 @@ import { Card, FAB } from "@rneui/themed";
 import { View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import AddEvent from "../components/AddEvent";
+import EventInfo from "../components/EventInfo";
 import { supabase } from "../utils/hooks/supabase";
 
 export default function EventScreen({ route, navigation }) {
     const [visible, setVisible] = useState(false)
     const [events, setEvents] = useState([]);
+    const [detailsVisible, setDetailsVisible] = useState(false)
+    const [selectedEvent, setSelectedEvent] = useState(null)
 
     function toggleComponent (){
         setVisible(!visible)
         console.log(visible)
+    }
+
+    function handleCardTouch(event){
+        console.log("press")
+        setDetailsVisible(!detailsVisible)
+        console.log(detailsVisible)
+        setSelectedEvent(event)
     }
 
 
@@ -44,91 +54,29 @@ export default function EventScreen({ route, navigation }) {
         <ScrollView>
         <View style={styles.Events}>
           {events.map((event) => (
-            <View style={styles.container} key={event.id}>
-              <View style={styles.friends}>
-                <Text style={styles.friendsText}>{event.attending} friends going</Text>
-              </View>
-              <Image
-                style={{ width: "100%", aspectRatio: 1, borderRadius: 20, objectFit:"cover" }}
-                resizeMode="contain"
-                source={{ uri: event.imageURL }}
-              />
-              <Card.Title style={styles.title}>{event.title}</Card.Title>
-              <View style={styles.userInfo}>
+
+                <TouchableOpacity key = {event.id} onPress = {() => handleCardTouch(event)} style={styles.container}>
+                <View style={styles.friends}>
+                    <Text style={styles.friendsText}>{event.attending} friends going</Text>
+                </View>
                 <Image
-                  style={styles.bitmojiUser}
-                  source={{
-                    uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
-                  }}
+                    style={{ width: "100%", aspectRatio: 1, borderRadius: 20, objectFit:"cover" }}
+                    resizeMode="contain"
+                    source={{ uri: event.imageURL }}
                 />
-                <Text style={styles.username}>{event.host}</Text>
-              </View>
-            </View>
+                <Card.Title style={styles.title}>{event.title}</Card.Title>
+                <View style={styles.userInfo}>
+                    <Image
+                    style={styles.bitmojiUser}
+                    source={{
+                        uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
+                    }}
+                    />
+                    <Text style={styles.username}>{event.host}</Text>
+                </View>
+                </TouchableOpacity>
           ))}
         </View>
-        {/* <View style = {styles.Events}>
-            <View style={styles.container}>
-                <View style = {styles.friends}>
-                    <Text style = {styles.friendsText}>3 friends going</Text>
-                </View>
-                <Image
-                    style={{width:"100%", aspectRatio:1, borderRadius:20}}
-                    resizeMode="contain"
-                    source={{ uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4" }}
-                    />
-                <Card.Title style = {styles.title}>Sona's Birthday</Card.Title>
-                <View style = {styles.userInfo}>
-                    <Image style = {styles.bitmojiUser} source = {{uri:"https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww"}}/>
-                    <Text style = {styles.username}>username</Text>
-                </View>
-            </View>
-
-          <View style={styles.container}>
-            <View style={styles.friends}>
-              <Text style={styles.friendsText}>3 friends going</Text>
-            </View>
-            <Image
-              style={{ width: "100%", aspectRatio: 1, borderRadius: 20 }}
-              resizeMode="contain"
-              source={{
-                uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4",
-              }}
-            />
-            <Card.Title style={styles.title}>Sona's Birthday</Card.Title>
-            <View style={styles.userInfo}>
-              <Image
-                style={styles.bitmojiUser}
-                source={{
-                  uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
-                }}
-              />
-              <Text style={styles.username}>username</Text>
-            </View>
-          </View>
-
-          <View style={styles.container}>
-            <View style={styles.friends}>
-              <Text style={styles.friendsText}>3 friends going</Text>
-            </View>
-            <Image
-              style={{ width: "100%", aspectRatio: 1, borderRadius: 20 }}
-              resizeMode="contain"
-              source={{
-                uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4",
-              }}
-            />
-            <Card.Title style={styles.title}>Sona's Birthday</Card.Title>
-            <View style={styles.userInfo}>
-              <Image
-                style={styles.bitmojiUser}
-                source={{
-                  uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
-                }}
-              />
-              <Text style={styles.username}>username</Text>
-            </View>
-          </View>
-        </View> */}
       </ScrollView>
       <FAB
         onPress={toggleComponent}
@@ -137,10 +85,16 @@ export default function EventScreen({ route, navigation }) {
         icon={{ name: "add", color: "white" }}
         color="#FF3386"
       />
-      <AddEvent isVisible={visible} onClose={() => {
-                toggleComponent();
-                refreshEvents();
-            }} />
+        <AddEvent isVisible={visible} onClose={() => {
+        toggleComponent();
+        refreshEvents();
+        }} />
+        <EventInfo
+            isVisible={detailsVisible}
+          event={selectedEvent}
+          onClose={() => setDetailsVisible(false)}
+        />
+        {/* <EventInfo isVisible = {detailsVisible} onClose={handleCardTouch}/> */}
     </View>
   );
 }
