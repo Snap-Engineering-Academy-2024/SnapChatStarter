@@ -14,7 +14,7 @@ export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const cameraRef = useRef(null);
-  const [facing, setFacing] = useState("back"); //Need to FIX facing camera state, only regular camera is working
+  const [facing, setFacing] = useState("back"); 
   const [permission, requestPermission] = useCameraPermissions();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
   const [photo, setPhoto] = useState(null);
@@ -96,7 +96,7 @@ export default function CameraScreen({ navigation, focused }) {
           },
         ]}
       >
-        <Image //NEED TO FIX THIS FACING CAMERA
+        <Image
           style={facing === "front" ? styles.frontPreview : styles.preview}
           source={{ uri: "data:image/jpg;base64," + photo.base64 }}
         />
@@ -118,8 +118,7 @@ export default function CameraScreen({ navigation, focused }) {
         },
       ]}
     >
-      {/* //NEED TO FIX THIS FACING CAMERA */}
-      <CameraView style={styles.camera} type={facing} ref={cameraRef} /> 
+      <CameraView style={styles.camera} facing={facing} ref={cameraRef} /> 
       <CameraOptions flipCamera={flipCamera} />
       <CameraActions checkGallery={checkGallery} takePhoto={takePhoto} />
     </View>
