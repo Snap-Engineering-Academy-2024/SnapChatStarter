@@ -18,7 +18,7 @@ const zodiac = [
 
 export function findAstrologySign() {
   const birthday = ["05", "01"];
-  const [sign, setSign] = useState("Leo");
+  const [sign, setSign] = useState("");
   const day = parseInt(birthday[1]);
 
   useEffect(() => {
