@@ -11,16 +11,33 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import AddEvent from "../components/AddEvent";
+import EventInfo from "../components/EventInfo";
 import { supabase } from "../utils/hooks/supabase";
 
 export default function EventScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
+  const [detailsVisible, setDetailsVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [refreshing, setRefreshing] = React.useState(false);
   const [events, setEvents] = useState([]);
+  
+
+  function toggleComponent() {
+    setVisible(!visible);
+    console.log(visible);
+  }
+
+  function handleCardTouch(event){
+    console.log("press")
+    setDetailsVisible(!detailsVisible)
+    console.log(detailsVisible)
+    setSelectedEvent(event)
+
+}
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchData()
+    fetchData();
     setTimeout(() => {
       setRefreshing(false);
     }, 700);
@@ -54,14 +71,16 @@ export default function EventScreen({ route, navigation }) {
 
   return (
     <View style={styles.EventScreen}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+      <ScrollView refreshControl= {<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
+        
         <View style={styles.Events}>
           {events.map((event) => (
-            <View style={styles.container} key={event.id}>
+            <TouchableOpacity
+              key={event.id}
+              onPress={() => handleCardTouch(event)}
+              style={styles.container}
+            >
               <View style={styles.friends}>
                 <Text style={styles.friendsText}>
                   {event.attending} friends going
@@ -87,17 +106,10 @@ export default function EventScreen({ route, navigation }) {
                 />
                 <Text style={styles.username}>{event.host}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
-      <FAB
-        onPress={toggleComponent}
-        style={styles.addButton}
-        visible={true}
-        icon={{ name: "add", color: "white" }}
-        color="#FF3386"
-      />
       <AddEvent
         isVisible={visible}
         onClose={() => {
