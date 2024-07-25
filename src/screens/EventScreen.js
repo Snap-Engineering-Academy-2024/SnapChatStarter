@@ -18,6 +18,7 @@ export default function EventScreen({ route, navigation }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [events, setEvents] = useState([]);
 
+<<<<<<< HEAD
   function toggleComponent() {
     setVisible(!visible);
     console.log(visible);
@@ -64,6 +65,36 @@ export default function EventScreen({ route, navigation }) {
   }, []);
 
   return (
+=======
+    function toggleComponent (){
+        setVisible(!visible)
+        console.log(visible)
+    }
+
+
+    const fetchData = async () => {
+        try {
+            const { data, error } = await supabase.from('event_tbl').select('*');
+            if (error) {
+                console.error("Error fetching data:", error);
+            } else {
+                setEvents(data);
+            }
+        } catch (error) {
+            console.error("Unexpected error:", error);
+        }
+    };
+
+    const refreshEvents = async () => {
+        await fetchData();
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    return (
+>>>>>>> origin/sona-branch
     <View style = {styles.EventScreen}>
         
         <ScrollView>
@@ -100,9 +131,10 @@ export default function EventScreen({ route, navigation }) {
         icon={{ name: "add", color: "white" }}
         color="#FF3386"
       />
-      {<AddEvent isVisible={visible} onClose={() => {
-        toggleComponent();
-        refreshEvents();}} />}
+      <AddEvent isVisible={visible} onClose={() => {
+                toggleComponent();
+                refreshEvents();
+            }} />
     </View>
   );
 }
