@@ -17,29 +17,26 @@ export default function EventScreen({ route, navigation }) {
     }
 
 
-    useEffect(() => {
     const fetchData = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('event_tbl')
-          .select('*');
-        if (error) {
-          console.error("Error fetching data:", error);
-        } else {
-          setEvents(data);
-          console.log("Data:", data);
+        try {
+            const { data, error } = await supabase.from('event_tbl').select('*');
+            if (error) {
+                console.error("Error fetching data:", error);
+            } else {
+                setEvents(data);
+            }
+        } catch (error) {
+            console.error("Unexpected error:", error);
         }
-      } catch (error) {
-        console.error("Unexpected error:", error);
-      }
     };
-
-    fetchData();
-  }, []);
 
     const refreshEvents = async () => {
         await fetchData();
     };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
     <View style = {styles.EventScreen}>
@@ -140,9 +137,10 @@ export default function EventScreen({ route, navigation }) {
         icon={{ name: "add", color: "white" }}
         color="#FF3386"
       />
-      {<AddEvent isVisible={visible} onClose={() => {
-        toggleComponent();
-        refreshEvents();}} />}
+      <AddEvent isVisible={visible} onClose={() => {
+                toggleComponent();
+                refreshEvents();
+            }} />
     </View>
   );
 }
