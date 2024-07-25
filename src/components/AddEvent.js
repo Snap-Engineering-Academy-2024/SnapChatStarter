@@ -5,7 +5,6 @@ import { View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity} fro
 import { supabase } from "../utils/hooks/supabase";
 import { Dialog, FAB } from "@rneui/themed";
 
-let count = 30;
 
 export default function AddEvent({ isVisible, onClose }) {
     const [title, setTitle] = useState('');
@@ -16,7 +15,7 @@ export default function AddEvent({ isVisible, onClose }) {
     //we want to use this function to send information to Supabse when Submit button is clicked
     function submitToSupabase(){  
         let object = {
-            id:++count,
+            id:`${title}${time}`,
             title:title,
             description:descr,
             time:time,
@@ -40,7 +39,7 @@ export default function AddEvent({ isVisible, onClose }) {
             .insert([eventData]); // Insert the event data
     
           if (error) {
-            console.error("Error inserting data:", error);
+            console.error("Event already exists:", error);
           } else {
             console.log("Data inserted:", data);
           }
