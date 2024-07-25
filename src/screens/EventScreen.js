@@ -28,8 +28,6 @@ export default function EventScreen({ route, navigation }) {
           .from('event_tbl') 
           .select('*')
           .eq('id', '0')
-
-         
         if (error) {
           console.error("Error fetching data:", error);
         } else {
