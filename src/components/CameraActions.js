@@ -1,8 +1,8 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-
-import Ionicons from '@react-native-vector-icons/ionicons';
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 
 export default function CameraActions({ checkGallery, takePhoto }) {
   return (
@@ -10,6 +10,7 @@ export default function CameraActions({ checkGallery, takePhoto }) {
       <View style={styles.cameraButtons}>
         <TouchableOpacity onPress={checkGallery} style={styles.photosIcon}>
           <Ionicons name="copy-outline" size={25} color="white" />
+
         </TouchableOpacity>
         <TouchableOpacity onPress={takePhoto} style={styles.pictureIcon}>
           <Ionicons name="ellipse-outline" size={80} color="white" />

@@ -37,7 +37,6 @@ const DATA = [
     title: "Third Item",
   },
 ];
-//const { data: galleryPhotos, error } = await supabase.from("gallery").select();
 
 export default function StoriesScreen({ route, navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -57,27 +56,9 @@ export default function StoriesScreen({ route, navigation }) {
         },
       ]}
     >
-
       <Header title="Stories" />
       <View style={styles.contentContainer}>
-        <View style={styles.storyBar}>
-          <Text style={styles.sectionHeader}>Friends</Text>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.stories}
-          >
-            <StoriesBitmoji onPress={console.log("bit moooooo")}/>
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-          </ScrollView>
-        </View>
         <View style={styles.discoverContent}>
-          <Text style={styles.sectionHeader}>Discover</Text>
           <FlatList
             data={DATA}
             horizontal={false}
