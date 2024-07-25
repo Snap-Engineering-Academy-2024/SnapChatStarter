@@ -27,11 +27,12 @@ export default function EventScreen({ route, navigation }) {
         const { data, error } = await supabase
           .from('event_tbl') 
           .select('*')
-          .eq('id', '0')
+          // .eq('id', '0')
         if (error) {
           console.error("Error fetching data:", error);
         } else {
-          console.log("Data:", data);
+          console.log("Data Is: ");
+          console.log(JSON.stringify(data, null, 4))
         }
       } catch (error) {
         console.error("Unexpected error:", error);

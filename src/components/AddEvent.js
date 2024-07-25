@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,42 +8,46 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
-import { Dialog } from "@rneui/themed";
+import { Dialog, FAB } from "@rneui/themed";
 import { supabase } from "../utils/hooks/supabase";
 
 
-export default function AddEvent({ isVisible, onClose }) {
 
+
+export default function AddEvent({ isVisible, onClose }) {
   const insertData = async () => {
     const eventData = {
-      id: "20",
-      title: "Sona's Birthday",
-      description: "Come celebrate the 2nd coolest birthday ever!",
-      location: "Santa Monica, CA",
-      time: "2024-12-07 03:30:00+00",
+      id: btoa(title + time),
+      title: title,
+      description: description,
+      location: location,
+      time: time,
       imageURL:
         "https://sdk.bitmoji.com/render/panel/20087589-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=2",
-      host: '{"userName":"","imageURL":"https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1"}',
-      attending:
-        '[{"userName":"","imageURL":""},{"userName":"","imageURL":""},{"userName":"","imageURL":""}]',
+      host: {"userName":"","imageURL":"https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1"},
+      attending: [{"userName":"","imageURL":""},{"userName":"","imageURL":""},{"userName":"","imageURL":""}],
       private: "true",
       created_at: new Date().toISOString(),
     };
 
     try {
       const { data, error } = await supabase
-        .from("event_tbl") // 
+        .from("event_tbl") //
         .insert([eventData]); // Insert the event data
 
       if (error) {
         console.error("Error inserting data:", error);
       } else {
-        console.log("Data inserted:", data);
+        console.log(JSON.stringify(data));
       }
     } catch (error) {
       console.error("Unexpected error:", error);
     }
   };
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
+  const [time, setTime] = useState("");
 
   return (
     <Dialog
@@ -52,18 +56,49 @@ export default function AddEvent({ isVisible, onClose }) {
       onBackdropPress={onClose}
     >
       <Text style={styles.eventText}>Event Details</Text>
-      <TextInput style={styles.inputFields} placeholder="Title"></TextInput>
+      <TextInput
+        style={styles.inputFields}
+        placeholder="Title"
+        onChangeText={(newText) => setTitle(newText)}
+        defaultValue={title}
+      />
       <TextInput
         style={styles.descriptionField}
         placeholder="Description"
-      ></TextInput>
-      <TextInput style={styles.inputFields} placeholder="Time"></TextInput>
-      <TextInput style={styles.inputFields} placeholder="Location"></TextInput>
-      <Button title="Upload pic"> </Button>
-      <Dialog.Actions>
-        <Button title="Create Event" onPress={insertData} />
-        <Button title="Close" onPress={onClose} />
-      </Dialog.Actions>
+        onChangeText={(newText) => setDescription(newText)}
+        defaultValue={description}
+      />
+      <TextInput
+        style={styles.inputFields}
+        placeholder="Time"
+        onChangeText={(newText) => setTime(newText)}
+        defaultValue={time}
+      />
+      <TextInput
+        style={styles.inputFields}
+        placeholder="Location"
+        onChangeText={(newText) => setLocation(newText)}
+        defaultValue={location}
+      />
+      <FAB
+        icon={{ name: "upload", color: "white" }}
+        style={styles.uploadButton}
+        title="Upload Button"
+        color="#65BEFF"
+      />
+      <FAB
+        style={styles.closeIcon}
+        onPress={onClose}
+        color={"none"}
+        icon={{ name: "close", color: "black" }}
+      />
+
+      <FAB
+        style={styles.uploadButton}
+        title="Submit"
+        color="#289CF1"
+        onPress={insertData}
+      />
     </Dialog>
   );
 }
@@ -83,7 +118,6 @@ const styles = StyleSheet.create({
   DialogueBox: {
     height: "60%",
     borderRadius: 20,
-    // backgroundColor :"red"
   },
   eventText: {
     textAlign: "center",
@@ -93,14 +127,29 @@ const styles = StyleSheet.create({
   inputFields: {
     marginTop: 10,
     backgroundColor: "#F0F0F0",
-    padding: 5,
+    padding: 8,
     borderRadius: 5,
   },
   descriptionField: {
     marginTop: 10,
     backgroundColor: "#F0F0F0",
-    padding: 5,
+    padding: 8,
     borderRadius: 5,
     paddingBottom: 30,
+  },
+  otherButtons: {
+    backgroundColor: "yellow",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    flexWrap: "wrap",
+  },
+  uploadButton: {
+    marginTop: 16,
+  },
+  closeIcon: {
+    position: "absolute",
+    top: 0,
+    right: 0,
   },
 });
