@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import { supabase } from '../utils/hooks/supabase';
+import defaultPhoto from '../../assets/snapchat/defaultprofile.png'
 
 export default function AddFriendBitmoji() {
   const [usersToAdd, setUsersToAdd] = useState([]);
@@ -9,8 +10,8 @@ export default function AddFriendBitmoji() {
     async function fetchUsers() {
       try {
         const { data, error } = await supabase
-          .from('usersToAdd') 
-          .select('*')
+          .from('profiles') 
+          .select('id')
           // .limit(1);
 
         if (error) {
@@ -18,7 +19,13 @@ export default function AddFriendBitmoji() {
           return;
         }
         if (data) {
-          setUsersToAdd(data);
+          setUsersToAdd(data.map(user => {
+            return {
+              name: user.id.slice(0, 6) + "-name",
+              username: user.id.slice(0, 6) + "-username"
+            }
+
+          }));
           console.log(data);
         }
       } catch (error) {
@@ -35,7 +42,7 @@ export default function AddFriendBitmoji() {
         <View key={index} style={styles.myBitmoji}>
           <Image
             style={styles.bitmojiImage}
-            source={{ uri: user.profile_picture }}
+            source={defaultPhoto}
           />
           <View style={styles.textContainer}>
             <Text style={styles.bitmojiText}>
