@@ -11,6 +11,8 @@ import CameraOptions from "../components/CameraOptions";
 import PostcaptureOptions from "../components/PostcaptureActions";
 // Add supabase to store:
 import {supabase} from '../utils/hooks/supabase';
+import CameraGalleryMenu from "../components/CameraGalleryMenu";
+import { Button } from "react-native-elements";
 
 export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -21,6 +23,7 @@ export default function CameraScreen({ navigation, focused }) {
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [image, setImage] = useState(null);
+  const [showGalleryMenu, setShowGalleryMenu] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -49,6 +52,12 @@ export default function CameraScreen({ navigation, focused }) {
 
   function flipCamera() {
     setFacing((current) => (current === "back" ? "front" : "back"));
+  }
+
+  function galleryMenu(){
+    console.log("HELLO I AM HERE!")
+    // return <CameraGalleryMenu />
+    setShowGalleryMenu(!showGalleryMenu);
   }
 
   async function checkGallery() {
@@ -144,6 +153,18 @@ export default function CameraScreen({ navigation, focused }) {
     );
   }
 
+  if(showGalleryMenu){
+    return (
+      <>
+        <CameraGalleryMenu />
+        <Button
+          onPress={galleryMenu}
+          title="Close"
+        />
+      </>
+    )
+  }
+
   return (
     <View
       style={[
@@ -157,7 +178,7 @@ export default function CameraScreen({ navigation, focused }) {
     >
       <CameraView style={styles.camera} facing={facing} ref={cameraRef} /> 
       <CameraOptions flipCamera={flipCamera} />
-      <CameraActions checkGallery={checkGallery} takePhoto={takePhoto} />
+      <CameraActions galleryMenu={galleryMenu} checkGallery={checkGallery} takePhoto={takePhoto} />
     </View>
   );
 }

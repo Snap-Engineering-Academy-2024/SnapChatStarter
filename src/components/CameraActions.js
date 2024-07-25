@@ -3,11 +3,11 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function CameraActions({ checkGallery, takePhoto }) {
+export default function CameraActions({ galleryMenu, checkGallery, takePhoto }) {
   return (
     <View style={styles.cameraActions}>
       <View style={styles.cameraButtons}>
-        <TouchableOpacity onPress={checkGallery} style={styles.photosIcon}>
+        <TouchableOpacity onPress={galleryMenu} style={styles.photosIcon}>
           <Ionicons name="copy-outline" size={25} color="white" />
         </TouchableOpacity>
         <TouchableOpacity onPress={takePhoto} style={styles.pictureIcon}>
