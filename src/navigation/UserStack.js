@@ -5,6 +5,7 @@ import ConversationScreen from "../screens/ConversationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import SearchScreen from "../screens/SearchScreen";
 import AstrologyScreen from "../screens/AstrologyScreen";
+import MemoryScreen from "../screens/MemoryScreen";
 
 
 const Stack = createStackNavigator();
@@ -28,7 +29,14 @@ export default function () {
           name="Search"
           component={SearchScreen}
           options={{ headerShown: false}}
-
+          name="DiscoverCard"
+          component={DiscoverCard}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="MemoryScreen"
+          component={MemoryScreen}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="Astrology"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,8 +13,9 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
 import StoriesBitmoji from "../components/StoriesBitmoji";
-import DiscoverFeed from "../components/DiscoverFeed";
 import { useNavigation } from "@react-navigation/native";
+import {supabase} from '../utils/hooks/supabase';
+import MemoryCard from "../components/MemoryCard";
 
 import Header from "../components/Header";
 
@@ -38,9 +39,30 @@ const DATA = [
   },
 ];
 
-export default function StoriesScreen({ route, navigation }) {
-  const tabBarHeight = useBottomTabBarHeight();
+export default function MemoryScreen({ route, navigation }) {
+
+  
+//   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
+
+  let [galleryPhotos, setGalleryPhotos] = useState([]);
+
+  useEffect(() => {
+    const fetchGalleryPhotos = async () => {
+      try{
+        const { data: galleryPhotos, error } = await supabase.from("gallery").select("photo");
+          if (error) {
+            console.error("Error fetching gallery photos:", error);
+          } else {
+            setGalleryPhotos(galleryPhotos);
+            // console.log(galleryPhotos);
+          }
+        } catch(error){
+          console.error("Error fetching photos", error.message)
+        }
+    };
+    fetchGalleryPhotos();
+  }, []);
 
   return (
     <View
@@ -52,40 +74,33 @@ export default function StoriesScreen({ route, navigation }) {
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,
-          marginBottom: tabBarHeight,
+        //   marginBottom: tabBarHeight,
         },
       ]}
     >
 
-      <Header title="Stories" />
       <View style={styles.contentContainer}>
         <View style={styles.storyBar}>
-          <Text style={styles.sectionHeader}>Friends</Text>
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.stories}
           >
-            <StoriesBitmoji onPress={console.log("bit moooooo")}/>
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
           </ScrollView>
         </View>
         <View style={styles.discoverContent}>
-          <Text style={styles.sectionHeader}>Discover</Text>
+          <Text style={styles.sectionHeader}>Memories</Text>
+          
           <FlatList
-            data={DATA}
+            data={galleryPhotos}
             horizontal={false}
             numColumns={2}
             ItemSeparatorComponent={() => <View style={{ height: "1%" }} />}
             columnWrapperStyle={{ justifyContent: "space-between" }}
-            renderItem={({ item }) => <DiscoverFeed title={item.title} />}
+            renderItem={({ item }) => <MemoryCard imageUri={item.photo} />}
             keyExtractor={(item) => item.id}
           />
+          {/* galleryPhotos.map((p)=>p.photo) */}
         </View>
       </View>
     </View>
