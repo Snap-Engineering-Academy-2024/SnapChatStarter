@@ -1,10 +1,8 @@
 import { color } from "@rneui/base";
-import { Image , Platform, Text, View} from "react-native";
-import { SearchBar } from "react-native-elements";
+import { Image , Platform, Text, View, SearchBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Button } from "react-native-elements";
 import { useState } from "react";
 import { Pressable } from "react-native";
 const Stack = createStackNavigator();

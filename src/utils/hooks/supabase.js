@@ -8,8 +8,8 @@ import { createClient } from '@supabase/supabase-js';
 // console.log('Supabase Anon Key:', process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY);
 
 export const supabase = createClient(
-    process.env.EXPO_PUBLIC_SUPABASE_URL || "https://aixqqkavvvpcilapfqfq.supabase.co",
-    process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpeHFxa2F2dnZwY2lsYXBmcWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjEzMzYyMjcsImV4cCI6MjAzNjkxMjIyN30.dOTCUDWiGJ4gl_NF1S1qRk7ELfwYjKG1KRZwZoVtHj0",
+    process.env.EXPO_PUBLIC_SUPABASE_URL,
+    process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
   {
     auth: {
       storage: AsyncStorage,
