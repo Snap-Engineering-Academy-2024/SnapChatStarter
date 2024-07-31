@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { supabase } from "../utils/hooks/supabase";  // Import Supabase client
+import { supabase } from "../utils/hooks/supabase"; // Import Supabase client
 
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
@@ -25,8 +25,8 @@ export default function ChatScreen({ navigation }) {
   async function getUserChats() {
     // Fetch user chats from Supabase
     const { data: userChats, error } = await supabase
-      .from('Chats')
-      .select('id');
+      .from("Chats")
+      .select("id");
 
     if (error) {
       console.error("Error fetching user chats:", error);

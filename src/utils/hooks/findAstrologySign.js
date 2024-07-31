@@ -18,7 +18,6 @@ const zodiac = [
 ];
 
 export function findAstrologySign() {
-
   const [birthday, setBirthday] = useState("git");
   const [sign, setSign] = useState("");
   const day = parseInt(birthday[1]);
@@ -39,7 +38,7 @@ export function findAstrologySign() {
       if (error) {
         console.log("Birthday fetch failure");
       } else if (data.birthday) {
-        setBirthday(data.birthday.split("/").slice(0,2));
+        setBirthday(data.birthday.split("/").slice(0, 2));
       }
     }
 

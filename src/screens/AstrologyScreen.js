@@ -29,11 +29,11 @@ export default function AstrologyScreen() {
   const [signElement, setSignElement] = useState();
   const [signCompatibility, setSignCompatibility] = useState();
   const userSign = findAstrologySign();
-  const [imageUrl, setImageUrl] = useState("")
+  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     setAstrology(userSign.sign);
-    setImageUrl(zodiacImages[userSign.sign])
+    setImageUrl(zodiacImages[userSign.sign]);
   }),
     [];
 
@@ -73,15 +73,13 @@ export default function AstrologyScreen() {
         setSignElement(result.element);
         setSignCompatibility(result.compatibility);
       })
-      .catch((error) => console.error("Error message:", error));
+      .catch((error) => console.error("RapidAPI key failure. Please contact Bee on Slack for more info."));
   }
 
   return (
     <ScrollView style={{ backgroundColor: "purple" }}>
       <View style={styles.page}>
-        <Image
-          source={imageUrl}
-        />
+        <Image source={imageUrl} />
         <Text style={styles.sign}>{astrology}</Text>
         <Text style={styles.contentTitles}>Today's Horoscope</Text>
         <Text style={styles.contentText}>{horoscope}</Text>
