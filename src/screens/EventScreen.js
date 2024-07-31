@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, onRefresh } from "react";
 import { Card, FAB } from "@rneui/themed";
 import {
   View,
@@ -37,7 +37,7 @@ export default function EventScreen({ route, navigation }) {
 
     const fetchData = async () => {
         try {
-            const { data, error } = await supabase.from('event_table').select('*');
+            const { data, error } = await supabase.from('event_tbl_ii').select('*');
             if (error) {
                 console.error("Error fetching data:", error);
             } else {
