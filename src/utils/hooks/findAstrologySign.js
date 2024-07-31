@@ -20,7 +20,6 @@ const zodiac = [
 export function findAstrologySign() {
   const [birthday, setBirthday] = useState("git");
   const [sign, setSign] = useState("");
-  const day = parseInt(birthday[1]);
   const { user } = useAuthentication();
 
   useEffect(() => {
@@ -47,93 +46,29 @@ export function findAstrologySign() {
 
   //   determine the sign based on birthday
   useEffect(() => {
-    switch (birthday[0]) {
-      case "01":
-        if (day <= 20) {
-          setSign(zodiac[0][0]);
-        } else {
-          setSign(zodiac[0][1]);
-        }
-        break;
-      case "02":
-        if (day <= 20) {
-          setSign(zodiac[1][0]);
-        } else {
-          setSign(zodiac[1][1]);
-        }
-        break;
-      case "03":
-        if (day <= 20) {
-          setSign(zodiac[2][0]);
-        } else {
-          setSign(zodiac[2][1]);
-        }
-        break;
-      case "04":
-        if (day <= 20) {
-          setSign(zodiac[3][0]);
-        } else {
-          setSign(zodiac[3][1]);
-        }
-        break;
-      case "05":
-        if (day <= 20) {
-          setSign(zodiac[4][0]);
-        } else {
-          setSign(zodiac[4][1]);
-        }
-        break;
-      case "06":
-        if (day <= 20) {
-          setSign(zodiac[5][0]);
-        } else {
-          setSign(zodiac[5][1]);
-        }
-        break;
-      case "07":
-        if (day <= 20) {
-          setSign(zodiac[6][0]);
-        } else {
-          setSign(zodiac[6][1]);
-        }
-        break;
-      case "08":
-        if (day <= 20) {
-          setSign(zodiac[7][0]);
-        } else {
-          setSign(zodiac[7][1]);
-        }
-        break;
-      case "09":
-        if (day <= 20) {
-          setSign(zodiac[8][0]);
-        } else {
-          setSign(zodiac[8][1]);
-        }
-        break;
-      case "10":
-        if (day <= 20) {
-          setSign(zodiac[9][0]);
-        } else {
-          setSign(zodiac[9][1]);
-        }
-        break;
-      case "11":
-        if (day <= 20) {
-          setSign(zodiac[10][0]);
-        } else {
-          setSign(zodiac[10][1]);
-        }
-        break;
-      case "12":
-        if (day <= 20) {
-          setSign(zodiac[11][0]);
-        } else {
-          setSign(zodiac[11][1]);
-        }
-        break;
+    const zodiacSigns = [
+      { month: "01", cutoffDay: 20, signs: [zodiac[0][0], zodiac[0][1]] },
+      { month: "02", cutoffDay: 19, signs: [zodiac[1][0], zodiac[1][1]] },
+      { month: "03", cutoffDay: 21, signs: [zodiac[2][0], zodiac[2][1]] },
+      { month: "04", cutoffDay: 20, signs: [zodiac[3][0], zodiac[3][1]] },
+      { month: "05", cutoffDay: 21, signs: [zodiac[4][0], zodiac[4][1]] },
+      { month: "06", cutoffDay: 21, signs: [zodiac[5][0], zodiac[5][1]] },
+      { month: "07", cutoffDay: 23, signs: [zodiac[6][0], zodiac[6][1]] },
+      { month: "08", cutoffDay: 23, signs: [zodiac[7][0], zodiac[7][1]] },
+      { month: "09", cutoffDay: 23, signs: [zodiac[8][0], zodiac[8][1]] },
+      { month: "10", cutoffDay: 23, signs: [zodiac[9][0], zodiac[9][1]] },
+      { month: "11", cutoffDay: 22, signs: [zodiac[10][0], zodiac[10][1]] },
+      { month: "12", cutoffDay: 22, signs: [zodiac[11][0], zodiac[11][1]] }
+    ];
+  
+    const birthMonth = birthday[0];
+    const birthDay = parseInt(birthday[1]);
+  
+    const zodiacSign = zodiacSigns.find(sign => sign.month === birthMonth);
+    if (zodiacSign) {
+      setSign(birthDay <= zodiacSign.cutoffDay ? zodiacSign.signs[0] : zodiacSign.signs[1]);
     }
-  }),
-    [];
+  }, [birthday]);
+  
   return { sign };
 }
