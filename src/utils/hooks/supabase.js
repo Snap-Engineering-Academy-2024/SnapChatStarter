@@ -2,7 +2,6 @@ import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 
-
 // Access environment variables from expo-config
 // const { SUPABASE_URL, SUPABASE_ANON_KEY } = Constants.expoConfig?.extra || {};
 // console.log('Supabase URL:', process.env.EXPO_PUBLIC_SUPABASE_URL);
