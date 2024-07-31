@@ -6,7 +6,7 @@ export function useAuthentication() {
 
   useEffect(() => {
     // Retrieve the current session
-  main
+    // console.log('Supabase client:', supabase); // Debugging line
 
     const fetchSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
