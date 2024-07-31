@@ -28,39 +28,25 @@ export default function EventScreen({ route, navigation }) {
     console.log(visible);
   }
 
-  function handleCardTouch(event){
-    console.log("press")
-    setDetailsVisible(true)
-    console.log(detailsVisible)
-    setSelectedEvent(event)
-
-}
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    fetchData();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 700);
-  }, []);
-
-  function toggleComponent() {
-    setVisible(!visible);
-    console.log(visible);
-  }
-
-  const fetchData = async () => {
-    try {
-      const { data, error } = await supabase.from("event_tbl_ii").select("*");
-      if (error) {
-        console.error("Error fetching data:", error);
-      } else {
-        setEvents(data);
-      }
-    } catch (error) {
-      console.error("Unexpected error:", error);
+    function handleCardTouch(event){
+        setDetailsVisible(true)
+        console.log(detailsVisible)
+        setSelectedEvent(event)
     }
-  };
+
+
+    const fetchData = async () => {
+        try {
+            const { data, error } = await supabase.from('event_table').select('*');
+            if (error) {
+                console.error("Error fetching data:", error);
+            } else {
+                setEvents(data);
+            }
+        } catch (error) {
+            console.error("Unexpected error:", error);
+        }
+    };
 
   const refreshEvents = async () => {
     await fetchData();
@@ -77,52 +63,45 @@ export default function EventScreen({ route, navigation }) {
         
         <View style={styles.Events}>
           {events.map((event) => (
-            <TouchableOpacity
-              key={event.id}
-              onPress={() => handleCardTouch(event)}
-              style={styles.container}
-            >
-              <View style={styles.friends}>
-                <Text style={styles.friendsText}>
-                  {event.attending} friends going
-                </Text>
-              </View>
-              <Image
-                style={{
-                  width: "100%",
-                  aspectRatio: 1,
-                  borderRadius: 20,
-                  objectFit: "cover",
-                }}
-                resizeMode="contain"
-                source={{ uri: event.imageURL }}
-              />
-              <Card.Title style={styles.title}>{event.title}</Card.Title>
-              <View style={styles.userInfo}>
+
+                <TouchableOpacity key = {event.id} onPress = {() => handleCardTouch(event)} style={styles.container}>
+                <View style={styles.friends}>
+                    <Text style={styles.friendsText}>{event.attending} friends going</Text>
+                </View>
                 <Image
-                  style={styles.bitmojiUser}
-                  source={{
-                    uri: "https://plus.unsplash.com/premium_photo-1664478383014-e8bc930be7c2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVvcGxlfGVufDB8fDB8fHww",
-                  }}
+                    style={{ width: "100%", aspectRatio: 1, borderRadius: 20, objectFit:"cover" }}
+                    resizeMode="contain"
+                    source={{ uri: event.imageURL }}
                 />
-                <Text style={styles.username}>{event.host}</Text>
-              </View>
-            </TouchableOpacity>
+                <Card.Title style={styles.title}>{event.title}</Card.Title>
+                <View style={styles.userInfo}>
+                    <Image
+                    style={styles.bitmojiUser}
+                    source={{
+                        uri: "https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
+                    }}
+                    />
+                    <Text style={styles.username}>{event.host}</Text>
+                </View>
+                </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
-      <AddEvent
-        isVisible={visible}
-        onClose={() => {
-          toggleComponent();
-          refreshEvents();
-        }}
+      <FAB
+        onPress={toggleComponent}
+        style={styles.addButton}
+        visible={true}
+        icon={{ name: "add", color: "white" }}
+        color="#FF3386"
       />
-    
-       <EventInfo
-          isVisible={detailsVisible}
-          event={selectedEvent}
-          onClose={() => setDetailsVisible(false)}
+        <AddEvent isVisible={visible} onClose={() => {
+        toggleComponent();
+        refreshEvents();
+        }} />
+        <EventInfo
+            isVisible={detailsVisible}
+            event={selectedEvent}
+            onClose={() => setDetailsVisible(false)}
         />
     </View>
   );
@@ -174,7 +153,7 @@ const styles = StyleSheet.create({
     top: 15,
     left: 15,
     zIndex: 100,
-    backgroundColor: "pink",
+    backgroundColor: "#fffc00",
     margin: 0,
     borderRadius: 20,
     padding: 10,
@@ -191,8 +170,8 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 80,
-    right: 20,
+    bottom: 110,
+    right: 30,
   },
   EventScreen: {
     height: "100%",
