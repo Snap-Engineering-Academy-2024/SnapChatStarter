@@ -1,33 +1,15 @@
 import {React, useState, useEffect, useCallback} from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Platform, ScrollView, Text, View, FlatList, SafeAreaView, ListItem} from "react-native";
-import { useSafeAreaInsets, } from "react-native-safe-area-context";
-import UserChat from "../components/UserChat";
+import { StyleSheet, Platform, Text, SafeAreaView } from "react-native";
 import BasicChatbot from "../chatbots/BasicChatbot";
 import { supabase } from "../utils/hooks/supabase";
 import { GiftedChat } from "react-native-gifted-chat";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
-
-// Initialize the JS client
-import { createClient } from '@supabase/supabase-js'
-// const supabase = createClient(EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY)
-// Create a function to handle inserts
-// const handleInserts = (payload) => {
-//   console.log('Change received!', payload)
-//   // addNewMessage(payload)
-// }
-// // Listen to inserts
-// supabase
-//   .channel('conversations')
-//   .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'conversations' }, handleInserts)
-//   .subscribe()
-
 const CHATBOT_USER_OBJ = {
   _id: 1,
   name: "Areli",
   avatar: ""
 }
-// prettier-ignore
 export const CHATBOTS = {
   "BasicChatbot": {
     name: "React Native Chatbot",
@@ -36,8 +18,6 @@ export const CHATBOTS = {
   }
 }
 export default function ConversationScreen({ route, navigation }) {
-  const { isChatbot, chatId } = route.params;
-  const insets = useSafeAreaInsets();
   const { user } = useAuthentication()
     const [loading, setLoading] = useState(true)
   const makeChatbotComponent = (chatbotName) => {
@@ -57,7 +37,6 @@ export default function ConversationScreen({ route, navigation }) {
       console.log("USER", user)
   }
   }, [user]);
-
   async function fetchConversations() {
     try {
         const { data, error } = await supabase
@@ -71,37 +50,26 @@ export default function ConversationScreen({ route, navigation }) {
           setConversations(data)
           console.log("DATA", JSON.stringify(data, null, 4))
           setMessages(data[0].messages);
-          // addUserMessage(data[0].messages[0].text)
-          // if (conversations.user === me ) {
-          // dont show
-          //} else {show as response}
         }
     } catch (error) {
         console.error('Error fetching conversations:', error.message);
     }
   }
-
-// const addUserMessage = (text) => {
-//   addNewMessage([
-//     {
-//       _id: Math.round(Math.random() * 1000000),
-//       text: text,
-//       createdAt: new Date(),
-//       user: CHATBOT_USER_OBJ,
-//     }
-//   ])
-// }
-
-const handleInserts = (payload) => {
-  console.log('Change received!', JSON.stringify(payload, null, 4))
-  addNewMessage(payload.new.messages[0])
-}
-// Listen to inserts
-supabase
-  .channel('conversations')
-  .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'conversations' }, handleInserts)
-  .subscribe()
-
+  const handleInserts = (payload) => {
+    console.log('Change received!', JSON.stringify(payload, null, 4))
+    // if (payload.new.messages[0]._id === messages[0]._id) {
+    //   console.log()
+    // }
+    // console.log("PAYLOAD", payload.new.messages[0]._id)
+    // console.log("MESSAGES", messages[0]._id)
+    addNewMessage(payload.new.messages[0])
+  }
+  // Listen to inserts
+  supabase
+    .channel('conversations')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'conversations' }, handleInserts)
+    .subscribe()
+  
 const addNewMessage = (newMessages) => {
   setMessages((previousMessages) => {
     // console.log("PREVIOUS MESSAGES:", previousMessages);
@@ -109,12 +77,9 @@ const addNewMessage = (newMessages) => {
     return GiftedChat.append(previousMessages, newMessages);
   });
 };
-
 const onSend = useCallback((messages = []) => {
   addNewMessage(messages);
-  handleInserts(messages)
 }, []);
-
 async function postConversations(newMessages) {
   const allMessages = [newMessages[0],...messages];
   const { data, error } = await supabase
@@ -123,10 +88,9 @@ async function postConversations(newMessages) {
   .eq('id', "areli_allison")
   console.log("POST CONVERSATIONS ERROR: ", error)
 }
-
-console.log("MESSAGES", JSON.stringify(messages, null, 4));
+// console.log("MESSAGES", JSON.stringify(messages, null, 4));
   return (
-      <SafeAreaView style={styles.container}>
+<SafeAreaView style={styles.container}>
         {messages &&
         // <Text>{JSON.stringify(messages)}</Text>
         <GiftedChat
@@ -137,36 +101,14 @@ console.log("MESSAGES", JSON.stringify(messages, null, 4));
           }}
           user={{
             _id: 2,
-            name: "Allison" // signed in user variable
+            name: "Allison" 
           }}
           renderUsernameOnMessage={true}
         />
-        // <FlatList
-        //   scrollEnabled={true}
-        //   data={messages}
-        //   // keyExtractor={(item) => `${item.id}`}
-        //   keyExtractor={(item, index) => `${index}`}
-        //   renderItem={({ item }) => (
-        //     <ListItem bottomDivider>
-        //       {/* <ListItem.Content> */}
-        //         <View
-        //           style={[
-        //             { display: 'flex', flexDirection: 'row', justifyContent: 'space-between' },
-        //           ]}
-        //         >
-        //           <Text h3 style={{ margin: 'auto' }}>
-        //           {/* {JSON.stringify(item)} */}
-        //           </Text>
-        //         </View>
-        //       {/* </ListItem.Content> */}
-        //     </ListItem>
-        //   )}
-        // />
 }
       </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -174,8 +116,6 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });
-
-
 
 
 
