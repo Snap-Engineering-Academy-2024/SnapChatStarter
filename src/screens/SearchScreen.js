@@ -64,7 +64,7 @@ export default function SearchScreen() {
   );
 
   const renderRecentItem = ({ item }) => (
-    <View style={{ alignItems: "center", backgroundColor: "white", width: 90, borderRadius: 10, gap: 10, paddingVertical: 10 }}>
+    <View style={{ alignItems: "center", backgroundColor: "white", width: 90, borderRadius: 10, gap: 10, paddingVertical: 15 }}>
       <Image
         source={{ uri: item.profile_picture }}
         style={{ width: 40, height: 40, borderRadius: 40 / 2, backgroundColor: "#EBECEE" }}
@@ -78,7 +78,7 @@ export default function SearchScreen() {
   );
 
   const renderSnapStar = ({ item }) => (
-    <View style={{ alignItems: "center", backgroundColor: "white", width: 90, borderRadius: 10, gap: 10, paddingVertical: 10, margin: 5 }}>
+    <View style={{ alignItems: "center", backgroundColor: "white", width: 84, borderRadius: 10, gap: 10, paddingVertical: 10, margin: 5 }}>
       <Image
         source={item.profile_picture}
         style={{ width: 40, height: 40, borderRadius: 40 / 2, backgroundColor: "#EBECEE" }}
@@ -92,7 +92,7 @@ export default function SearchScreen() {
   );
 
   return (
-    <View styles={{ alignItems: "center" }}>
+    <View styles={{ alignItems: "center", paddingLeft: 15 }}>
       <SafeAreaView>
         <View
           style={{
@@ -133,7 +133,7 @@ export default function SearchScreen() {
         style={{ width: 400, height: 400, borderRadius: 400 / 2 }}
       /> */}
         <Text style={{ paddingLeft: 10, fontWeight: "bold" }}>Best Friends</Text>
-        { usersToAdd.length > 1 ?
+        {usersToAdd.length > 1 ?
           <FlatList
             style={{ marginLeft: 10, marginRight: 10 }}
             data={usersToAdd}
@@ -143,12 +143,11 @@ export default function SearchScreen() {
             columnWrapperStyle={{ justifyContent: 'space-between' }}
             contentContainerStyle={{ alignItems: "center" }}
             scrollEnabled={false}
-            // ItemSeparatorComponent={() => <View style={{height: -50, width:"50%", gap:10}} />}
-          /> 
-          : 
+          // ItemSeparatorComponent={() => <View style={{height: -50, width:"50%", gap:10}} />}
+          />
+          :
           <Text>No "usersToAdd" table</Text>
         }
-
 
         <Text style={{ paddingLeft: 10, fontWeight: "bold" }}>Search results</Text>
         {recents.length > 0 ? (
@@ -184,6 +183,8 @@ export default function SearchScreen() {
           // horizontal={true}
           contentContainerStyle={{ alignItems: "center", paddingTop: 10 }}
         />
+
+
       </SafeAreaView>
     </View>
   );
