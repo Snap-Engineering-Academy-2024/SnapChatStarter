@@ -45,11 +45,12 @@ export default function SearchScreen() {
 
   const renderItem = ({ item }) => (
     <View style={{backgroundColor: "#fff",
+        // width: 90, borderRadius: 10, gap: 10, paddingVertical: 10, margin: 5
         borderRadius: 10,
-        padding: 10,
+        paddingHorizontal: 10,
         margin: 4,
         alignItems: "center",
-        width: "50%",
+        width: 175,
         flexDirection:"row",
         height: 50,
         gap: 10,
@@ -65,7 +66,7 @@ export default function SearchScreen() {
 
 
   const renderRecentItem = ({ item }) => (
-    <View style={{alignItems: "center", backgroundColor: "white", width: 90, borderRadius: 10, gap: 10, paddingVertical: 10}}>
+    <View style={{alignItems: "center", backgroundColor: "white", width: 90, borderRadius: 10, gap: 10, paddingVertical: 15}}>
       <Image
       source={{uri: item.profile_picture}}
       style={{width: 40, height: 40, borderRadius: 40/ 2, backgroundColor:"#EBECEE"}}
@@ -79,7 +80,7 @@ export default function SearchScreen() {
   );
 
   const renderSnapStar = ({ item }) => (
-    <View style={{alignItems: "center", backgroundColor: "white", width: 90, borderRadius: 10, gap: 10, paddingVertical: 10, margin: 5}}>
+    <View style={{alignItems: "center", backgroundColor: "white", width: 84, borderRadius: 10, gap: 10, paddingVertical: 10, margin: 5}}>
       <Image
       source={item.profile_picture}
       style={{width: 40, height: 40, borderRadius: 40/ 2, backgroundColor:"#EBECEE"}}
@@ -93,7 +94,7 @@ export default function SearchScreen() {
   );
 
   return (
-    <View styles={{ alignItems: "center" }}>
+    <View styles={{ alignItems: "center", paddingLeft:15}}>
       <SafeAreaView>
         <View
           style={{
@@ -132,15 +133,15 @@ export default function SearchScreen() {
       </SafeAreaView>
 
       
-      <Text style={{paddingLeft:10, fontWeight:"bold"}}>Best Friends</Text>
+      <Text style={{paddingLeft:15, fontWeight:"bold"}}>Best Friends</Text>
       <FlatList
-        style={{marginLeft:10, marginRight:10}}
+        style={{marginLeft:15, marginRight:15}}
         data={usersToAdd}
         renderItem={renderItem}
         keyExtractor={(item) => item.Username}
         numColumns={2}
         columnWrapperStyle={{justifyContent: 'space-between'}}
-        contentContainerStyle={{alignItems: "center"}}
+        contentContainerStyle={{alignItems: "center", gap: 10, paddingTop:10}}
         scrollEnabled={false}
         // ItemSeparatorComponent={() => <View style={{height: -50, width:"50%", gap:10}} />}
         
@@ -149,8 +150,8 @@ export default function SearchScreen() {
 
       {recents.length > 0 ? (
         <>
-          <View style={{justifyContent: "space-between", flexDirection:"row", paddingHorizontal: 20}}>
-            <Text style={{fontWeight:"bold"}}>Recents</Text>
+          <View style={{justifyContent: "space-between", flexDirection:"row", paddingHorizontal: 15}}>
+            <Text style={{fontWeight:"bold", paddingTop:10}}>Recents</Text>
             <Pressable
               onPress={() => {
                 setRecents([]);
@@ -165,12 +166,12 @@ export default function SearchScreen() {
             renderItem={renderRecentItem}
             keyExtractor={(item) => item.name}
             horizontal={true}
-            contentContainerStyle={{alignItems: "center", gap: 10, paddingHorizontal: 20, paddingTop: 10}}
+            contentContainerStyle={{alignItems: "center", gap: 10, paddingHorizontal: 15, paddingTop: 10}}
           />
         </>
       ) : null}
 
-      <Text style={{fontWeight:"bold", paddingLeft: 20, paddingTop: 20}}>Follow a Snap Star</Text>
+      <Text style={{fontWeight:"bold", paddingLeft: 20, paddingTop: 10}}>Follow a Snap Star</Text>
 
       <FlatList
         data={snapStars}
@@ -178,7 +179,7 @@ export default function SearchScreen() {
         keyExtractor={(item) => item.name}
         numColumns={4}
         // horizontal={true}
-        contentContainerStyle={{alignItems: "center", paddingTop: 10}}
+        contentContainerStyle={{alignItems: "center", paddingTop: 10, }}
       />
 
 
