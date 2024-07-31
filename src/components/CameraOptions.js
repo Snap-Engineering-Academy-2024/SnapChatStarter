@@ -4,14 +4,14 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function CameraOptions({ flipCamera, switchFlash }) {
-  const [flashState, setFlashState] = useState("ios-flash-off-outline");
+  const [flashState, setFlashState] = useState("flash-off-outline");
   const insets = useSafeAreaInsets();
 
   function switchFlash() {
-    if (flashState == "ios-flash-off-outline") {
-      setFlashState("ios-flash");
+    if (flashState == "flash-off-outline") {
+      setFlashState("flash-outline");
     } else {
-      setFlashState("ios-flash-off-outline");
+      setFlashState("flash-off-outline");
     }
   }
 
@@ -36,7 +36,7 @@ export default function CameraOptions({ flipCamera, switchFlash }) {
       <TouchableOpacity>
         <Ionicons
           style={styles.videoIcon}
-          name="ios-videocam"
+          name="videocam"
           size={30}
           color="white"
         />
@@ -44,7 +44,7 @@ export default function CameraOptions({ flipCamera, switchFlash }) {
       <TouchableOpacity>
         <Ionicons
           style={styles.musicIcon}
-          name="ios-musical-notes-outline"
+          name="musical-notes-outline"
           size={30}
           color="white"
         />
@@ -52,7 +52,7 @@ export default function CameraOptions({ flipCamera, switchFlash }) {
       <TouchableOpacity>
         <Ionicons
           style={styles.nightModeIcon}
-          name="ios-moon-outline"
+          name="moon-outline"
           size={30}
           color="white"
         />
