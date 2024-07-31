@@ -51,7 +51,7 @@ export default function EventScreen({ route, navigation }) {
 
   const fetchData = async () => {
     try {
-      const { data, error } = await supabase.from("event_tbl").select("*");
+      const { data, error } = await supabase.from("event_tbl_ii").select("*");
       if (error) {
         console.error("Error fetching data:", error);
       } else {

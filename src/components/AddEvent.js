@@ -35,7 +35,7 @@ export default function AddEvent({ isVisible, onClose }) {
     
         try {
           const { data, error } = await supabase
-            .from("event_tbl") // 
+            .from("event_tbl_ii") // 
             .insert([eventData]); // Insert the event data
     
           if (error) {
