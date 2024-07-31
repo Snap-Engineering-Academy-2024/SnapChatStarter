@@ -85,7 +85,7 @@ async function postConversations(newMessages) {
   const { data, error } = await supabase
   .from('conversations')
   .update({ messages: allMessages })
-  .eq('id', "areli_allison")
+  .eq('id', "areli_allison") // COMBINED NAMES OF USERS IS THE ID, CHANGE FOR USERS
   console.log("POST CONVERSATIONS ERROR: ", error)
 }
 // console.log("MESSAGES", JSON.stringify(messages, null, 4));
