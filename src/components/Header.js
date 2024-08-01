@@ -14,7 +14,6 @@ import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from "../utils/hooks/supabase";
 const Stack = createStackNavigator();
 import SelectionMenu from "./SelectionMenu";
-import { useState } from "react";
 
 export default function Header({ title }) {
   const navigation = useNavigation();

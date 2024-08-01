@@ -1,9 +1,8 @@
-import { Image, Text, View, Button } from "react-native";
+import { Image, Text, View, Button, StyleSheet } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
-import { Image, Text, View, StyleSheet } from "react-native";
 
 const handleSignOut = async () => {
   try {
@@ -41,6 +40,22 @@ export default function ProfileScreen() {
         title={astrology}
         color="#841584"
         accessibilityLabel="Learn more about this purple button"
+      />
+      <Button
+        // onPress={() => {
+        //   navigation.navigate("Astrology");
+        // }}
+        title={"Snap Together Badge"}
+        color="brown"
+        accessibilityLabel="The Badge for Snap Together"
+      />
+      <Button
+        // onPress={() => {
+        //   navigation.navigate("Astrology");
+        // }}
+        title={"Snap Together"}
+        color="brown"
+        accessibilityLabel="Snap Together redirect button"
       />
       <Button onPress={handleSignOut} title="Log Out" />
     </View>
