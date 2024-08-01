@@ -7,6 +7,7 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -23,7 +24,7 @@ export default function MapScreen({ navigation }) {
 
   const [currentRegion, setCurrentRegion] = useState({
     latitude: 34.0211573,
-    longitude:  -118.4503864,
+    longitude: -118.4503864,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -73,15 +74,19 @@ export default function MapScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={[styles.bitmojiContainer, styles.shadow]}>
-          <View style={styles.myBitmoji}>
-            <Image
-              style={styles.bitmojiImage}
-              source={require("../../assets/snapchat/personalBitmoji.png")}
-            />
-            <View style={styles.bitmojiTextContainer}>
-              <Text style={styles.bitmojiText}>My Bitmoji</Text>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Event");
+            }}
+          >
+            <View style={styles.myBitmoji}>
+              <Ionicons name="calendar-outline" size={50} color="gray" />
+              <View style={styles.bitmojiTextContainer}>
+                <Text style={styles.bitmojiText}>Events</Text>
+              </View>
             </View>
-          </View>
+          </Pressable>
+
           <View style={styles.places}>
             <Image
               style={styles.bitmojiImage}
@@ -192,4 +197,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  calendarIcon: {},
 });

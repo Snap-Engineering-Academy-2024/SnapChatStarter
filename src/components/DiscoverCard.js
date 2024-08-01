@@ -7,7 +7,7 @@ import {
   ScrollView,
   ImageBackground,
   Pressable,
-  useState
+  useState,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
@@ -15,21 +15,21 @@ import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
 
 export default function DiscoverCard() {
-    return (
-        <View style={styles.Square}>
-          {/* <Pressable onPress={() => console.log("I was clicked")}> */}
-            <ImageBackground
-              style={styles.FeedImage}
-              imageStyle={{ borderRadius: 20 }}
-              source={{
-                uri: "https://eccles.utah.edu/wp-content/uploads/2017/02/snapchat.jpg",
-              }}
-            >
-              <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
-            </ImageBackground>
-          {/* </Pressable> */}
-        </View>
-      );
+  return (
+    <View style={styles.Square}>
+      {/* <Pressable onPress={() => console.log("I was clicked")}> */}
+      <ImageBackground
+        style={styles.FeedImage}
+        imageStyle={{ borderRadius: 20 }}
+        source={{
+          uri: "https://eccles.utah.edu/wp-content/uploads/2017/02/snapchat.jpg",
+        }}
+      >
+        <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
+      </ImageBackground>
+      {/* </Pressable> */}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -17,22 +17,22 @@ import { useNavigation } from "@react-navigation/native";
 export default function MemoryPhoto({ imageUri }) {
   const navigation = useNavigation();
 
-
-// console.log("Uri is: ", imageUri);
+  // console.log("Uri is: ", imageUri);
   return (
     <View style={styles.Square}>
       {/* <Pressable onPress={() => console.log("I was clicked")}> */}
-      <Pressable onPress={() => {
-            navigation.navigate("MemoryCard");
-          }}>
+      <Pressable
+        onPress={() => {
+          navigation.navigate("MemoryCard");
+        }}
+      >
         <ImageBackground
           style={styles.FeedImage}
           imageStyle={{ borderRadius: 0 }}
           source={{
             uri: imageUri,
           }}
-        >
-        </ImageBackground>
+        ></ImageBackground>
       </Pressable>
     </View>
   );

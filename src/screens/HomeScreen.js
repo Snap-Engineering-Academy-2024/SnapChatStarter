@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     heigh: 80,
     position: "absolute",
     top: 200,
-    alignItems: "center"
+    alignItems: "center",
   },
   ghostLogo: {
     width: 80,

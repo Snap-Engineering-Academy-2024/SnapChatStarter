@@ -14,7 +14,7 @@ import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
 import StoriesBitmoji from "../components/StoriesBitmoji";
 import { useNavigation } from "@react-navigation/native";
-import {supabase} from '../utils/hooks/supabase';
+import { supabase } from "../utils/hooks/supabase";
 import MemoryCard from "../components/MemoryCard";
 
 import Header from "../components/Header";
@@ -40,26 +40,26 @@ const DATA = [
 ];
 
 export default function MemoryScreen({ route, navigation }) {
-
-  
-//   const tabBarHeight = useBottomTabBarHeight();
+  //   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
 
   let [galleryPhotos, setGalleryPhotos] = useState([]);
 
   useEffect(() => {
     const fetchGalleryPhotos = async () => {
-      try{
-        const { data: galleryPhotos, error } = await supabase.from("gallery").select("photo");
-          if (error) {
-            console.error("Error fetching gallery photos:", error);
-          } else {
-            setGalleryPhotos(galleryPhotos);
-            // console.log(galleryPhotos);
-          }
-        } catch(error){
-          console.error("Error fetching photos", error.message)
+      try {
+        const { data: galleryPhotos, error } = await supabase
+          .from("gallery")
+          .select("photo");
+        if (error) {
+          console.error("Error fetching gallery photos:", error);
+        } else {
+          setGalleryPhotos(galleryPhotos);
+          // console.log(galleryPhotos);
         }
+      } catch (error) {
+        console.error("Error fetching photos", error.message);
+      }
     };
     fetchGalleryPhotos();
   }, []);
@@ -74,23 +74,21 @@ export default function MemoryScreen({ route, navigation }) {
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,
-        //   marginBottom: tabBarHeight,
+          //   marginBottom: tabBarHeight,
         },
       ]}
     >
-
       <View style={styles.contentContainer}>
         <View style={styles.storyBar}>
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.stories}
-          >
-          </ScrollView>
+          ></ScrollView>
         </View>
         <View style={styles.discoverContent}>
           <Text style={styles.sectionHeader}>Memories</Text>
-          
+
           <FlatList
             data={galleryPhotos}
             horizontal={false}
