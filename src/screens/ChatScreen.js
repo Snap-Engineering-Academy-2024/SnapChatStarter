@@ -25,8 +25,8 @@ export default function ChatScreen({ navigation }) {
   async function getUserChats() {
     // Fetch user chats from Supabase
     const { data: userChats, error } = await supabase
-      .from('Chats')
-      .select('id');
+      .from("Chats")
+      .select("id");
 
     if (error) {
       console.error("Error fetching user chats:", error);
