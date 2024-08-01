@@ -22,9 +22,6 @@ export default function ConversationScreen({ route, navigation }) {
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
-  
-  const { isChatbot, chatId } = route.params;
-  const insets = useSafeAreaInsets();
 
 
     useEffect(() => {

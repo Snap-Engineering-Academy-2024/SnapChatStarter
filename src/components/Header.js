@@ -12,9 +12,9 @@ import SearchScreen from "../screens/SearchScreen";
 import { useState, useEffect } from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from "../utils/hooks/supabase";
-const Stack = createStackNavigator();
+
 import SelectionMenu from "./SelectionMenu";
-import { useState } from "react";
+const Stack = createStackNavigator();
 
 export default function Header({ title }) {
   const navigation = useNavigation();
