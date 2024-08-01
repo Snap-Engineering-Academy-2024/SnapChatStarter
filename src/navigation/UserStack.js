@@ -41,11 +41,6 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="DiscoverCard"
-          component={DiscoverCard}
-          options={{ headerShown: true }}
-        />
-        <Stack.Screen
           name="MemoryScreen"
           component={MemoryScreen}
           options={{ headerShown: true }}
