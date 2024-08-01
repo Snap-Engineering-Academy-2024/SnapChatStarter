@@ -12,7 +12,6 @@ export default function SettingsScreen() {
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
   const [initialDisplayName, setInitialDisplayName] = useState('');
   const [initialEmail, setInitialEmail] = useState('');
-  const [initialProfilePictureUrl, setInitialProfilePictureUrl] = useState('');
   const [editingDisplayName, setEditingDisplayName] = useState(false);
   const [editingEmail, setEditingEmail] = useState(false);
   const [editingDateOfBirth, setEditingDateOfBirth] = useState(false);
@@ -40,7 +39,6 @@ export default function SettingsScreen() {
       setProfilePictureUrl(data.avatar_url || 'https://image.cnbcfm.com/api/v1/image/100703713-Rubber%20duck%20in%20hk.jpg?v=1532564692&w=1600&h=900'); // Default URL
       setInitialDisplayName(data.username || user.email.split('@')[0]);
       setInitialEmail(data.email || user.email);
-      setInitialProfilePictureUrl('https://image.cnbcfm.com/api/v1/image/100703713-Rubber%20duck%20in%20hk.jpg?v=1532564692&w=1600&h=900');
       setLoading(false);
     } catch (error) {
       console.error('Error fetching user data:', error.message);
@@ -58,7 +56,7 @@ export default function SettingsScreen() {
       if (error) throw error;
 
       setEditingProfilePicture(false);
-      setInitialProfilePictureUrl(profilePictureUrl);
+      setProfilePictureUrl(profilePictureUrl);
     } catch (error) {
       console.error('Error updating profile picture URL:', error.message);
     }
@@ -112,7 +110,7 @@ export default function SettingsScreen() {
   };
 
   const cancelEditProfilePicture = () => {
-    setProfilePictureUrl(initialProfilePictureUrl);
+    setProfilePictureUrl(profilePictureUrl);
     setEditingProfilePicture(false);
   };
 
