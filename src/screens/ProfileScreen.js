@@ -1,8 +1,9 @@
-import { Image, Text, View, Button, StyleSheet } from "react-native";
+import { Image, Text, View, Button, StyleSheet, Pressable } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
 
 const handleSignOut = async () => {
   try {
@@ -19,6 +20,7 @@ const handleSignOut = async () => {
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
+  const { user } = useAuthentication();
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
 
@@ -33,7 +35,19 @@ export default function ProfileScreen() {
         source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
         style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
       />
-      <Text style={{ justifyContents: "center" }}>User Name Would Go Here</Text>
+      <Text
+        style={{
+          justifyContents: "center",
+          textAlign: "center",
+        }}
+      >
+        {user &&
+          user.user_metadata &&
+          user.user_metadata.email.slice(
+            0,
+            user.user_metadata.email.indexOf("@") // gets part before @ of email address, should use profile username instead
+          )}
+      </Text>
       <Button
         onPress={() => {
           navigation.navigate("Astrology");
@@ -43,6 +57,14 @@ export default function ProfileScreen() {
         accessibilityLabel="Learn more about this purple button"
       />
       <Button onPress={handleSignOut} title="Log Out" />
+      <Pressable>
+        <Button
+          onPress={() => {
+            navigation.navigate("Settings", {});
+          }}
+          title="Settings"
+        />
+      </Pressable>
     </View>
   );
 }
