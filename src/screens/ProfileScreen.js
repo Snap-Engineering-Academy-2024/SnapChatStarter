@@ -45,7 +45,7 @@ export default function ProfileScreen() {
           user.user_metadata &&
           user.user_metadata.email.slice(
             0,
-            user.user_metadata.email.indexOf("@") // gets part before @ of email address, should use profile username instead
+            user.user_metadata.email.indexOf("@"), // gets part before @ of email address, should use profile username instead
           )}
       </Text>
       <Button
