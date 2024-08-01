@@ -36,7 +36,7 @@ export default function SettingsScreen() {
 
       setDisplayName(data.username || user.email.split('@')[0]);
       setEmail(data.email || user.email);
-      setDateOfBirth(data.dob || '01/01/1998');
+      setDateOfBirth(data.birthday || '01/01/1998');
       setProfilePictureUrl(data.profile_picture_url || 'https://example.com/default-profile-picture.jpg'); // Default URL
       setInitialDisplayName(data.username || user.email.split('@')[0]);
       setInitialEmail(data.email || user.email);
@@ -100,7 +100,7 @@ export default function SettingsScreen() {
     try {
       const { error } = await supabase
         .from('profiles') // Replace with your table name
-        .update({ dob: dateOfBirth })
+        .update({ birthday: dateOfBirth })
         .eq('id', user.id);
 
       if (error) throw error;
