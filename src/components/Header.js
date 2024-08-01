@@ -6,10 +6,21 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "../screens/ProfileScreen";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import SearchScreen from "../screens/SearchScreen";
 const Stack = createStackNavigator();
+import SelectionMenu from "./SelectionMenu";
+import { useState } from "react";
 
 export default function Header({ title }) {
   const navigation = useNavigation();
+
+  const [showMenu, setShowMenu] = useState(false);
+  console.log(showMenu)
+
+  // const handleClick = () => {
+  //   setShowMenu(true)
+  //   console.log("handleClick")
+  // }
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>
@@ -24,18 +35,29 @@ export default function Header({ title }) {
             source={require("../../assets/snapchat/defaultprofile.png")}
           />
         </Pressable>
-        <View style={[styles.search, styles.buttons]}>
+        <Pressable
+        style={[styles.search, styles.buttons]}
+        onPress= {()=>{
+          navigation.navigate("Search");
+        }}
+        >
           <Search />
-        </View>
+        </Pressable>
       </View>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.headerRight}>
         <View style={[styles.followers, styles.buttons]}>
           <Followers />
         </View>
-        <View style={[styles.more, styles.buttons]}>
+        <Pressable title="Open Bottom Sheet"
+        onPress={() => setShowMenu(true)}>
+          <View 
+          style={[styles.more, styles.buttons]}>
           <More />
         </View>
+        </Pressable>
+        {/* {showMenu && <SelectionMenu/>} */}
+        <SelectionMenu showMenu={showMenu} setShowMenu={setShowMenu} />
       </View>
     </View>
   );

@@ -47,7 +47,7 @@ export default function ChatScreen({ navigation }) {
   useEffect(() => {
     if (chats.length < 1) {
       getChatbots();
-      getUserChats();
+      // getUserChats();
     }
   }, [chats.length]);
 
