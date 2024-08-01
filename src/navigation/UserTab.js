@@ -3,8 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, StyleSheet, Pressable, Text, Button } from "react-native";
 import { supabase } from '../utils/hooks/supabase'; // Import the Supabase client
-
 // Screens
+import EventScreen from "../screens/EventScreen"; //New component by Sona and Christian
 import MapScreen from "../screens/MapScreen";
 import CameraScreen from "../screens/CameraScreen";
 import StoriesScreen from "../screens/StoriesScreen";
@@ -63,6 +63,10 @@ export default function UserStack({ route, navigation }) {
       initialRouteName="Camera"
     >
       <Tab.Screen
+        name="Event"
+        component={EventScreen}
+      />
+      <Tab.Screen
         name="Map"
         component={MapScreen}
         options={{ ...screenOptions, headerShown: false }}
@@ -87,6 +91,8 @@ export default function UserStack({ route, navigation }) {
         component={SpotlightScreen}
         options={screenOptions}
       />
+      
+      
     </Tab.Navigator>
   );
 }
@@ -102,6 +108,8 @@ const getTabIcon = (routeName, focused) => {
     case "Stories":
       return focused ? <GroupFill /> : <GroupOutline />;
     case "Spotlight":
+      return focused ? <PlayFill /> : <PlayOutline />;
+    case "Event":
       return focused ? <PlayFill /> : <PlayOutline />;
     default:
       return null;

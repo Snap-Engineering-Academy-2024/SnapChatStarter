@@ -22,13 +22,27 @@ export default function ConversationScreen({ route, navigation }) {
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
-  useEffect(() => {
-    fetchConversations();
-    if (user !== null) {
-      setLoading(false);
-      console.log("USER", user);
+  
+  const { isChatbot, chatId } = route.params;
+  const insets = useSafeAreaInsets();
+
+
+    useEffect(() => {
+      fetchConversations();
+      if (user !== null) {
+        setLoading(false);
+        console.log("USER", user);
+      }
+    }, [user]);
+
+  const makeChatbotComponent = (chatbotName) => {
+    if (CHATBOTS[chatbotName]) {
+      const Chatbot = CHATBOTS[chatbotName].component;
+      return <Chatbot />;
+    } else {
+      return <Text>No Chatbot Found with name '{chatbotName}'</Text>;
     }
-  }, [user]);
+  }
   async function fetchConversations() {
     try {
       const { data, error } = await supabase.from("conversations").select("*");

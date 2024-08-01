@@ -1,35 +1,63 @@
-import { useState, useEffect } from "react";
-import { Image , Text, View, ActivityIndicator } from "react-native";
-import { useAuthentication } from "../utils/hooks/useAuthentication";
+import { Image, Text, View, Button } from "react-native";
+import { supabase } from "../utils/hooks/supabase";
+import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { findAstrologySign } from "../utils/hooks/findAstrologySign";
+import { Image, Text, View, StyleSheet } from "react-native";
 
-export default function ProfileScreen(){
-    const { user } = useAuthentication()
-    const [loading, setLoading] = useState(true)
+const handleSignOut = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error.message);
+    } else {
+      // Handle successful sign out (e.g., redirect to login screen)
+    }
+  } catch (error) {
+    console.error("Unexpected error:", error);
+  }
+};
 
-    useEffect(() => {
-        if (user !==  null) {
-            setLoading(false);
-            console.log("USER", user)
-        }
-    }, [user]); // rerenders when user is updated, when getting user data loading is true and buffering sign is returned, when user data is obtained loading is updated to false and username output is returned
+export default function ProfileScreen() {
+  const navigation = useNavigation();
+  const [astrology, setAstrology] = useState("Pisces");
+  const userSign = findAstrologySign()
 
-    if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
-      }
+  useEffect(()=>{
+    setAstrology(userSign.sign)
+  }),[]
 
-    return(
-        <View styles={{alignItems:"center"}}>
-            <Image 
-            source={{uri:"https://loremflickr.com/cache/resized/65535_52294428543_2d04971c12_n_320_240_nofilter.jpg"}}
-            style={{width: 400, height: 400, borderRadius: 400/ 2}} 
-            />
-            <Text 
-                style={{
-                    justifyContents:"center",
-                    textAlign:"center"
-                }}>
-                {user.user_metadata.email.slice(0, user.user_metadata.email.indexOf("@"))}
-            </Text>
-        </View>
-    );  
+  return (
+    <View style={{ alignItems: "center" }}>
+      <Image
+        source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
+        style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
+      />
+      <Text style={{ justifyContents: "center" }}>User Name Would Go Here</Text>
+      <Button
+        onPress={() => {
+          navigation.navigate("Astrology");
+        }}
+        title={astrology}
+        color="#841584"
+        accessibilityLabel="Learn more about this purple button"
+      />
+      <Button onPress={handleSignOut} title="Log Out" />
+    </View>
+  );
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    avatar: {
+        width: 150,
+        height: 150,
+        borderRadius: 150 / 2,
+        alignItems: "center",
+    }
+})
