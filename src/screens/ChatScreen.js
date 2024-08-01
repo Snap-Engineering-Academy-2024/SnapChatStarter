@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-// import Ionicons from "react-native-vector-icons/Ionicons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { supabase } from "../utils/hooks/supabase";  // Import Supabase client
+import { supabase } from "../utils/hooks/supabase";
+import StoriesBitmoji from "../components/StoriesBitmoji";
+
+import { FAB } from "@rneui/themed";
 
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
+
+import AddEvent from "../components/AddEvent";
 
 export default function ChatScreen({ navigation }) {
   const [chats, setChats] = useState([]);
@@ -23,33 +27,9 @@ export default function ChatScreen({ navigation }) {
     setChats((otherChats) => [...otherChats, ...chatbotsTemp]);
   }
 
-  // async function getUserChats() {
-  //   // Fetch user chats from Supabase
-  //   const { data: userChats, error } = await supabase
-  //     .from('conversations')
-  //     .select('id')
-  //     .select('messages');
-
-  //   if (error) {
-  //     console.error("Error fetching user chats:", error);
-  //     return;
-  //   }
-
-  //   // Add user chats to array
-  //   let userChatsTemp = [];
-  //   if (userChats) {
-  //     userChats.forEach((userChat) => {
-  //       userChatsTemp.push({ isChatbot: false, chatId: userChat.id });
-  //     });
-  //   }
-
-  //   setChats((otherChats) => [...otherChats, ...userChatsTemp]);
-  // }
-
   useEffect(() => {
     if (chats.length < 1) {
       getChatbots();
-      // getUserChats();
     }
   }, [chats.length]);
 
@@ -68,35 +48,45 @@ export default function ChatScreen({ navigation }) {
     >
       <Header title="Chat" />
       <View>
-        {chats?.map((chat) => {
-          return (
-            <TouchableOpacity
-              style={styles.userButton}
-              onPress={() => {
-                navigation.navigate("Conversation", {
-                  isChatbot: chat.isChatbot,
-                  chatId: chat.chatId,
-                });
-              }}
-              key={chat.chatId}
-            >
-              <Ionicons
-                style={styles.userIcon}
-                name="person-outline"
-                size={36}
-                color="lightgrey"
-              />
-              <Text style={styles.userName}> {chat.chatId} </Text>
-              <Ionicons
-                style={styles.userCamera}
-                name="camera-outline"
-                size={24}
-                color="lightgrey"
-              />
-            </TouchableOpacity>
-          );
-        })}
+        {chats?.map((chat) => (
+          <TouchableOpacity
+            style={styles.userButton}
+            onPress={() => {
+              navigation.navigate("Conversation", {
+                isChatbot: chat.isChatbot,
+                chatId: chat.chatId,
+              });
+            }}
+            key={chat.chatId}
+          >
+            <Ionicons
+              style={styles.userIcon}
+              name="person-outline"
+              size={36}
+              color="lightgrey"
+            />
+            <Text style={styles.userName}> {chat.chatId} </Text>
+            <Ionicons
+              style={styles.userCamera}
+              name="camera-outline"
+              size={24}
+              color="lightgrey"
+            />
+          </TouchableOpacity>
+        ))}
       </View>
+      <FAB
+        style={styles.addButton}
+        visible={true}
+        icon={{ name: "star", color: "white" }}
+        color="#3CB2E2"
+      />
+      <FAB
+        style={styles.addButtonSecond}
+        visible={true}
+        icon={{ name: "edit", color: "white" }}
+        color="#FF3386"
+      />
     </View>
   );
 }
@@ -127,5 +117,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 15,
     top: 10,
+  },
+  addButton: {
+    position: "absolute",
+    bottom: 90,
+    right: 20,
+  },
+  addButtonSecond: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
   },
 });
