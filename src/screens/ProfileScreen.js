@@ -1,9 +1,8 @@
-import { Image, Text, View, Button } from "react-native";
+import { Image, Text, View, Button, StyleSheet } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
-import { Image, Text, View, StyleSheet } from "react-native";
 
 const handleSignOut = async () => {
   try {
