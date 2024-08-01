@@ -13,6 +13,8 @@ import PostcaptureOptions from "../components/PostcaptureActions";
 import {supabase} from '../utils/hooks/supabase';
 import CameraGalleryMenu from "../components/CameraGalleryMenu";
 import { Button } from "react-native-elements";
+import { useAuthentication } from '../utils/hooks/useAuthentication';
+
 
 export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -24,19 +26,53 @@ export default function CameraScreen({ navigation, focused }) {
   const [photo, setPhoto] = useState(null);
   //const [image, setImage] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
+  const { user } = useAuthentication();
+  const [communitiesArray, setCommunitiesArray] = useState([]);
+
+
+
+  const fetchUserData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles') // Replace with your table name
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+
+      setCommunitiesArray(data.identity_communities);
+
+    } catch (error) {
+      console.error('Error fetching user data:', error.message);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
+    if (user !== null) {
+      fetchUserData();
+      if (communitiesArray.length < 1)
+        console.log("shows popup.");
+      else
+        console.log("doesnt show popup");
+      
+    }
+
     (async () => {
       // Request media library permissions
       const { status: mediaLibraryStatus } = await MediaLibrary.requestPermissionsAsync();
       setHasMediaLibraryPermission(mediaLibraryStatus === 'granted');
+
     })();
-  }, []);
+  }, [user]);
 
   if (!permission) {
     // Camera permissions are still loading.
     return <View />;
   }
+
+
 
   if (!permission.granted) {
     // Camera permissions are not granted yet.
