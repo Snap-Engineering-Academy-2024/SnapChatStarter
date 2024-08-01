@@ -47,7 +47,7 @@ export default function AstrologyScreen() {
   async function getHoroscope() {
     fetch(
       `https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=${astrology}&day=TODAY`,
-      requestOptions
+      requestOptions,
     )
       .then((response) => response.json())
       .then((result) => setHoroscope(result.data.horoscope_data))
@@ -73,7 +73,11 @@ export default function AstrologyScreen() {
         setSignElement(result.element);
         setSignCompatibility(result.compatibility);
       })
-      .catch((error) => console.error("RapidAPI key failure. Please contact Bee on Slack for more info."));
+      .catch((error) =>
+        console.error(
+          "RapidAPI key failure. Please contact Bee on Slack for more info.",
+        ),
+      );
   }
 
   return (

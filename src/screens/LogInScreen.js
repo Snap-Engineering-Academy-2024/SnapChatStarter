@@ -1,18 +1,24 @@
-import { Text, View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { useState } from "react";
-import {supabase} from '../utils/hooks/supabase';
+import { supabase } from "../utils/hooks/supabase";
 
 // Components
 import ReturnButton from "../components/ReturnButton";
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordLength, setPasswordLength] = useState(0);
 
   async function handleSubmit() {
     // console.log("handle submit invoked!!");
-    
+
     const { user, error } = await supabase.auth.signInWithPassword({
       email,
       password,

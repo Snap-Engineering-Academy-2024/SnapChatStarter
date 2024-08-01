@@ -20,18 +20,13 @@ const DATA = [
   },
 ];
 
-const renderItem = ({item}) => {
-  return (
-    <Image
-      style={styles.image}
-      source={{uri:item.id}}
-    />    
-  )
-}
+const renderItem = ({ item }) => {
+  return <Image style={styles.image} source={{ uri: item.id }} />;
+};
 
 export default function SpotlightScreen() {
   return (
-    <FlatList 
+    <FlatList
       contentContainerStyle={styles.container}
       pagingEnabled={true}
       data={DATA}
@@ -50,6 +45,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   image: {
-    height: 800
+    height: 800,
   },
 });

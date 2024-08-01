@@ -12,7 +12,9 @@ export default function AddFriendBitmoji() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const { data, error } = await supabase.from("profiles").select("id, username");
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("id, username");
 
         if (error) {
           console.error("Error fetching users:", error.message);
@@ -24,7 +26,7 @@ export default function AddFriendBitmoji() {
               id: user.id,
               name: user.username, // Use the username directly
               username: user.username, // Use the username directly
-            }))
+            })),
           );
           console.log(data);
         }

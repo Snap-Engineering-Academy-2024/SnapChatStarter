@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 // import Ionicons from "react-native-vector-icons/Ionicons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { supabase } from "../utils/hooks/supabase";  // Import Supabase client
+import { supabase } from "../utils/hooks/supabase"; // Import Supabase client
 
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
