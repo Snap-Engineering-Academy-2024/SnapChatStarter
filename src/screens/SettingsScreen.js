@@ -37,10 +37,10 @@ export default function SettingsScreen() {
       setDisplayName(data.username || user.email.split('@')[0]);
       setEmail(data.email || user.email);
       setDateOfBirth(data.birthday || '01/01/1998');
-      setProfilePictureUrl(data.profile_picture_url || 'https://example.com/default-profile-picture.jpg'); // Default URL
+      setProfilePictureUrl(data.avatar_url || 'https://image.cnbcfm.com/api/v1/image/100703713-Rubber%20duck%20in%20hk.jpg?v=1532564692&w=1600&h=900'); // Default URL
       setInitialDisplayName(data.username || user.email.split('@')[0]);
       setInitialEmail(data.email || user.email);
-      setInitialProfilePictureUrl(data.profile_picture_url || 'https://example.com/default-profile-picture.jpg');
+      setInitialProfilePictureUrl('https://image.cnbcfm.com/api/v1/image/100703713-Rubber%20duck%20in%20hk.jpg?v=1532564692&w=1600&h=900');
       setLoading(false);
     } catch (error) {
       console.error('Error fetching user data:', error.message);
@@ -52,7 +52,7 @@ export default function SettingsScreen() {
     try {
       const { error } = await supabase
         .from('profiles') // Replace with your table name
-        .update({ profile_picture_url: profilePictureUrl })
+        .update({ avatar_url: profilePictureUrl })
         .eq('id', user.id);
 
       if (error) throw error;
