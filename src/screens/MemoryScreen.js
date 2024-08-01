@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,9 +13,9 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
 import StoriesBitmoji from "../components/StoriesBitmoji";
-import DiscoverFeed from "../components/DiscoverFeed";
 import { useNavigation } from "@react-navigation/native";
-
+import {supabase} from '../utils/hooks/supabase';
+import MemoryCard from "../components/MemoryCard";
 
 import Header from "../components/Header";
 
@@ -37,12 +37,32 @@ const DATA = [
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
     title: "Third Item",
   },
-  
 ];
 
-export default function StoriesScreen({ route, navigation }) {
-  const tabBarHeight = useBottomTabBarHeight();
+export default function MemoryScreen({ route, navigation }) {
+
+  
+//   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
+
+  let [galleryPhotos, setGalleryPhotos] = useState([]);
+
+  useEffect(() => {
+    const fetchGalleryPhotos = async () => {
+      try{
+        const { data: galleryPhotos, error } = await supabase.from("gallery").select("photo");
+          if (error) {
+            console.error("Error fetching gallery photos:", error);
+          } else {
+            setGalleryPhotos(galleryPhotos);
+            // console.log(galleryPhotos);
+          }
+        } catch(error){
+          console.error("Error fetching photos", error.message)
+        }
+    };
+    fetchGalleryPhotos();
+  }, []);
 
   return (
     <View
@@ -54,46 +74,34 @@ export default function StoriesScreen({ route, navigation }) {
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,
-          marginBottom: tabBarHeight,
+        //   marginBottom: tabBarHeight,
         },
       ]}
     >
 
-      <Header title="Stories" />
       <View style={styles.contentContainer}>
         <View style={styles.storyBar}>
-          <Text style={styles.sectionHeader}>Friends</Text>
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            
-            //contentContainerStyle={styles.stories} commented this out because it prevented story scrolling felt unintuitive
+            contentContainerStyle={styles.stories}
           >
-            <StoriesBitmoji onPress={console.log("bit moooooo")}/>
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
           </ScrollView>
         </View>
-        <ScrollView style={styles.discoverContent}>
-          <Text style={styles.sectionHeader}>Discover</Text>
-          <FlatList style = {styles.listItems}
-            data={DATA}
+        <View style={styles.discoverContent}>
+          <Text style={styles.sectionHeader}>Memories</Text>
+          
+          <FlatList
+            data={galleryPhotos}
             horizontal={false}
             numColumns={2}
-            ItemSeparatorComponent={() => <View style={{ height: "1.5%" }} />}
-            columnWrapperStyle={styles.listContainer}
-            renderItem={({ item }) => <DiscoverFeed style = {styles.itemTitle} title={item.title} />}
+            ItemSeparatorComponent={() => <View style={{ height: "1%" }} />}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            renderItem={({ item }) => <MemoryCard imageUri={item.photo} />}
             keyExtractor={(item) => item.id}
           />
-        </ScrollView>
+          {/* galleryPhotos.map((p)=>p.photo) */}
+        </View>
       </View>
     </View>
   );
@@ -103,28 +111,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  listItems: {
-    display:"flex",
-    gap:10,
-    // backgroundColor:"red",
-    flexGrow: 1
-  },
-  itemTitle: {
-    // backgroundColor:"red",
-  },
-  listContainer: {
-    // display:"flex",
-    // width:"100%",
-    // justifyContent:"space-between",
-    
-    // backgroundColor:"red",
-  },
   contentContainer: {
     padding: 12,
     display: "flex",
     flexDirection: "column",
     gap: 12,
-    
   },
   storyBar: {
     display: "flex",
@@ -134,24 +125,16 @@ const styles = StyleSheet.create({
   },
   discoverContent: {
     display: "flex",
-    // // backgroundColor:"red",
-    // borderWidth:5,
-    // borderColor:"black",
     flexDirection: "column",
-    // gap:10,
   },
   stories: {
     display: "flex",
-    gap: 20,
+    gap: 12,
     width: "100%",
-    // justifyContent:"center",
-
-
   },
   DiscoveryContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    
   },
   sectionHeader: {
     textAlign: "left",
