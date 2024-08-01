@@ -17,9 +17,8 @@ export default function SignupScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [birthday, setBirthday] = useState("");
   const [alreadyInUseButton, setAlreadyInUseButton] = useState(false);
-  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState("");
-
   //major dubbing here to figure out why auth doesnt work
+  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState('');
   async function handleSubmit() {
     console.log("handle submit invoked!!");
 
@@ -28,10 +27,17 @@ export default function SignupScreen({ navigation }) {
       // https://supabase.com/docs/reference/javascript/auth-signup
 
       const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-      });
+        email,
+        password,
 
+        options: {
+          data: {
+            userName: email.split('@')[0]
+          },
+        }
+        
+      });
+     
       if (error) {
         console.error("Error signing up:", error.message);
         if (error.message.includes("User already registered")) {

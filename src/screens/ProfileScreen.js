@@ -3,6 +3,7 @@ import { supabase } from "../utils/hooks/supabase";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
+import { Image, Text, View, StyleSheet } from "react-native";
 
 const handleSignOut = async () => {
   try {
@@ -45,3 +46,18 @@ export default function ProfileScreen() {
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    avatar: {
+        width: 150,
+        height: 150,
+        borderRadius: 150 / 2,
+        alignItems: "center",
+    }
+})

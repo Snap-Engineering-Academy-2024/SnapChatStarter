@@ -4,6 +4,8 @@ import { fontHeader } from "../../assets/themes/font";
 import { Followers, More, Search } from "../../assets/snapchat/HeaderIcons";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "../screens/ProfileScreen";
+import AddFriendScreen from "../screens/AddFriendScreen";
+
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import SearchScreen from "../screens/SearchScreen";
@@ -11,9 +13,12 @@ import { useState, useEffect } from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from "../utils/hooks/supabase";
 const Stack = createStackNavigator();
+import SelectionMenu from "./SelectionMenu";
+import { useState } from "react";
 
 export default function Header({ title }) {
   const navigation = useNavigation();
+
 
   const [profilePicUrl, setProfilePicUrl] = useState(
     "https://i.imgur.com/FxsJ3xy.jpg"
@@ -43,6 +48,15 @@ export default function Header({ title }) {
     fetchProfilePic();
   }, [user]);
 
+
+  const [showMenu, setShowMenu] = useState(false);
+  console.log(showMenu);
+
+  // const handleClick = () => {
+  //   setShowMenu(true)
+  //   console.log("handleClick")
+  // }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>
@@ -65,12 +79,22 @@ export default function Header({ title }) {
       </View>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.headerRight}>
-        <View style={[styles.followers, styles.buttons]}>
+        <Pressable
+          style={[styles.followers, styles.buttons]}
+          onPress={() => {
+            navigation.navigate("AddFriend");
+          }}
+        >
           <Followers />
-        </View>
-        <View style={[styles.more, styles.buttons]}>
-          <More />
-        </View>
+        </Pressable>
+
+        <Pressable title="Open Bottom Sheet" onPress={() => setShowMenu(true)}>
+          <View style={[styles.more, styles.buttons]}>
+            <More />
+          </View>
+        </Pressable>
+        {/* {showMenu && <SelectionMenu/>} */}
+        <SelectionMenu showMenu={showMenu} setShowMenu={setShowMenu} />
       </View>
     </View>
   );
