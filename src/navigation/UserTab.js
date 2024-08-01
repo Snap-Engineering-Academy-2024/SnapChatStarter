@@ -142,8 +142,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     backgroundColor: "white",
-    borderRadius: 24,
+    // borderRadius: 24,
     padding: 16,
+    margin:0,
     bottom: 0,
   },
   grayRectangle: {
