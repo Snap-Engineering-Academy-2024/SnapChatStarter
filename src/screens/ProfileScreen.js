@@ -1,4 +1,4 @@
-import { Image, Text, View, Button, StyleSheet, Pressable } from "react-native";
+import { Image, Text, View, Button, StyleSheet, Pressable} from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -57,17 +57,17 @@ export default function ProfileScreen() {
         accessibilityLabel="Learn more about this purple button"
       />
       <Button
-        // onPress={() => {
-        //   navigation.navigate("Astrology");
-        // }}
+        onPress={() => {
+          navigation.navigate("SnapTogether");
+        }}
         title={"Snap Together Badge"}
         color="brown"
         accessibilityLabel="The Badge for Snap Together"
       />
       <Button
-        // onPress={() => {
-        //   navigation.navigate("Astrology");
-        // }}
+        onPress={() => {
+          navigation.navigate("SnapTogether");
+        }}
         title={"Snap Together"}
         color="brown"
         accessibilityLabel="Snap Together redirect button"

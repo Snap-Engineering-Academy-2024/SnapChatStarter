@@ -9,12 +9,12 @@ import { supabase } from "../utils/hooks/supabase"; // Import Supabase client
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
 
-export default function InfoScreen() {
+export default function SnapTogetherScreen() {
 
   return (
     <SafeAreaView>
       <Text>
-        "Hi I'm the Info Screen"
+        "Hi I'm the Snap Together Screen"
       </Text>
     </SafeAreaView>
   );
