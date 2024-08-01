@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, ScrollView, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { fontHeader } from "../../assets/themes/font";
@@ -16,10 +23,11 @@ export default function StoriesBitmoji() {
   return (
     <View style={styles.myBitmoji}>
       <Pressable //added a presable to give the story interaction
-      style={[styles.profile, styles.buttons]}
-      onPress={() => {
-        navigation.navigate("FriendStory");
-      }}>
+        style={[styles.profile, styles.buttons]}
+        onPress={() => {
+          navigation.navigate("FriendStory");
+        }}
+      >
         <Image
           style={styles.bitmojiImage}
           source={require("../../assets/snapchat/personalBitmoji.png")}

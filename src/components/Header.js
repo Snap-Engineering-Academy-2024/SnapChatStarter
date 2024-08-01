@@ -19,9 +19,8 @@ const Stack = createStackNavigator();
 export default function Header({ title }) {
   const navigation = useNavigation();
 
-
   const [profilePicUrl, setProfilePicUrl] = useState(
-    "https://i.imgur.com/FxsJ3xy.jpg"
+    "https://i.imgur.com/FxsJ3xy.jpg",
   );
 
   const { user } = useAuthentication();
@@ -47,7 +46,6 @@ export default function Header({ title }) {
 
     fetchProfilePic();
   }, [user]);
-
 
   const [showMenu, setShowMenu] = useState(false);
   console.log(showMenu);

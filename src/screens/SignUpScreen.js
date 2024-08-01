@@ -18,10 +18,10 @@ export default function SignupScreen({ navigation }) {
   const [birthday, setBirthday] = useState("");
   const [alreadyInUseButton, setAlreadyInUseButton] = useState(false);
   //major dubbing here to figure out why auth doesnt work
-  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState('');
+  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState("");
   async function handleSubmit() {
     // console.log("handle submit invoked!!");
-  
+
     try {
       // sign up with additional user metadata
       // https://supabase.com/docs/reference/javascript/auth-signup
@@ -32,18 +32,17 @@ export default function SignupScreen({ navigation }) {
 
         options: {
           data: {
-            userName: email.split('@')[0]
+            userName: email.split("@")[0],
           },
-        }
-        
+        },
       });
-     
+
       if (error) {
         console.error("Error signing up:", error.message);
         if (error.message.includes("User already registered")) {
           setAlreadyInUseButton(true);
           setAlreadyInUseMessage(
-            "That email is already associated with a username"
+            "That email is already associated with a username",
           );
         } else {
           setAlreadyInUseMessage("");
@@ -115,7 +114,7 @@ export default function SignupScreen({ navigation }) {
             styles={styles.blueText}
             onPress={() =>
               Linking.openURL(
-                "https://values.snap.com/privacy/privacy-policy#:~:text=We%20may%20collect%20information%20about%20you%20from%20other%20users%2C%20our,how%20you%20use%20that%20service."
+                "https://values.snap.com/privacy/privacy-policy#:~:text=We%20may%20collect%20information%20about%20you%20from%20other%20users%2C%20our,how%20you%20use%20that%20service.",
               )
             }
           >

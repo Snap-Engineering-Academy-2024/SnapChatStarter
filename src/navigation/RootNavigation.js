@@ -2,7 +2,7 @@ import React from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import AuthStack from "./AuthStack";
 import UserStack from "./UserStack";
-import supabase from '../utils/hooks/supabase';
+import supabase from "../utils/hooks/supabase";
 
 export default function RootNavigation() {
   const { user } = useAuthentication();
@@ -26,8 +26,6 @@ async function devAutoLogin() {
     email: process.env.EXPO_PUBLIC_DEV_EMAIL,
     password: process.env.EXPO_PUBLIC_DEV_PASSWORD,
   });
-
-
 
   if (error) {
     console.error("Error logging in:", error.message);

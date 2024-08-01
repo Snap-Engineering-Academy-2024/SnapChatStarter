@@ -20,11 +20,12 @@ const handleSignOut = async () => {
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const [astrology, setAstrology] = useState("Pisces");
-  const userSign = findAstrologySign()
+  const userSign = findAstrologySign();
 
-  useEffect(()=>{
-    setAstrology(userSign.sign)
-  }),[]
+  useEffect(() => {
+    setAstrology(userSign.sign);
+  }),
+    [];
 
   return (
     <View style={{ alignItems: "center" }}>
@@ -46,17 +47,16 @@ export default function ProfileScreen() {
   );
 }
 
-
 const styles = StyleSheet.create({
-    container: {
-        width: "100%",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    avatar: {
-        width: 150,
-        height: 150,
-        borderRadius: 150 / 2,
-        alignItems: "center",
-    }
-})
+  container: {
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    width: 150,
+    height: 150,
+    borderRadius: 150 / 2,
+    alignItems: "center",
+  },
+});

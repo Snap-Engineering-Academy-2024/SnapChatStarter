@@ -2,78 +2,94 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 
 import { Card, FAB } from "@rneui/themed";
-import { View, Text, TextInput, StyleSheet, Image, Button, TouchableOpacity} from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import AddEvent from "../components/AddEvent";
 import EventInfo from "../components/EventInfo";
 import { supabase } from "../utils/hooks/supabase";
 
 export default function EventScreen({ route, navigation }) {
-    const [visible, setVisible] = useState(false)
-    const [events, setEvents] = useState([]);
-    const [detailsVisible, setDetailsVisible] = useState(false)
-    const [selectedEvent, setSelectedEvent] = useState(null)
+  const [visible, setVisible] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [detailsVisible, setDetailsVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
-    function toggleComponent (){
-        setVisible(!visible)
-        console.log(visible)
+  function toggleComponent() {
+    setVisible(!visible);
+    console.log(visible);
+  }
+
+  function handleCardTouch(event) {
+    setDetailsVisible(true);
+    console.log(detailsVisible);
+    setSelectedEvent(event);
+  }
+
+  const fetchData = async () => {
+    try {
+      const { data, error } = await supabase.from("event_table").select("*");
+      if (error) {
+        console.error("Error fetching data:", error);
+      } else {
+        setEvents(data);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
     }
+  };
 
-    function handleCardTouch(event){
-        setDetailsVisible(true)
-        console.log(detailsVisible)
-        setSelectedEvent(event)
-    }
+  const refreshEvents = async () => {
+    await fetchData();
+  };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    const fetchData = async () => {
-        try {
-            const { data, error } = await supabase.from('event_table').select('*');
-            if (error) {
-                console.error("Error fetching data:", error);
-            } else {
-                setEvents(data);
-            }
-        } catch (error) {
-            console.error("Unexpected error:", error);
-        }
-    };
-
-    const refreshEvents = async () => {
-        await fetchData();
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    return (
-    <View style = {styles.EventScreen}>
-        
-        <ScrollView>
+  return (
+    <View style={styles.EventScreen}>
+      <ScrollView>
         <View style={styles.Events}>
           {events.map((event) => (
-
-                <TouchableOpacity key = {event.id} onPress = {() => handleCardTouch(event)} style={styles.container}>
-                <View style={styles.friends}>
-                    <Text style={styles.friendsText}>{event.attending} friends going</Text>
-                </View>
+            <TouchableOpacity
+              key={event.id}
+              onPress={() => handleCardTouch(event)}
+              style={styles.container}
+            >
+              <View style={styles.friends}>
+                <Text style={styles.friendsText}>
+                  {event.attending} friends going
+                </Text>
+              </View>
+              <Image
+                style={{
+                  width: "100%",
+                  aspectRatio: 1,
+                  borderRadius: 20,
+                  objectFit: "cover",
+                }}
+                resizeMode="contain"
+                source={{ uri: event.imageURL }}
+              />
+              <Card.Title style={styles.title}>{event.title}</Card.Title>
+              <View style={styles.userInfo}>
                 <Image
-                    style={{ width: "100%", aspectRatio: 1, borderRadius: 20, objectFit:"cover" }}
-                    resizeMode="contain"
-                    source={{ uri: event.imageURL }}
+                  style={styles.bitmojiUser}
+                  source={{
+                    uri: "https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
+                  }}
                 />
-                <Card.Title style={styles.title}>{event.title}</Card.Title>
-                <View style={styles.userInfo}>
-                    <Image
-                    style={styles.bitmojiUser}
-                    source={{
-                        uri: "https://sdk.bitmoji.com/render/panel/20048676-103221902646_4-s5-v1.png?transparent=1&palette=1&scale=1",
-                    }}
-                    />
-                    <Text style={styles.username}>{event.host}</Text>
-                </View>
-                </TouchableOpacity>
+                <Text style={styles.username}>{event.host}</Text>
+              </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
@@ -84,15 +100,18 @@ export default function EventScreen({ route, navigation }) {
         icon={{ name: "add", color: "white" }}
         color="#FF3386"
       />
-        <AddEvent isVisible={visible} onClose={() => {
-        toggleComponent();
-        refreshEvents();
-        }} />
-        <EventInfo
-            isVisible={detailsVisible}
-            event={selectedEvent}
-            onClose={() => setDetailsVisible(false)}
-        />
+      <AddEvent
+        isVisible={visible}
+        onClose={() => {
+          toggleComponent();
+          refreshEvents();
+        }}
+      />
+      <EventInfo
+        isVisible={detailsVisible}
+        event={selectedEvent}
+        onClose={() => setDetailsVisible(false)}
+      />
     </View>
   );
 }

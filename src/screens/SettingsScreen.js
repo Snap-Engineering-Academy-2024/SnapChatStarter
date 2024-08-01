@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Button, StyleSheet, TextInput, Image } from 'react-native';
-import { supabase } from '../utils/hooks/supabase';
-import { useAuthentication } from '../utils/hooks/useAuthentication';
+import React, { useState, useEffect } from "react";
+import { Text, View, Button, StyleSheet, TextInput, Image } from "react-native";
+import { supabase } from "../utils/hooks/supabase";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
 
 export default function SettingsScreen() {
   const { user } = useAuthentication();
   const [loading, setLoading] = useState(true);
-  const [displayName, setDisplayName] = useState('');
-  const [email, setEmail] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('01/01/1998'); // Default random date
-  const [profilePictureUrl, setProfilePictureUrl] = useState('');
-  const [initialDisplayName, setInitialDisplayName] = useState('');
-  const [initialEmail, setInitialEmail] = useState('');
+  const [displayName, setDisplayName] = useState("");
+  const [email, setEmail] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("01/01/1998"); // Default random date
+  const [profilePictureUrl, setProfilePictureUrl] = useState("");
+  const [initialDisplayName, setInitialDisplayName] = useState("");
+  const [initialEmail, setInitialEmail] = useState("");
   const [editingDisplayName, setEditingDisplayName] = useState(false);
   const [editingEmail, setEditingEmail] = useState(false);
   const [editingDateOfBirth, setEditingDateOfBirth] = useState(false);
@@ -26,22 +26,25 @@ export default function SettingsScreen() {
   const fetchUserData = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles') // Replace with your table name
-        .select('*')
-        .eq('id', user.id)
+        .from("profiles") // Replace with your table name
+        .select("*")
+        .eq("id", user.id)
         .single();
 
       if (error) throw error;
 
-      setDisplayName(data.username || user.email.split('@')[0]);
+      setDisplayName(data.username || user.email.split("@")[0]);
       setEmail(data.email || user.email);
-      setDateOfBirth(data.birthday || '01/01/1998');
-      setProfilePictureUrl(data.avatar_url || 'https://image.cnbcfm.com/api/v1/image/100703713-Rubber%20duck%20in%20hk.jpg?v=1532564692&w=1600&h=900'); // Default URL
-      setInitialDisplayName(data.username || user.email.split('@')[0]);
+      setDateOfBirth(data.birthday || "01/01/1998");
+      setProfilePictureUrl(
+        data.avatar_url ||
+          "https://image.cnbcfm.com/api/v1/image/100703713-Rubber%20duck%20in%20hk.jpg?v=1532564692&w=1600&h=900",
+      ); // Default URL
+      setInitialDisplayName(data.username || user.email.split("@")[0]);
       setInitialEmail(data.email || user.email);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching user data:', error.message);
+      console.error("Error fetching user data:", error.message);
       setLoading(false);
     }
   };
@@ -49,63 +52,63 @@ export default function SettingsScreen() {
   const saveProfilePicture = async () => {
     try {
       const { error } = await supabase
-        .from('profiles') // Replace with your table name
+        .from("profiles") // Replace with your table name
         .update({ avatar_url: profilePictureUrl })
-        .eq('id', user.id);
+        .eq("id", user.id);
 
       if (error) throw error;
 
       setEditingProfilePicture(false);
       setProfilePictureUrl(profilePictureUrl);
     } catch (error) {
-      console.error('Error updating profile picture URL:', error.message);
+      console.error("Error updating profile picture URL:", error.message);
     }
   };
 
   const saveDisplayName = async () => {
     try {
       const { error } = await supabase
-        .from('profiles') // Replace with your table name
+        .from("profiles") // Replace with your table name
         .update({ username: displayName })
-        .eq('id', user.id);
+        .eq("id", user.id);
 
       if (error) throw error;
 
       setEditingDisplayName(false);
       setInitialDisplayName(displayName);
     } catch (error) {
-      console.error('Error updating display name:', error.message);
+      console.error("Error updating display name:", error.message);
     }
   };
 
   const saveEmail = async () => {
     try {
       const { error } = await supabase
-        .from('profiles') // Replace with your table name
+        .from("profiles") // Replace with your table name
         .update({ email })
-        .eq('id', user.id);
+        .eq("id", user.id);
 
       if (error) throw error;
 
       setEditingEmail(false);
       setInitialEmail(email);
     } catch (error) {
-      console.error('Error updating email:', error.message);
+      console.error("Error updating email:", error.message);
     }
   };
 
   const saveDateOfBirth = async () => {
     try {
       const { error } = await supabase
-        .from('profiles') // Replace with your table name
+        .from("profiles") // Replace with your table name
         .update({ birthday: dateOfBirth })
-        .eq('id', user.id);
+        .eq("id", user.id);
 
       if (error) throw error;
 
       setEditingDateOfBirth(false);
     } catch (error) {
-      console.error('Error updating date of birth:', error.message);
+      console.error("Error updating date of birth:", error.message);
     }
   };
 
@@ -125,7 +128,7 @@ export default function SettingsScreen() {
   };
 
   const cancelEditDateOfBirth = () => {
-    setDateOfBirth('01/01/1998');
+    setDateOfBirth("01/01/1998");
     setEditingDateOfBirth(false);
   };
 
@@ -133,12 +136,12 @@ export default function SettingsScreen() {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {
-        console.error('Error signing out:', error.message);
+        console.error("Error signing out:", error.message);
       } else {
         // Handle successful sign out (e.g., redirect to login screen)
       }
     } catch (error) {
-      console.error('Unexpected error:', error);
+      console.error("Unexpected error:", error);
     }
   };
 
@@ -172,7 +175,10 @@ export default function SettingsScreen() {
               source={{ uri: profilePictureUrl }}
               style={styles.profilePicture}
             />
-            <Button onPress={() => setEditingProfilePicture(true)} title="Edit" />
+            <Button
+              onPress={() => setEditingProfilePicture(true)}
+              title="Edit"
+            />
           </View>
         )}
       </View>
@@ -269,30 +275,30 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   databaseData: {
-    color: 'grey',
+    color: "grey",
     marginTop: 5,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   input: {
     flex: 1,
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     paddingHorizontal: 10,
     marginTop: 5,
     marginBottom: 10,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 10,
   },
   profilePictureContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 10,
   },
   profilePicture: {
