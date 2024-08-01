@@ -89,7 +89,7 @@ export default function MemoryScreen({ route, navigation }) {
           </ScrollView>
         </View>
         <View style={styles.discoverContent}>
-          <Text style={styles.sectionHeader}>Memories</Text>
+          <Text style={styles.sectionHeader}>Memoriesss</Text>
           
           <FlatList
             data={galleryPhotos}

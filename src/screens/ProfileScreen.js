@@ -14,7 +14,7 @@ const handleSignOut = async () => {
     }
   };
 
-export default function ProfileScreen(){
+export default function ProfileScreen({ navigation }){
 return(
     <View styles={{alignItems:"center"}}>
     <Image 
@@ -26,6 +26,10 @@ return(
         User Name Would Go Here
     </Text>
     <Button onPress={handleSignOut} title="Log Out" />
+    <Button
+        title="Go to Community"
+        onPress={() => navigation.navigate('Community')}
+      />
     </View>
 );
 };

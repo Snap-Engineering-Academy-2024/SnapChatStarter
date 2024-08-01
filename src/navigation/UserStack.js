@@ -6,6 +6,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import DiscoverCard from "../components/DiscoverCard";
 import SearchScreen from "../screens/SearchScreen";
 import MemoryScreen from "../screens/MemoryScreen";
+import CommunityScreen from "../screens/CommunityScreen";
 
 const Stack = createStackNavigator();
 
@@ -35,10 +36,16 @@ export default function () {
           options={{ headerShown: false}}
         />
         <Stack.Screen
+          name="Community"
+          component={CommunityScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
           name="MemoryScreen"
           component={MemoryScreen}
           options={{ headerShown: true }}
         />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
