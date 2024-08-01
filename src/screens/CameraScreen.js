@@ -35,13 +35,18 @@ export default function CameraScreen({ navigation, focused }) {
     try {
       const { data, error } = await supabase
         .from('profiles') // Replace with your table name
-        .select('*')
+        .select('identity_communities')
         .eq('id', user.id)
         .single();
 
       if (error) throw error;
 
-      setCommunitiesArray(data.identity_communities);
+      setCommunitiesArray(data);
+      console.log(data.identity_communities);
+      if (data.identity_communities === null)
+        console.log("shows popup.");
+      else
+        console.log("doesnt show popup");
 
     } catch (error) {
       console.error('Error fetching user data:', error.message);
@@ -52,11 +57,8 @@ export default function CameraScreen({ navigation, focused }) {
   useEffect(() => {
     if (user !== null) {
       fetchUserData();
-      if (communitiesArray.length < 1)
-        console.log("shows popup.");
-      else
-        console.log("doesnt show popup");
-      
+      // console.log(JSON.stringify(user, null, 4))
+
     }
 
     (async () => {
