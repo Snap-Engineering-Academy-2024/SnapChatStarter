@@ -16,7 +16,6 @@ import StoriesBitmoji from "../components/StoriesBitmoji";
 import DiscoverFeed from "../components/DiscoverFeed";
 import { useNavigation } from "@react-navigation/native";
 
-
 import Header from "../components/Header";
 
 /* Discover FlatList will render a component in the list
@@ -37,7 +36,6 @@ const DATA = [
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
     title: "Third Item",
   },
-  
 ];
 
 export default function StoriesScreen({ route, navigation }) {
@@ -58,7 +56,6 @@ export default function StoriesScreen({ route, navigation }) {
         },
       ]}
     >
-
       <Header title="Stories" />
       <View style={styles.contentContainer}>
         <View style={styles.storyBar}>
@@ -66,10 +63,10 @@ export default function StoriesScreen({ route, navigation }) {
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            
+
             //contentContainerStyle={styles.stories} commented this out because it prevented story scrolling felt unintuitive
           >
-            <StoriesBitmoji onPress={console.log("bit moooooo")}/>
+            <StoriesBitmoji onPress={console.log("bit moooooo")} />
             <StoriesBitmoji />
             <StoriesBitmoji />
             <StoriesBitmoji />
@@ -82,18 +79,16 @@ export default function StoriesScreen({ route, navigation }) {
             <StoriesBitmoji />
           </ScrollView>
         </View>
-        <ScrollView style={styles.discoverContent}>
-          <Text style={styles.sectionHeader}>Discover</Text>
-          <FlatList style = {styles.listItems}
-            data={DATA}
-            horizontal={false}
-            numColumns={2}
-            ItemSeparatorComponent={() => <View style={{ height: "1.5%" }} />}
-            columnWrapperStyle={styles.listContainer}
-            renderItem={({ item }) => <DiscoverFeed style = {styles.itemTitle} title={item.title} />}
-            keyExtractor={(item) => item.id}
-          />
-        </ScrollView>
+        <Text style={styles.sectionHeader}>Discover</Text>
+        <FlatList
+          contentContainerStyle={{ paddingBottom: 250 }}
+          data={DATA}
+          horizontal={false}
+          numColumns={2}
+          ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+          renderItem={({ item }) => <DiscoverFeed title={item.title} />}
+          keyExtractor={(item) => item.id}
+        />
       </View>
     </View>
   );
@@ -103,28 +98,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  listItems: {
-    display:"flex",
-    gap:10,
-    // backgroundColor:"red",
-    flexGrow: 1
-  },
-  itemTitle: {
-    // backgroundColor:"red",
-  },
-  listContainer: {
-    // display:"flex",
-    // width:"100%",
-    // justifyContent:"space-between",
-    
-    // backgroundColor:"red",
-  },
   contentContainer: {
-    padding: 12,
+    // padding: 12,
     display: "flex",
     flexDirection: "column",
     gap: 12,
-    
   },
   storyBar: {
     display: "flex",
@@ -132,26 +110,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: 4,
   },
-  discoverContent: {
-    display: "flex",
-    // // backgroundColor:"red",
-    // borderWidth:5,
-    // borderColor:"black",
-    flexDirection: "column",
-    // gap:10,
-  },
   stories: {
     display: "flex",
     gap: 20,
     width: "100%",
     // justifyContent:"center",
-
-
-  },
-  DiscoveryContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    
   },
   sectionHeader: {
     textAlign: "left",
