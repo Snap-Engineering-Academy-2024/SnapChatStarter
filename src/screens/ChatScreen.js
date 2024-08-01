@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, FAB } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-// import Ionicons from "react-native-vector-icons/Ionicons";
+// import Ionicons from "react-native-vector-icons/Ionicorns";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { supabase } from "../utils/hooks/supabase";  // Import Supabase client
+import Actions from "../components/Actions";
+import { supabase } from "../utils/hooks/supabase"; // Import Supabase client
 
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
 
 export default function ChatScreen({ navigation }) {
   const [chats, setChats] = useState([]);
+  const [detailsVisible, setDetailsVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
 
+  function toggleComponent() {
+    setVisible(!visible);
+    console.log(visible);
+  }
+
+  function handleCardTouch(event) {
+    setDetailsVisible(true);
+    console.log(detailsVisible);
+    setSelectedEvent(event);
+  }
   function getChatbots() {
     let chatbotsTemp = [];
     for (const botId in CHATBOTS) {
@@ -22,29 +36,6 @@ export default function ChatScreen({ navigation }) {
 
     setChats((otherChats) => [...otherChats, ...chatbotsTemp]);
   }
-
-  // async function getUserChats() {
-  //   // Fetch user chats from Supabase
-  //   const { data: userChats, error } = await supabase
-  //     .from('conversations')
-  //     .select('id')
-  //     .select('messages');
-
-  //   if (error) {
-  //     console.error("Error fetching user chats:", error);
-  //     return;
-  //   }
-
-  //   // Add user chats to array
-  //   let userChatsTemp = [];
-  //   if (userChats) {
-  //     userChats.forEach((userChat) => {
-  //       userChatsTemp.push({ isChatbot: false, chatId: userChat.id });
-  //     });
-  //   }
-
-  //   setChats((otherChats) => [...otherChats, ...userChatsTemp]);
-  // }
 
   useEffect(() => {
     if (chats.length < 1) {
@@ -97,6 +88,25 @@ export default function ChatScreen({ navigation }) {
           );
         })}
       </View>
+      <FAB
+        onPress={toggleComponent}
+        style={styles.addButton}
+        visible={true}
+        icon={{ name: "star", color: "white" }}
+        color="#FF3386"
+      />
+      <Actions
+        isVisible={visible}
+        onClose={() => {
+          toggleComponent();
+          refreshEvents();
+        }}
+      />
+      <Actions
+        isVisible={detailsVisible}
+        event={selectedEvent}
+        onClose={() => setDetailsVisible(false)}
+      />
     </View>
   );
 }
@@ -111,6 +121,9 @@ const styles = StyleSheet.create({
     display: "flex",
     borderBottomColor: "lightgrey",
     borderBottomWidth: 1,
+  },
+  uploadButton: {
+    marginTop: 16,
   },
   userIcon: {
     position: "absolute",
