@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { supabase } from "../utils/hooks/supabase"; // Import Supabase client
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { supabase } from "../utils/hooks/supabase";  // Import Supabase client
 
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
@@ -47,7 +47,7 @@ export default function ChatScreen({ navigation }) {
   useEffect(() => {
     if (chats.length < 1) {
       getChatbots();
-      getUserChats();
+      // getUserChats();
     }
   }, [chats.length]);
 
@@ -80,14 +80,14 @@ export default function ChatScreen({ navigation }) {
             >
               <Ionicons
                 style={styles.userIcon}
-                name="ios-person-outline"
+                name="person-outline"
                 size={36}
                 color="lightgrey"
               />
               <Text style={styles.userName}> {chat.chatId} </Text>
               <Ionicons
                 style={styles.userCamera}
-                name="ios-camera-outline"
+                name="camera-outline"
                 size={24}
                 color="lightgrey"
               />
