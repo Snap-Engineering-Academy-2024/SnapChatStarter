@@ -6,6 +6,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import AddFriendScreen from "../screens/AddFriendScreen";
 import DiscoverCard from "../components/DiscoverCard";
 import SearchScreen from "../screens/SearchScreen";
+import AstrologyScreen from "../screens/AstrologyScreen";
 import MemoryScreen from "../screens/MemoryScreen";
 
 const Stack = createStackNavigator();
@@ -44,6 +45,12 @@ export default function App() {
           name="MemoryScreen"
           component={MemoryScreen}
           options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="Astrology"
+          component={AstrologyScreen}
+          options={{ headerShown: true}}
+
         />
       </Stack.Navigator>
     </NavigationContainer>

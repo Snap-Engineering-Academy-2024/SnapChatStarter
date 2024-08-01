@@ -9,12 +9,45 @@ import AddFriendScreen from "../screens/AddFriendScreen";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import SearchScreen from "../screens/SearchScreen";
+import { useState, useEffect } from "react";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
+import { supabase } from "../utils/hooks/supabase";
 const Stack = createStackNavigator();
 import SelectionMenu from "./SelectionMenu";
 import { useState } from "react";
 
 export default function Header({ title }) {
   const navigation = useNavigation();
+
+
+  const [profilePicUrl, setProfilePicUrl] = useState(
+    "https://i.imgur.com/FxsJ3xy.jpg"
+  );
+
+  const { user } = useAuthentication();
+
+  useEffect(() => {
+    async function fetchProfilePic() {
+      if (user === null) {
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", user.id)
+        .single();
+
+      if (error) {
+        console.log("Profile pic fetch failure");
+      } else if (data.avatar_url) {
+        setProfilePicUrl(data.avatar_url);
+      }
+    }
+
+    fetchProfilePic();
+  }, [user]);
+
 
   const [showMenu, setShowMenu] = useState(false);
   console.log(showMenu);
@@ -23,6 +56,7 @@ export default function Header({ title }) {
   //   setShowMenu(true)
   //   console.log("handleClick")
   // }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>
@@ -32,10 +66,7 @@ export default function Header({ title }) {
             navigation.navigate("Profile");
           }}
         >
-          <Image
-            style={styles.profileImage}
-            source={require("../../assets/snapchat/defaultprofile.png")}
-          />
+          <Image style={styles.profileImage} source={{ uri: profilePicUrl }} />
         </Pressable>
         <Pressable
           style={[styles.search, styles.buttons]}
