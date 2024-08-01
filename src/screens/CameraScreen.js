@@ -146,7 +146,7 @@ export default function CameraScreen({ navigation, focused }) {
           style={facing === "front" ? styles.frontPreview : styles.preview}
           //source={{ uri: "data:image/jpg;base64," + photo.base64 }}
           // We don't need that base64 thing, just uri is good
-          source={{ uri: "file:///var/mobile/Containers/Data/Application/CF05F08E-8F78-4CEA-8A92-B092A5505765/Library/Caches/ExponentExperienceData/@anonymous/chatsnap-c59d517a-6d48-4777-ad0f-718efa4cc1b0/Camera/DAEF7FB1-8167-483D-B99A-4A8D742D9A05.jpg" }}
+          source={{ uri: photo.uri }}
         />
         {hasMediaLibraryPermission && (
           <PostcaptureOptions deletePhoto={() => setPhoto(null)} savePhoto={savePhoto} />
