@@ -23,27 +23,28 @@ export default function ChatScreen({ navigation }) {
     setChats((otherChats) => [...otherChats, ...chatbotsTemp]);
   }
 
-  async function getUserChats() {
-    // Fetch user chats from Supabase
-    const { data: userChats, error } = await supabase
-      .from("Chats")
-      .select("id");
+  // async function getUserChats() {
+  //   // Fetch user chats from Supabase
+  //   const { data: userChats, error } = await supabase
+  //     .from('conversations')
+  //     .select('id')
+  //     .select('messages');
 
-    if (error) {
-      console.error("Error fetching user chats:", error);
-      return;
-    }
+  //   if (error) {
+  //     console.error("Error fetching user chats:", error);
+  //     return;
+  //   }
 
-    // Add user chats to array
-    let userChatsTemp = [];
-    if (userChats) {
-      userChats.forEach((userChat) => {
-        userChatsTemp.push({ isChatbot: false, chatId: userChat.id });
-      });
-    }
+  //   // Add user chats to array
+  //   let userChatsTemp = [];
+  //   if (userChats) {
+  //     userChats.forEach((userChat) => {
+  //       userChatsTemp.push({ isChatbot: false, chatId: userChat.id });
+  //     });
+  //   }
 
-    setChats((otherChats) => [...otherChats, ...userChatsTemp]);
-  }
+  //   setChats((otherChats) => [...otherChats, ...userChatsTemp]);
+  // }
 
   useEffect(() => {
     if (chats.length < 1) {

@@ -66,6 +66,7 @@ export default function CameraScreen({ navigation, focused }) {
       return;
     }
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
+    // console.log(pickerResult);
     console.log(pickerResult);
     setShowGalleryMenu(false); //By Ryan
     console.log(pickerResult.assets[0].uri);

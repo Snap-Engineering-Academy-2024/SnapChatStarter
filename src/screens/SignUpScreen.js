@@ -20,8 +20,8 @@ export default function SignupScreen({ navigation }) {
   //major dubbing here to figure out why auth doesnt work
   const [alreadyInUseMessage, setAlreadyInUseMessage] = useState('');
   async function handleSubmit() {
-    console.log("handle submit invoked!!");
-
+    // console.log("handle submit invoked!!");
+  
     try {
       // sign up with additional user metadata
       // https://supabase.com/docs/reference/javascript/auth-signup
@@ -49,6 +49,7 @@ export default function SignupScreen({ navigation }) {
           setAlreadyInUseMessage("");
         }
       } else {
+        // console.log("User signed up:", data);
         // Navigate to a different screen or handle successful signup
 
         console.log("User signed up:", JSON.stringify(data, null, 4));
