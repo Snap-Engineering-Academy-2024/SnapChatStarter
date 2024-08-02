@@ -4,7 +4,7 @@ import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
-import DraggableButtonList from "../components/DraggableButtons"; 
+import DraggableButtonList from "../components/DraggableButtons";
 
 const handleSignOut = async () => {
   try {
@@ -54,10 +54,10 @@ export default function ProfileScreen() {
       <DraggableButtonList onPressHandlers={onPressHandlers} />
       <View>
         <Button onPress={handleSignOut} title="Log Out" />
-      <Button
-        onPress={() => navigation.navigate("Settings")}
-        title="Settings"
-      />
+        <Button
+          onPress={() => navigation.navigate("Settings")}
+          title="Settings"
+        />
       </View>
     </View>
   );
