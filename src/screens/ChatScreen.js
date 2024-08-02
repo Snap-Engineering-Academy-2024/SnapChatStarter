@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Pressable,
-} from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -17,12 +11,10 @@ import { FAB } from "@rneui/themed";
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
 
-<<<<<<< HEAD
-=======
 import AddEvent from "../components/AddEvent";
 import Actions from "../components/Actions";
+import PinnedBotBitmoji from "../components/PinnedBotBitmoji";
 
->>>>>>> origin/christians
 export default function ChatScreen({ navigation }) {
   const [chats, setChats] = useState([]);
   const [detailsVisible, setDetailsVisible] = useState(false);
@@ -32,7 +24,7 @@ export default function ChatScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
 
   function toggleComponent() {
-    console.log("Pressed Star")
+    console.log("Pressed Star");
     setVisible(!visible);
     console.log(visible);
   }
@@ -71,12 +63,13 @@ export default function ChatScreen({ navigation }) {
       ]}
     >
       <Header title="Chat" />
-      <View style={styles.storiesContainer}>
-        <TouchableOpacity onPress={() => alert("First pressed")} >
-          <StoriesBitmoji />
+      
+      <View style={styles.pinnedBotBar}>
+        <TouchableOpacity>
+          <PinnedBotBitmoji name={"MyAI"}></PinnedBotBitmoji>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert("Second pressed")}>
-          <StoriesBitmoji />
+        <TouchableOpacity>
+          <PinnedBotBitmoji name={"MyWellness"}></PinnedBotBitmoji>
         </TouchableOpacity>
       </View>
 
@@ -108,39 +101,25 @@ export default function ChatScreen({ navigation }) {
           </TouchableOpacity>
         ))}
       </View>
-<<<<<<< HEAD
-      {/* this is the star button */}
-      <FAB
-        style={styles.addButton}
-        visible={true}
-        icon={{ name: "star", color: "white" }}
-        color="#FF3386"
-=======
       <FAB // Button for bring up dialogue
         style={styles.addButton}
         visible={true}
         icon={{ name: "star", color: "white" }}
         color="#3CB2E2"
         onPress={toggleComponent}
->>>>>>> origin/christians
       />
-      {/* this is the write a message button */}
       <FAB
         style={styles.addButtonSecond}
         visible={true}
         icon={{ name: "edit", color: "white" }}
-<<<<<<< HEAD
-        color="#3CB2E2"
-=======
         color="#FF3386"
-        
->>>>>>> origin/christians
       />
-      <Actions isVisible={visible}
-      onClose={() => {
-        toggleComponent();
-
-        }} />
+      <Actions
+        isVisible={visible}
+        onClose={() => {
+          toggleComponent();
+        }}
+      />
     </View>
   );
 }
@@ -149,11 +128,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
-  },
-  storiesContainer: {
-    flexDirection: "row",
-    //justifyContent: "space-between",
-    marginBottom: 20,
   },
   userButton: {
     padding: 25,
@@ -190,4 +164,10 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
   },
+  pinnedBotBar: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 4,
+  }
 });
