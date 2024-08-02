@@ -1,8 +1,10 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { Dialog } from "@rneui/themed";
+import { ScrollView } from "react-native-gesture-handler";
+import { FAB } from "react-native-elements";
 
 export default function Actions({ isVisible, onClose }) {
   const [title, setTitle] = useState("");
@@ -10,7 +12,24 @@ export default function Actions({ isVisible, onClose }) {
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [imageURL, setImageURL] = useState("");
-  const [event, setEvent] = useState({});
+  const [actions, setActions] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const { data, error } = await supabase.from("allPrompt").select("*");
+      if (error) {
+        console.error("Error fetching data:", error);
+      } else {
+        setActions(data);
+        console.log(data)
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+}, []);
 
   return (
     <Dialog
@@ -18,16 +37,15 @@ export default function Actions({ isVisible, onClose }) {
       isVisible={isVisible}
       onBackdropPress={onClose}
     >
-      <Text style={styles.eventText}>Snap Initiatives</Text>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Snap A Friend</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Share A Memory</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Chat With ...</Text>
-      </TouchableOpacity>
+      <Text style={styles.eventText}>Snap Daily</Text>
+      <ScrollView>
+        {actions.map((action) => (
+          <View>
+            <Text> {action.prompts.context} </Text>
+            <FAB color = {action.prompts.color} title={action.prompts.prompt}> </FAB>
+          </View>
+        ))}
+      </ScrollView>
     </Dialog>
   );
 }
@@ -35,6 +53,8 @@ export default function Actions({ isVisible, onClose }) {
 const styles = StyleSheet.create({
   DialogueBox: {
     borderRadius: 20,
+    height: "80%",
+    width: "100%",
   },
   eventText: {
     textAlign: "center",
