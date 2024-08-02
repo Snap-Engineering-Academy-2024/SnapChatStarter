@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 // import Ionicons from "react-native-vector-icons/Ionicons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { supabase } from "../utils/hooks/supabase"; // Import Supabase client
+import { supabase } from "../utils/hooks/supabase"; 
 import { useNavigation } from "@react-navigation/native";
 
 import Header from "../components/Header";
@@ -16,7 +16,9 @@ export default function SectionScreen() {
 
   return (
     <SafeAreaView>
-      <Button onPress={handleBack} title="<" />
+      <View alignItems="Left">
+        <Button onPress={handleBack} title="< Snap Together" />
+      </View>
       <Text>
         "Hi I'm the Section Screen"
       </Text>

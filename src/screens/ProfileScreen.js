@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "top",
+    marginTop: 20,
   },
   draggableContainer: {
     height: 100,

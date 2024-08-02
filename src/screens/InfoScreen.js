@@ -17,7 +17,9 @@ export default function InfoScreen() {
 
   return (
     <SafeAreaView>
-      <Button onPress={handleBack} title="<" />
+      <View alignItems="Left">
+        <Button onPress={handleBack} title="< Section" />
+      </View>
       <Text>
         "Hi I'm the Info Screen"
       </Text>
