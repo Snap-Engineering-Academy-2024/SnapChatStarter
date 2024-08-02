@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Modal, Pressable, SafeAreaView, Image } from "react-native";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { shareAsync } from "expo-sharing";
 import * as ImagePicker from "expo-image-picker";
@@ -22,6 +25,12 @@ import PostcaptureOptions from "../components/PostcaptureActions";
 import { supabase } from "../utils/hooks/supabase";
 import CameraGalleryMenu from "../components/CameraGalleryMenu";
 import { Button } from "react-native-elements";
+import Popup from "../components/Popup";
+import { createStackNavigator } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+
+import defaultPhoto from "../../assets/snapchat/notificationPic.png";
+
 import { useAuthentication } from '../utils/hooks/useAuthentication';
 
 
@@ -34,8 +43,8 @@ export default function CameraScreen({ navigation, focused }) {
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] =
     useState(null);
   const [photo, setPhoto] = useState(null);
-  //const [image, setImage] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
+  const [popupTrigger, setPopupTrigger] = useState(false);
   const { user } = useAuthentication();
   const [communitiesArray, setCommunitiesArray] = useState([]);
 
@@ -77,26 +86,42 @@ export default function CameraScreen({ navigation, focused }) {
         await MediaLibrary.requestPermissionsAsync();
       setHasMediaLibraryPermission(mediaLibraryStatus === "granted");
     })();
-  }, [user]);
+  }, []);
+
+  useEffect(() => {
+    if (permission && permission.granted) {
+      setPopupTrigger(true);
+    }
+  }, [permission]);
 
   if (!permission) {
-    // Camera permissions are still loading.
     return <View />;
   }
 
 
 
   if (!permission.granted) {
-    // Camera permissions are not granted yet.
     return (
-      <View style={styles.container}>
-        <Text style={styles.message}>
-          We need your permission to show the camera.
-        </Text>
-        <TouchableOpacity onPress={requestPermission} style={styles.button}>
-          <Text style={styles.text}>Grant Permission</Text>
+      <SafeAreaView style={styles.container}>
+        <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
+          <Image style={{ width: 100, height: 100 }} source={defaultPhoto}
+          />
+          <Text style={{fontSize: 20}}>Community Ping!</Text>
+          <Text>Will allow you to join a community and find others within your community who share the same interests.</Text>
+          <TouchableOpacity 
+          style={styles.buttonStyle2} 
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}>
+
+          <Text style={styles.buttonText2}>Check Out New Feature!</Text>
+
+          </TouchableOpacity>
+        </Popup>
+        <TouchableOpacity onPress={() => setPopupTrigger(true)} style={styles.button}>
+          <Text style={styles.text}>Show Popup</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -105,10 +130,9 @@ export default function CameraScreen({ navigation, focused }) {
   }
 
   function galleryMenu() {
-    // console.log("HELLO, is the gallery menu being shown?\n", !showGalleryMenu)
-    // return <CameraGalleryMenu />
     setShowGalleryMenu(!showGalleryMenu);
   }
+
   async function checkGallery() {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -117,13 +141,9 @@ export default function CameraScreen({ navigation, focused }) {
       return;
     }
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
-    // console.log(pickerResult);
-    console.log(pickerResult);
-    setShowGalleryMenu(false); //By Ryan
-    console.log(pickerResult.assets[0].uri);
+    setShowGalleryMenu(false);
     if (!pickerResult.canceled) {
-      //setImage(pickerResult.uri);
-      setPhoto(pickerResult.assets[0]); //By Ryan
+      setPhoto(pickerResult.assets[0]);
     }
   }
 
@@ -138,11 +158,13 @@ export default function CameraScreen({ navigation, focused }) {
         .from("gallery")
         .insert({ photo: newPhoto.uri });
       console.log("After Insert to table!");
+      const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });    
       if (error) {
         console.error("Error inserting photo:", error.message);
       }
       // This part is to store images in a folder bucket named "pictureStorage"
       //uploadImage(newPhoto.uri);
+      
     }
   }
 
@@ -182,22 +204,8 @@ export default function CameraScreen({ navigation, focused }) {
     };
 
     return (
-      <View
-        style={[
-          styles.container,
-          {
-            marginBottom: tabBarHeight,
-            paddingTop: insets.top,
-            paddingBottom: insets.bottom,
-          },
-        ]}
-      >
-        <Image
-          style={facing === "front" ? styles.frontPreview : styles.preview}
-          //source={{ uri: "data:image/jpg;base64," + photo.base64 }}
-          // We don't need that base64 thing, just uri is good
-          source={{ uri: photo.uri }}
-        />
+      <View style={[styles.container, { marginBottom: tabBarHeight, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+        <Image style={facing === "front" ? styles.frontPreview : styles.preview} source={{ uri: photo.uri }} />
         {hasMediaLibraryPermission && (
           <PostcaptureOptions
             deletePhoto={() => setPhoto(null)}
@@ -209,51 +217,19 @@ export default function CameraScreen({ navigation, focused }) {
   }
 
   if (showGalleryMenu) {
+  if (showGalleryMenu) {
     return (
-      <View
-        style={[
-          styles.container,
-          {
-            marginBottom: tabBarHeight,
-            paddingTop: insets.top,
-            paddingBottom: insets.bottom,
-          },
-        ]}
-      >
-        <CameraView style={styles.camera} facing={facing} ref={cameraRef} />
+      <View style={[styles.container, { marginBottom: tabBarHeight, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+        <CameraView style={styles.camera} facing={facing} ref={cameraRef} /> 
         <CameraOptions flipCamera={flipCamera} />
-        <CameraActions
-          galleryMenu={galleryMenu}
-          checkGallery={checkGallery}
-          takePhoto={takePhoto}
-        />
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={showGalleryMenu}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
+        <CameraActions galleryMenu={galleryMenu} checkGallery={checkGallery} takePhoto={takePhoto} />
+        <Modal animationType="slide" transparent={true} visible={showGalleryMenu} onRequestClose={() => setShowGalleryMenu(!showGalleryMenu)}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Pressable
-                onPress={checkGallery}
-                style={({ pressed }) => [
-                  { backgroundColor: pressed ? "blue" : "transparent" },
-                  styles.buttonStyle,
-                ]}
-                // style={styles.buttonStyle}
-              >
+              <Pressable onPress={checkGallery} style={styles.buttonStyle}>
                 <Text style={styles.buttonText}>Phone Gallery</Text>
               </Pressable>
-              <Pressable
-                onPress={() => {
-                  navigation.navigate("MemoryScreen");
-                }}
-                style={styles.buttonStyle}
-              >
+              <Pressable onPress={() => navigation.navigate('MemoryScreen')} style={styles.buttonStyle}>
                 <Text style={styles.buttonText}>ChatSnap Memories</Text>
               </Pressable>
               <Pressable onPress={galleryMenu} style={styles.closeButtonStyle}>
@@ -267,23 +243,17 @@ export default function CameraScreen({ navigation, focused }) {
   }
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          marginBottom: tabBarHeight,
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-        },
-      ]}
-    >
-      <CameraView style={styles.camera} facing={facing} ref={cameraRef} />
+    <View style={[styles.container, { marginBottom: tabBarHeight, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+      <CameraView style={styles.camera} facing={facing} ref={cameraRef} /> 
       <CameraOptions flipCamera={flipCamera} />
-      <CameraActions
-        galleryMenu={galleryMenu}
-        checkGallery={checkGallery}
-        takePhoto={takePhoto}
-      />
+      <CameraActions galleryMenu={galleryMenu} checkGallery={checkGallery} takePhoto={takePhoto} />
+      <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
+        {/* <Image 
+          source={require('../snapchat/notificationPic.png')} // Replace with the path to your image
+          style={{ width: 100, height: 100 }}
+        /> */}
+        <Text>My popup</Text>
+      </Popup>
     </View>
   );
 }
@@ -335,6 +305,16 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: "#2196F3",
   },
+  buttonStyle2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 32,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#FFFC00',
+  },
   closeButtonStyle: {
     alignItems: "center",
     justifyContent: "center",
@@ -351,4 +331,28 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     color: "white",
   },
+  buttonText2: {
+    fontSize: 13,
+    lineHeight: 21,
+    letterSpacing: 0.5,
+    color: 'black',
+  },
+  message: {
+    color: 'white',
+    textAlign: 'center',
+    margin: 20,
+  },
+  button: {
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+  },
+  text: {
+    color: 'white',
+    fontSize: 16,
+  },
 });
+
