@@ -1,12 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
-// import StoriesBitmoji from "../components/StoriesBitmoji";
-
-import Header from "../components/Header";
 
 export default function PinnedBotBitmoji({name="defualtName"}) {
   return (
