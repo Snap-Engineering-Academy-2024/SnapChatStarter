@@ -86,6 +86,7 @@ export default function ProfileScreen() {
       </Pressable>
       <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout}/>
     </View>
+    </View>
   );
 }
 
