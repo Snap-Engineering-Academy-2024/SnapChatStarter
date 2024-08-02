@@ -7,7 +7,7 @@ import { supabase } from "../utils/hooks/supabase";
 import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 
 // Height for BottomSheet
-const HEIGHT = 300;
+const HEIGHT = 400;
 
 const AboutSheet = ({ showAbout, setShowAbout }) => {
   const navigation = useNavigation();
@@ -37,6 +37,7 @@ const AboutSheet = ({ showAbout, setShowAbout }) => {
       modalProps={{}}
     >
       <View style={styles.content}>
+        <Text style={styles.title}>SnapTogether</Text>
         <Text style={styles.text}>
           Welcome to SnapTogether! Press 'Join' to take advantage of our
           resources.
@@ -84,20 +85,28 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginBottom: 16,
+    textAlign: "center"
+  },
+  title: {
+    fontSize: 50,
+    marginBottom: 16,
+    fontWeight: "bold",
   },
   button: {
-    backgroundColor: "black",
+    backgroundColor: "#10adff",
     marginBottom: 16,
+    borderRadius: 15,
+    width: 100
   },
   buttonText: {
-    color: "#FFFC00",
+    color: "white",
   },
   buttonsView: {
     flexDirection: "row",
-    justifyContent: 'space-between',
-    width: '50%',
+    justifyContent: "space-between",
+    width: "75%",
     paddingHorizontal: 20,
-  }
+  },
 });
 
 export default AboutSheet;
