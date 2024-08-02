@@ -12,9 +12,11 @@ import { CHATBOTS } from "./ConversationScreen";
 
 export default function SectionScreen() {
   const navigation = useNavigation();
+  const handleBack = () => navigation.navigate("SnapTogether");
 
   return (
     <SafeAreaView>
+      <Button onPress={handleBack} title="<" />
       <Text>
         "Hi I'm the Section Screen"
       </Text>

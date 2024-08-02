@@ -12,9 +12,11 @@ import { CHATBOTS } from "./ConversationScreen";
 
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
+  const handleBack = () => navigation.navigate("Profile");
 
   return (
     <SafeAreaView>
+      <Button onPress={handleBack} title="<" />
       <Text>
         "Hi I'm the Snap Together Screen"
       </Text>

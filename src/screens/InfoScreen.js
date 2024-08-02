@@ -13,7 +13,7 @@ export default function InfoScreen() {
 
   const navigation = useNavigation();
   const [eventURL, setEventUrl] = useState('https://afrotechconference.com/')
-  const handleBack = () => navigation.navigate("Profile");
+  const handleBack = () => navigation.navigate("Section");
 
   return (
     <SafeAreaView>
