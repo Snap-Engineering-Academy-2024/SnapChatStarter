@@ -17,11 +17,31 @@ import { FAB } from "@rneui/themed";
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
 
+<<<<<<< HEAD
+=======
+import AddEvent from "../components/AddEvent";
+import Actions from "../components/Actions";
+
+>>>>>>> origin/christians
 export default function ChatScreen({ navigation }) {
   const [chats, setChats] = useState([]);
+  const [detailsVisible, setDetailsVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
 
+  function toggleComponent() {
+    console.log("Pressed Star")
+    setVisible(!visible);
+    console.log(visible);
+  }
+
+  function handleCardTouch(event) {
+    setDetailsVisible(true);
+    console.log(detailsVisible);
+    setSelectedEvent(event);
+  }
   function getChatbots() {
     let chatbotsTemp = [];
     for (const botId in CHATBOTS) {
@@ -88,20 +108,39 @@ export default function ChatScreen({ navigation }) {
           </TouchableOpacity>
         ))}
       </View>
+<<<<<<< HEAD
       {/* this is the star button */}
       <FAB
         style={styles.addButton}
         visible={true}
         icon={{ name: "star", color: "white" }}
         color="#FF3386"
+=======
+      <FAB // Button for bring up dialogue
+        style={styles.addButton}
+        visible={true}
+        icon={{ name: "star", color: "white" }}
+        color="#3CB2E2"
+        onPress={toggleComponent}
+>>>>>>> origin/christians
       />
       {/* this is the write a message button */}
       <FAB
         style={styles.addButtonSecond}
         visible={true}
         icon={{ name: "edit", color: "white" }}
+<<<<<<< HEAD
         color="#3CB2E2"
+=======
+        color="#FF3386"
+        
+>>>>>>> origin/christians
       />
+      <Actions isVisible={visible}
+      onClose={() => {
+        toggleComponent();
+
+        }} />
     </View>
   );
 }
@@ -121,6 +160,9 @@ const styles = StyleSheet.create({
     display: "flex",
     borderBottomColor: "lightgrey",
     borderBottomWidth: 1,
+  },
+  uploadButton: {
+    marginTop: 16,
   },
   userIcon: {
     position: "absolute",
