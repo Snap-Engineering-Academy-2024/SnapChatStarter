@@ -1,9 +1,11 @@
-import { Image, Text, View, Button, StyleSheet, Pressable} from "react-native";
+import { Image, Text, View, Button, StyleSheet, Pressable } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
+import AboutSheet from "../components/AboutSheet";
+import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 
 const handleSignOut = async () => {
   try {
@@ -23,11 +25,24 @@ export default function ProfileScreen() {
   const { user } = useAuthentication();
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
+  const userJoinStaus = findJoinStatus();
+  const [joined, setJoined] = useState("false");
+  const [showAbout, setShowAbout] = useState(false)
 
   useEffect(() => {
     setAstrology(userSign.sign);
   }),
     [];
+
+  function SnapTogetherRedirect() {
+    if(userJoinStaus){
+      navigation.navigate("SnapTogether");
+    } else {
+      console.log("You need to join!")
+      setShowAbout(true)
+    }
+
+  }
 
   return (
     <View style={{ alignItems: "center" }}>
@@ -45,7 +60,7 @@ export default function ProfileScreen() {
           user.user_metadata &&
           user.user_metadata.email.slice(
             0,
-            user.user_metadata.email.indexOf("@"), // gets part before @ of email address, should use profile username instead
+            user.user_metadata.email.indexOf("@") // gets part before @ of email address, should use profile username instead
           )}
       </Text>
       <Button
@@ -58,7 +73,7 @@ export default function ProfileScreen() {
       />
       <Button
         onPress={() => {
-          navigation.navigate("SnapTogether");
+          SnapTogetherRedirect()
         }}
         title={"Snap Together Badge"}
         color="brown"
@@ -66,7 +81,7 @@ export default function ProfileScreen() {
       />
       <Button
         onPress={() => {
-          navigation.navigate("SnapTogether");
+          SnapTogetherRedirect()
         }}
         title={"Snap Together"}
         color="brown"
@@ -81,6 +96,7 @@ export default function ProfileScreen() {
           title="Settings"
         />
       </Pressable>
+      <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout}/>
     </View>
   );
 }
