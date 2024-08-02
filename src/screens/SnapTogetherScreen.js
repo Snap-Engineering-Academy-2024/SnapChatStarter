@@ -12,18 +12,26 @@ import { CHATBOTS } from "./ConversationScreen";
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
   const handleBack = () => navigation.navigate("Profile");
+  const handleSectionPress = () => navigation.navigate("Section")
 
   return (
     <SafeAreaView>
       <View alignItems="Left">
         <Button onPress={handleBack} title="< Profile" align="Left"/>
       </View>
-      <Image source={{uri: "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*"}} style = {styles.logo}>
+      <Image 
+      source={{uri: "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*"}} 
+      style = {styles.logo} 
+      />
 
-      </Image>
-      <Text>
-        Hi I'm the Snap Together Screen
+      <Text style={styles.snapTogetherText}>
+        SnapTogether
       </Text>
+      <Text style = {styles.info}>
+        An accessible resource hub
+      </Text>
+      <Button style = {styles.sections} title={"Career Boost"} onPress={handleSectionPress}>
+      </Button>
       <Button
         onPress={() => {
           navigation.navigate("Section");
@@ -46,7 +54,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   userButton: {
     padding: 25,
@@ -70,4 +78,21 @@ const styles = StyleSheet.create({
     right: 15,
     top: 10,
   },
+  snapTogetherText: {
+    fontSize: 36,
+    fontWeight: "bold",
+    alignSelf: "center",
+    alignContent: "center",
+    fontFamily: "avenir",
+  },
+  info: {
+    fontSize: 20,
+    fontWeight: 300,
+    alignSelf: "center",
+    marginBottom: 20
+  },
+  sections: {
+    fontSize: 20,
+    fontWeight: 400
+  }
 });
