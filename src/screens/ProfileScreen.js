@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Image, Text, View, StyleSheet, Button } from "react-native";
+import { Image, Text, View, Button, StyleSheet, Pressable } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import DraggableButtonList from "../components/DraggableButtons";
+import AboutSheet from "../components/AboutSheet";
+import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 
 const handleSignOut = async () => {
   try {
@@ -24,6 +26,9 @@ export default function ProfileScreen() {
   const { user } = useAuthentication();
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
+  const userJoinStaus = findJoinStatus();
+  const [joined, setJoined] = useState("false");
+  const [showAbout, setShowAbout] = useState(false)
 
   useEffect(() => {
     setAstrology(userSign.sign);
@@ -36,6 +41,16 @@ export default function ProfileScreen() {
     "Log Out": handleSignOut,
     Settings: () => navigation.navigate("Settings"),
   };
+
+  function SnapTogetherRedirect() {
+    if(userJoinStaus){
+      navigation.navigate("SnapTogether");
+    } else {
+      console.log("You need to join!")
+      setShowAbout(true)
+    }
+
+  }
 
   return (
     <View style={styles.container}>
@@ -54,11 +69,22 @@ export default function ProfileScreen() {
       <DraggableButtonList onPressHandlers={onPressHandlers} />
       <View>
         <Button onPress={handleSignOut} title="Log Out" />
+      <Button
+        onPress={() => {
+          SnapTogetherRedirect()
+        }}
+        title={"Snap Together"}
+        color="brown"
+        accessibilityLabel="Snap Together redirect button"
+      />
+      <Button onPress={handleSignOut} title="Log Out" />
+      <Pressable>
         <Button
           onPress={() => navigation.navigate("Settings")}
           title="Settings"
         />
-      </View>
+      </Pressable>
+      <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout}/>
     </View>
   );
 }
