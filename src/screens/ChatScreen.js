@@ -63,13 +63,24 @@ export default function ChatScreen({ navigation }) {
       ]}
     >
       <Header title="Chat" />
-      
+
       <View style={styles.pinnedBotBar}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Conversation", {
+              isChatbot: false,
+              chatId: 1,
+            });
+          }}
+          key={1}
+        >
           <PinnedBotBitmoji name={"MyAI"}></PinnedBotBitmoji>
         </TouchableOpacity>
         <TouchableOpacity>
-          <PinnedBotBitmoji name={"MyWellness"}></PinnedBotBitmoji>
+          <PinnedBotBitmoji
+            name={"MyWellness"}
+            imgSource={require("../../assets/sign-images/cancer.png")}
+          ></PinnedBotBitmoji>
         </TouchableOpacity>
       </View>
 
@@ -169,5 +180,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 4,
-  }
+  },
 });
