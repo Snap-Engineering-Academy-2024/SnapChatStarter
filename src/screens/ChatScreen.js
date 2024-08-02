@@ -3,11 +3,7 @@ import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { supabase } from "../utils/hooks/supabase";
-import StoriesBitmoji from "../components/StoriesBitmoji";
-
 import { FAB } from "@rneui/themed";
-
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
 
