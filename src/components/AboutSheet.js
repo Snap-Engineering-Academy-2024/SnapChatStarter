@@ -7,7 +7,7 @@ import { supabase } from "../utils/hooks/supabase";
 import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 
 // Height for BottomSheet
-const HEIGHT = 250;
+const HEIGHT = 300;
 
 const AboutSheet = ({ showAbout, setShowAbout }) => {
   const navigation = useNavigation();
@@ -70,7 +70,7 @@ const AboutSheet = ({ showAbout, setShowAbout }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.25)",
+    backgroundColor: "rgba(0, 0, 0, 0)",
   },
   content: {
     backgroundColor: "#FFFC00",
