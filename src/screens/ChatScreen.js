@@ -76,7 +76,15 @@ export default function ChatScreen({ navigation }) {
         >
           <PinnedBotBitmoji name={"MyAI"}></PinnedBotBitmoji>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Conversation", {
+              isChatbot: false,
+              chatId: 1,
+            });
+          }}
+          key={1}
+        >
           <PinnedBotBitmoji
             name={"MyWellness"}
             imgSource={require("../../assets/sign-images/cancer.png")}
