@@ -13,9 +13,6 @@ import {
 import { supabase } from "../utils/hooks/supabase";
 import { Dialog, FAB } from "@rneui/themed";
 
-
-
-
 export default function Actions({ isVisible, onClose }) {
   const [title, setTitle] = useState("");
   const [descr, setDescr] = useState("");
@@ -25,15 +22,15 @@ export default function Actions({ isVisible, onClose }) {
 
   const [event, setEvent] = useState({});
 
-
   return (
     <Dialog
-      overlayStyle={styles.DialogueBox} isVisible={isVisible}
+      overlayStyle={styles.DialogueBox}
+      isVisible={isVisible}
       onBackdropPress={onClose}
     >
-        <Text> hiiiiiii </Text>
-        <Text> hiiiiiii </Text>
-        <Text> hiiiiiii </Text>
+      <Button title="Snap A Friend"></Button>
+      <Button title="Share A Memory"></Button>
+      <Button title="Chat With ..."></Button>
       
     </Dialog>
   );
