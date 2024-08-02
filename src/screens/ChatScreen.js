@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -10,8 +16,6 @@ import { FAB } from "@rneui/themed";
 
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
-
-import AddEvent from "../components/AddEvent";
 
 export default function ChatScreen({ navigation }) {
   const [chats, setChats] = useState([]);
@@ -47,6 +51,15 @@ export default function ChatScreen({ navigation }) {
       ]}
     >
       <Header title="Chat" />
+      <View style={styles.storiesContainer}>
+        <TouchableOpacity onPress={() => alert("First pressed")} >
+          <StoriesBitmoji />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => alert("Second pressed")}>
+          <StoriesBitmoji />
+        </TouchableOpacity>
+      </View>
+
       <View>
         {chats?.map((chat) => (
           <TouchableOpacity
@@ -75,17 +88,19 @@ export default function ChatScreen({ navigation }) {
           </TouchableOpacity>
         ))}
       </View>
+      {/* this is the star button */}
       <FAB
         style={styles.addButton}
         visible={true}
         icon={{ name: "star", color: "white" }}
-        color="#3CB2E2"
+        color="#FF3386"
       />
+      {/* this is the write a message button */}
       <FAB
         style={styles.addButtonSecond}
         visible={true}
         icon={{ name: "edit", color: "white" }}
-        color="#FF3386"
+        color="#3CB2E2"
       />
     </View>
   );
@@ -95,6 +110,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
+  },
+  storiesContainer: {
+    flexDirection: "row",
+    //justifyContent: "space-between",
+    marginBottom: 20,
   },
   userButton: {
     padding: 25,
