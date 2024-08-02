@@ -33,8 +33,15 @@ export default function ProfileScreen() {
     <View style={{ alignItems: "center" }}>
       <Image
         source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
-        style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
+        //style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
+        style={{ width: 400, height: 250}}
       />
+      <Text style={{ justifyContents: "center", fontWeight: "bold", fontSize: 30, marginRight: 35}}>
+      <Image
+        source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
+        style={{ width: 100, height: 100, borderRadius: 15, marginRight: 100}}
+      />
+        UserName</Text>
       <Text
         style={{
           justifyContents: "center",
