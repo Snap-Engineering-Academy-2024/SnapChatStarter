@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
 
-export default function PinnedBotBitmoji({name="defualtName"}) {
+export default function PinnedBotBitmoji({name="defualtName", imgSource=require("../../assets/snapchat/personalBitmoji.png")}) {
   return (
     <View style={styles.myBitmoji}>
       <Image
         style={styles.bitmojiImage}
-        source={require("../../assets/snapchat/personalBitmoji.png")}
+        source={imgSource}
       />
       <View style={styles.bitmojiTextContainer}>
         <Text style={styles.bitmojiText}>{name}</Text>
