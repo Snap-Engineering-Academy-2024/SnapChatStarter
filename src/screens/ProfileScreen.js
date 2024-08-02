@@ -68,7 +68,6 @@ export default function ProfileScreen() {
       </Text>
       <DraggableButtonList onPressHandlers={onPressHandlers} />
       <View>
-        <Button onPress={handleSignOut} title="Log Out" />
       <Button
         onPress={() => {
           SnapTogetherRedirect()
@@ -85,6 +84,7 @@ export default function ProfileScreen() {
         />
       </Pressable>
       <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout}/>
+    </View>
     </View>
   );
 }
