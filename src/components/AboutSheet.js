@@ -38,18 +38,30 @@ const AboutSheet = ({ showAbout, setShowAbout }) => {
     >
       <View style={styles.content}>
         <Text style={styles.text}>
-          Welcome to SnapTogether! Press 'Join' to take advantage of our resources.
+          Welcome to SnapTogether! Press 'Join' to take advantage of our
+          resources.
         </Text>
-        <Button
-          onPress={() => {
-            joinButtonPress();
-            setShowAbout(false);
-          }}
-          title={"Join"}
-          buttonStyle={styles.button}
-          titleStyle={styles.buttonText}
-          accessibilityLabel="Click to join SnapTogether"
-        />
+        <View style={styles.buttonsView}>
+          <Button
+            onPress={() => {
+              joinButtonPress();
+              setShowAbout(false);
+            }}
+            title={"JOIN"}
+            buttonStyle={styles.button}
+            titleStyle={styles.buttonText}
+            accessibilityLabel="Click to join SnapTogether"
+          />
+          <Button
+            onPress={() => {
+              setShowAbout(false);
+            }}
+            title={"CLOSE"}
+            buttonStyle={styles.button}
+            titleStyle={styles.buttonText}
+            accessibilityLabel="Close Bottomsheet"
+          />
+        </View>
       </View>
     </BottomSheet>
   );
@@ -58,27 +70,34 @@ const AboutSheet = ({ showAbout, setShowAbout }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.75)",
+    backgroundColor: "rgba(0, 0, 0, 0.25)",
   },
   content: {
-    backgroundColor: "white",
+    backgroundColor: "#FFFC00",
     padding: 16,
     height: HEIGHT,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   text: {
     fontSize: 16,
     marginBottom: 16,
   },
   button: {
-    backgroundColor: "yellow",
+    backgroundColor: "black",
+    marginBottom: 16,
   },
   buttonText: {
-    color: "black",
+    color: "#FFFC00",
   },
+  buttonsView: {
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    width: '50%',
+    paddingHorizontal: 20,
+  }
 });
 
 export default AboutSheet;
