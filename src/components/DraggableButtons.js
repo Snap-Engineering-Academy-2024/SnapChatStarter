@@ -38,13 +38,14 @@ const DraggableButtonList = ({ onPressHandlers }) => {
 
 const styles = StyleSheet.create({
   draggableContainer: {
-    height: 100,
+    height: 60,
+    // width: 100,
     marginBottom: 20,
   },
   button: {
     padding: 20,
     marginHorizontal: 10,
-    borderRadius: 5,
+    borderRadius: 15,
   },
   buttonText: {
     color: "white",
