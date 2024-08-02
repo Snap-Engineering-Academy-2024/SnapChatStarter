@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, SafeAreaView, Button, Linking } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 // import Ionicons from "react-native-vector-icons/Ionicons";
@@ -11,11 +11,21 @@ import { CHATBOTS } from "./ConversationScreen";
 
 export default function InfoScreen() {
 
+  const [eventURL, setEventUrl] = useState('https://afrotechconference.com/')
+
   return (
     <SafeAreaView>
       <Text>
         "Hi I'm the Info Screen"
       </Text>
+      <Button
+      onPress={() => {
+        Linking.openURL(eventURL);
+      }}
+      title={"Event Page"}
+      color="brown"
+      accessibilityLabel="Event info redirect button"
+    />
     </SafeAreaView>
   );
 }
