@@ -1,9 +1,10 @@
+import React, { useState, useEffect } from "react";
 import { Image, Text, View, Button, StyleSheet, Pressable } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
-import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
+import DraggableButtonList from "../components/DraggableButtons";
 import AboutSheet from "../components/AboutSheet";
 import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 
@@ -31,8 +32,15 @@ export default function ProfileScreen() {
 
   useEffect(() => {
     setAstrology(userSign.sign);
-  }),
-    [];
+  }, [userSign.sign]);
+
+  const onPressHandlers = {
+    Astrology: () => navigation.navigate("Astrology"),
+    "Snap Together Badge": () => navigation.navigate("SnapTogether"),
+    "Snap Together": () => navigation.navigate("SnapTogether"),
+    "Log Out": handleSignOut,
+    Settings: () => navigation.navigate("Settings"),
+  };
 
   function SnapTogetherRedirect() {
     if(userJoinStaus){
@@ -45,40 +53,22 @@ export default function ProfileScreen() {
   }
 
   return (
-    <View style={{ alignItems: "center" }}>
+    <View style={styles.container}>
       <Image
         source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
-        style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
+        style={styles.avatar}
       />
-      <Text
-        style={{
-          justifyContents: "center",
-          textAlign: "center",
-        }}
-      >
+      <Text style={styles.emailText}>
         {user &&
           user.user_metadata &&
           user.user_metadata.email.slice(
             0,
-            user.user_metadata.email.indexOf("@") // gets part before @ of email address, should use profile username instead
+            user.user_metadata.email.indexOf("@")
           )}
       </Text>
-      <Button
-        onPress={() => {
-          navigation.navigate("Astrology");
-        }}
-        title={astrology}
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-      <Button
-        onPress={() => {
-          SnapTogetherRedirect()
-        }}
-        title={"Snap Together Badge"}
-        color="brown"
-        accessibilityLabel="The Badge for Snap Together"
-      />
+      <DraggableButtonList onPressHandlers={onPressHandlers} />
+      <View>
+        <Button onPress={handleSignOut} title="Log Out" />
       <Button
         onPress={() => {
           SnapTogetherRedirect()
@@ -90,9 +80,7 @@ export default function ProfileScreen() {
       <Button onPress={handleSignOut} title="Log Out" />
       <Pressable>
         <Button
-          onPress={() => {
-            navigation.navigate("Settings", {});
-          }}
+          onPress={() => navigation.navigate("Settings")}
           title="Settings"
         />
       </Pressable>
@@ -104,13 +92,34 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    flex: 1,
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "top",
+    marginTop: 20,
+  },
+  draggableContainer: {
+    height: 100,
+    marginBottom: 20,
   },
   avatar: {
     width: 150,
     height: 150,
-    borderRadius: 150 / 2,
-    alignItems: "center",
+    borderRadius: 75,
+    marginBottom: 20,
+  },
+  emailText: {
+    justifyContents: "center",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  button: {
+    padding: 20,
+    marginHorizontal: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
