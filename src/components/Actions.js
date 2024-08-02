@@ -1,17 +1,8 @@
 import React from "react";
 import { useState } from "react";
-
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Image,
-  Button,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
-import { Dialog, FAB } from "@rneui/themed";
+import { Dialog } from "@rneui/themed";
 
 export default function Actions({ isVisible, onClose }) {
   const [title, setTitle] = useState("");
@@ -19,7 +10,6 @@ export default function Actions({ isVisible, onClose }) {
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [imageURL, setImageURL] = useState("");
-
   const [event, setEvent] = useState({});
 
   return (
@@ -28,61 +18,43 @@ export default function Actions({ isVisible, onClose }) {
       isVisible={isVisible}
       onBackdropPress={onClose}
     >
-      <Button title="Snap A Friend"></Button>
-      <Button title="Share A Memory"></Button>
-      <Button title="Chat With ..."></Button>
-      
+      <Text style={styles.eventText}>Snap Initiatives</Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Snap A Friend</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Share A Memory</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Chat With ...</Text>
+      </TouchableOpacity>
     </Dialog>
   );
 }
+
 const styles = StyleSheet.create({
-  userInfo: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "yellow",
-    width: "80%",
-    // aspectRatio: 1,
-    position: "absolute",
-    alignSelf: "center",
-    top: "20%",
-    borderRadius: 20,
-    padding: 20,
-  },
   DialogueBox: {
-    // height: "60%",
     borderRadius: 20,
   },
   eventText: {
     textAlign: "center",
     fontSize: 23,
     fontWeight: "bold",
+    marginBottom: 20,
   },
-  inputFields: {
-    marginTop: 10,
-    backgroundColor: "#F0F0F0",
-    padding: 8,
+  button: {
+    backgroundColor: "#3CB2E2",
     borderRadius: 5,
+    height: 50,
+    width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginVertical: 10,
   },
-  descriptionField: {
-    marginTop: 10,
-    backgroundColor: "#F0F0F0",
-    padding: 8,
-    borderRadius: 5,
-    paddingBottom: 30,
-  },
-  otherButtons: {
-    backgroundColor: "yellow",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    flexWrap: "wrap",
-  },
-  uploadButton: {
-    marginTop: 16,
-  },
-  closeIcon: {
-    position: "absolute",
-    top: 0,
-    right: 0,
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
