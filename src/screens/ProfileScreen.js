@@ -56,6 +56,13 @@ export default function ProfileScreen() {
         color="#841584"
         accessibilityLabel="Learn more about this purple button"
       />
+      <Button
+        onPress={() => {
+          navigation.navigate("Topics");
+        }}
+        title="Chillah Challenges"
+        accessibilityLabel="Navigate to Chillah Challenges landing page"
+      />
       <Button onPress={handleSignOut} title="Log Out" />
       <Pressable>
         <Button
