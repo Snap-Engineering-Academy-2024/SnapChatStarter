@@ -5,7 +5,8 @@ import BasicChatbot from "../chatbots/BasicChatbot";
 import { supabase } from "../utils/hooks/supabase";
 import { GiftedChat } from "react-native-gifted-chat";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
-const CHATBOT_USER_OBJ = { // user you are trying to send a message to 
+const CHATBOT_USER_OBJ = {
+  // user you are trying to send a message to
   _id: 1,
   name: "Areli",
   avatar: "",
@@ -23,14 +24,13 @@ export default function ConversationScreen({ route, navigation }) {
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
 
-
-    useEffect(() => {
-      fetchConversations();
-      if (user !== null) {
-        setLoading(false);
-        console.log("USER", user);
-      }
-    }, [user]);
+  useEffect(() => {
+    fetchConversations();
+    if (user !== null) {
+      setLoading(false);
+      console.log("USER", user);
+    }
+  }, [user]);
 
   const makeChatbotComponent = (chatbotName) => {
     if (CHATBOTS[chatbotName]) {
@@ -39,7 +39,7 @@ export default function ConversationScreen({ route, navigation }) {
     } else {
       return <Text>No Chatbot Found with name '{chatbotName}'</Text>;
     }
-  }
+  };
   async function fetchConversations() {
     try {
       const { data, error } = await supabase.from("conversations").select("*");
@@ -57,7 +57,7 @@ export default function ConversationScreen({ route, navigation }) {
     }
   }
   const handleInserts = (payload) => {
-    console.log("Change received!", JSON.stringify(payload, null, 4))
+    console.log("Change received!", JSON.stringify(payload, null, 4));
     addNewMessage(payload.new.messages[0]);
   };
   // Listen to inserts
@@ -99,7 +99,8 @@ export default function ConversationScreen({ route, navigation }) {
             onSend(newMessages);
             postConversations(newMessages);
           }}
-          user={{ // user that is doing the sending
+          user={{
+            // user that is doing the sending
             _id: 2,
             name: "Allison",
           }}
