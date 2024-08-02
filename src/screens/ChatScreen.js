@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, FAB } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-// import Ionicons from "react-native-vector-icons/Ionicorns";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Actions from "../components/Actions";
-import { supabase } from "../utils/hooks/supabase"; // Import Supabase client
+import { supabase } from "../utils/hooks/supabase";
+import StoriesBitmoji from "../components/StoriesBitmoji";
+
+import { FAB } from "@rneui/themed";
 
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
+
+import AddEvent from "../components/AddEvent";
+import Actions from "../components/Actions";
 
 export default function ChatScreen({ navigation }) {
   const [chats, setChats] = useState([]);
@@ -19,6 +23,7 @@ export default function ChatScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
 
   function toggleComponent() {
+    console.log("Pressed Star")
     setVisible(!visible);
     console.log(visible);
   }
@@ -40,7 +45,6 @@ export default function ChatScreen({ navigation }) {
   useEffect(() => {
     if (chats.length < 1) {
       getChatbots();
-      // getUserChats();
     }
   }, [chats.length]);
 
@@ -59,54 +63,52 @@ export default function ChatScreen({ navigation }) {
     >
       <Header title="Chat" />
       <View>
-        {chats?.map((chat) => {
-          return (
-            <TouchableOpacity
-              style={styles.userButton}
-              onPress={() => {
-                navigation.navigate("Conversation", {
-                  isChatbot: chat.isChatbot,
-                  chatId: chat.chatId,
-                });
-              }}
-              key={chat.chatId}
-            >
-              <Ionicons
-                style={styles.userIcon}
-                name="person-outline"
-                size={36}
-                color="lightgrey"
-              />
-              <Text style={styles.userName}> {chat.chatId} </Text>
-              <Ionicons
-                style={styles.userCamera}
-                name="camera-outline"
-                size={24}
-                color="lightgrey"
-              />
-            </TouchableOpacity>
-          );
-        })}
+        {chats?.map((chat) => (
+          <TouchableOpacity
+            style={styles.userButton}
+            onPress={() => {
+              navigation.navigate("Conversation", {
+                isChatbot: chat.isChatbot,
+                chatId: chat.chatId,
+              });
+            }}
+            key={chat.chatId}
+          >
+            <Ionicons
+              style={styles.userIcon}
+              name="person-outline"
+              size={36}
+              color="lightgrey"
+            />
+            <Text style={styles.userName}> {chat.chatId} </Text>
+            <Ionicons
+              style={styles.userCamera}
+              name="camera-outline"
+              size={24}
+              color="lightgrey"
+            />
+          </TouchableOpacity>
+        ))}
       </View>
-      <FAB
-        onPress={toggleComponent}
+      <FAB // Button for bring up dialogue
         style={styles.addButton}
         visible={true}
         icon={{ name: "star", color: "white" }}
+        color="#3CB2E2"
+        onPress={toggleComponent}
+      />
+      <FAB
+        style={styles.addButtonSecond}
+        visible={true}
+        icon={{ name: "edit", color: "white" }}
         color="#FF3386"
+        
       />
-      <Actions
-        isVisible={visible}
-        onClose={() => {
-          toggleComponent();
-          refreshEvents();
-        }}
-      />
-      <Actions
-        isVisible={detailsVisible}
-        event={selectedEvent}
-        onClose={() => setDetailsVisible(false)}
-      />
+      <Actions isVisible={visible}
+      onClose={() => {
+        toggleComponent();
+
+        }} />
     </View>
   );
 }
@@ -140,5 +142,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 15,
     top: 10,
+  },
+  addButton: {
+    position: "absolute",
+    bottom: 90,
+    right: 20,
+  },
+  addButtonSecond: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
   },
 });
