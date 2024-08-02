@@ -14,7 +14,6 @@ const handleSignOut = async () => {
     if (error) {
       console.error("Error signing out:", error.message);
     } else {
-      // Handle successful sign out (e.g., redirect to login screen)
     }
   } catch (error) {
     console.error("Unexpected error:", error);
@@ -28,29 +27,24 @@ export default function ProfileScreen() {
   const userSign = findAstrologySign();
   const userJoinStaus = findJoinStatus();
   const [joined, setJoined] = useState("false");
-  const [showAbout, setShowAbout] = useState(false)
+  const [showAbout, setShowAbout] = useState(false);
 
   useEffect(() => {
     setAstrology(userSign.sign);
   }, [userSign.sign]);
-
-  const onPressHandlers = {
-    Astrology: () => navigation.navigate("Astrology"),
-    "Snap Together Badge": () => navigation.navigate("SnapTogether"),
-    "Snap Together": () => navigation.navigate("SnapTogether"),
-    "Log Out": handleSignOut,
-    Settings: () => navigation.navigate("Settings"),
-  };
-
-  function SnapTogetherRedirect() {
-    if(userJoinStaus){
+  
+  const SnapTogetherRedirect = async () => {
+    if (userJoinStaus) {
       navigation.navigate("SnapTogether");
     } else {
-      console.log("You need to join!")
-      setShowAbout(true)
+      console.log("You need to join!");
+      setShowAbout(true);
     }
-
   }
+  const onPressHandlers = {
+    Astrology: () => navigation.navigate("Astrology"),
+    "Snap Together Badge": SnapTogetherRedirect,
+  };
 
   return (
     <View style={styles.container}>
@@ -68,23 +62,23 @@ export default function ProfileScreen() {
       </Text>
       <DraggableButtonList onPressHandlers={onPressHandlers} />
       <View>
-      <Button
-        onPress={() => {
-          SnapTogetherRedirect()
-        }}
-        title={"Snap Together"}
-        color="brown"
-        accessibilityLabel="Snap Together redirect button"
-      />
-      <Button onPress={handleSignOut} title="Log Out" />
-      <Pressable>
         <Button
-          onPress={() => navigation.navigate("Settings")}
-          title="Settings"
+          onPress={() => {
+            SnapTogetherRedirect();
+          }}
+          title={"Snap Together"}
+          color="brown"
+          accessibilityLabel="Snap Together redirect button"
         />
-      </Pressable>
-      <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout}/>
-    </View>
+        <Button onPress={handleSignOut} title="Log Out" />
+        <Pressable>
+          <Button
+            onPress={() => navigation.navigate("Settings")}
+            title="Settings"
+          />
+        </Pressable>
+        <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
+      </View>
     </View>
   );
 }
