@@ -2,23 +2,23 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
-const DraggableButtonList = ({ onPressHandlers }) => {
+const DraggableBadgeList = ({ onPressHandlers, astrology = "Astrology" }) => {
   const [data, setData] = useState([
-    { key: "1", label: "Astrology", color: "#841584" },
-    { key: "2", label: "Snap Together Badge", color: "brown" },
+    { key: "1", label: astrology, color: "white" },
+    { key: "2", label: "🫶🏻🫶🏽🫶🏿", color: "white" },
   ]);
 
   const renderItem = ({ item, drag, isActive }) => {
     return (
       <TouchableOpacity
         style={[
-          styles.button,
+          styles.badge,
           { backgroundColor: isActive ? "blue" : item.color },
         ]}
         onLongPress={drag}
         onPress={() => onPressHandlers[item.label]()}
       >
-        <Text style={styles.buttonText}>{item.label}</Text>
+        <Text style={styles.badgeText}>{item.label}</Text>
       </TouchableOpacity>
     );
   };
@@ -39,18 +39,22 @@ const DraggableButtonList = ({ onPressHandlers }) => {
 const styles = StyleSheet.create({
   draggableContainer: {
     height: 60,
-    // width: 100,
     marginBottom: 20,
   },
-  button: {
-    padding: 20,
+  badge: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     marginHorizontal: 10,
-    borderRadius: 15,
+    borderWidth: .5,
+    borderColor: "grey",
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  buttonText: {
-    color: "white",
+  badgeText: {
+    color: "purple",
     fontWeight: "bold",
   },
 });
 
-export default DraggableButtonList;
+export default DraggableBadgeList;
