@@ -16,6 +16,7 @@ import Popup from "../components/Popup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 
+
 import defaultPhoto from "../../assets/snapchat/notificationPic.png";
 
 
@@ -29,6 +30,7 @@ export default function CameraScreen({ navigation, focused }) {
   const [photo, setPhoto] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
   const [popupTrigger, setPopupTrigger] = useState(false);
+
 
   useEffect(() => {
     (async () => {
@@ -50,16 +52,19 @@ export default function CameraScreen({ navigation, focused }) {
   if (!permission.granted) {
     return (
       <SafeAreaView style={styles.container}>
+
         <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
           <Image style={{ width: 100, height: 100 }} source={defaultPhoto}
           />
           <Text style={{fontSize: 20}}>Community Ping!</Text>
           <Text>Will allow you to join a community and find others within your community who share the same interests.</Text>
+          
           <TouchableOpacity 
           style={styles.buttonStyle2} 
           onPress={() => {
             navigation.navigate("Profile");
-          }}>
+          }}
+          >
 
           <Text style={styles.buttonText2}>Check Out New Feature!</Text>
 

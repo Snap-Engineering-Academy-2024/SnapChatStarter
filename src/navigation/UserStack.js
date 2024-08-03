@@ -8,6 +8,7 @@ import DiscoverCard from "../components/DiscoverCard";
 import SearchScreen from "../screens/SearchScreen";
 import AstrologyScreen from "../screens/AstrologyScreen";
 import MemoryScreen from "../screens/MemoryScreen";
+import CommSelectionScreen from "../screens/CommSelectionScreen";
 
 const Stack = createStackNavigator();
 
@@ -51,6 +52,11 @@ export default function App() {
           component={AstrologyScreen}
           options={{ headerShown: true}}
 
+        />
+        <Stack.Screen
+          name="CommunitySelection"
+          component={CommSelectionScreen}
+          options={{ headerShown: true }}
         />
       </Stack.Navigator>
     </NavigationContainer>
