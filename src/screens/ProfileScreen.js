@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Image, Text, View, Button, StyleSheet, Pressable } from "react-native";
+import {
+  Image,
+  Text,
+  View,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
@@ -7,6 +14,11 @@ import { useAuthentication } from "../utils/hooks/useAuthentication";
 import DraggableButtonList from "../components/DraggableButtons";
 import AboutSheet from "../components/AboutSheet";
 import { findJoinStatus } from "../utils/hooks/findJoinStatus";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import ProfileSections from "../components/ProfileSections";
+import ProfileHeader from "../components/ProfileHeader";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const handleSignOut = async () => {
   try {
@@ -28,63 +40,76 @@ export default function ProfileScreen() {
   const userJoinStaus = findJoinStatus();
   const [joined, setJoined] = useState("false");
   const [showAbout, setShowAbout] = useState(false);
+  const insets = useSafeAreaInsets();
+  // const tabBarHeight = useBottomTabBarHeight();
 
   useEffect(() => {
     setAstrology(userSign.sign);
   }, [userSign.sign]);
-  
+
   const SnapTogetherRedirect = async () => {
     if (userJoinStaus) {
       navigation.navigate("SnapTogether");
     } else {
-      console.log("You need to join!");
       setShowAbout(true);
     }
-  }
-  const onPressHandlers = {
-    Astrology: () => navigation.navigate("Astrology"),
-    "Snap Together Badge": SnapTogetherRedirect,
+  };
+  const badgeOnPressHandlers = {
+    [astrology]: () => navigation.navigate("Astrology"),
+    "🫶🏻🫶🏽🫶🏿": SnapTogetherRedirect,
   };
 
+  const sectionOnPressHandlers = {
+    "Add to My Story": () => navigation.navigate("Camera"),
+    "Add Friends": () => navigation.navigate("AddFriend"),
+    "My Friends": () => navigation.navigate("Chat"),
+    "Add Your School": () => navigation.navigate("Profile"),
+    "SnapTogether": SnapTogetherRedirect,
+  }
+
   return (
-    <View style={styles.container}>
-      <Image
-        source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
-        style={styles.avatar}
-      />
-      <Text style={styles.emailText}>
-        {user &&
-          user.user_metadata &&
-          user.user_metadata.email.slice(
-            0,
-            user.user_metadata.email.indexOf("@")
-          )}
-      </Text>
-      <DraggableButtonList onPressHandlers={onPressHandlers} />
-      <View>
-        <Button
-          onPress={() => {
-            SnapTogetherRedirect();
-          }}
-          title={"Snap Together"}
-          color="brown"
-          accessibilityLabel="Snap Together redirect button"
+    <View
+      style={{
+        flex: 0.9,
+        flexDirection: "column",
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+        // marginBottom: tabBarHeight,
+      }}
+    >
+      <ProfileHeader />
+      <View style={styles.topContainer}>
+        <Image
+          source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
+          style={styles.avatar}
         />
-        <Button onPress={handleSignOut} title="Log Out" />
-        <Pressable>
-          <Button
-            onPress={() => navigation.navigate("Settings")}
-            title="Settings"
-          />
-        </Pressable>
-        <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
+        <Text style={styles.emailText}>
+          {user &&
+            user.user_metadata &&
+            user.user_metadata.email.slice(
+              0,
+              user.user_metadata.email.indexOf("@")
+            )}
+        </Text>
+        <DraggableButtonList
+          onPressHandlers={badgeOnPressHandlers}
+          astrology={astrology}
+        />
+        <View>
+          <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
+        </View>
+      </View>
+      <View>
+        <ProfileSections onPressHandlers={sectionOnPressHandlers}/>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  topContainer: {
     width: "100%",
     flex: 1,
     flexDirection: "column",
@@ -97,8 +122,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   avatar: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 75,
     marginBottom: 20,
   },
@@ -112,7 +137,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 5,
     backgroundColor: "white",
-    borderColor: "black"
+    borderColor: "black",
   },
   buttonText: {
     color: "white",
