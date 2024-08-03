@@ -85,14 +85,6 @@ export default function ProfileScreen() {
           source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
           style={styles.avatar}
         />
-        <Text style={styles.emailText}>
-          {user &&
-            user.user_metadata &&
-            user.user_metadata.email.slice(
-              0,
-              user.user_metadata.email.indexOf("@")
-            )}
-        </Text>
         <DraggableButtonList
           onPressHandlers={badgeOnPressHandlers}
           astrology={astrology}
@@ -125,11 +117,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 75,
-    marginBottom: 20,
-  },
-  emailText: {
-    justifyContents: "center",
-    textAlign: "center",
     marginBottom: 20,
   },
   button: {

@@ -38,7 +38,7 @@ const DraggableBadgeList = ({ onPressHandlers, astrology = "Astrology" }) => {
 
 const styles = StyleSheet.create({
   draggableContainer: {
-    height: 60,
+    height: 40,
     marginBottom: 20,
   },
   badge: {
@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: "purple",
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontSize: 15,
   },
 });
 
