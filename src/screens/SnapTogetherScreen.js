@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, StyleSheet, SafeAreaView, Button, Image} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 // import Ionicons from "react-native-vector-icons/Ionicons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
-import Header from "../components/Header";
-import { CHATBOTS } from "./ConversationScreen";
+import AboutSheet from "../components/AboutSheet";
 
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
   const handleBack = () => navigation.navigate("Profile");
   const handleSectionPress = () => navigation.navigate("Section")
+  const [showAbout, setShowAbout] = useState(false);
 
   return (
     <SafeAreaView>
@@ -30,16 +28,30 @@ export default function SnapTogetherScreen() {
       <Text style = {styles.info}>
         An accessible resource hub
       </Text>
+      <TouchableOpacity
+      onPress={() => {
+        setShowAbout(true);
+      }}
+      title={"About"}
+      color="Red"
+      accessibilityLabel="Show About Sheet"
+      >
+      <Ionicons
+      style = {{fontSize: 26, alignSelf:"center"}} 
+          name={"help"}
+          size={30}
+          color="black"
+        />
+      </TouchableOpacity>
       <Button style = {styles.sections} title={"Career Boost"} onPress={handleSectionPress}>
       </Button>
-      <Button
-        onPress={() => {
-          navigation.navigate("Section");
-        }}
-        title={"Sections"}
-        color="brown"
-        accessibilityLabel="Section redirect button"
-      />
+      <Button style = {styles.sections} title={"Mom & Pops"} onPress={handleSectionPress}>
+      </Button>
+      <Button style = {styles.sections} title={"Showcase"} onPress={handleSectionPress}>
+      </Button>
+      <View>
+          <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
+        </View>
     </SafeAreaView>
   );
 }
