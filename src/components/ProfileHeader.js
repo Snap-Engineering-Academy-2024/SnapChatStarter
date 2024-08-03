@@ -24,25 +24,34 @@ export default function ProfileHeader() {
         <Pressable
           style={[styles.profile, styles.buttons]}
           onPress={() => {
-            navigation.navigate("Chat");
+            navigation.navigate("Camera");
           }}
         >
-          <Icon name="arrow-back" size={24}/>
+          <Icon name="arrow-back" size={24} />
         </Pressable>
       </View>
-      {/* <Text style={styles.title}>{title}</Text> */}
+      <View style={styles.headerCenter}>
+        <Text style={styles.emailText}>
+          {user &&
+            user.user_metadata &&
+            user.user_metadata.email.slice(
+              0,
+              user.user_metadata.email.indexOf("@")
+            )}
+        </Text>
+      </View>
       <View style={styles.headerRight}>
-      <TouchableOpacity
+        <TouchableOpacity
           style={styles.shareButton}
-        //   onPress={() => navigation.navigate("Settings")}
+          //   onPress={() => navigation.navigate("Settings")}
         >
-          <Icon name="share" size={24}/>
+          <Icon name="share" size={24} />
         </TouchableOpacity>
-      <TouchableOpacity
+        <TouchableOpacity
           style={styles.settingsButton}
           onPress={() => navigation.navigate("Settings")}
         >
-          <Icon name="settings" size={24}/>
+          <Icon name="settings" size={24} />
         </TouchableOpacity>
       </View>
     </View>
@@ -66,12 +75,20 @@ const styles = StyleSheet.create({
     fontWeight: fontHeader.fontWeight,
   },
   headerLeft: {
-    flexDirection: "row",
-    gap: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  headerCenter: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerRight: {
-    flexDirection: "row",
-    gap: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flex: 1,
   },
   buttons: {
     borderRadius: 100,
@@ -83,13 +100,17 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   shareButton: {
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     marginBottom: 16,
-    marginRight: 50,
+    marginRight: 10,
   },
   settingsButton: {
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     marginBottom: 16,
     marginRight: 25,
+  },
+  emailText: {
+    fontWeight: "bold",
+    fontSize: 18
   },
 });
