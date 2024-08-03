@@ -38,7 +38,7 @@ export default function ProfileScreen() {
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
   const userJoinStaus = findJoinStatus();
-  const [joined, setJoined] = useState("false");
+  const [joined, setJoined] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
   const insets = useSafeAreaInsets();
   // const tabBarHeight = useBottomTabBarHeight();

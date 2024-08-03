@@ -24,6 +24,7 @@ export function findJoinStatus() {
         console.log("Join status fetch failure");
       } else {
         setJoinStatus(data.joined_snaptogether)
+        // console.log("From hook", data.joined_snaptogether)
       }
     }
 
