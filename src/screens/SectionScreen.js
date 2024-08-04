@@ -9,18 +9,17 @@ import {
   ScrollView,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import InfoSheet from "../components/InfoSheet";
 
 const ethnicities = [
   { label: "All Inclusive", acronym: "All" },
-  { label: "American Indian/Alaska Native", acronym: "AI/AN " },
+  { label: "American Indian/Alaska Native", acronym: "AI/AN" },
   { label: "Asian", acronym: "Asian" },
   { label: "Black/African American", acronym: "Black" },
   { label: "Hispanic/Latino", acronym: "H/L" },
-  { label: "Native Hawaiian/Pacific Islander", acronym: "NH/PI" },
+  { label: "Native Hawaiian/Pacific Islander", acronym: "NHPI" },
 ];
 
 export default function SectionScreen() {
@@ -30,11 +29,42 @@ export default function SectionScreen() {
   const handleBack = () => navigation.navigate("SnapTogether");
   const [showAbout, setShowAbout] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedRace, setSelectedRace] = useState("All Inclusive");
+  const [selectedRaces, setSelectedRaces] = useState(["All Inclusive"]);
 
   const updateSearch = (search) => {
     setSearch(search);
   };
+
+  const raceSelection = (label) => {
+    if (label === "All Inclusive") {
+      setSelectedRaces(["All Inclusive"]);
+    } else {
+      setSelectedRaces((prevSelectedRaces) => {
+        const isAlreadySelected = prevSelectedRaces.includes(label);
+        let updatedSelections;
+
+        if (isAlreadySelected) {
+          updatedSelections = prevSelectedRaces.filter(
+            (race) => race !== label
+          );
+        } else {
+          updatedSelections = prevSelectedRaces
+            .filter((race) => race !== "All Inclusive")
+            .concat(label);
+        }
+
+        if (updatedSelections.length === ethnicities.length - 1) {
+          return ["All Inclusive"];
+        }
+
+        return updatedSelections.length === 0
+          ? ["All Inclusive"]
+          : updatedSelections;
+      });
+    }
+  };
+
+  const subtitleText = selectedRaces.length === 1 ? selectedRaces[0] : "Multi-Inclusive";
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,15 +90,18 @@ export default function SectionScreen() {
         {ethnicities.map((ethnicity, index) => (
           <TouchableOpacity
             key={index}
-            style={styles.button}
-            onPress={() => setSelectedRace(ethnicity.label)}
+            style={[
+              styles.button,
+              selectedRaces.includes(ethnicity.label) && styles.buttonSelected,
+            ]}
+            onPress={() => raceSelection(ethnicity.label)}
           >
             <Text style={styles.buttonText}>{ethnicity.acronym}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
       <Text style={styles.title}>{buttonTitle}</Text>
-      <Text style={styles.subtitle}>{selectedRace}</Text>
+      <Text style={styles.subtitle}>{subtitleText}</Text>
       <TouchableOpacity
         onPress={() => {
           setShowAbout(true);
@@ -107,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
   },
   scrollView: {
-    maxHeight: 50
+    maxHeight: 50,
   },
   scrollViewContent: {
     justifyContent: "center",
@@ -121,6 +154,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 40,
+  },
+  buttonSelected: {
+    backgroundColor: "#AAAAAA",
   },
   buttonText: {
     color: "#333",
