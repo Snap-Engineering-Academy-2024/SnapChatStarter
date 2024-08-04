@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Button,
   ScrollView,
+  SectionList
 } from "react-native";
 import { SearchBar } from "react-native-elements";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -15,21 +16,21 @@ import InfoSheet from "../components/InfoSheet";
 
 const ethnicities = [
   { label: "All Inclusive", acronym: "All" },
-  { label: "American Indian/Alaska Native", acronym: "AI/AN" },
-  { label: "Asian", acronym: "Asian" },
-  { label: "Black/African American", acronym: "Black" },
-  { label: "Hispanic/Latino", acronym: "H/L" },
-  { label: "Native Hawaiian/Pacific Islander", acronym: "NHPI" },
+  { label: "AAPI", acronym: "AAPI" },
+  { label: "Black", acronym: "Black" },
+  { label: "Indigenous", acronym: "Indigenous" },
+  { label: "Latinx", acronym: "Latinx" },
 ];
 
 export default function SectionScreen() {
   const route = useRoute();
-  const buttonTitle = route.params.buttonTitle;
+  const { buttonTitle, companyData } = route.params;
   const navigation = useNavigation();
   const handleBack = () => navigation.navigate("SnapTogether");
   const [showAbout, setShowAbout] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedRaces, setSelectedRaces] = useState(["All Inclusive"]);
+  const [selectedCompany, setSelectedCompany] = useState("")
 
   const updateSearch = (search) => {
     setSearch(search);
@@ -64,7 +65,8 @@ export default function SectionScreen() {
     }
   };
 
-  const subtitleText = selectedRaces.length === 1 ? selectedRaces[0] : "Multi-Inclusive";
+  const subtitleText =
+    selectedRaces.length === 1 ? selectedRaces[0] : "Multi-Inclusive";
 
   return (
     <SafeAreaView style={styles.container}>
@@ -101,24 +103,38 @@ export default function SectionScreen() {
         ))}
       </ScrollView>
       <Text style={styles.title}>{buttonTitle}</Text>
-      <Text style={styles.subtitle}>{subtitleText}</Text>
-      <TouchableOpacity
-        onPress={() => {
-          setShowAbout(true);
-        }}
-        title={"About"}
-        color="Red"
-        accessibilityLabel="Show About Sheet"
-      >
-        <Ionicons
-          style={{ alignSelf: "center" }}
-          name={"information-circle"}
-          size={36}
-          color="black"
-        />
-      </TouchableOpacity>
+          <Text style={styles.subtitle}>{subtitleText}</Text>
+          {companyData && (
+  <SectionList
+    sections={[
+      {
+        title: buttonTitle,
+        data: companyData,
+        renderItem: ({ item }) => (
+          <TouchableOpacity
+            style={styles.cardContainer}
+            onPress={() => {
+              setShowAbout(true);
+              setSelectedCompany(item)
+              }}
+          >
+            <View style={styles.textContainer}>
+              <Text style={styles.cardTitle}>{item.username}</Text>
+            </View>
+          </TouchableOpacity>
+        ),
+      },
+    ]}
+    keyExtractor={(item) => item.id}
+    renderItem={({ item }) => null}
+  />
+)}
       <View>
-        <InfoSheet showAbout={showAbout} setShowAbout={setShowAbout} />
+        <InfoSheet
+          showAbout={showAbout}
+          setShowAbout={setShowAbout}
+          selectedCompany={selectedCompany}
+        />
       </View>
     </SafeAreaView>
   );
@@ -173,5 +189,22 @@ const styles = StyleSheet.create({
     fontSize: 26,
     alignSelf: "flex-start",
     fontFamily: "avenir",
+  },
+  cardContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
