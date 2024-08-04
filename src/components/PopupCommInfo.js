@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   popupContainer: {
-    width: '90%',
+    width: '100%',
+    height: '100%',
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -48,7 +49,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 30,
+    marginBottom: 10,
+    marginTop: 40,
     
   },
   button: {
