@@ -10,7 +10,7 @@ export const getCareerBoostCo = () => {
     const fetchCompanies = async () => {
       try {
         setIsLoading(true);
-        const { data, error } = await supabase.from('company_profiles').select('*');
+        const { data, error } = await supabase.from('career_boost_profiles').select('*');
         if (error) throw error;
         setCompanies(data);
       } catch (error) {

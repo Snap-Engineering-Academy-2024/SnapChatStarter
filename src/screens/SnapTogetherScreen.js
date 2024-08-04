@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -19,6 +19,39 @@ export default function SnapTogetherScreen() {
   const navigation = useNavigation();
   const [showAbout, setShowAbout] = useState(false);
 
+  const handleSectionPress = async (buttonTitle) => {
+    let table;
+    switch (buttonTitle) {
+      case "Career Boost":
+        table = "career_boost_profiles";
+        break;
+      case "Mom & Pops":
+        table = "mom_pop_profiles";
+        break;
+      case "Showcase":
+        table = "showcase_profiles";
+        break;
+      default:
+        table = null;
+    }
+
+    if (table) {
+      const { data, error } = await supabase
+        .from(table)
+        .select("*")
+
+      if (error) {
+        console.error("Error fetching company data:", error);
+      } else if (data.length === 0) {
+        console.warn("No company found for this section");
+      } else {
+        const companyData = data;
+        navigation.navigate("Section", { buttonTitle, companyData });
+      }
+    }
+  };
+
+
   return (
     <SafeAreaView>
       <SnapTogetherHeader />
@@ -35,8 +68,6 @@ export default function SnapTogetherScreen() {
         onPress={() => {
           setShowAbout(true);
         }}
-        title={"About"}
-        color="Red"
         accessibilityLabel="Show About Sheet"
       >
         <Ionicons
@@ -46,21 +77,20 @@ export default function SnapTogetherScreen() {
           color="black"
         />
       </TouchableOpacity>
-      <Button
-        style={styles.sections}
-        title={"Career Boost"}
-        onPress={() => navigation.navigate("Section", { buttonTitle: "Career Boost" })}
-      ></Button>
-      <Button
-        style={styles.sections}
-        title={"Mom & Pops"}
-        onPress={() => navigation.navigate("Section", { buttonTitle: "Mom & Pops" })}
-      ></Button>
-      <Button
-        style={styles.sections}
-        title={"Showcase"}
-        onPress={() => navigation.navigate("Section", { buttonTitle: "Showcase" })}
-      ></Button>
+      <View style={styles.buttonContainer}>
+        <Button
+          title={"Career Boost"}
+          onPress={() => handleSectionPress("Career Boost")}
+        />
+        <Button
+          title={"Mom & Pops"}
+          onPress={() => handleSectionPress("Mom & Pops")}
+        />
+        <Button
+          title={"Showcase"}
+          onPress={() => handleSectionPress("Showcase")}
+        />
+      </View>
       <View>
         <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
       </View>
