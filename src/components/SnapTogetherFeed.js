@@ -1,38 +1,29 @@
-import react from "react";
 import {
   View,
   Text,
   StyleSheet,
-  Image,
-  ScrollView,
   ImageBackground,
   Pressable,
-  useState,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { fontHeader } from "../../assets/themes/font";
-import { colors } from "../../assets/themes/colors";
 import { useNavigation } from "@react-navigation/native";
 
-export default function DiscoverFeed() {
-  const navigation = useNavigation();
+export default function SnapTogetherFeed({ title, eventImage, handlePress }) {
   return (
     <View style={styles.FeedContainer}>
       <View style={styles.Square}>
         <Pressable
           onPress={() => {
-            navigation.navigate("DiscoverCard");
+            handlePress ()
           }}
         >
           <ImageBackground
             style={styles.FeedImage}
             imageStyle={{ borderRadius: 20 }}
             source={{
-              uri: "https://eccles.utah.edu/wp-content/uploads/2017/02/snapchat.jpg",
+              uri: eventImage,
             }}
           >
-            <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
+            <Text style={styles.FeedText}>{title}</Text>
           </ImageBackground>
         </Pressable>
       </View>
@@ -48,49 +39,52 @@ const styles = StyleSheet.create({
     gap: 10,
     justifyContent: "space-between",
     flexWrap: "wrap",
+    paddingTop: 20
   },
   Square: {
     display: "flex",
-
     flexDirection: "row",
     justifyContent: "space-around",
     gap: 20,
     width: "100%",
-    alignItems: "center",
-    // backgroundColor: "pink",
-    alignItems: "center",
     borderRadius: 20,
     flexWrap: "wrap",
   },
   FeedImage: {
-    width: 165,
-    height: 320,
+    width: 200,
+    height: 300,
     display: "flex",
     justifyContent: "center",
-    // borderRadius: 50,
-    // backgroundColor:"blue",
-    // borderRadius:20,
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
+    borderRadius: 50,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowRadius: 3.84,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    
     elevation: 5,
   },
   FeedText: {
     padding: 8,
     fontWeight: "900",
-    fontSize: 14,
+    fontSize: 16,
     color: "white",
     position: "absolute",
     right: 15,
     bottom: 15,
-    textShadowColor: "#292929",
-
-    textShadowRadius: 5,
-    textShadowOpacity: 0,
+    textShadowColor: "black",
+    textShadowRadius: 15,
+    textShadowOpacity: 0.5,
+    backgroundColor: "black",
+    shadowColor: "black",
+    shadowRadius: 3.84,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.75,
   },
-  smallFeedText: {},
 });
