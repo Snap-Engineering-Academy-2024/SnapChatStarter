@@ -7,12 +7,14 @@ import {
   SafeAreaView,
   Button,
   ScrollView,
-  SectionList
+  FlatList,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import InfoSheet from "../components/InfoSheet";
+import SnapTogetherFeed from "../components/SnapTogetherFeed";
+import SnapTogetherStories from "../components/SnapTogetherStories";
+import StoryModal from "../components/StoryModal";
 
 const ethnicities = [
   { label: "All Inclusive", acronym: "All" },
@@ -30,7 +32,8 @@ export default function SectionScreen() {
   const [showAbout, setShowAbout] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedRaces, setSelectedRaces] = useState(["All Inclusive"]);
-  const [selectedCompany, setSelectedCompany] = useState("")
+  const [selectedCompany, setSelectedCompany] = useState("");
+  const [showStory, setShowStory] = useState(false);
 
   const updateSearch = (search) => {
     setSearch(search);
@@ -73,6 +76,7 @@ export default function SectionScreen() {
       <View style={{ alignItems: "flex-start" }}>
         <Button onPress={handleBack} title="< Snap Together" />
       </View>
+      {/* Search bar */}
       <SearchBar
         placeholder="Type Here..."
         onChangeText={updateSearch}
@@ -82,7 +86,7 @@ export default function SectionScreen() {
         containerStyle={styles.searchContainer}
         inputContainerStyle={styles.searchInputContainer}
       />
-
+      {/* Filter buttons */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -102,37 +106,58 @@ export default function SectionScreen() {
           </TouchableOpacity>
         ))}
       </ScrollView>
+      {/* Title */}
       <Text style={styles.title}>{buttonTitle}</Text>
-          <Text style={styles.subtitle}>{subtitleText}</Text>
-          {companyData && (
-  <SectionList
-    sections={[
-      {
-        title: buttonTitle,
-        data: companyData,
-        renderItem: ({ item }) => (
-          <TouchableOpacity
-            style={styles.cardContainer}
-            onPress={() => {
-              setShowAbout(true);
-              setSelectedCompany(item)
+      {/* Current filter selection */}
+      <Text style={styles.subtitle}>{subtitleText}</Text>
+      {/* Story bar */}
+      <Text style={styles.sectionTitle}>Stories</Text>
+      {companyData && (
+        <View style={styles.storyBar}>
+          <FlatList
+            data={companyData}
+            horizontal={true}
+            ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
+            renderItem={({ item }) => <SnapTogetherStories company={item} handlePress={() => {
+              setShowStory(true);
+              setSelectedCompany(item);
+            }}/>}
+            keyExtractor={(item) => item.id}
+          />
+        </View>
+      )}
+      {/* Event discover list */}
+      <Text style={styles.sectionTitle}>Events</Text>
+      {companyData && (
+        <FlatList
+          contentContainerStyle={{ paddingBottom: 250 }}
+          data={companyData}
+          horizontal={false}
+          numColumns={2}
+          ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+          renderItem={({ item }) => (
+            <SnapTogetherFeed
+              title={item.username}
+              eventImage={item.poster_url}
+              handlePress={() => {
+                setShowAbout(true);
+                setSelectedCompany(item);
               }}
-          >
-            <View style={styles.textContainer}>
-              <Text style={styles.cardTitle}>{item.username}</Text>
-            </View>
-          </TouchableOpacity>
-        ),
-      },
-    ]}
-    keyExtractor={(item) => item.id}
-    renderItem={({ item }) => null}
-  />
-)}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      )}
+      {/* If infosheet is shown */}
       <View>
         <InfoSheet
           showAbout={showAbout}
           setShowAbout={setShowAbout}
+          selectedCompany={selectedCompany}
+        />
+        <StoryModal
+          showStory={showStory}
+          setShowStory={setShowStory}
           selectedCompany={selectedCompany}
         />
       </View>
@@ -157,6 +182,8 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     maxHeight: 50,
+    paddingBottom: 60,
+    paddingTop: 10,
   },
   scrollViewContent: {
     justifyContent: "center",
@@ -180,15 +207,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   title: {
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: "bold",
     alignSelf: "flex-start",
     fontFamily: "avenir",
   },
   subtitle: {
-    fontSize: 26,
+    fontSize: 20,
     alignSelf: "flex-start",
     fontFamily: "avenir",
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    alignSelf: "flex-start",
+    fontFamily: "avenir",
+    paddingBottom: 5,
+    paddingTop: 10,
   },
   cardContainer: {
     flexDirection: "row",
@@ -206,5 +241,11 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  storyBar: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: 4,
   },
 });
