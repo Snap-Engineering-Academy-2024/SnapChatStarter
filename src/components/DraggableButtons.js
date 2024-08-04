@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: "purple",
-    // fontWeight: "bold",
     fontSize: 15,
   },
 });

@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {
-  Image,
-  Text,
-  View,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Image, View, StyleSheet } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
-import { useAuthentication } from "../utils/hooks/useAuthentication";
 import DraggableButtonList from "../components/DraggableButtons";
 import AboutSheet from "../components/AboutSheet";
 import { findJoinStatus } from "../utils/hooks/findJoinStatus";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ProfileSections from "../components/ProfileSections";
 import ProfileHeader from "../components/ProfileHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const handleSignOut = async () => {
   try {
@@ -34,21 +24,18 @@ const handleSignOut = async () => {
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const { user } = useAuthentication();
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
-  const userJoinStaus = findJoinStatus();
-  const [joined, setJoined] = useState(false);
+  const userJoinStatus = findJoinStatus();
   const [showAbout, setShowAbout] = useState(false);
   const insets = useSafeAreaInsets();
-  // const tabBarHeight = useBottomTabBarHeight();
 
   useEffect(() => {
     setAstrology(userSign.sign);
   }, [userSign.sign]);
 
   const SnapTogetherRedirect = async () => {
-    if (userJoinStaus) {
+    if (userJoinStatus) {
       navigation.navigate("SnapTogether");
     } else {
       setShowAbout(true);
@@ -64,8 +51,8 @@ export default function ProfileScreen() {
     "Add Friends": () => navigation.navigate("AddFriend"),
     "My Friends": () => navigation.navigate("Chat"),
     "Add Your School": () => navigation.navigate("Profile"),
-    "SnapTogether": SnapTogetherRedirect,
-  }
+    SnapTogether: SnapTogetherRedirect,
+  };
 
   return (
     <View
@@ -76,7 +63,6 @@ export default function ProfileScreen() {
         paddingBottom: insets.bottom,
         paddingLeft: insets.left,
         paddingRight: insets.right,
-        // marginBottom: tabBarHeight,
       }}
     >
       <ProfileHeader />
@@ -94,7 +80,7 @@ export default function ProfileScreen() {
         </View>
       </View>
       <View>
-        <ProfileSections onPressHandlers={sectionOnPressHandlers}/>
+        <ProfileSections onPressHandlers={sectionOnPressHandlers} />
       </View>
     </View>
   );

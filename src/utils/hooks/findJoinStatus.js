@@ -4,7 +4,7 @@ import { supabase } from "./supabase";
 import { useAuthentication } from "./useAuthentication";
 
 export function findJoinStatus() {
-  const [joinStatus, setJoinStatus] = useState(true);
+  const [joinStatus, setJoinStatus] = useState(false);
   const { user } = useAuthentication();
 
   useEffect(() => {
