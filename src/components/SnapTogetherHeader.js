@@ -10,7 +10,7 @@ import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from "../utils/hooks/supabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-export default function ProfileHeader() {
+export default function SnapTogetherHeader() {
   const navigation = useNavigation();
 
   const { user } = useAuthentication();
@@ -21,21 +21,11 @@ export default function ProfileHeader() {
         <Pressable
           style={[styles.profile, styles.buttons]}
           onPress={() => {
-            navigation.navigate("Camera");
+            navigation.navigate("Profile");
           }}
         >
           <Icon name="arrow-back" size={24} />
         </Pressable>
-      </View>
-      <View style={styles.headerCenter}>
-        <Text style={styles.emailText}>
-          {user &&
-            user.user_metadata &&
-            user.user_metadata.email.slice(
-              0,
-              user.user_metadata.email.indexOf("@")
-            )}
-        </Text>
       </View>
       <View style={styles.headerRight}>
         <TouchableOpacity

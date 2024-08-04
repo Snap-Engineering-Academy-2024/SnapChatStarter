@@ -13,7 +13,6 @@ import MemoryScreen from "../screens/MemoryScreen";
 import EventScreen from "../screens/EventScreen";
 import SectionScreen from "../screens/SectionScreen";
 import SnapTogetherScreen from "../screens/SnapTogetherScreen";
-import InfoScreen from "../screens/InfoScreen";
 
 const Stack = createStackNavigator();
 
@@ -80,11 +79,6 @@ export default function App() {
         <Stack.Screen
           name="Section"
           component={SectionScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Info"
-          component={InfoScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

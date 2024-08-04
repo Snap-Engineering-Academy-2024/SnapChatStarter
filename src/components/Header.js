@@ -48,13 +48,7 @@ export default function Header({ title }) {
   }, [user]);
 
   const [showMenu, setShowMenu] = useState(false);
-  // console.log(showMenu);
-
-  // const handleClick = () => {
-  //   setShowMenu(true)
-  //   console.log("handleClick")
-  // }
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>

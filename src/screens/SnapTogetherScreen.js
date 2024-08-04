@@ -5,18 +5,16 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import AboutSheet from "../components/AboutSheet";
+import SnapTogetherHeader from "../components/SnapTogetherHeader";
 
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
-  const handleBack = () => navigation.navigate("Profile");
   const handleSectionPress = () => navigation.navigate("Section")
   const [showAbout, setShowAbout] = useState(false);
 
   return (
     <SafeAreaView>
-      <View alignItems="Left">
-        <Button onPress={handleBack} title="< Profile" align="Left"/>
-      </View>
+      <SnapTogetherHeader/>
       <Image 
       source={{uri: "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*"}} 
       style = {styles.logo} 
@@ -99,12 +97,12 @@ const styles = StyleSheet.create({
   },
   info: {
     fontSize: 20,
-    fontWeight: 300,
+    fontWeight: "semibold",
     alignSelf: "center",
     marginBottom: 20
   },
   sections: {
     fontSize: 20,
-    fontWeight: 400
+    fontWeight: "semibold",
   }
 });
