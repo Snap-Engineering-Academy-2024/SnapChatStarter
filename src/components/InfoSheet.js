@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     borderRadius: 25,
     alignItems: "center",
-    top: SCREEN_HEIGHT / 100,
+    top: SCREEN_HEIGHT / 20,
   },
   text: {
     fontSize: 16,
@@ -116,21 +116,21 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#10adff",
     marginBottom: 16,
-    borderRadius: 15,
-    width: 100,
+    borderRadius: 20,
+    width: 300,
   },
   buttonText: {
     color: "white",
   },
   buttonsView: {
-    flexDirection: "row",
-    width: "75%",
-    justifyContent: "space-between" 
+    flexDirection: "column",
+    justifyContent: "center" 
   },
   companyPhoto: {
-    width: 300,
+    width: 400,
     height: 300,
-    borderRadius: 50,
+    borderRadius: 20,
+    borderWidth: 3,
     marginBottom: 16,
   },
 });
