@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, SafeAreaView, Button, Image} from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  Button,
+  Image,
+} from "react-native";
 // import Ionicons from "react-native-vector-icons/Ionicons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { supabase } from "../utils/hooks/supabase";
@@ -9,47 +17,53 @@ import SnapTogetherHeader from "../components/SnapTogetherHeader";
 
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
-  const handleSectionPress = () => navigation.navigate("Section")
   const [showAbout, setShowAbout] = useState(false);
 
   return (
     <SafeAreaView>
-      <SnapTogetherHeader/>
-      <Image 
-      source={{uri: "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*"}} 
-      style = {styles.logo} 
+      <SnapTogetherHeader />
+      <Image
+        source={{
+          uri: "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*",
+        }}
+        style={styles.logo}
       />
 
-      <Text style={styles.snapTogetherText}>
-        SnapTogether
-      </Text>
-      <Text style = {styles.info}>
-        An accessible resource hub
-      </Text>
+      <Text style={styles.snapTogetherText}>SnapTogether</Text>
+      <Text style={styles.info}>An accessible resource hub</Text>
       <TouchableOpacity
-      onPress={() => {
-        setShowAbout(true);
-      }}
-      title={"About"}
-      color="Red"
-      accessibilityLabel="Show About Sheet"
+        onPress={() => {
+          setShowAbout(true);
+        }}
+        title={"About"}
+        color="Red"
+        accessibilityLabel="Show About Sheet"
       >
-      <Ionicons
-      style = {{fontSize: 26, alignSelf:"center"}} 
+        <Ionicons
+          style={{ fontSize: 26, alignSelf: "center" }}
           name={"help"}
           size={30}
           color="black"
         />
       </TouchableOpacity>
-      <Button style = {styles.sections} title={"Career Boost"} onPress={handleSectionPress}>
-      </Button>
-      <Button style = {styles.sections} title={"Mom & Pops"} onPress={handleSectionPress}>
-      </Button>
-      <Button style = {styles.sections} title={"Showcase"} onPress={handleSectionPress}>
-      </Button>
+      <Button
+        style={styles.sections}
+        title={"Career Boost"}
+        onPress={() => navigation.navigate("Section", { buttonTitle: "Career Boost" })}
+      ></Button>
+      <Button
+        style={styles.sections}
+        title={"Mom & Pops"}
+        onPress={() => navigation.navigate("Section", { buttonTitle: "Mom & Pops" })}
+      ></Button>
+      <Button
+        style={styles.sections}
+        title={"Showcase"}
+        onPress={() => navigation.navigate("Section", { buttonTitle: "Showcase" })}
+      ></Button>
       <View>
-          <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
-        </View>
+        <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -99,10 +113,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "semibold",
     alignSelf: "center",
-    marginBottom: 20
+    marginBottom: 20,
   },
   sections: {
     fontSize: 20,
     fontWeight: "semibold",
-  }
+  },
 });

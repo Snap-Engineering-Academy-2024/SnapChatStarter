@@ -11,7 +11,7 @@ import {
 import { SearchBar } from "react-native-elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import InfoSheet from "../components/InfoSheet";
 
 const ethnicities = [
@@ -24,6 +24,8 @@ const ethnicities = [
 ];
 
 export default function SectionScreen() {
+  const route = useRoute();
+  const buttonTitle = route.params.buttonTitle;
   const navigation = useNavigation();
   const handleBack = () => navigation.navigate("SnapTogether");
   const [showAbout, setShowAbout] = useState(false);
@@ -65,7 +67,7 @@ export default function SectionScreen() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <Text style={styles.title}>Career Boost</Text>
+      <Text style={styles.title}>{buttonTitle}</Text>
       <Text style={styles.subtitle}>{selectedRace}</Text>
       <TouchableOpacity
         onPress={() => {
