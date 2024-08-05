@@ -297,6 +297,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 6,
   },
+  bitmojiItem: {
+    width: 70,
+    height: 70,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bitmojiItem: {
+    width: 70,
+    height: 70,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 
