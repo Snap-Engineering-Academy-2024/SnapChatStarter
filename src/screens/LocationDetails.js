@@ -1,14 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView,  TouchableOpacity, Dimensions} from 'react-native';
 
-export default function LocationDetails({ place }) {
 
+const { height } = Dimensions.get('window');
+
+export default function LocationDetails({ place, onClose }) {
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.modalOverlay}>
+      <ScrollView style={styles.container}>
       <Text style={styles.title}>{place.name}</Text>
       <Text style={styles.details}>Address: {place.vicinity}</Text>
+      <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+        <Text style={styles.closeButtonText}>Close</Text>
+      </TouchableOpacity>
     </ScrollView>
+    </View>    
   );
 }
 
@@ -17,6 +24,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#fff',
+  },
+  modalOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: height / 2,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'flex-end',
   },
   title: {
     fontSize: 24,
