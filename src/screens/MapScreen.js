@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
+
 import {
   StyleSheet,
   View,
@@ -22,7 +23,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 export default function MapScreen({ navigation }) {
-
   const bottomSheetRef = useRef(null);
   const snapPoints = ["50%", "90%"];
   function handlePresentModal() {
@@ -48,7 +48,7 @@ export default function MapScreen({ navigation }) {
     },
   ])
   
-  const [showPins, setShowPins] = useState(false);
+  const [showPins, setShowPins] = useState(false); 
   const PinInfoSheet = useRef(null);
   const [expanded, setExpanded] = useState(false);
   const [deal, setDeal] = useState('');
@@ -73,10 +73,9 @@ export default function MapScreen({ navigation }) {
         console.error("Unexpected error:", error);
         }
     }
-  
-  function createPinInfo() {
-    PinInfoSheet.current?.present();
-  }
+    function createPinInfo() {
+      PinInfoSheet.current?.present();
+    }
 
   const showLocations = () => {
     if(showPins){
@@ -107,8 +106,8 @@ export default function MapScreen({ navigation }) {
       console.log(e.nativeEvent.coordinate)
       setPins([...pins, newPin]);
     }
+    createPinInfo();
   };
-
 
 
   const tabBarHeight = useBottomTabBarHeight();
@@ -156,6 +155,7 @@ export default function MapScreen({ navigation }) {
         showsUserLocation={true}
         showsMyLocationButton={true}
         onLongPress={handleMapPress}
+
       >
         {showLocations()}
       </MapView>
@@ -217,7 +217,6 @@ export default function MapScreen({ navigation }) {
           </Button>
         </View>
       </BottomSheetModal>
-
       <View style={[styles.mapFooter, expanded ? styles.expanded : null]}> 
         <View style={styles.locationContainer}>
           <TouchableOpacity
@@ -372,6 +371,7 @@ export default function MapScreen({ navigation }) {
           </BottomSheetModal>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style = {styles.buttonScrollview}>
             <View style = {styles.buttonContainer}>
+              
                 <Button
                   style = {styles.buttonsInside}
                   titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
@@ -421,13 +421,16 @@ export default function MapScreen({ navigation }) {
                     borderRadius: 30,
                   }}
                 />
+     
             </View>
           </ScrollView>
+
+          
         </View>
       </View>
     </View>
-    </BottomSheetModalProvider>
-  );
+  </BottomSheetModalProvider>  
+);
 }
 
 const styles = StyleSheet.create({
@@ -488,7 +491,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   buttonContainer:{
     display:"flex",
     flexDirection:"row",
@@ -563,8 +565,7 @@ const styles = StyleSheet.create({
     borderRadius:40,
     alignItems: 'center',
   },
-
-  modalContainer:{
+    modalContainer:{
     display:"flex",
     height:"100%"
   },
@@ -630,6 +631,5 @@ const styles = StyleSheet.create({
   categoryScrollView:{
     marginTop:10,
   }
-
 
 });
