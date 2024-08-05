@@ -46,7 +46,7 @@ export default function SectionHeader() {
           style={styles.settingsButton}
           onPress={() => navigation.navigate("Settings")}
         >
-          <Icon name="settings" size={24} />
+          <Icon name="settings" size={30} />
         </TouchableOpacity>
       </View>
       <View>
