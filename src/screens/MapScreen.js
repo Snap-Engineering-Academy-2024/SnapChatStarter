@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
-
 import {
   StyleSheet,
   View,
   Dimensions,
   ScrollView,
-  
+  TextInput,
   Image,
   Text,
   TouchableOpacity,
@@ -22,6 +22,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 export default function MapScreen({ navigation }) {
+
   const bottomSheetRef = useRef(null);
   const snapPoints = ["50%", "90%"];
   function handlePresentModal() {
@@ -48,7 +49,10 @@ export default function MapScreen({ navigation }) {
   ])
   
   const [showPins, setShowPins] = useState(false);
+  const PinInfoSheet = useRef(null);
   const [expanded, setExpanded] = useState(false);
+  const [deal, setDeal] = useState('');
+  const [organization, setOrganization] = useState('');
 
   const insertData = async () => {
         const eventData = submitToSupabase()
@@ -69,7 +73,11 @@ export default function MapScreen({ navigation }) {
         console.error("Unexpected error:", error);
         }
     }
- 
+  
+  const snapPoints = ["70%"];
+  function createPinInfo() {
+    PinInfoSheet.current?.present();
+  }
 
   const showLocations = () => {
     if(showPins){
@@ -101,6 +109,7 @@ export default function MapScreen({ navigation }) {
       setPins([...pins, newPin]);
     }
   };
+
 
 
   const tabBarHeight = useBottomTabBarHeight();
@@ -148,10 +157,67 @@ export default function MapScreen({ navigation }) {
         showsUserLocation={true}
         showsMyLocationButton={true}
         onLongPress={handleMapPress}
-
       >
         {showLocations()}
       </MapView>
+      <BottomSheetModal
+        ref={PinInfoSheet}
+        index={0}
+        snapPoints={snapPoints}
+      >
+        <View>
+          <View flexDirection={"row"} alignItems= {'center'}>
+            <Text style={styles.headerPinSheet}> SnapServe Pin</Text>
+            <TouchableOpacity style={styles.exitCreatePin}><Icon name="close" size="20"></Icon></TouchableOpacity>
+          </View>
+          <Text style={styles.subheadingPinSheet}>Enter additional details about your resource pin below.</Text>
+          <Text style={styles.information}>Deal Information</Text>
+          <TextInput 
+          style={styles.input} 
+          onChangeText={(deal)=> setDeal(deal)}
+          value ={deal}
+          />
+          <Text style={styles.information}>Organization Name</Text>
+          <TextInput 
+          style={styles.input}
+          onChangeText={(organization)=> setOrganization(organization)}
+          value ={organization}
+          />
+          <TouchableOpacity style ={styles.moreInfoContainer}>
+            <View flexDirection={"row"} alignItems={"center"}>
+              <View flexDirection={"column"}>
+                <Text style = {styles.moreInfoTitle}>Time</Text>
+                <Text style = {styles.moreInfoSub}>From what time is this deal available?</Text>
+              </View>
+              <Icon name="arrow-forward-ios" size={15} paddingLeft={149}/>
+            </View> 
+          </TouchableOpacity>
+          <TouchableOpacity style ={styles.moreInfoContainer}>
+            <View flexDirection={"row"} alignItems={"center"}>
+              <View flexDirection={"column"}>
+                <Text style = {styles.moreInfoTitle}>Repeat</Text>
+                <Text style = {styles.moreInfoSub}>If applicable, enter the days this deal reoccurs.</Text>
+              </View>
+              <Icon name="arrow-forward-ios" size={15} paddingLeft={97}/>
+            </View> 
+          </TouchableOpacity>
+          <TouchableOpacity style ={styles.moreInfoContainer}>
+            <View flexDirection={"row"} alignItems={"center"}>
+              <View flexDirection={"column"}>
+                <Text style = {styles.moreInfoTitle}>Resource Type</Text>
+                <Text style = {styles.moreInfoSub}>Select all filters that apply to this resource</Text>
+              </View>
+              <Icon name="arrow-forward-ios" size={15} paddingLeft={120}/>
+            </View> 
+          </TouchableOpacity>
+          <Button
+           buttonStyle={{backgroundColor: '#33BBFF', borderRadius: 30, width: 370}} 
+           style={styles.postPin}>
+            <Text color={"#FFFFFF"}>Send</Text>
+            <Icon name="send" size={"15"}/>
+          </Button>
+        </View>
+      </BottomSheetModal>
 
       <View style={[styles.mapFooter, expanded ? styles.expanded : null]}> 
         <View style={styles.locationContainer}>
@@ -307,7 +373,6 @@ export default function MapScreen({ navigation }) {
           </BottomSheetModal>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style = {styles.buttonScrollview}>
             <View style = {styles.buttonContainer}>
-              
                 <Button
                   style = {styles.buttonsInside}
                   titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
@@ -357,16 +422,13 @@ export default function MapScreen({ navigation }) {
                     borderRadius: 30,
                   }}
                 />
-     
             </View>
           </ScrollView>
-
-          
         </View>
       </View>
     </View>
-  </BottomSheetModalProvider>  
-);
+    </BottomSheetModalProvider>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -445,6 +507,64 @@ const styles = StyleSheet.create({
     borderBottomWidth:0.2,
     borderBottomColor:"#D9D9D9"
   },
+  headerPinSheet:{
+    fontSize: 17,
+    fontWeight: '600',
+    paddingBottom: 5,
+    paddingLeft: 5,
+    paddingTop:5,
+    paddingRight:225,
+  },
+  subheadingPinSheet:{
+    fontSize: 11,
+    color: "#6e6e6e",
+    paddingLeft: 10,
+    paddingBottom:25,
+  },
+  information:{
+    fontSize:13,
+    paddingLeft: 10,
+    color: "#a3a3a3",
+  },
+  input: {
+    height: 25,
+    marginLeft: 10,
+    marginRight:10,
+    marginTop: 5,
+    marginBottom:20,
+    borderLeftColor: "#33BBFF",
+    borderLeftWidth: 5,
+    padding: 5,
+    backgroundColor: "#EDEEEF",
+    borderRadius: 4,
+  },
+  exitCreatePin:{
+    width: "100",
+    height: "100",
+    borderRadius: "50",
+    padding: 5,
+    backgroundColor: "#EDEEEF",
+  },
+  moreInfoContainer: {
+    color: "none",
+    borderBottomWidth: 1,
+    borderBottomColor: "#EDEEEF",
+    padding: 15
+  },
+  moreInfoTitle: {
+    fontSize: 15,
+    fontWeight: 500,
+  },
+  moreInfoSub: {
+    fontSize:11,
+    color: "#646567",
+  },
+  postPin: {
+    paddingTop: 30,
+    borderRadius:40,
+    alignItems: 'center',
+  }
+
   modalContainer:{
     display:"flex",
     height:"100%"
@@ -511,5 +631,6 @@ const styles = StyleSheet.create({
   categoryScrollView:{
     marginTop:10,
   }
+
 
 });
