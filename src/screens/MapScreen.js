@@ -48,7 +48,7 @@ export default function MapScreen({ navigation }) {
       //pin disappears after 7 days of NO DEALS at the place
     },
   ])
-  
+  const [sendButton, setSendButton] = useState(true);
   const [showPins, setShowPins] = useState(false); 
   const PinInfoSheet = useRef(null);
   const TimeInfoSheet = useRef(null);
@@ -80,6 +80,7 @@ export default function MapScreen({ navigation }) {
     }
     function createPinInfo() {
       PinInfoSheet.current?.present();
+      setSendButton(false)
     }
     function TimeInfo() {
       TimeInfoSheet.current?.present();
@@ -89,6 +90,16 @@ export default function MapScreen({ navigation }) {
     }
     function TypeInfo(){
       TypeInfoSheet.current?.present();
+    }
+
+
+    function sendToDatabase(){
+      setSendButton(true)
+      //push downn the modal
+    }
+
+    function deletePin(){
+
     }
 
   const showLocations = () => {
@@ -118,8 +129,9 @@ export default function MapScreen({ navigation }) {
       };
       console.log(e.nativeEvent.coordinate)
       setPins([...pins, newPin]);
+      createPinInfo();
     }
-    createPinInfo();
+    
   };
 
 
@@ -237,7 +249,7 @@ export default function MapScreen({ navigation }) {
           <Button
            buttonStyle={{backgroundColor: '#33BBFF', borderRadius: 30, width: 370}} 
            style={styles.postPin}>
-            <Text style={styles.sendButton}>Send</Text>
+            <Text onPress = {sendToDatabase} style={styles.sendButton}>Send</Text>
             <Icon color={"white"} name="send" size={"15"}/>
           </Button>
         </View>
