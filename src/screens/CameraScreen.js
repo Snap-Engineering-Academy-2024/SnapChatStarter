@@ -22,6 +22,7 @@ import PostcaptureOptions from "../components/PostcaptureActions";
 import { supabase } from "../utils/hooks/supabase";
 import CameraGalleryMenu from "../components/CameraGalleryMenu";
 import { Button } from "react-native-elements";
+import CameraHeader from "../components/CameraHeader";
 
 export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -52,12 +53,19 @@ export default function CameraScreen({ navigation, focused }) {
   if (!permission.granted) {
     // Camera permissions are not granted yet.
     return (
-      <View style={styles.container}>
+      <View style={{flex: 1,
+        backgroundColor: "black",
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+        marginBottom: tabBarHeight,}}>
+        <CameraHeader />
         <Text style={styles.message}>
           We need your permission to show the camera.
         </Text>
         <TouchableOpacity onPress={requestPermission} style={styles.button}>
-          <Text style={styles.text}>Grant Permission</Text>
+          <Text style={styles.message}>Grant Permission</Text>
         </TouchableOpacity>
       </View>
     );
@@ -147,11 +155,14 @@ export default function CameraScreen({ navigation, focused }) {
     return (
       <View
         style={[
-          styles.container,
           {
-            marginBottom: tabBarHeight,
-            paddingTop: insets.top,
-            paddingBottom: insets.bottom,
+            flex: 1,
+    backgroundColor: "black",
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+    marginBottom: tabBarHeight,
           },
         ]}
       >
@@ -177,12 +188,17 @@ export default function CameraScreen({ navigation, focused }) {
         style={[
           styles.container,
           {
-            marginBottom: tabBarHeight,
-            paddingTop: insets.top,
-            paddingBottom: insets.bottom,
+            flex: 1,
+    backgroundColor: "black",
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+    marginBottom: tabBarHeight,
           },
         ]}
       >
+        <CameraHeader/>
         <CameraView style={styles.camera} facing={facing} ref={cameraRef} />
         <CameraOptions flipCamera={flipCamera} />
         <CameraActions
@@ -234,12 +250,17 @@ export default function CameraScreen({ navigation, focused }) {
       style={[
         styles.container,
         {
-          marginBottom: tabBarHeight,
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
+          flex: 1,
+    backgroundColor: "black",
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+    marginBottom: tabBarHeight,
         },
       ]}
     >
+      <CameraHeader/>
       <CameraView style={styles.camera} facing={facing} ref={cameraRef} />
       <CameraOptions flipCamera={flipCamera} />
       <CameraActions
@@ -252,10 +273,6 @@ export default function CameraScreen({ navigation, focused }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-  },
   camera: {
     overflow: "hidden",
     flex: 1,
@@ -314,4 +331,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     color: "white",
   },
+  message: {
+    color:"white",
+    alignSelf: "center",
+    paddingTop: 150,
+  }
 });

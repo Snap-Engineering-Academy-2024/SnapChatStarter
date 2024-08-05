@@ -1,9 +1,14 @@
-import { Image, Text, View, Button, StyleSheet, Pressable } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Image, View, StyleSheet } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
-import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
-import { useAuthentication } from "../utils/hooks/useAuthentication";
+import DraggableButtonList from "../components/DraggableButtons";
+import AboutSheet from "../components/AboutSheet";
+import { findJoinStatus } from "../utils/hooks/findJoinStatus";
+import ProfileSections from "../components/ProfileSections";
+import ProfileHeader from "../components/ProfileHeader";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const handleSignOut = async () => {
   try {
@@ -11,7 +16,6 @@ const handleSignOut = async () => {
     if (error) {
       console.error("Error signing out:", error.message);
     } else {
-      // Handle successful sign out (e.g., redirect to login screen)
     }
   } catch (error) {
     console.error("Unexpected error:", error);
@@ -20,65 +24,96 @@ const handleSignOut = async () => {
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const { user } = useAuthentication();
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
+  const userJoinStatus = findJoinStatus();
+  const [showAbout, setShowAbout] = useState(false);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     setAstrology(userSign.sign);
-  }),
-    [];
+  }, [userSign.sign]);
+
+  const SnapTogetherRedirect = async () => {
+    if (userJoinStatus) {
+      navigation.navigate("SnapTogether");
+    } else {
+      setShowAbout(true);
+    }
+  };
+  const badgeOnPressHandlers = {
+    [astrology]: () => navigation.navigate("Astrology"),
+    "🫶🏻🫶🏽🫶🏿": SnapTogetherRedirect,
+  };
+
+  const sectionOnPressHandlers = {
+    "Add to My Story": () => navigation.navigate("Camera"),
+    "Add Friends": () => navigation.navigate("AddFriend"),
+    "My Friends": () => navigation.navigate("Chat"),
+    "Add Your School": () => navigation.navigate("Profile"),
+    SnapTogether: SnapTogetherRedirect,
+  };
 
   return (
-    <View style={{ alignItems: "center" }}>
-      <Image
-        source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
-        style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
-      />
-      <Text
-        style={{
-          justifyContents: "center",
-          textAlign: "center",
-        }}
-      >
-        {user &&
-          user.user_metadata &&
-          user.user_metadata.email.slice(
-            0,
-            user.user_metadata.email.indexOf("@"), // gets part before @ of email address, should use profile username instead
-          )}
-      </Text>
-      <Button
-        onPress={() => {
-          navigation.navigate("Astrology");
-        }}
-        title={astrology}
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-      <Button onPress={handleSignOut} title="Log Out" />
-      <Pressable>
-        <Button
-          onPress={() => {
-            navigation.navigate("Settings", {});
-          }}
-          title="Settings"
+    <View
+      style={{
+        flex: 0.9,
+        flexDirection: "column",
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+      }}
+    >
+      <ProfileHeader />
+      <View style={styles.topContainer}>
+        <Image
+          source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
+          style={styles.avatar}
         />
-      </Pressable>
+        <DraggableButtonList
+          onPressHandlers={badgeOnPressHandlers}
+          astrology={astrology}
+        />
+        <View>
+          <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
+        </View>
+      </View>
+      <View>
+        <ProfileSections onPressHandlers={sectionOnPressHandlers} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  topContainer: {
     width: "100%",
+    flex: 1,
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "top",
+    marginTop: 20,
+  },
+  draggableContainer: {
+    height: 100,
+    marginBottom: 20,
   },
   avatar: {
-    width: 150,
-    height: 150,
-    borderRadius: 150 / 2,
-    alignItems: "center",
+    width: 100,
+    height: 100,
+    borderRadius: 75,
+    marginBottom: 20,
+  },
+  button: {
+    padding: 20,
+    marginHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: "white",
+    borderColor: "black",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
