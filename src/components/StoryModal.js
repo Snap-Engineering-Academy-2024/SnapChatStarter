@@ -1,6 +1,14 @@
-import React from 'react';
-import { Modal, StyleSheet, Text, View, Image, TouchableOpacity, Dimensions,SafeAreaView } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import React from "react";
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  SafeAreaView,
+} from "react-native";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -16,10 +24,8 @@ const StoryModal = ({ showStory, setShowStory, selectedCompany }) => {
       <View style={styles.centeredView}>
         <SafeAreaView style={styles.modalView}>
           <Text style={styles.title}>{selectedCompany.username}</Text>
-          <TouchableOpacity
-            onPress={() => setShowStory(false)}
-          >
-           <View style={styles.imageContainer}>
+          <TouchableOpacity onPress={() => setShowStory(false)}>
+            <View style={styles.imageContainer}>
               {selectedCompany.header_url && (
                 <Image
                   source={{ uri: selectedCompany.poster_url }}
@@ -37,20 +43,19 @@ const StoryModal = ({ showStory, setShowStory, selectedCompany }) => {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'black',
-    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: "black",
     height: "100%",
     width: "100%",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -60,16 +65,16 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 10,
     right: 10,
   },
   title: {
     fontSize: 16,
     marginBottom: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "white",
-    alignSelf: "flex-start"
+    alignSelf: "flex-start",
   },
   companyPhoto: {
     width: SCREEN_WIDTH / 1,
@@ -78,9 +83,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   imageContainer: {
-    flex: 1, // Ensure the container takes up full height
-    justifyContent: 'center', // Center the image vertically
-    alignItems: 'center', // Center the image horizontally
+    flex: 1,
+    justifyContent: "center", // Center the image vertically
+    alignItems: "center", // Center the image horizontally
   },
 });
 

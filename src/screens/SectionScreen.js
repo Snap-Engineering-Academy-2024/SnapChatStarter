@@ -4,12 +4,10 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Button,
   ScrollView,
   FlatList,
 } from "react-native";
-import { SearchBar } from "react-native-elements";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import InfoSheet from "../components/InfoSheet";
 import SnapTogetherFeed from "../components/SnapTogetherFeed";
 import SnapTogetherStories from "../components/SnapTogetherStories";
@@ -28,18 +26,11 @@ const ethnicities = [
 export default function SectionScreen() {
   const route = useRoute();
   const { buttonTitle, companyData } = route.params;
-  const navigation = useNavigation();
-  const handleBack = () => navigation.navigate("SnapTogether");
   const [showAbout, setShowAbout] = useState(false);
-  const [search, setSearch] = useState("");
   const [selectedRaces, setSelectedRaces] = useState(["All Inclusive"]);
   const [selectedCompany, setSelectedCompany] = useState("");
   const [showStory, setShowStory] = useState(false);
   const insets = useSafeAreaInsets();
-
-  const updateSearch = (search) => {
-    setSearch(search);
-  };
 
   const raceSelection = (label) => {
     if (label === "All Inclusive") {
@@ -86,19 +77,6 @@ export default function SectionScreen() {
       }}
     >
       <SectionHeader />
-      {/* <View style={{ alignItems: "flex-start" }}>
-        <Button onPress={handleBack} title="< Snap Together" />
-      </View> */}
-      {/* Search bar */}
-      {/* <SearchBar
-        placeholder="Type Here..."
-        onChangeText={updateSearch}
-        value={search}
-        lightTheme
-        round
-        containerStyle={styles.searchContainer}
-        inputContainerStyle={styles.searchInputContainer}
-      /> */}
       {/* Filter buttons */}
       <ScrollView
         horizontal
@@ -128,7 +106,12 @@ export default function SectionScreen() {
       {companyData && (
         <View style={styles.storyBar}>
           <FlatList
-            data={companyData}
+            data={companyData.filter((company) => {
+              return selectedRaces.some(race => {
+                if (race === "All Inclusive") return true;
+                return company.communities.includes(race);
+              });
+            })}
             horizontal={true}
             ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
             renderItem={({ item }) => (
@@ -148,8 +131,13 @@ export default function SectionScreen() {
       <Text style={styles.sectionTitle}>Events</Text>
       {companyData && (
         <FlatList
-          contentContainerStyle={{ paddingBottom: 250 }}
-          data={companyData}
+          // contentContainerStyle={{ paddingBottom: 250 }}
+          data={companyData.filter((company) => {
+            return selectedRaces.some(race => {
+              if (race === "All Inclusive") return true;
+              return company.communities.includes(race);
+            });
+          })}
           horizontal={false}
           numColumns={2}
           ItemSeparatorComponent={() => <View style={{ height: 20 }} />}

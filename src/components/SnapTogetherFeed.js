@@ -5,7 +5,7 @@ import {
   ImageBackground,
   Pressable,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+
 
 export default function SnapTogetherFeed({ title, eventImage, handlePress }) {
   return (
