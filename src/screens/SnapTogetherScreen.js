@@ -129,5 +129,6 @@ const styles = StyleSheet.create({
   sections: {
     fontSize: 20,
     fontWeight: "semibold",
+    alignItems:"left",
   },
 });

@@ -43,6 +43,7 @@ export default function SectionScreen() {
       style={{
         flex: 0.9,
         flexDirection: "column",
+        alignContent: "left",
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
         paddingLeft: insets.left,
