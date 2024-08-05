@@ -74,7 +74,6 @@ export default function MapScreen({ navigation }) {
         }
     }
   
-  const snapPoints = ["70%"];
   function createPinInfo() {
     PinInfoSheet.current?.present();
   }
@@ -563,7 +562,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     borderRadius:40,
     alignItems: 'center',
-  }
+  },
 
   modalContainer:{
     display:"flex",
