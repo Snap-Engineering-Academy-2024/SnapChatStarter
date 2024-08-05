@@ -48,7 +48,7 @@ export default function MapScreen({ navigation }) {
       //pin disappears after 7 days of NO DEALS at the place
     },
   ])
-  const [sendButton, setSendButton] = useState(true);
+  const [sendButton, setSendButton] = useState(false);
   const [showPins, setShowPins] = useState(false); 
   const PinInfoSheet = useRef(null);
   const TimeInfoSheet = useRef(null);
@@ -58,6 +58,8 @@ export default function MapScreen({ navigation }) {
   const [checkAllDay, setCheckAllDay] = useState(true);
   const [deal, setDeal] = useState('');
   const [organization, setOrganization] = useState('');
+  const [lastAddedPinIndex, setLastAddedPinIndex] = useState(null);
+
 
   const insertData = async () => {
         const eventData = submitToSupabase()
@@ -95,12 +97,12 @@ export default function MapScreen({ navigation }) {
 
     function sendToDatabase(){
       setSendButton(true)
+      PinInfoSheet.current?.close();
+      console.log("sent")
       //push downn the modal
     }
 
-    function deletePin(){
 
-    }
 
   const showLocations = () => {
     if(showPins){
@@ -129,11 +131,18 @@ export default function MapScreen({ navigation }) {
       };
       console.log(e.nativeEvent.coordinate)
       setPins([...pins, newPin]);
+      setLastAddedPinIndex(pins.length);
       createPinInfo();
     }
     
   };
 
+  function deletePin(){
+    if ((lastAddedPinIndex !== null) && (sendButton == false)) {
+      setPins(pins.filter((_, index) => index !== lastAddedPinIndex));
+      setLastAddedPinIndex(null); // Reset the tracker
+    }
+    }
 
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
@@ -188,6 +197,7 @@ export default function MapScreen({ navigation }) {
         ref={PinInfoSheet}
         index={0}
         snapPoints={snapPoints}
+        onDismiss={deletePin}
       >
         <View>
           <View flexDirection={"row"} alignItems= {'center'}>
@@ -247,9 +257,10 @@ export default function MapScreen({ navigation }) {
             </View> 
           </TouchableOpacity>
           <Button
+          onPress = {sendToDatabase} 
            buttonStyle={{backgroundColor: '#33BBFF', borderRadius: 30, width: 370}} 
            style={styles.postPin}>
-            <Text onPress = {sendToDatabase} style={styles.sendButton}>Send</Text>
+            <Text style={styles.sendButton}>Send</Text>
             <Icon color={"white"} name="send" size={"15"}/>
           </Button>
         </View>
@@ -804,6 +815,10 @@ const styles = StyleSheet.create({
   },
   categoryScrollView:{
     marginTop:10,
+  },
+  sendButton: {
+    color: "white",
+    fontWeight: "500"
   }
 
 });
