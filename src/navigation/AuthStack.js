@@ -34,6 +34,7 @@ export default function AuthStack() {
           component={ProfileScreen}
           options={{ headerShown: false }}
         />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

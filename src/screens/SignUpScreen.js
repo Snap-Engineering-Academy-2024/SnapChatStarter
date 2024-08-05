@@ -8,8 +8,6 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { supabase } from "../utils/hooks/supabase";
-
-// Components
 import ReturnButton from "../components/ReturnButton";
 
 export default function SignupScreen({ navigation }) {
