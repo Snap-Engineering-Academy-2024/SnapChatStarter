@@ -29,6 +29,15 @@ export default function MapScreen({ navigation }) {
   function handlePresentModal() {
     bottomSheetRef?.current?.present();
   }
+  const [currentPin, setCurrentPin] = useState({
+    title:"",
+    location:{},
+    address:"",
+    description:"",
+    deals:{},
+    type:"",
+    time:0,
+  })
   const [pins, setPins] = useState([
     {
       title:"First", //user inpit (organization)
@@ -59,25 +68,39 @@ export default function MapScreen({ navigation }) {
   const [deal, setDeal] = useState('');
   const [organization, setOrganization] = useState('');
 
-  const insertData = async () => {
-        const eventData = submitToSupabase()
-        console.log(eventData)
+  const insertData = async (newPin) => {
+    // New Pin is the object
+    // title:"First", //user inpit (organization)
+    //   location: {
+    //     latitude: 34.0211573,
+    //     longitude:  -118.4503864,
+    //   }, //not user input
+    //   address: "", //figure out how to implement when clickig on pin, not user input
+    //   description:"new location", //not required, user input
+    //   deals: {
+    //     name:"", //the discounted item's name
+    //     discount:"", //either free or some percentage off
+    //     time:"", //default is all day for that day
+    //   },
+    // console.log(eventData)
 
-        onClose()
-        try {
-        const { data, error } = await supabase
-            .from("event_table") // 
-            .insert([eventData]); // Insert the event data
-    
-        if (error) {
-            console.error("Event already exists:", error);
-        } else {
-            console.log("Data inserted:", data);
-        }
-        } catch (error) {
-        console.error("Unexpected error:", error);
-        }
+    onClose()
+    try {
+    const { data, error } = await supabase
+        .from("event_table") // 
+        .insert([eventData]); // Insert the event data
+
+    if (error) {
+        console.error("Event already exists:", error);
+    } else {
+        console.log("Data inserted:", data);
     }
+    } catch (error) {
+    console.error("Unexpected error:", error);
+    }
+  }
+
+
     function createPinInfo() {
       PinInfoSheet.current?.present();
       setSendButton(false)
@@ -120,15 +143,43 @@ export default function MapScreen({ navigation }) {
     return null
     
   }
+
+  useEffect(() => {
+    console.log(currentPin);
+  }, [currentPin]);
   const handleMapPress = (e) => {
     if(showPins){
       const newPin = {
         title: `Pin ${pins.length + 1}`,
         location: e.nativeEvent.coordinate,
         description: "User added pin",
+        type:"food",
+        time:24,
+
       };
-      console.log(e.nativeEvent.coordinate)
+      // console.log(newPin.location)
+      // console.log(e.nativeEvent.coordinate)
       setPins([...pins, newPin]);
+      setCurrentPin({
+        location: newPin.location,
+        title:newPin.title,
+        description:newPin.description,
+        time:newPin.time,
+        type:newPin.type,
+      })
+
+// title:"First", //user inpit (organization)
+    //   location: {
+    //     latitude: 34.0211573,
+    //     longitude:  -118.4503864,
+    //   }, //not user input
+    //   address: "", //figure out how to implement when clickig on pin, not user input
+    //   description:"new location", //not required, user input
+    //   deals: {
+    //     name:"", //the discounted item's name
+    //     discount:"", //either free or some percentage off
+    //     time:"", //default is all day for that day
+    //   },
       createPinInfo();
     }
     
@@ -188,6 +239,7 @@ export default function MapScreen({ navigation }) {
         ref={PinInfoSheet}
         index={0}
         snapPoints={snapPoints}
+        onDismiss={deletePin}
       >
         <View>
           <View flexDirection={"row"} alignItems= {'center'}>
@@ -308,7 +360,7 @@ export default function MapScreen({ navigation }) {
           <TouchableOpacity
             style={[styles.userLocation, styles.shadow]}
             onPress={() => {
-              console.log("Go to user location!");
+              // console.log("Go to user location!");
               const { latitude, longitude } = location.coords;
               setCurrentRegion({ ...currentRegion, latitude, longitude });
             }}
