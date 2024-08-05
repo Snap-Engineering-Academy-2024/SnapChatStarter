@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import MapView, { Marker } from "react-native-maps";
+
 import {
   StyleSheet,
   View,
@@ -11,7 +12,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button, ButtonGroup, Icon, withTheme } from '@rneui/themed';
-
+import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -21,6 +22,11 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 export default function MapScreen({ navigation }) {
+  const bottomSheetRef = useRef(null);
+  const snapPoints = ["50%", "90%"];
+  function handlePresentModal() {
+    bottomSheetRef?.current?.present();
+  }
   const [pins, setPins] = useState([
     {
       title:"First", //user inpit (organization)
@@ -66,28 +72,34 @@ export default function MapScreen({ navigation }) {
  
 
   const showLocations = () => {
+    if(showPins){
+      return pins.map((item, index) => {
+        return (
+          <Marker
+            style = {styles.pinsVisible}
+            key = {index}
+            coordinate = {item.location}
+            title = {item.title}
+            description = {item.description}
+          />
+        )
+      })
+    }
 
-    return pins.map((item, index) => {
-      return (
-        <Marker
-          style = {styles.pinsVisible}
-          key = {index}
-          coordinate = {item.location}
-          title = {item.title}
-          description = {item.description}
-        />
-      )
-    })
+    return null
+    
   }
 
   const handleMapPress = (e) => {
-    const newPin = {
-      title: `Pin ${pins.length + 1}`,
-      location: e.nativeEvent.coordinate,
-      description: "User added pin",
-    };
-    console.log(e.nativeEvent.coordinate)
-    setPins([...pins, newPin]);
+    if(showPins){
+      const newPin = {
+        title: `Pin ${pins.length + 1}`,
+        location: e.nativeEvent.coordinate,
+        description: "User added pin",
+      };
+      console.log(e.nativeEvent.coordinate)
+      setPins([...pins, newPin]);
+    }
   };
 
 
@@ -127,6 +139,7 @@ export default function MapScreen({ navigation }) {
 
 
   return (
+    <BottomSheetModalProvider>
     <View style={[styles.container, { marginBottom: tabBarHeight }]}>
       <MapView
         style={styles.map}
@@ -154,6 +167,144 @@ export default function MapScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={[styles.bitmojiContainer]}>
+          <BottomSheetModal backgroundStyle={{backgroundColor:"#F8F8F8"}} ref={bottomSheetRef} index={0} snapPoints={snapPoints}>
+            <View style = {styles.modalContainer}>
+              <Button onClick={() => {
+                bottomSheetRef?.current?.hide();
+              }} style = {styles.closeButton} type="solid" buttonStyle={{
+                backgroundColor: '#EDEEEF',
+                borderRadius: 3,
+                height:40, width:40,
+                marginRight:20,
+                borderRadius:100,
+              }}>
+                <Icon name="close" color="black" size = "20" />
+              </Button>
+              <View style = {{marginTop:-30, marginLeft:20, display:"flex", flexDirection:"row", alignItems:"center", gap:20}}>
+                <Image src="https://wallpapercave.com/wp/JTpVKUS.jpg" style = {{width:60, height:60, borderRadius:100}}></Image>
+                <Text style = {{fontSize:21, fontWeight:"600"}}>Snap Serve</Text>
+              </View>
+
+              <View>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}  style = {styles.categoryScrollView}>
+                <View style = {styles.categoryContainer}>
+                  <Button
+                    title = "Bookmarks"
+                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
+                    buttonStyle={{
+                      backgroundColor: '#EDEEEF',
+                      borderRadius: 30,
+                    }}
+                    ><Icon name="bookmark" color="black" />
+                  Bookmars</Button>
+                  <Button
+                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
+                    buttonStyle={{
+                      backgroundColor: '#EDEEEF',
+                      borderRadius: 30,
+                    }}
+                    ><Icon name="store" color="black" />
+                  Stores</Button>
+                  <Button
+                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
+                    backgroundStyle= {{backgroundColor:"red"}}
+                    buttonStyle={{
+                      backgroundColor: '#EDEEEF',
+                      borderRadius: 30,
+                    }}
+                    ><Icon name="local-dining" color="black" />
+                  Food Banks</Button>
+                  <Button
+                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
+                    backgroundStyle= {{backgroundColor:"red"}}
+                    buttonStyle={{
+                      backgroundColor: '#EDEEEF',
+                      borderRadius: 30,
+                    }}
+                    ><Icon name="local-dining" color="black" />
+                  Restaurants</Button>
+                  </View>
+                  </ScrollView>
+              </View>
+
+
+
+              <ScrollView > 
+                <View style = {styles.dealsContainer}>
+                  <View style = {styles.dealContainer}>
+                    <View style = {styles.imageContainer}>
+                      <Image style = {styles.dealStories} src="http://www.dumpaday.com/wp-content/uploads/2017/01/random-pictures-109.jpg" ></Image>
+                    </View>
+                    <View style = {styles.dealTextContainer}>
+                      <Text style = {{fontWeight:600, fontSize:19}}>Target</Text>
+                      <Text style = {{marginTop:5}}>5 occuring deals</Text>
+                    </View>
+                    <Button
+                      style = {styles.buttonsInside}
+                      buttonStyle={{
+                        backgroundColor: 'transparent',
+                        borderRadius: 30,
+                      }}
+                      ><Icon name="chevron-right" color="black" />
+                    </Button>
+                  </View>               
+                  <View style = {styles.dealContainer}>
+                    <View style = {styles.imageContainer}>
+                      <Image style = {styles.dealStories} src="https://tse3.mm.bing.net/th?id=OIP.7TgBB5DgbtJoSnCFIS7SJgHaHa&pid=Api&P=0&h=220" ></Image>
+                    </View>
+                    <View style = {styles.dealTextContainer}>
+                      <Text style = {{fontWeight:600, fontSize:19}}>Walmart</Text>
+                      <Text style = {{marginTop:5}}>20 occuring deals</Text>
+                    </View>
+                    <Button
+                      style = {styles.buttonsInside}
+                      buttonStyle={{
+                        backgroundColor: 'transparent',
+                        borderRadius: 30,
+                      }}
+                      ><Icon name="chevron-right" color="black" />
+                    </Button>
+                  </View>
+
+                  <View style = {styles.dealContainer}>
+                    <View style = {styles.imageContainer}>
+                      <Image style = {styles.dealStories} src="https://concepto.de/wp-content/uploads/2022/09/random-aleatorio-imprevisible-e1664563555843.jpg" ></Image>
+                    </View>
+                    <View style = {styles.dealTextContainer}>
+                      <Text style = {{fontWeight:600, fontSize:19}}>Food Bank</Text>
+                      <Text style = {{marginTop:5}}>5 occuring deals</Text>
+                    </View>
+                    <Button
+                      style = {styles.buttonsInside}
+                      buttonStyle={{
+                        backgroundColor: 'transparent',
+                        borderRadius: 30,
+                      }}
+                      ><Icon name="chevron-right" color="black" />
+                    </Button>
+                  </View>
+                  <View style = {styles.dealContainer}>
+                    <View style = {styles.imageContainer}>
+                      <Image style = {styles.dealStories} src="https://external-preview.redd.it/JfuQsaTmiI7w5bRdgcebjAO3i95B68pqkHpcdQPjEIs.jpg?width=640&crop=smart&auto=webp&s=d6e44852b2ff8e557c79884ba698a2f55208d3cb" ></Image>
+                    </View>
+                    <View style = {styles.dealTextContainer}>
+                      <Text style = {{fontWeight:600, fontSize:19}}>David's Truck</Text>
+                      <Text style = {{marginTop:5}}>3 occuring deals</Text>
+                    </View>
+                    <Button
+                      style = {styles.buttonsInside}
+                      buttonStyle={{
+                        backgroundColor: 'transparent',
+                        borderRadius: 30,
+                      }}
+                      ><Icon name="chevron-right" color="black" />
+                    </Button>
+                  </View>
+                </View>
+              </ScrollView>
+              
+            </View>
+          </BottomSheetModal>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style = {styles.buttonScrollview}>
             <View style = {styles.buttonContainer}>
               
@@ -166,7 +317,11 @@ export default function MapScreen({ navigation }) {
                   }}
                 ><Icon name="search" color="black" /></Button>
                 <Button
-                  // onPress = {swipeUp}
+                  onPress={() => {
+                    setShowPins(true);
+                    setExpanded(true);
+                    handlePresentModal();
+                  }}
                   style = {styles.buttonsInside}
                   title="Snap Serve"
                   titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
@@ -202,31 +357,21 @@ export default function MapScreen({ navigation }) {
                     borderRadius: 30,
                   }}
                 />
-            
-
-              
+     
             </View>
           </ScrollView>
-          {/* <View style={styles.myBitmoji}>
-            <Image
-              style={styles.bitmojiImage}
-              source={require("../../assets/snapchat/personalBitmoji.png")}
-            />
-            <View style={styles.bitmojiTextContainer}>
-              <Text style={styles.bitmojiText}>My Bitmoji</Text>
-            </View>
-          </View> */}
+
           
         </View>
       </View>
     </View>
-  );
+  </BottomSheetModalProvider>  
+);
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -241,6 +386,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     
   },
+  
+
   map: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
@@ -326,5 +473,84 @@ const styles = StyleSheet.create({
     borderBottomWidth:0.2,
     borderBottomColor:"#D9D9D9"
   },
+  modalContainer:{
+    display:"flex",
+    height:"100%"
+  },
+  closeButton:{
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"flex-end"
+  },
+  dealsContainer:{
+    elevation: 5,
+    marginTop:20,
+    marginRight:10,
+    marginLeft:10,
+    display:"flex",
+    flexDirection:"column",
+    gap:10,
+    height:"100%",
+  },
+  dealContainer:{
+    display:"flex",
+    flexDirection:"row",
+    paddingLeft:10,
+    paddingRight:10,
+    paddingTop:5,
+    paddingBottom:5,
+    backgroundColor:"white",
+    borderRadius:10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    alignItems:"center",
+  },
+  imageContainer: {
+    width: 75,
+    height: 75,
+    borderRadius: 100, 
+    borderWidth: 3, 
+    borderColor: '#0FADFF',
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+  dealStories: {
+    width: 65,
+    height: 65,
+    borderRadius: 100,
+    borderColor: 'white',
+    borderWidth: 2, 
+    backgroundColor: 'white', 
+  },
+  dealTextContainer:{
+    marginLeft:12,
+    flex:1,
+  },
 
+
+  categoryContainer:{
+    display:"flex",
+    flexDirection:"row",
+    gap:10,
+    marginLeft:10
+  },
+  categoryScrollView:{
+    marginTop:10,
+
+
+  }
+  // expanded: {
+  //   height: "50%",
+  //   bottom:0,
+  //   backgroundColor: "white"
+  // },
+  // expandedContent: {
+  //   width: "100%",
+  //   backgroundColor: "white",
+  //   padding: 20,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
 });
