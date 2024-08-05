@@ -8,7 +8,8 @@ import {
   Modal,
   Pressable,
 } from "react-native";
-import { useEffect, useRef, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { shareAsync } from "expo-sharing";
@@ -44,24 +45,24 @@ export default function CameraScreen({ navigation, focused }) {
     })();
   }, []);
 
-  if (!permission) {
-    // Camera permissions are still loading.
-    return <View />;
-  }
+  // if (!permission) {
+  //   // Camera permissions are still loading.
+  //   return <View />;
+  // }
 
-  if (!permission.granted) {
-    // Camera permissions are not granted yet.
-    return (
-      <View style={styles.container}>
-        <Text style={styles.message}>
-          We need your permission to show the camera.
-        </Text>
-        <TouchableOpacity onPress={requestPermission} style={styles.button}>
-          <Text style={styles.text}>Grant Permission</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+  // if (!permission.granted) {
+  //   // Camera permissions are not granted yet.
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text style={styles.message}>
+  //         We need your permission to show the camera.
+  //       </Text>
+  //       <TouchableOpacity onPress={requestPermission} style={styles.button}>
+  //         <Text style={styles.text}>Grant Permission</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // }
 
   function flipCamera() {
     setFacing((current) => (current === "back" ? "front" : "back"));
@@ -136,6 +137,65 @@ export default function CameraScreen({ navigation, focused }) {
       setPhoto(null);
     });
   }
+
+  const [modalVisible, setModalVisible] = useState(true);
+
+  return (
+    <SafeAreaView
+      style={[
+        styles.container,
+        {
+          marginBottom: tabBarHeight,
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+        },
+      ]}
+    >
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalHeading}>Our new Snap feature...{"\n"}~~~~~~~~~~~~~~~~~~~~~~~{"\n"}Introducing Brain Bites!</Text>
+                <Text style={styles.modalParagraph}>{"<"}Games with bite-sized infomation your{"\n"} brain could bite, anywhere and anytime{">"}</Text>
+                <Image 
+                  style={styles.modalImage} 
+                  source={require("../../assets/modal-image.png")}
+                >
+                </Image>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    navigation.navigate("Welcome");
+                    setModalVisible(!modalVisible);
+                  }}>
+                    <Text style={styles.textStyle}>I'll bite!</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}>
+                    <Text style={styles.textStyle}>Nah, not hungry</Text>
+                </Pressable>
+              </View>
+            </View>
+        </Modal>
+      </View>
+      {/* <CameraView style={styles.camera} facing={facing} ref={cameraRef} />
+      <CameraOptions flipCamera={flipCamera} />
+      <CameraActions
+        galleryMenu={galleryMenu}
+        checkGallery={checkGallery}
+        takePhoto={takePhoto}
+      /> */}
+    </SafeAreaView>
+  );
 
   if (photo) {
     const sharePic = () => {
@@ -228,33 +288,18 @@ export default function CameraScreen({ navigation, focused }) {
       </View>
     );
   }
-
-  return (
-    <View
-      style={[
-        styles.container,
-        {
-          marginBottom: tabBarHeight,
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-        },
-      ]}
-    >
-      <CameraView style={styles.camera} facing={facing} ref={cameraRef} />
-      <CameraOptions flipCamera={flipCamera} />
-      <CameraActions
-        galleryMenu={galleryMenu}
-        checkGallery={checkGallery}
-        takePhoto={takePhoto}
-      />
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
   camera: {
     overflow: "hidden",
@@ -274,8 +319,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    marginTop: 400,
-    backgroundColor: "white",
+    marginTop: 50,
+    backgroundColor: "#000000",
+    borderColor: "#FFFFFF",
+    borderWidth: 2,
     borderRadius: 20,
     padding: 15,
     alignItems: "center",
@@ -313,5 +360,40 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     letterSpacing: 0.5,
     color: "white",
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalHeading: {
+    marginBottom: 15,
+    color: "#FFFFFF",
+    fontFamily: "Avenir Next",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  modalParagraph: {
+    marginBottom: 15,
+    textAlign: 'center',
+    color: "#FFFFFF",
+    fontFamily: "Avenir Next",
+  },
+  modalImage: {
+    height: 200,
+    width: 320,
+    marginBottom: 15,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginBottom: 5,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
   },
 });
