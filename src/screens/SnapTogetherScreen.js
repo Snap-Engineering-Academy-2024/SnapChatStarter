@@ -1,5 +1,12 @@
 import React from "react";
-import { Text, View, StyleSheet, Button, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import SnapTogetherHeader from "../components/SnapTogetherHeader";
@@ -60,18 +67,28 @@ export default function SnapTogetherScreen() {
       <Text style={styles.info}>An accessible resource hub</Text>
 
       <View style={styles.buttonContainer}>
-        <Button
+        <TouchableOpacity
           title={"Career Boost"}
           onPress={() => handleSectionPress("Career Boost")}
-        />
-        <Button
+        >
+          <Text style={styles.button}>Career Boost</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
           title={"Mom & Pops"}
           onPress={() => handleSectionPress("Mom & Pops")}
-        />
-        <Button
+        >
+          <Text style={styles.button}>Mom & Pops</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
           title={"Showcase"}
           onPress={() => handleSectionPress("Showcase")}
-        />
+        >
+          <Text style={styles.button}>Showcase</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -127,5 +144,18 @@ const styles = StyleSheet.create({
   sections: {
     fontSize: 20,
     fontWeight: "semibold",
+  },
+  buttonContainer: {
+    alignItems: "left",
+  },
+  button: {
+    fontSize: 20,
+    fontWeight: "bold",
+    alignSelf: "flex-start",
+    fontFamily: "avenir",
+    paddingBottom: 5,
+    paddingTop: 10,
+    paddingLeft: 10,
+    textDecorationLine: 'underline',
   },
 });
