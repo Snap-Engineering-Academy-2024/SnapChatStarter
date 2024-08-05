@@ -384,10 +384,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingBottom: 20,
     bottom: 0,
-    
   },
-  
-
   map: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
@@ -424,38 +421,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom:-1,
   },
-  myBitmoji: {
-    width: 70,
-    height: 70,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 5,
-  },
-  bitmojiImage: {
-    width: 50,
-    height: 50,
-  },
-  bitmojiTextContainer: {
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 4,
-  },
-  bitmojiText: {
-    fontSize: 10,
-    fontWeight: "700",
-  },
   places: {
     width: 70,
     height: 70,
     alignItems: "center",
     justifyContent: "center",
   },
-  myFriends: {
-    width: 70,
-    height: 70,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+
   buttonContainer:{
     display:"flex",
     flexDirection:"row",
@@ -538,19 +510,6 @@ const styles = StyleSheet.create({
   },
   categoryScrollView:{
     marginTop:10,
-
-
   }
-  // expanded: {
-  //   height: "50%",
-  //   bottom:0,
-  //   backgroundColor: "white"
-  // },
-  // expandedContent: {
-  //   width: "100%",
-  //   backgroundColor: "white",
-  //   padding: 20,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
+
 });
