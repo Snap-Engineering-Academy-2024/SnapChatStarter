@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView from "react-native-maps";
 import {
   StyleSheet,
   View,
@@ -10,9 +10,7 @@ import {
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import * as Location from "expo-location";
-
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function MapScreen({ navigation }) {
@@ -23,7 +21,7 @@ export default function MapScreen({ navigation }) {
 
   const [currentRegion, setCurrentRegion] = useState({
     latitude: 34.0211573,
-    longitude:  -118.4503864,
+    longitude: -118.4503864,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -70,6 +68,20 @@ export default function MapScreen({ navigation }) {
             }}
           >
             <Ionicons name="navigate" size={15} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.bitmojiContainer, styles.shadow]}>
+          <TouchableOpacity
+            style={[styles.bitmojiItem, styles.shadow]}
+            onPress={() => navigation.navigate('LocationList')}
+          >
+            <Image
+              style={styles.bitmojiImage}
+              source={require("../../assets/snapchat/personalBitmoji.png")}
+            />
+            <View style={styles.bitmojiTextContainer}>
+              <Text style={styles.bitmojiText}>Locations</Text>
+            </View>
           </TouchableOpacity>
         </View>
         <View style={[styles.bitmojiContainer, styles.shadow]}>
@@ -187,6 +199,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   myFriends: {
+    width: 70,
+    height: 70,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bitmojiItem: {
     width: 70,
     height: 70,
     alignItems: "center",
