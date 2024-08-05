@@ -1,24 +1,12 @@
-import React, { useState } from "react";
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  Button,
-  Image,
-} from "react-native";
-// import Ionicons from "react-native-vector-icons/Ionicons";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import React from "react";
+import { Text, View, StyleSheet, Button, Image } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
-import AboutSheet from "../components/AboutSheet";
 import SnapTogetherHeader from "../components/SnapTogetherHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
-  const [showAbout, setShowAbout] = useState(false);
   const insets = useSafeAreaInsets();
 
   const handleSectionPress = async (buttonTitle) => {
@@ -38,9 +26,7 @@ export default function SnapTogetherScreen() {
     }
 
     if (table) {
-      const { data, error } = await supabase
-        .from(table)
-        .select("*")
+      const { data, error } = await supabase.from(table).select("*");
 
       if (error) {
         console.error("Error fetching company data:", error);
@@ -53,16 +39,17 @@ export default function SnapTogetherScreen() {
     }
   };
 
-
   return (
-    <View style={{
-      flex: 0.9,
-      flexDirection: "column",
-      paddingTop: insets.top,
-      paddingBottom: insets.bottom,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-    }}>
+    <View
+      style={{
+        flex: 0.9,
+        flexDirection: "column",
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+      }}
+    >
       <SnapTogetherHeader />
       <Image
         source={{
@@ -73,19 +60,7 @@ export default function SnapTogetherScreen() {
 
       <Text style={styles.snapTogetherText}>SnapTogether</Text>
       <Text style={styles.info}>An accessible resource hub</Text>
-      <TouchableOpacity
-        onPress={() => {
-          setShowAbout(true);
-        }}
-        accessibilityLabel="Show About Sheet"
-      >
-        <Ionicons
-          style={{ fontSize: 26, alignSelf: "center" }}
-          name={"help"}
-          size={30}
-          color="black"
-        />
-      </TouchableOpacity>
+
       <View style={styles.buttonContainer}>
         <Button
           title={"Career Boost"}
@@ -99,9 +74,6 @@ export default function SnapTogetherScreen() {
           title={"Showcase"}
           onPress={() => handleSectionPress("Showcase")}
         />
-      </View>
-      <View>
-        <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
       </View>
     </View>
   );

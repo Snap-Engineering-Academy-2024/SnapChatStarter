@@ -1,13 +1,10 @@
-import { Text, View, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { View, StyleSheet,TouchableOpacity } from "react-native";
 import { colors } from "../../assets/themes/colors";
 import { fontHeader } from "../../assets/themes/font";
-import { Followers, More, Search } from "../../assets/snapchat/HeaderIcons";
-import { createStackNavigator } from "@react-navigation/stack";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
-import { supabase } from "../utils/hooks/supabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import SnapTogetherSearchModal from "./SnapTogetherSearchModal";
 import Ionicons from "@expo/vector-icons/Ionicons";

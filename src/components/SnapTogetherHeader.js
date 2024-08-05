@@ -1,19 +1,16 @@
-import { Text, View, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { colors } from "../../assets/themes/colors";
 import { fontHeader } from "../../assets/themes/font";
-import { Followers, More, Search } from "../../assets/snapchat/HeaderIcons";
-import { createStackNavigator } from "@react-navigation/stack";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
-import { useAuthentication } from "../utils/hooks/useAuthentication";
-import { supabase } from "../utils/hooks/supabase";
+import { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import AboutSheet from "../components/AboutSheet";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function SnapTogetherHeader() {
   const navigation = useNavigation();
-
-  const { user } = useAuthentication();
+  const [showAbout, setShowAbout] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -29,10 +26,18 @@ export default function SnapTogetherHeader() {
       </View>
       <View style={styles.headerRight}>
         <TouchableOpacity
-          style={styles.shareButton}
-          //   onPress={() => navigation.navigate("Settings")}
+          style={styles.settingsButton}
+          onPress={() => {
+            setShowAbout(true);
+          }}
+          accessibilityLabel="Show About Sheet"
         >
-          <Icon name="share" size={24} />
+          <Ionicons
+            style={{ alignSelf: "center" }}
+            name={"information-circle"}
+            size={24}
+            color="black"
+          />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.settingsButton}
@@ -40,6 +45,9 @@ export default function SnapTogetherHeader() {
         >
           <Icon name="settings" size={24} />
         </TouchableOpacity>
+      </View>
+      <View>
+        <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
       </View>
     </View>
   );
@@ -62,19 +70,19 @@ const styles = StyleSheet.create({
     fontWeight: fontHeader.fontWeight,
   },
   headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
   },
   headerCenter: {
     flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
     flex: 1,
   },
   buttons: {
@@ -98,6 +106,6 @@ const styles = StyleSheet.create({
   },
   emailText: {
     fontWeight: "bold",
-    fontSize: 18
+    fontSize: 18,
   },
 });
