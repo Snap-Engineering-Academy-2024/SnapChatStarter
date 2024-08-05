@@ -113,6 +113,48 @@ export default function MapScreen({ navigation }) {
             <Ionicons name="navigate" size={15} color="black" />
           </TouchableOpacity>
         </View>
+        <View style={[styles.bitmojiContainer, styles.shadow]}>
+          <TouchableOpacity
+            style={[styles.bitmojiItem, styles.shadow]}
+            onPress={() => navigation.navigate('LocationList')}
+          >
+            <Image
+              style={styles.bitmojiImage}
+              source={require("../../assets/snapchat/personalBitmoji.png")}
+            />
+            <View style={styles.bitmojiTextContainer}>
+              <Text style={styles.bitmojiText}>Locations</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.bitmojiContainer, styles.shadow]}>
+          <View style={styles.myBitmoji}>
+            <Image
+              style={styles.bitmojiImage}
+              source={require("../../assets/snapchat/personalBitmoji.png")}
+            />
+            <View style={styles.bitmojiTextContainer}>
+              <Text style={styles.bitmojiText}>My Bitmoji</Text>
+            </View>
+          </View>
+          <View style={styles.places}>
+            <Image
+              style={styles.bitmojiImage}
+              source={require("../../assets/snapchat/personalBitmoji.png")}
+            />
+            <View style={styles.bitmojiTextContainer}>
+              <Text style={styles.bitmojiText}>Places</Text>
+            </View>
+          </View>
+          <View style={styles.myFriends}>
+            <Image
+              style={styles.bitmojiImage}
+              source={require("../../assets/snapchat/personalBitmoji.png")}
+            />
+            <View style={styles.bitmojiTextContainer}>
+              <Text style={styles.bitmojiText}>Friends</Text>
+            </View>
+          </View>
         <View style={styles.buttonsContainer}>
           <ScrollView
             horizontal
@@ -239,6 +281,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: "center",
+    marginRight: 6,
   },
   buttonText: {
     fontSize: 13,
