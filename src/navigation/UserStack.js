@@ -9,6 +9,8 @@ import SearchScreen from "../screens/SearchScreen";
 import AstrologyScreen from "../screens/AstrologyScreen";
 import MemoryScreen from "../screens/MemoryScreen";
 import CommSelectionScreen from "../screens/CommSelectionScreen";
+import InterestFormScreen from  "../screens/InterestFormScreen";
+
 
 const Stack = createStackNavigator();
 
@@ -56,6 +58,11 @@ export default function App() {
         <Stack.Screen
           name="CommunitySelection"
           component={CommSelectionScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="InterestSelection"
+          component={InterestFormScreen}
           options={{ headerShown: true }}
         />
       </Stack.Navigator>
