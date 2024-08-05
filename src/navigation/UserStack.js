@@ -11,7 +11,9 @@ import FriendStory from "../screens/FriendStory";
 import AstrologyScreen from "../screens/AstrologyScreen";
 import MemoryScreen from "../screens/MemoryScreen";
 import EventScreen from "../screens/EventScreen"; //New component by Sona and Christian
+import WelcomeScreen from "../screens/WelcomeScreen";
 import TopicsScreen from "../screens/TopicsScreen";
+import ResourcesScreen from "../screens/ResourcesScreen";
 import LevelsScreen from "../screens/LevelsScreen";
 import GameScreen from "../screens/GameScreen";
 
@@ -63,8 +65,18 @@ export default function App() {
           options={{ headerShown: true }}
         />
         <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
           name="Topics"
           component={TopicsScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="Resources"
+          component={ResourcesScreen}
           options={{ headerShown: true }}
         />
         <Stack.Screen
