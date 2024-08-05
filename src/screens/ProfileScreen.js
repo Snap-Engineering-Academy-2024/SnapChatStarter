@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, View, StyleSheet } from "react-native";
+import { Image, View, StyleSheet,ScrollView } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
@@ -68,7 +68,7 @@ export default function ProfileScreen() {
       <ProfileHeader />
       <View style={styles.topContainer}>
         <Image
-          source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
+           source={require("../../assets/SnapTogether/JadeBitmojiPicture.png")}
           style={styles.avatar}
         />
         <DraggableButtonList
@@ -79,7 +79,7 @@ export default function ProfileScreen() {
           <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
         </View>
       </View>
-      <View>
+      <View style={styles.sections}>
         <ProfileSections onPressHandlers={sectionOnPressHandlers} />
       </View>
     </View>
@@ -100,9 +100,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 75,
+    width: "100%",
+    height: "100%",
+    // borderRadius: 75,
     marginBottom: 20,
   },
   button: {
@@ -116,4 +116,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  sections: {
+    paddingTop: 100,
+  }
 });

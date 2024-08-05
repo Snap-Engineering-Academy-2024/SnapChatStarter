@@ -36,7 +36,7 @@ const AboutSheet = ({ showAbout, setShowAbout }) => {
         <View style={styles.line} />
         <Text style={styles.title}>SnapTogether</Text>
         <Text style={styles.text}>
-          Welcome to SnapTogether! Press 'Join' to take advantage of our resources.
+        This is a vibrant space for people from different backgrounds to share career tips, cool local businesses, and tasty eats. Dive into stories, earn badges and join a network that’s all about you. 
         </Text>
         <View style={[styles.buttonsView, !joinStatus ? { justifyContent: 'space-between' } : { justifyContent: 'center' }]}>
 
