@@ -14,6 +14,8 @@ import SnapTogetherStories from "../components/SnapTogetherStories";
 import StoryModal from "../components/StoryModal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SectionHeader from "../components/SectionHeader";
+import { useRaceSelection } from "../utils/hooks/useRaceSelection";
+import { useFilteredData } from "../utils/hooks/useFilteredData";
 
 const ethnicities = [
   { label: "All Inclusive", acronym: "All" },
@@ -27,47 +29,19 @@ export default function SectionScreen() {
   const route = useRoute();
   const { buttonTitle, companyData } = route.params;
   const [showAbout, setShowAbout] = useState(false);
-  const [selectedRaces, setSelectedRaces] = useState(["All Inclusive"]);
   const [selectedCompany, setSelectedCompany] = useState("");
   const [showStory, setShowStory] = useState(false);
   const insets = useSafeAreaInsets();
 
-  const raceSelection = (label) => {
-    if (label === "All Inclusive") {
-      setSelectedRaces(["All Inclusive"]);
-    } else {
-      setSelectedRaces((prevSelectedRaces) => {
-        const isAlreadySelected = prevSelectedRaces.includes(label);
-        let updatedSelections;
+  const { selectedRaces, raceSelection } = useRaceSelection(["All Inclusive"], ethnicities);
+  const filteredData = useFilteredData(companyData, selectedRaces);
 
-        if (isAlreadySelected) {
-          updatedSelections = prevSelectedRaces.filter(
-            (race) => race !== label
-          );
-        } else {
-          updatedSelections = prevSelectedRaces
-            .filter((race) => race !== "All Inclusive")
-            .concat(label);
-        }
-
-        if (updatedSelections.length === ethnicities.length - 1) {
-          return ["All Inclusive"];
-        }
-
-        return updatedSelections.length === 0
-          ? ["All Inclusive"]
-          : updatedSelections;
-      });
-    }
-  };
-
-  const subtitleText =
-    selectedRaces.length === 1 ? selectedRaces[0] : "Multi-Inclusive";
+  const subtitleText = selectedRaces.length === 1 ? selectedRaces[0] : "Multi-Inclusive";
 
   return (
     <View
       style={{
-        flex: .9,
+        flex: 0.9,
         flexDirection: "column",
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
@@ -106,12 +80,7 @@ export default function SectionScreen() {
       {companyData && (
         <View style={styles.storyBar}>
           <FlatList
-            data={companyData.filter((company) => {
-              return selectedRaces.some(race => {
-                if (race === "All Inclusive") return true;
-                return company.communities.includes(race);
-              });
-            })}
+            data={filteredData}
             horizontal={true}
             ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
             renderItem={({ item }) => (
@@ -131,13 +100,7 @@ export default function SectionScreen() {
       <Text style={styles.sectionTitle}>Events</Text>
       {companyData && (
         <FlatList
-          // contentContainerStyle={{ paddingBottom: 250 }}
-          data={companyData.filter((company) => {
-            return selectedRaces.some(race => {
-              if (race === "All Inclusive") return true;
-              return company.communities.includes(race);
-            });
-          })}
+          data={filteredData}
           horizontal={false}
           numColumns={2}
           ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
@@ -172,15 +135,6 @@ export default function SectionScreen() {
 }
 
 const styles = StyleSheet.create({
-  searchContainer: {
-    backgroundColor: "transparent",
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-    paddingHorizontal: 0,
-  },
-  searchInputContainer: {
-    backgroundColor: "#EFEFEF",
-  },
   scrollView: {
     maxHeight: 50,
     paddingBottom: 60,
@@ -228,23 +182,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 10,
     paddingLeft: 10,
-  },
-  cardContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 10,
-    margin: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
   },
   storyBar: {
     display: "flex",
