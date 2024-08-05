@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
-
 import {
   StyleSheet,
   View,
@@ -12,13 +11,11 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { Button, ButtonGroup, Icon, withTheme } from '@rneui/themed';
+import { Button, ButtonGroup, Icon, withTheme, CheckBox } from '@rneui/themed';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import * as Location from "expo-location";
-
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 
@@ -50,7 +47,11 @@ export default function MapScreen({ navigation }) {
   
   const [showPins, setShowPins] = useState(false); 
   const PinInfoSheet = useRef(null);
+  const TimeInfoSheet = useRef(null);
+  const RepeatInfoSheet = useRef(null);
+  const TypeInfoSheet = useRef(null);
   const [expanded, setExpanded] = useState(false);
+  const [checkAllDay, setCheckAllDay] = useState(true);
   const [deal, setDeal] = useState('');
   const [organization, setOrganization] = useState('');
 
@@ -76,6 +77,15 @@ export default function MapScreen({ navigation }) {
     function createPinInfo() {
       PinInfoSheet.current?.present();
     }
+    function TimeInfo() {
+      TimeInfoSheet.current?.present();
+    }
+    function RepeatInfo(){
+      RepeatInfoSheet.current?.present();
+    }
+    function TypeInfo(){
+      TypeInfoSheet.current?.present();
+    }
 
   const showLocations = () => {
     if(showPins){
@@ -95,7 +105,6 @@ export default function MapScreen({ navigation }) {
     return null
     
   }
-
   const handleMapPress = (e) => {
     if(showPins){
       const newPin = {
@@ -182,40 +191,101 @@ export default function MapScreen({ navigation }) {
           onChangeText={(organization)=> setOrganization(organization)}
           value ={organization}
           />
-          <TouchableOpacity style ={styles.moreInfoContainer}>
-            <View flexDirection={"row"} alignItems={"center"}>
+          <View paddingTop={30} style={styles.moreInfoContainer}>
+            <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
+              <View flexDirection={"column"}>
+                <Text style={styles.moreInfoTitle}>All Day</Text>
+                <Text style={styles.moreInfoSub}>This deal runs for 24 hours.</Text>
+              </View>
+               <CheckBox 
+               checked={checkAllDay}
+              onPress={() => setCheckAllDay(!checkAllDay)}/>
+            </View>
+          </View>
+
+          <TouchableOpacity style ={styles.moreInfoContainer} onPress={TimeInfo}>
+            <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
               <View flexDirection={"column"}>
                 <Text style = {styles.moreInfoTitle}>Time</Text>
                 <Text style = {styles.moreInfoSub}>From what time is this deal available?</Text>
               </View>
-              <Icon name="arrow-forward-ios" size={15} paddingLeft={149}/>
+              <Icon name="arrow-forward-ios" size={15}/>
             </View> 
           </TouchableOpacity>
-          <TouchableOpacity style ={styles.moreInfoContainer}>
-            <View flexDirection={"row"} alignItems={"center"}>
+          <TouchableOpacity style ={styles.moreInfoContainer} onPress={RepeatInfo}>
+            <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
               <View flexDirection={"column"}>
                 <Text style = {styles.moreInfoTitle}>Repeat</Text>
                 <Text style = {styles.moreInfoSub}>If applicable, enter the days this deal reoccurs.</Text>
               </View>
-              <Icon name="arrow-forward-ios" size={15} paddingLeft={97}/>
+              <Icon name="arrow-forward-ios" size={15}/>
             </View> 
           </TouchableOpacity>
-          <TouchableOpacity style ={styles.moreInfoContainer}>
-            <View flexDirection={"row"} alignItems={"center"}>
+          <TouchableOpacity style ={styles.moreInfoContainer} onPress={TypeInfo}>
+            <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
               <View flexDirection={"column"}>
                 <Text style = {styles.moreInfoTitle}>Resource Type</Text>
-                <Text style = {styles.moreInfoSub}>Select all filters that apply to this resource</Text>
+                <Text style = {styles.moreInfoSub}>Select all filters that apply to this resource.</Text>
               </View>
-              <Icon name="arrow-forward-ios" size={15} paddingLeft={120}/>
+              <Icon name="arrow-forward-ios" size={15}/>
             </View> 
           </TouchableOpacity>
           <Button
            buttonStyle={{backgroundColor: '#33BBFF', borderRadius: 30, width: 370}} 
            style={styles.postPin}>
-            <Text color={"#FFFFFF"}>Send</Text>
-            <Icon name="send" size={"15"}/>
+            <Text style={styles.sendButton}>Send</Text>
+            <Icon color={"white"} name="send" size={"15"}/>
           </Button>
         </View>
+      </BottomSheetModal>
+      <BottomSheetModal
+      ref={TimeInfoSheet}
+      index={0}
+      snapPoints={snapPoints}
+      >
+        <Text style={styles.InfoHeader}> Time </Text>
+        <View style={styles.moreInfoContainer}>
+            <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
+              <View flexDirection={"column"}>
+                <Text style={styles.moreInfoTitle}>Start</Text>
+                <Text style={styles.moreInfoSub}>What time does this deal begin?</Text>
+              </View>
+               <CheckBox 
+               checked={checkAllDay}
+              onPress={() => setCheckAllDay(!checkAllDay)}/>
+            </View>
+         </View>
+         <View style={styles.moreInfoContainer}>
+            <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
+              <View flexDirection={"column"}>
+                <Text style={styles.moreInfoTitle}>End</Text>
+                <Text style={styles.moreInfoSub}>What time does this deal End?</Text>
+              </View>
+               <CheckBox 
+               checked={checkAllDay}
+              onPress={() => setCheckAllDay(!checkAllDay)}/>
+            </View>
+         </View>
+      </BottomSheetModal>
+      <BottomSheetModal
+      ref={RepeatInfoSheet}
+      index={0}
+      snapPoints={snapPoints}
+      >
+        <Text style={styles.InfoHeader}> Repeat </Text>
+        <View style={styles.moreInfoContainer}>
+              <View flexDirection={"column"}>
+                <Text style={styles.moreInfoTitle}>Repeat on</Text>
+                <Text style={styles.moreInfoSub}>Select the day this deal repeats on.</Text>
+              </View>
+        </View>
+      </BottomSheetModal>
+      <BottomSheetModal
+      ref={TypeInfoSheet}
+      index={0}
+      snapPoints={snapPoints}
+      >
+        <Text style ={styles.InfoHeader}>Type</Text>
       </BottomSheetModal>
       <View style={[styles.mapFooter, expanded ? styles.expanded : null]}> 
         <View style={styles.locationContainer}>
@@ -366,7 +436,6 @@ export default function MapScreen({ navigation }) {
                   </View>
                 </View>
               </ScrollView>
-              
             </View>
           </BottomSheetModal>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style = {styles.buttonScrollview}>
@@ -421,11 +490,8 @@ export default function MapScreen({ navigation }) {
                     borderRadius: 30,
                   }}
                 />
-     
             </View>
           </ScrollView>
-
-          
         </View>
       </View>
     </View>
@@ -620,8 +686,6 @@ const styles = StyleSheet.create({
     marginLeft:12,
     flex:1,
   },
-
-
   categoryContainer:{
     display:"flex",
     flexDirection:"row",
@@ -630,6 +694,16 @@ const styles = StyleSheet.create({
   },
   categoryScrollView:{
     marginTop:10,
+  },
+  sendButton:{
+    color: "white",
+  },
+  InfoHeader: {
+    textAlign: 'center',
+    fontSize: 17,
+    paddingTop: 10,
+    fontWeight: '500',
+
   }
 
 });
