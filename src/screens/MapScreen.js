@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import {
   StyleSheet,
@@ -231,7 +234,7 @@ export default function MapScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={[styles.bitmojiContainer]}>
-          <BottomSheetModal backgroundStyle={{backgroundColor:"#F8F8F8"}} ref={bottomSheetRef} index={0} snapPoints={snapPoints}>
+          <BottomSheetModal backgroundStyle={{backgroundColor:"white"}} ref={bottomSheetRef} index={0} snapPoints={snapPoints}>
             <View style = {styles.modalContainer}>
               <Button onClick={() => {
                 bottomSheetRef?.current?.hide();
@@ -245,8 +248,30 @@ export default function MapScreen({ navigation }) {
                 <Icon name="close" color="black" size = "20" />
               </Button>
               <View style = {{marginTop:-30, marginLeft:20, display:"flex", flexDirection:"row", alignItems:"center", gap:20}}>
-                <Image src="https://wallpapercave.com/wp/JTpVKUS.jpg" style = {{width:60, height:60, borderRadius:100}}></Image>
-                <Text style = {{fontSize:21, fontWeight:"600"}}>Snap Serve</Text>
+                <View style = {styles.imageContainer}>
+                  <Image style = {styles.mainStories} src="https://wallpapercave.com/wp/JTpVKUS.jpg" ></Image>
+                </View>
+                <View style = {{
+                  display:"flex",
+                }}>
+                  
+                  <Text style = {{fontSize:18, fontWeight:"600", marginBottom:5}}>Snap Bite</Text>
+                  <Text style = {{marginBottom:4, color:"#1A9964", fontWeight:400, fontSize:12}}>45 Deals Nearby</Text>
+                  <View style={{
+                    display:"flex",
+                    flexDirection:"row",
+                    gap:4,
+                    alignItems:"center"
+                  }}>
+                    <AntDesign name="star" size={16} color="#0894FA" />
+                    <AntDesign name="star" size={16} color="#0894FA" />
+                    <AntDesign name="star" size={16} color="#0894FA" />
+                    <AntDesign name="star" size={16} color="#0894FA" />
+                    <AntDesign name="staro" size={16} color="#0894FA" />
+                    <Text style = {{fontSize:12, color:"#646567"}}>2034 Shares</Text>
+                  </View>
+                  
+                </View>
               </View>
 
               <View>
@@ -254,41 +279,112 @@ export default function MapScreen({ navigation }) {
                 <View style = {styles.categoryContainer}>
                   <Button
                     title = "Bookmarks"
-                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
+                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 12, margin:3 }}
                     buttonStyle={{
-                      backgroundColor: '#EDEEEF',
+                      borderWidth:1,
+                      paddingTop:3,
+                      paddingBottom:3,
+                      paddingLeft:8,
+                      paddingRight:8,
+                      borderColor:"#E2E3E5",
+                      backgroundColor: 'white',
                       borderRadius: 30,
                     }}
-                    ><Icon name="bookmark" color="black" />
-                  Bookmars</Button>
+                    >
+                  🎉 Big Groups</Button>
                   <Button
-                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
+                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 12, margin:3 }}
                     buttonStyle={{
-                      backgroundColor: '#EDEEEF',
+                      borderWidth:1,
+                      paddingTop:3,
+                      paddingBottom:3,
+                      paddingLeft:8,
+                      paddingRight:8,
+                      borderColor:"#E2E3E5",
+                      backgroundColor: 'white',
                       borderRadius: 30,
                     }}
-                    ><Icon name="store" color="black" />
-                  Stores</Button>
+                    >
+                  🍾 Special Occasions</Button>
                   <Button
-                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
+                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 12, margin:3 }}
                     backgroundStyle= {{backgroundColor:"red"}}
                     buttonStyle={{
-                      backgroundColor: '#EDEEEF',
+                      borderWidth:1,
+                      paddingTop:3,
+                      paddingBottom:3,
+                      paddingLeft:8,
+                      paddingRight:8,
+                      borderColor:"#E2E3E5",
+                      backgroundColor: 'white',
                       borderRadius: 30,
                     }}
-                    ><Icon name="local-dining" color="black" />
-                  Food Banks</Button>
+                    >
+                  🏠 Family Friends</Button>
                   <Button
-                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
+                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 12, margin:3 }}
                     backgroundStyle= {{backgroundColor:"red"}}
                     buttonStyle={{
-                      backgroundColor: '#EDEEEF',
+                      borderWidth:1,
+                      paddingTop:3,
+                      paddingBottom:3,
+                      paddingLeft:8,
+                      paddingRight:8,
+                      borderColor:"#E2E3E5",
+                      backgroundColor: 'white',
                       borderRadius: 30,
                     }}
-                    ><Icon name="local-dining" color="black" />
-                  Restaurants</Button>
+                    >
+                  🍽 Restaurants</Button>
                   </View>
                   </ScrollView>
+              </View>
+
+              <View style = {styles.shareContainer}>
+                <View style = {{flex:1}}>
+                  <Button
+                      titleStyle={{ fontWeight: "500", color:"black", fontSize: 12 }}
+                      backgroundStyle= {{backgroundColor:"red"}}
+                      buttonStyle={{
+                        paddingTop:8,
+                        paddingBottom:8,
+                        backgroundColor: "#EDEEEF",
+                        borderRadius: 30,
+                      }}
+                      >
+                    <FontAwesome6 name="heart" size={20} color="black" /> 71</Button>
+                  </View>
+
+                  <View style = {{flex:1}}>
+                    <Button
+                      titleStyle={{ fontWeight: "500", color:"black", fontSize: 12}}
+                      backgroundStyle= {{backgroundColor:"red"}}
+                      buttonStyle={{
+                        paddingTop:8,
+                        paddingBottom:8,
+                        backgroundColor: "#EDEEEF",
+                        borderRadius: 30,
+                      }}
+                      >
+                    <MaterialIcons name="filter-list" size={20} color="black" /> Filter</Button>
+                  </View>
+                  <View style = {{flex:1}}>
+                    <Button
+                    titleStyle={{ fontWeight: "500", color:"black", fontSize: 12}}
+                    backgroundStyle= {{backgroundColor:"blue"}}
+                    buttonStyle={{
+                      paddingTop:8,
+                      paddingBottom:8,
+                      backgroundColor: "#0CADFF",
+
+                      borderRadius: 30,
+                    
+                    }}
+                    >
+                  <FontAwesome6 name="share" size={20} color="white" />
+                  </Button>
+                  </View>
+
               </View>
 
 
@@ -296,9 +392,7 @@ export default function MapScreen({ navigation }) {
               <ScrollView > 
                 <View style = {styles.dealsContainer}>
                   <View style = {styles.dealContainer}>
-                    <View style = {styles.imageContainer}>
-                      <Image style = {styles.dealStories} src="http://www.dumpaday.com/wp-content/uploads/2017/01/random-pictures-109.jpg" ></Image>
-                    </View>
+                    <Image style = {styles.dealStories} src="http://www.dumpaday.com/wp-content/uploads/2017/01/random-pictures-109.jpg" ></Image>
                     <View style = {styles.dealTextContainer}>
                       <Text style = {{fontWeight:600, fontSize:19}}>Target</Text>
                       <Text style = {{marginTop:5}}>5 occuring deals</Text>
@@ -313,9 +407,7 @@ export default function MapScreen({ navigation }) {
                     </Button>
                   </View>               
                   <View style = {styles.dealContainer}>
-                    <View style = {styles.imageContainer}>
-                      <Image style = {styles.dealStories} src="https://tse3.mm.bing.net/th?id=OIP.7TgBB5DgbtJoSnCFIS7SJgHaHa&pid=Api&P=0&h=220" ></Image>
-                    </View>
+                    <Image style = {styles.dealStories} src="https://tse3.mm.bing.net/th?id=OIP.7TgBB5DgbtJoSnCFIS7SJgHaHa&pid=Api&P=0&h=220" ></Image>
                     <View style = {styles.dealTextContainer}>
                       <Text style = {{fontWeight:600, fontSize:19}}>Walmart</Text>
                       <Text style = {{marginTop:5}}>20 occuring deals</Text>
@@ -331,9 +423,7 @@ export default function MapScreen({ navigation }) {
                   </View>
 
                   <View style = {styles.dealContainer}>
-                    <View style = {styles.imageContainer}>
-                      <Image style = {styles.dealStories} src="https://concepto.de/wp-content/uploads/2022/09/random-aleatorio-imprevisible-e1664563555843.jpg" ></Image>
-                    </View>
+                    <Image style = {styles.dealStories} src="https://concepto.de/wp-content/uploads/2022/09/random-aleatorio-imprevisible-e1664563555843.jpg" ></Image>
                     <View style = {styles.dealTextContainer}>
                       <Text style = {{fontWeight:600, fontSize:19}}>Food Bank</Text>
                       <Text style = {{marginTop:5}}>5 occuring deals</Text>
@@ -348,9 +438,7 @@ export default function MapScreen({ navigation }) {
                     </Button>
                   </View>
                   <View style = {styles.dealContainer}>
-                    <View style = {styles.imageContainer}>
-                      <Image style = {styles.dealStories} src="https://external-preview.redd.it/JfuQsaTmiI7w5bRdgcebjAO3i95B68pqkHpcdQPjEIs.jpg?width=640&crop=smart&auto=webp&s=d6e44852b2ff8e557c79884ba698a2f55208d3cb" ></Image>
-                    </View>
+                    <Image style = {styles.dealStories} src="https://external-preview.redd.it/JfuQsaTmiI7w5bRdgcebjAO3i95B68pqkHpcdQPjEIs.jpg?width=640&crop=smart&auto=webp&s=d6e44852b2ff8e557c79884ba698a2f55208d3cb" ></Image>
                     <View style = {styles.dealTextContainer}>
                       <Text style = {{fontWeight:600, fontSize:19}}>David's Truck</Text>
                       <Text style = {{marginTop:5}}>3 occuring deals</Text>
@@ -578,43 +666,52 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginTop:20,
     marginRight:10,
+    gap:1,
     marginLeft:10,
     display:"flex",
     flexDirection:"column",
-    gap:10,
-    height:"100%",
+    // gap:10,
+    backgroundColor: "red",
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    borderRadius:10,
   },
   dealContainer:{
     display:"flex",
     flexDirection:"row",
     paddingLeft:10,
+    backgroundColor:"white",
     paddingRight:10,
     paddingTop:5,
     paddingBottom:5,
-    backgroundColor:"white",
-    borderRadius:10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    borderBottomWidth:1,
+    borderBottomColor:"transparent",
     alignItems:"center",
   },
   imageContainer: {
     width: 75,
     height: 75,
     borderRadius: 100, 
-    borderWidth: 3, 
+    borderWidth: 2, 
     borderColor: '#0FADFF',
     justifyContent: 'center', 
     alignItems: 'center',
   },
   dealStories: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    borderColor: 'white',
+    backgroundColor: 'white', 
+  },
+  mainStories:{
     width: 65,
     height: 65,
     borderRadius: 100,
     borderColor: 'white',
-    borderWidth: 2, 
-    backgroundColor: 'white', 
+    backgroundColor: 'white',
   },
   dealTextContainer:{
     marginLeft:12,
@@ -626,10 +723,22 @@ const styles = StyleSheet.create({
     display:"flex",
     flexDirection:"row",
     gap:10,
-    marginLeft:10
+  
   },
   categoryScrollView:{
-    marginTop:10,
+    marginTop:20,
+    marginLeft:20,
+  },
+
+  shareContainer:{
+    display:"flex",
+    justifyContent:"space-between",
+    alignItems:"center",
+    gap:10,
+    flexDirection:"row",
+    marginLeft:20, marginRight:20,
+    marginTop:20,
+    height:50,
   }
 
 });
