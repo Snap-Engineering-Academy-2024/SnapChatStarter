@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   myBitmoji: {
     alignItems: "center",
     justifyContent: "center",
-    paddingRight: 10,
+    paddingLeft: 20,
   },
   bitmojiImage: {
     width: 60,

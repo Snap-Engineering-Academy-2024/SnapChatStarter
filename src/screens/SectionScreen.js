@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   Button,
   ScrollView,
   FlatList,
@@ -15,6 +14,8 @@ import InfoSheet from "../components/InfoSheet";
 import SnapTogetherFeed from "../components/SnapTogetherFeed";
 import SnapTogetherStories from "../components/SnapTogetherStories";
 import StoryModal from "../components/StoryModal";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import SectionHeader from "../components/SectionHeader";
 
 const ethnicities = [
   { label: "All Inclusive", acronym: "All" },
@@ -34,6 +35,7 @@ export default function SectionScreen() {
   const [selectedRaces, setSelectedRaces] = useState(["All Inclusive"]);
   const [selectedCompany, setSelectedCompany] = useState("");
   const [showStory, setShowStory] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const updateSearch = (search) => {
     setSearch(search);
@@ -72,12 +74,23 @@ export default function SectionScreen() {
     selectedRaces.length === 1 ? selectedRaces[0] : "Multi-Inclusive";
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{ alignItems: "flex-start" }}>
+    <View
+      style={{
+        flex: .9,
+        flexDirection: "column",
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+        backgroundColor: "#FFF",
+      }}
+    >
+      <SectionHeader />
+      {/* <View style={{ alignItems: "flex-start" }}>
         <Button onPress={handleBack} title="< Snap Together" />
-      </View>
+      </View> */}
       {/* Search bar */}
-      <SearchBar
+      {/* <SearchBar
         placeholder="Type Here..."
         onChangeText={updateSearch}
         value={search}
@@ -85,7 +98,7 @@ export default function SectionScreen() {
         round
         containerStyle={styles.searchContainer}
         inputContainerStyle={styles.searchInputContainer}
-      />
+      /> */}
       {/* Filter buttons */}
       <ScrollView
         horizontal
@@ -118,10 +131,15 @@ export default function SectionScreen() {
             data={companyData}
             horizontal={true}
             ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
-            renderItem={({ item }) => <SnapTogetherStories company={item} handlePress={() => {
-              setShowStory(true);
-              setSelectedCompany(item);
-            }}/>}
+            renderItem={({ item }) => (
+              <SnapTogetherStories
+                company={item}
+                handlePress={() => {
+                  setShowStory(true);
+                  setSelectedCompany(item);
+                }}
+              />
+            )}
             keyExtractor={(item) => item.id}
           />
         </View>
@@ -161,16 +179,11 @@ export default function SectionScreen() {
           selectedCompany={selectedCompany}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF",
-    padding: 16,
-  },
   searchContainer: {
     backgroundColor: "transparent",
     borderTopWidth: 0,
@@ -209,13 +222,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "bold",
-    alignSelf: "flex-start",
+    alignSelf: "center",
     fontFamily: "avenir",
+    paddingLeft: 10,
   },
   subtitle: {
     fontSize: 20,
-    alignSelf: "flex-start",
+    alignSelf: "center",
     fontFamily: "avenir",
+    paddingLeft: 10,
   },
   sectionTitle: {
     fontSize: 20,
@@ -224,6 +239,7 @@ const styles = StyleSheet.create({
     fontFamily: "avenir",
     paddingBottom: 5,
     paddingTop: 10,
+    paddingLeft: 10,
   },
   cardContainer: {
     flexDirection: "row",

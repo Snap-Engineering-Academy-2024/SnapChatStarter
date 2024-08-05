@@ -14,10 +14,12 @@ import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import AboutSheet from "../components/AboutSheet";
 import SnapTogetherHeader from "../components/SnapTogetherHeader";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
   const [showAbout, setShowAbout] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const handleSectionPress = async (buttonTitle) => {
     let table;
@@ -53,7 +55,14 @@ export default function SnapTogetherScreen() {
 
 
   return (
-    <SafeAreaView>
+    <View style={{
+      flex: 0.9,
+      flexDirection: "column",
+      paddingTop: insets.top,
+      paddingBottom: insets.bottom,
+      paddingLeft: insets.left,
+      paddingRight: insets.right,
+    }}>
       <SnapTogetherHeader />
       <Image
         source={{
@@ -94,7 +103,7 @@ export default function SnapTogetherScreen() {
       <View>
         <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
