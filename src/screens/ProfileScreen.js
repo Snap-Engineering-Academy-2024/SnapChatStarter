@@ -58,10 +58,10 @@ export default function ProfileScreen() {
       />
       <Button
         onPress={() => {
-          navigation.navigate("Topics");
+          navigation.navigate("Welcome");
         }}
-        title="Chillah Challenges"
-        accessibilityLabel="Navigate to Chillah Challenges landing page"
+        title="Brain Bites"
+        accessibilityLabel="Navigate to Brain Bites landing page"
       />
       <Button onPress={handleSignOut} title="Log Out" />
       <Pressable>

@@ -161,21 +161,27 @@ export default function CameraScreen({ navigation, focused }) {
           }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>Chillah Challenges Modal</Text>
+                <Text style={styles.modalHeading}>Our new Snap feature...{"\n"}~~~~~~~~~~~~~~~~~~~~~~~{"\n"}Introducing Brain Bites!</Text>
+                <Text style={styles.modalParagraph}>{"<"}Games with bite-sized infomation your{"\n"} brain could bite, anywhere and anytime{">"}</Text>
+                <Image 
+                  style={styles.modalImage} 
+                  source={require("../../assets/modal-image.png")}
+                >
+                </Image>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
-                    navigation.navigate("Topics");
+                    navigation.navigate("Welcome");
                     setModalVisible(!modalVisible);
                   }}>
-                    <Text style={styles.textStyle}>Topics</Text>
+                    <Text style={styles.textStyle}>I'll bite!</Text>
                 </Pressable>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
                     setModalVisible(!modalVisible);
                   }}>
-                    <Text style={styles.textStyle}>Hide Modal</Text>
+                    <Text style={styles.textStyle}>Nah, not hungry</Text>
                 </Pressable>
               </View>
             </View>
@@ -313,8 +319,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    marginTop: 400,
-    backgroundColor: "white",
+    marginTop: 50,
+    backgroundColor: "#000000",
+    borderColor: "#FFFFFF",
+    borderWidth: 2,
     borderRadius: 20,
     padding: 15,
     alignItems: "center",
@@ -358,14 +366,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  modalText: {
+  modalHeading: {
+    marginBottom: 15,
+    color: "#FFFFFF",
+    fontFamily: "Avenir Next",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  modalParagraph: {
     marginBottom: 15,
     textAlign: 'center',
+    color: "#FFFFFF",
+    fontFamily: "Avenir Next",
+  },
+  modalImage: {
+    height: 200,
+    width: 320,
+    marginBottom: 15,
   },
   button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    marginBottom: 5,
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
