@@ -9,6 +9,8 @@ import axios from "axios";
 import Constants from 'expo-constants';
 import { colors } from "../../assets/themes/colors";
 import LocationList from "./LocationList";
+import LocationDetails from "./LocationDetails"
+import onePlaceToTest from "./oneTestPlace.json"
 
 
 let GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
@@ -21,6 +23,7 @@ export default function MapScreen({ navigation }) {
   const [currentRegion, setCurrentRegion] = useState(null);
   const [places, setPlaces] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalDetailsVisible, setModalDetailsVisible] = useState(false);
 
   const mapRef = useRef(null);
 
@@ -120,6 +123,7 @@ export default function MapScreen({ navigation }) {
           >
             <TouchableOpacity
               style={styles.circleButton}
+              onPress={() => setModalDetailsVisible(true)}
             >
                 <Ionicons name="search" size={20} color="black" />
             </TouchableOpacity>
@@ -162,6 +166,15 @@ export default function MapScreen({ navigation }) {
       >
         <LocationList places={places} onClose={() => setModalVisible(false)}
         searchFunc={(keyWord) => handleShowPlaces(keyWord)}
+        />
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalDetailsVisible}
+        onRequestClose={() => setModalDetailsVisible(false)}
+      >
+        <LocationDetails place={onePlaceToTest} onClose={() => setModalDetailsVisible(false)}
         />
       </Modal>
     </View>
