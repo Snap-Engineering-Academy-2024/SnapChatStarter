@@ -1,45 +1,35 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView,  TouchableOpacity, Dimensions} from 'react-native';
+import React from "react";
+import { View, Text, Button, StyleSheet } from "react-native";
 
-
-const { height } = Dimensions.get('window');
-
-export default function LocationDetails({ place, onClose }) {
+const LocationDetails = ({ place, onClose }) => {
+  if (!place) return null;
 
   return (
-    <View style={styles.modalOverlay}>
-      <ScrollView style={styles.container}>
-      <Text style={styles.title}>{place.name}</Text>
-      <Text style={styles.details}>Address: {place.vicinity}</Text>
-      <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-        <Text style={styles.closeButtonText}>Close</Text>
-      </TouchableOpacity>
-    </ScrollView>
-    </View>    
+    <View style={styles.container}>
+      <Text style={styles.name}>{place.name}</Text>
+      <Text>{place.vicinity}</Text>
+      {place.rating && (
+        <Text>Rating: {place.rating} ({place.user_ratings_total} reviews)</Text>
+      )}
+      {place.opening_hours && (
+        <Text>{place.opening_hours.open_now ? "Open Now" : "Closed"}</Text>
+      )}
+      <Button title="Close" onPress={onClose} />
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
-  modalOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: height / 2,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'flex-end',
-  },
-  title: {
+  name: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  details: {
-    fontSize: 16,
+    fontWeight: "bold",
     marginBottom: 10,
   },
 });
+
+export default LocationDetails;
