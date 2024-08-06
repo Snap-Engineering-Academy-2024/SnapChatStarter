@@ -16,6 +16,9 @@ import Popup from "../components/Popup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 
+import PopupPingNotification from "../components/PopupPingNotification";
+
+
 
 import defaultPhoto from "../../assets/snapchat/notificationPic.png";
 
@@ -30,6 +33,9 @@ export default function CameraScreen({ navigation, focused }) {
   const [photo, setPhoto] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
   const [popupTrigger, setPopupTrigger] = useState(false);
+
+  const [popupTriggePing, setPopupTriggerPing] = useState(false);
+
 
 
   useEffect(() => {
@@ -52,6 +58,24 @@ export default function CameraScreen({ navigation, focused }) {
   if (!permission.granted) {
     return (
       <SafeAreaView style={styles.container}>
+        <PopupPingNotification trigger={popupTriggePing} setTrigger={setPopupTriggerPing}>
+        <Image style={{ width: 150, height: 150 }} 
+        source={{ uri: "https://i.imgur.com/j8qg2QK_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+          />
+          <Text style={{fontSize: 27}}>You've Been Pinged!</Text>
+          <Text>We've found a friend with your interests!</Text>
+          
+          <TouchableOpacity 
+          style={styles.buttonStyle2} 
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}
+          >
+
+          <Text style={styles.buttonText2}>Chat with Friend!</Text>
+
+          </TouchableOpacity>
+        </PopupPingNotification>
 
         <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
           <Image style={{ width: 150, height: 150 }} source={defaultPhoto}
@@ -72,6 +96,14 @@ export default function CameraScreen({ navigation, focused }) {
         </Popup>
         <TouchableOpacity onPress={() => setPopupTrigger(true)} style={styles.button}>
           <Text style={styles.text}>Show Popup</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.buttonStyle2}
+          onPress={() => {
+            setPopupTriggerPing(true);
+          }}>
+          <Text style={styles.buttonText2}>Ping Notification</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );

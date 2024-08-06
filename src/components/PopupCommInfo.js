@@ -1,8 +1,12 @@
 import React from 'react';
-import { View, Modal, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, Modal, StyleSheet, Text, TouchableOpacity, ImageBackground } from 'react-native';
 
 const PopupCommInfo = ({ trigger, setTrigger, children }) => {
   return (
+    <ImageBackground 
+      source={{ uri: 'https://i.imgur.com/BrJDOVG_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
+      style={styles.backgroundImage}
+    >
     <Modal
       transparent={true}
       animationType="slide"
@@ -27,6 +31,7 @@ const PopupCommInfo = ({ trigger, setTrigger, children }) => {
         </View>
       </View>
     </Modal>
+    </ImageBackground>
   );
 };
 
@@ -35,7 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    // backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   popupContainer: {
     width: '100%',

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image , TextInput} from "react-native";
 import PopupLocationNotification from "../components/PopupLocationNotification";
 import { useNavigation } from "@react-navigation/native";
 
 
 const interests = {
+  SelectedInterests:[],
   Technology: ["Programming", "Gadgets", "AI", "Blockchain"],
   Arts: ["Music", "Painting", "Dance", "Theater"],
   Sciences: ["Physics", "Chemistry", "Biology", "Astronomy"],
@@ -15,6 +16,8 @@ export default function InterestSelectionScreen() {
   const navigation = useNavigation();
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [popupTrigger, setPopupTrigger] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
 
 
   const toggleInterest = (interest) => {
@@ -31,6 +34,58 @@ export default function InterestSelectionScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
+  <PopupLocationNotification trigger={popupTrigger} setTrigger={setPopupTrigger}>
+     <Text style={{fontSize: 40, marginTop: 20 }}>Community Ping</Text>
+     <Text style={{fontSize: 20, marginTop: 20 }}>Warning: Location Privacy</Text>
+     <Image
+      source={{ uri: "https://i.imgur.com/wWeONMN_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+      style={{ width: 300, height: 500, borderRadius: 15}}
+    />
+    <TouchableOpacity style={styles.understandButton} onPress={() => {navigation.navigate("Profile"); }}>
+          <Text style={styles.understandText}>I Understand</Text>
+        </TouchableOpacity>
+  </PopupLocationNotification>
+
+  <TextInput
+    style={styles.searchBar}
+    placeholder="Search Interests"
+    value={searchQuery}
+    onChangeText={setSearchQuery}
+  />
+
+  <Text style={styles.title}>Select Your Top 3 Interests</Text>
+  {Object.keys(interests).map((category) => (
+    <View key={category} style={styles.categoryContainer}>
+      <Text style={styles.categoryTitle}>{category}</Text>
+      <View style={styles.interestsContainer}>
+        {interests[category].map((interest) => (
+          <TouchableOpacity
+            key={interest}
+            style={[
+              styles.interestButton,
+              selectedInterests.includes(interest) && styles.selectedInterestButton,
+            ]}
+            onPress={() => toggleInterest(interest)}
+          >
+            <Text
+              style={[
+                styles.interestText,
+                selectedInterests.includes(interest) && styles.selectedInterestText,
+              ]}
+            >
+              {interest}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  ))}
+  <TouchableOpacity style={styles.submitButton} onPress={() => {setPopupTrigger(true); }}>
+    <Text style={styles.submitButtonText}>Submit</Text>
+  </TouchableOpacity>
+</ScrollView>
+
       <PopupLocationNotification trigger={popupTrigger} setTrigger={setPopupTrigger}>
          <Text style={{fontSize: 40, marginTop: 20 }}>Community Ping</Text>
          <Text style={{fontSize: 20, marginTop: 20 }}>Warning: Location Privacy</Text>
@@ -43,41 +98,6 @@ export default function InterestSelectionScreen() {
             </TouchableOpacity>
 
       </PopupLocationNotification>
-
-
-
-
-      <Text style={styles.title}>Select Your Interests</Text>
-      {Object.keys(interests).map((category) => (
-        <View key={category} style={styles.categoryContainer}>
-          <Text style={styles.categoryTitle}>{category}</Text>
-          <View style={styles.interestsContainer}>
-            {interests[category].map((interest) => (
-              <TouchableOpacity
-                key={interest}
-                style={[
-                  styles.interestButton,
-                  selectedInterests.includes(interest) && styles.selectedInterestButton,
-                ]}
-                onPress={() => toggleInterest(interest)}
-              >
-                <Text
-                  style={[
-                    styles.interestText,
-                    selectedInterests.includes(interest) && styles.selectedInterestText,
-                  ]}
-                >
-                  {interest}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      ))}
-      <TouchableOpacity style={styles.submitButton} 
-      onPress={() => {setPopupTrigger(true); }}>
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -89,6 +109,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
   },
+  searchBar: {
+    width: '100%',
+    padding: 10,
+    marginBottom: 20,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 20,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -99,7 +127,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   categoryTitle: {
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: 'left',
@@ -123,7 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFC00",
   },
   interestText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "black",
   },
   selectedInterestText: {
@@ -151,7 +179,6 @@ const styles = StyleSheet.create({
     marginVertical: 35,
     alignItems: 'center',
   },
-  
   understandText: {
     color: 'black',
     fontSize: 19,
