@@ -167,6 +167,7 @@ export default function MapScreen({ navigation }) {
             places={places}
             onPlacePress={handlePlacePress}
             searchFunc={(keyword) => handleShowPlaces(keyword)}
+            onClose = {() => locationListModalRef.current.close()}
           />
         </BottomSheetModal>
         <BottomSheetModal

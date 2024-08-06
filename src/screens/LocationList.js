@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput , ScrollV
 import { colors } from "../../assets/themes/colors";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-const LocationList = ({ places, onPlacePress, searchFunc }) => {
+const LocationList = ({ places, onPlacePress, searchFunc, onClose}) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.item} onPress={() => onPlacePress(item)}>
       <Text style={styles.title}>{item.name}</Text>
@@ -14,6 +14,7 @@ const LocationList = ({ places, onPlacePress, searchFunc }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.modalTitle}>Location List Page</Text>
+      <TouchableOpacity onPress={onClose}><Text>Close</Text></TouchableOpacity>
       <TextInput
         style={styles.searchInput}
         placeholder="Search for places"
