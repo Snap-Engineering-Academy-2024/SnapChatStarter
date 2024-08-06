@@ -1,4 +1,4 @@
-import react from "react";
+import react, { useState } from "react";
 import {
   View,
   Text,
@@ -7,43 +7,51 @@ import {
   ScrollView,
   ImageBackground,
   Pressable,
-  useState,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
+import { useNavigation } from "@react-navigation/native";
 
-export default function DiscoverCard() {
+export default function MemoryPhoto({ imageUri }) {
+  const navigation = useNavigation();
+
+  // console.log("Uri is: ", imageUri);
   return (
     <View style={styles.Square}>
       {/* <Pressable onPress={() => console.log("I was clicked")}> */}
-      <ImageBackground
-        style={styles.FeedImage}
-        imageStyle={{ borderRadius: 20 }}
-        source={{
-          uri: "https://eccles.utah.edu/wp-content/uploads/2017/02/snapchat.jpg",
+      <Pressable
+        onPress={() => {
+          navigation.navigate("MemoryCard");
         }}
       >
-        <Text style={styles.FeedText}>Hello My Name Is Chillahs</Text>
-      </ImageBackground>
-      {/* </Pressable> */}
+        <ImageBackground
+          style={styles.FeedImage}
+          imageStyle={{ borderRadius: 0 }}
+          source={{
+            uri: imageUri,
+          }}
+        ></ImageBackground>
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  FeedContainer: {
+    paddingLeft: 20,
+    width: "100%",
+  },
   Square: {
-    flex: 1,
-    justifyContent: "center",
+    width: "49%",
     alignItems: "center",
     backgroundColor: colors.secondary,
     borderRadius: 4,
   },
   FeedImage: {
-    width: 480,
-    height: 420,
-    borderRadius: 20,
+    width: 180,
+    height: 320,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -69,4 +77,5 @@ const styles = StyleSheet.create({
     textShadowRadius: 1,
     textShadowOpacity: 1,
   },
+  smallFeedText: {},
 });

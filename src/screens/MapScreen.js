@@ -233,7 +233,7 @@ export default function MapScreen({ navigation }) {
 
   const [currentRegion, setCurrentRegion] = useState({
     latitude: 34.0211573,
-    longitude:  -118.4503864,
+    longitude: -118.4503864,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -644,6 +644,27 @@ export default function MapScreen({ navigation }) {
                   </View>
                 </View>
               </ScrollView>
+        <View style={[styles.bitmojiContainer, styles.shadow]}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Event");
+            }}
+          >
+            <View style={styles.myBitmoji}>
+              <Ionicons name="calendar-outline" size={50} color="gray" />
+              <View style={styles.bitmojiTextContainer}>
+                <Text style={styles.bitmojiText}>Events</Text>
+              </View>
+            </View>
+          </Pressable>
+
+          <View style={styles.places}>
+            <Image
+              style={styles.bitmojiImage}
+              source={require("../../assets/snapchat/personalBitmoji.png")}
+            />
+            <View style={styles.bitmojiTextContainer}>
+              <Text style={styles.bitmojiText}>Places</Text>
             </View>
           </BottomSheetModal>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style = {styles.buttonScrollview}>
@@ -940,4 +961,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 12,
   }
+  calendarIcon: {},
 });

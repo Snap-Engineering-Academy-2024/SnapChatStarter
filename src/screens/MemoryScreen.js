@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,8 +13,9 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
 import StoriesBitmoji from "../components/StoriesBitmoji";
-import DiscoverFeed from "../components/DiscoverFeed";
 import { useNavigation } from "@react-navigation/native";
+import { supabase } from "../utils/hooks/supabase";
+import MemoryCard from "../components/MemoryCard";
 
 import Header from "../components/Header";
 
@@ -38,9 +39,30 @@ const DATA = [
   },
 ];
 
-export default function StoriesScreen({ route, navigation }) {
-  const tabBarHeight = useBottomTabBarHeight();
+export default function MemoryScreen({ route, navigation }) {
+  //   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
+
+  let [galleryPhotos, setGalleryPhotos] = useState([]);
+
+  useEffect(() => {
+    const fetchGalleryPhotos = async () => {
+      try {
+        const { data: galleryPhotos, error } = await supabase
+          .from("gallery")
+          .select("photo");
+        if (error) {
+          console.error("Error fetching gallery photos:", error);
+        } else {
+          setGalleryPhotos(galleryPhotos);
+          // console.log(galleryPhotos);
+        }
+      } catch (error) {
+        console.error("Error fetching photos", error.message);
+      }
+    };
+    fetchGalleryPhotos();
+  }, []);
 
   return (
     <View
@@ -52,43 +74,32 @@ export default function StoriesScreen({ route, navigation }) {
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,
-          marginBottom: tabBarHeight,
+          //   marginBottom: tabBarHeight,
         },
       ]}
     >
-      <Header title="Stories" />
       <View style={styles.contentContainer}>
         <View style={styles.storyBar}>
-          <Text style={styles.sectionHeader}>Friends</Text>
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-
-            //contentContainerStyle={styles.stories} commented this out because it prevented story scrolling felt unintuitive
-          >
-            <StoriesBitmoji onPress={console.log("bit moooooo")} />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-            <StoriesBitmoji />
-          </ScrollView>
+            contentContainerStyle={styles.stories}
+          ></ScrollView>
         </View>
-        <Text style={styles.sectionHeader}>Discover</Text>
-        <FlatList
-          contentContainerStyle={{ paddingBottom: 250 }}
-          data={DATA}
-          horizontal={false}
-          numColumns={2}
-          ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-          renderItem={({ item }) => <DiscoverFeed title={item.title} />}
-          keyExtractor={(item) => item.id}
-        />
+        <View style={styles.discoverContent}>
+          <Text style={styles.sectionHeader}>Memories</Text>
+
+          <FlatList
+            data={galleryPhotos}
+            horizontal={false}
+            numColumns={2}
+            ItemSeparatorComponent={() => <View style={{ height: "1%" }} />}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            renderItem={({ item }) => <MemoryCard imageUri={item.photo} />}
+            keyExtractor={(item) => item.id}
+          />
+          {/* galleryPhotos.map((p)=>p.photo) */}
+        </View>
       </View>
     </View>
   );
@@ -99,7 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    // padding: 12,
+    padding: 12,
     display: "flex",
     flexDirection: "column",
     gap: 12,
@@ -110,11 +121,18 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: 4,
   },
+  discoverContent: {
+    display: "flex",
+    flexDirection: "column",
+  },
   stories: {
     display: "flex",
-    gap: 20,
+    gap: 12,
     width: "100%",
-    // justifyContent:"center",
+  },
+  DiscoveryContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   sectionHeader: {
     textAlign: "left",

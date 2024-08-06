@@ -2,8 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, StyleSheet, Pressable, Text, Button } from "react-native";
-import { supabase } from '../utils/hooks/supabase'; // Import the Supabase client
-
+import { supabase } from "../utils/hooks/supabase"; // Import the Supabase client
 // Screens
 import MapScreen from "../screens/MapScreen";
 import CameraScreen from "../screens/CameraScreen";
@@ -29,7 +28,6 @@ import {
 import { colors } from "../../assets/themes/colors";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-
 const Tab = createBottomTabNavigator();
 
 export default function UserStack({ route, navigation }) {
@@ -49,9 +47,7 @@ export default function UserStack({ route, navigation }) {
 
   const screenOptions = {
     tabBarShowLabel: false,
-    headerLeft: () => (
-      <Button onPress={handleSignOut} title="Log Out" />
-    ),
+    headerLeft: () => <Button onPress={handleSignOut} title="Log Out" />,
   };
 
   return (
@@ -102,6 +98,8 @@ const getTabIcon = (routeName, focused) => {
     case "Stories":
       return focused ? <GroupFill /> : <GroupOutline />;
     case "Spotlight":
+      return focused ? <PlayFill /> : <PlayOutline />;
+    case "Event":
       return focused ? <PlayFill /> : <PlayOutline />;
     default:
       return null;

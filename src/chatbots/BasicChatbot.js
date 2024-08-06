@@ -5,13 +5,14 @@ import { StyleSheet, SafeAreaView, Platform } from "react-native";
 import defaultProfileImage from "../../assets/snapchat/defaultprofile12.png";
 
 //Temporary Solution to avoid warning on user screen
-const error = console.error; 
-console.error = (...args) => { 
-  if (/defaultProps/.test(args[0])) return; error(...args); 
+const error = console.error;
+console.error = (...args) => {
+  if (/defaultProps/.test(args[0])) return;
+  error(...args);
 };
 
 const CHATBOT_USER_OBJ = {
-  _id: 2,
+  _id: 3,
   name: "React Native Chatbot",
   avatar: defaultProfileImage,
 };
@@ -22,7 +23,7 @@ export default function BasicChatbot() {
   useEffect(() => {
     setMessages([
       {
-        _id: 1,
+        _id: 5,
         text: "Hello, welcome to simple trivia! Say 'Yes' when you're ready to play!",
         createdAt: new Date(),
         user: CHATBOT_USER_OBJ,
@@ -69,7 +70,7 @@ export default function BasicChatbot() {
         setTimeout(() => respondToUser(messages), 1000);
       }}
       user={{
-        _id: 1,
+        _id: 4,
         name: "Alexis",
       }}
       renderUsernameOnMessage={true}

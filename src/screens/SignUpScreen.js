@@ -1,44 +1,85 @@
-import { Text, View, TextInput, StyleSheet, TouchableOpacity, Linking } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { useState } from "react";
-import {supabase} from '../utils/hooks/supabase';
+import { supabase } from "../utils/hooks/supabase";
 
 // Components
 import ReturnButton from "../components/ReturnButton";
 
 export default function SignupScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [birthday, setBirthday] = useState("");
   const [alreadyInUseButton, setAlreadyInUseButton] = useState(false);
-  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState('');
-
-
   //major dubbing here to figure out why auth doesnt work
+  const [alreadyInUseMessage, setAlreadyInUseMessage] = useState("");
   async function handleSubmit() {
-    console.log("handle submit invoked!!");
-  
+    // console.log("handle submit invoked!!");
+
     try {
+      // sign up with additional user metadata
+      // https://supabase.com/docs/reference/javascript/auth-signup
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+
+        options: {
+          data: {
+            userName: email.split("@")[0],
+          },
+        },
       });
-  
+
       if (error) {
         console.error("Error signing up:", error.message);
         if (error.message.includes("User already registered")) {
           setAlreadyInUseButton(true);
-          setAlreadyInUseMessage("That email is already associated with a username");
+          setAlreadyInUseMessage(
+            "That email is already associated with a username",
+          );
         } else {
-          setAlreadyInUseMessage('');
+          setAlreadyInUseMessage("");
         }
       } else {
-        console.log("User signed up:", data);
+        // console.log("User signed up:", data);
         // Navigate to a different screen or handle successful signup
+
+        console.log("User signed up:", JSON.stringify(data, null, 4));
+
+        try {
+          console.log("Now updating profile with birthday");
+          const updates = {
+            id: data.user.id,
+            username: data.user.email,
+            birthday: birthday,
+            updated_at: new Date(),
+          };
+
+          const { error } = await supabase.from("profiles").upsert(updates);
+
+          if (error) {
+            console.log("Error caught");
+            throw error;
+          } else {
+            console.log("User profile updated.");
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            Alert.alert(error.message);
+          }
+        }
       }
     } catch (error) {
       console.error("Unexpected error:", error);
     }
   }
-  
 
   return (
     <View style={styles.signUpScreen}>
@@ -60,29 +101,38 @@ export default function SignupScreen({ navigation }) {
           autoCapitalize="none"
           onChangeText={(password) => setPassword(password)}
         />
+        <Text style={styles.inputText}>BIRTHDAY (MM/DD/YYYY)</Text>
+        <TextInput
+          style={styles.inputField}
+          secureTextEntry={false}
+          autoCapitalize="none"
+          onChangeText={(birthday) => setBirthday(birthday)}
+        />
         <Text style={styles.disclaimerText}>
           By tapping Sign Up & Accept, you acknowledge that you have read the{" "}
           <TouchableOpacity
             styles={styles.blueText}
             onPress={() =>
               Linking.openURL(
-                "https://values.snap.com/privacy/privacy-policy#:~:text=We%20may%20collect%20information%20about%20you%20from%20other%20users%2C%20our,how%20you%20use%20that%20service."
+                "https://values.snap.com/privacy/privacy-policy#:~:text=We%20may%20collect%20information%20about%20you%20from%20other%20users%2C%20our,how%20you%20use%20that%20service.",
               )
             }
           >
             <Text style={styles.blueText}>Privacy Policy</Text>
           </TouchableOpacity>{" "}
           and agree to the{" "}
-          <TouchableOpacity onPress={() => Linking.openURL("https://snap.com/en-US/terms")}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL("https://snap.com/en-US/terms")}
+          >
             <Text style={styles.blueText}>Terms of Service</Text>
           </TouchableOpacity>
         </Text>
       </View>
-        {password.length >= 4 && (
+      {email.length >= 1 && password.length >= 4 && birthday.length == 10 && (
         <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
           <Text style={styles.signUpText}>{"Sign Up & Accept"}</Text>
         </TouchableOpacity>
-        )}
+      )}
     </View>
   );
 }

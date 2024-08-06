@@ -2,7 +2,7 @@ import React from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import AuthStack from "./AuthStack";
 import UserStack from "./UserStack";
-import supabase from '../utils/hooks/supabase';
+import supabase from "../utils/hooks/supabase";
 
 export default function RootNavigation() {
   const { user } = useAuthentication();
@@ -15,7 +15,7 @@ export default function RootNavigation() {
 }
 
 async function devAutoLogin() {
-  console.log("Developer environment, signing in automatically");
+  // console.log("Developer environment, signing in automatically");
 
   // Only works if you make a file called ".env" with contents:
   // EXPO_PUBLIC_ENVIRONMENT=dev
@@ -30,6 +30,6 @@ async function devAutoLogin() {
   if (error) {
     console.error("Error logging in:", error.message);
   } else {
-    console.log("User signed in:", user);
+    // console.log("User signed in:", user);
   }
 }

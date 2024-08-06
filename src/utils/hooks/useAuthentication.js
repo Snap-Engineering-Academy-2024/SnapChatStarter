@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from './supabase';
+import { supabase } from "./supabase";
 
 export function useAuthentication() {
   const [user, setUser] = useState(null);
@@ -7,16 +7,19 @@ export function useAuthentication() {
   useEffect(() => {
     // Retrieve the current session
 
-
     const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
     };
 
     fetchSession();
 
     // Set up an auth state change listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
 
@@ -25,5 +28,6 @@ export function useAuthentication() {
     };
   }, []);
 
+  // console.log("USER", user)
   return { user };
 }
