@@ -13,9 +13,7 @@ import LocationList from "./LocationList";
 import LocationDetails from "./LocationDetails";
 import onePlaceToTest from "./oneTestPlace.json";
 import placesListTest from "./placesListTest.json"
-
 let GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
-
 export default function MapScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
@@ -24,13 +22,11 @@ export default function MapScreen({ navigation }) {
   const [currentRegion, setCurrentRegion] = useState(null);
   const [places, setPlaces] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
-
   const mapRef = useRef(null);
   const locationListModalRef = useRef(null);
   const locationDetailsModalRef = useRef(null);
   const snapPointsLocationList = ["25%","50%", "92%"];
   const snapPointsLocationDetails = ["50%", "92%"];
-
   useEffect(() => {
     const getLocation = async () => {
       try {
@@ -39,7 +35,6 @@ export default function MapScreen({ navigation }) {
           setErrorMsg("Permission to access location was denied");
           return;
         }
-
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
         setCurrentRegion({
@@ -52,10 +47,8 @@ export default function MapScreen({ navigation }) {
         setErrorMsg(error.message);
       }
     };
-
     getLocation();
   }, []);
-
   const handleRecenter = () => {
     if (location && mapRef.current) {
       mapRef.current.animateToRegion(
@@ -70,17 +63,14 @@ export default function MapScreen({ navigation }) {
       );
     }
   };
-
   const handleShowPlaces = async (keyword) => {
     if (!location) {
       setErrorMsg("Location not available");
       return;
     }
-
-    //const radius = 2 * 1609.34; 
+    //const radius = 2 * 1609.34;
     //const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
     //const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.coords.latitude},${location.coords.longitude}&radius=${radius}&keyword=${keyword}&key=${apiKey}`;
-
     try {
       //const response = await axios.get(url);
       //setPlaces(response.data.results);
@@ -91,12 +81,10 @@ export default function MapScreen({ navigation }) {
       console.error(error);
     }
   };
-
   const handlePlacePress = useCallback((place) => {
     setSelectedPlace(place);
     locationDetailsModalRef.current.present();
   }, []);
-
   return (
     <BottomSheetModalProvider>
       <View style={[styles.container, { marginBottom: tabBarHeight }]}>
@@ -119,7 +107,6 @@ export default function MapScreen({ navigation }) {
             />
           ))}
         </MapView>
-
         <View style={styles.mapFooter}>
           <View style={styles.locationContainer}>
             <TouchableOpacity
@@ -170,7 +157,6 @@ export default function MapScreen({ navigation }) {
             </ScrollView>
           </View>
         </View>
-
         <BottomSheetModal
           ref={locationListModalRef}
           index={0}
@@ -183,7 +169,6 @@ export default function MapScreen({ navigation }) {
             searchFunc={(keyword) => handleShowPlaces(keyword)}
           />
         </BottomSheetModal>
-
         <BottomSheetModal
           ref={locationDetailsModalRef}
           index={0}
@@ -199,7 +184,6 @@ export default function MapScreen({ navigation }) {
     </BottomSheetModalProvider>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -249,9 +233,9 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     backgroundColor: "#fff",
     flexDirection: "row",
-    paddingVertical: 13, 
+    paddingVertical: 13,
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20, 
+    borderTopRightRadius: 20,
   },
   button: {
     backgroundColor: colors.belowPage,
@@ -278,10 +262,10 @@ const styles = StyleSheet.create({
     color: "black",
   },
   iconContainer: {
-    backgroundColor: "#1E90FF", 
-    borderRadius: 100, 
-    height: 30, 
-    width: 30, 
+    backgroundColor: "#1E90FF",
+    borderRadius: 100,
+    height: 30,
+    width: 30,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 6,
