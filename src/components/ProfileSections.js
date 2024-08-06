@@ -18,20 +18,20 @@ import { useAuthentication } from "../utils/hooks/useAuthentication";
 const DATA = [
   {
     title: "My Stories",
-    data: [{ name: "Add to My Story", description: "Just for Friends" }],
+    data: [{ name: "Add to My Story", description: "Just for Friends", icon: "add-a-photo" }],
   },
   {
     title: "Friends",
     data: [
-      { name: "Add Friends", description: "New Friends" },
-      { name: "My Friends", description: "Old Friends" },
+      { name: "Add Friends", description: "New Friends", icon: "person-add" },
+      { name: "My Friends", description: "Old Friends", icon: "group" },
     ],
   },
   {
     title: "Communities",
     data: [
-      { name: "Add Your School", description: "Stay In Touch" },
-      { name: "SnapTogether", description: "Connect With Your Communities" },
+      { name: "Add Your School", description: "Stay In Touch", icon: "school" },
+      { name: "SnapTogether", description: "Connect With Your Communities", icon: "thumb-up" },
     ],
   },
 ];
@@ -114,8 +114,15 @@ const ProfileSections = ({ onPressHandlers }) => {
             onPress={() => onPressHandlers[item.name]()}
           >
             <View style={styles.iconContainer}>
-              <Icon name="school" size={24} color="#000" />
-            </View>
+  {item.name !== "SnapTogether" ? (
+    <Icon name={item.icon} size={24} color="#000" />
+  ) : (
+    <Image
+      source={require("../../assets/SnapTogether/SnapTogetherLogoPurple.png")}
+      style={styles.logo}
+    />
+  )}
+</View>
             <View style={styles.textContainer}>
               <Text style={styles.title}>{item.name}</Text>
               <Text style={styles.subtitle}>{item.description}</Text>
@@ -188,6 +195,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#555",
   },
+  logo: {
+    width: 25,
+    height: 25,
+  }
 });
 
 export default ProfileSections;

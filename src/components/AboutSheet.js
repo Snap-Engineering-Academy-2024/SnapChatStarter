@@ -73,12 +73,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0)",
   },
   content: {
-    backgroundColor: "#FFFC00",
+    backgroundColor: "#9900ff",
     padding: 16,
     height: SCREEN_HEIGHT,
     borderRadius: 25,
     alignItems: "center",
-    top: SCREEN_HEIGHT / 2.5,
+    top: SCREEN_HEIGHT / 2,
   },
   text: {
     fontSize: 16,
