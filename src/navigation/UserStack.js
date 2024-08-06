@@ -10,7 +10,9 @@ import SettingsScreen from "../screens/SettingsScreen";
 import FriendStory from "../screens/FriendStory";
 import AstrologyScreen from "../screens/AstrologyScreen";
 import MemoryScreen from "../screens/MemoryScreen";
-import EventScreen from "../screens/EventScreen"; //New component by Sona and Christian
+import CommSelectionScreen from "../screens/CommSelectionScreen";
+import InterestFormScreen from  "../screens/InterestFormScreen";
+
 
 const Stack = createStackNavigator();
 
@@ -69,6 +71,17 @@ export default function App() {
           component={EventScreen}
           options={{ headerShown: true }}
         />
+        <Stack.Screen
+          name="Select Identity!"
+          component={CommSelectionScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="InterestSelection"
+          component={InterestFormScreen}
+          options={{ headerShown: true }}
+        />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
