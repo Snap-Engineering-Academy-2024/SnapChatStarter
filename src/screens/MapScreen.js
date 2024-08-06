@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View, Dimensions, Text, TouchableOpacity, ScrollView, Modal } from "react-native";
+import { StyleSheet, View, Dimensions, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Location from "expo-location";
@@ -8,13 +8,12 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import axios from "axios";
 import Constants from 'expo-constants';
 import { colors } from "../../assets/themes/colors";
+import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import LocationList from "./LocationList";
-import LocationDetails from "./LocationDetails"
-import onePlaceToTest from "./oneTestPlace.json"
-
-
+import LocationDetails from "./LocationDetails";
+import onePlaceToTest from "./oneTestPlace.json";
+import placesListTest from "./placesListTest.json"
 let GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
-
 export default function MapScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
@@ -22,11 +21,12 @@ export default function MapScreen({ navigation }) {
   const [errorMsg, setErrorMsg] = useState(null);
   const [currentRegion, setCurrentRegion] = useState(null);
   const [places, setPlaces] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalDetailsVisible, setModalDetailsVisible] = useState(false);
-
+  const [selectedPlace, setSelectedPlace] = useState(null);
   const mapRef = useRef(null);
-
+  const locationListModalRef = useRef(null);
+  const locationDetailsModalRef = useRef(null);
+  const snapPointsLocationList = ["25%","50%", "92%"];
+  const snapPointsLocationDetails = ["50%", "92%"];
   useEffect(() => {
     const getLocation = async () => {
       try {
@@ -35,7 +35,6 @@ export default function MapScreen({ navigation }) {
           setErrorMsg("Permission to access location was denied");
           return;
         }
-
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
         setCurrentRegion({
@@ -48,139 +47,144 @@ export default function MapScreen({ navigation }) {
         setErrorMsg(error.message);
       }
     };
-
     getLocation();
   }, []);
-
   const handleRecenter = () => {
     if (location && mapRef.current) {
       mapRef.current.animateToRegion(
-        {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        },
+        // {
+        //   latitude: location.coords.latitude,
+        //   longitude: location.coords.longitude,
+        //   latitudeDelta: 0.0922,
+        //   longitudeDelta: 0.0421,
+        // },
+        currentRegion,
         1000
       );
     }
   };
-
   const handleShowPlaces = async (keyword) => {
     if (!location) {
       setErrorMsg("Location not available");
       return;
     }
-
-    const radius = 2 * 1609.34; 
-    const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.coords.latitude},${location.coords.longitude}&radius=${radius}&keyword=${keyword}&key=${apiKey}`;
-
+    //const radius = 2 * 1609.34;
+    //const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
+    //const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.coords.latitude},${location.coords.longitude}&radius=${radius}&keyword=${keyword}&key=${apiKey}`;
     try {
-      const response = await axios.get(url);
-      setPlaces(response.data.results);
-      setModalVisible(true);
+      //const response = await axios.get(url);
+      //setPlaces(response.data.results);
+      setPlaces(placesListTest)
+      locationListModalRef.current.present();
+      console.log(JSON.stringify(places))
     } catch (error) {
       console.error(error);
     }
   };
-
+  const handlePlacePress = useCallback((place) => {
+    setSelectedPlace(place);
+    locationDetailsModalRef.current.present();
+  }, []);
   return (
-    <View style={[styles.container, { marginBottom: tabBarHeight }]}>
-      <MapView
-        ref={mapRef}
-        style={styles.map}
-        region={currentRegion}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-      >
-        {places.map((place, index) => (
-          <Marker
-            key={index}
-            coordinate={{
-              latitude: place.geometry.location.lat,
-              longitude: place.geometry.location.lng,
-            }}
-            title={place.name}
-            description={place.vicinity}
-          />
-        ))}
-      </MapView>
-
-      <View style={[styles.mapFooter]}>
-        <View style={styles.locationContainer}>
-          <TouchableOpacity
-            style={[styles.userLocation, styles.shadow]}
-            onPress={handleRecenter}
-          >
-            <Ionicons name="navigate" size={15} color="black" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          >
+    <BottomSheetModalProvider>
+      <View style={[styles.container, { marginBottom: tabBarHeight }]}>
+        <MapView
+          ref={mapRef}
+          style={styles.map}
+          region={currentRegion}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+        >
+          {places.map((place, index) => (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: place.geometry.location.lat,
+                longitude: place.geometry.location.lng,
+              }}
+              title={place.name}
+              description={place.vicinity}
+            />
+          ))}
+        </MapView>
+        <View style={styles.mapFooter}>
+          <View style={styles.locationContainer}>
             <TouchableOpacity
-              style={styles.circleButton}
-              onPress={() => setModalDetailsVisible(true)}
+              style={[styles.userLocation, styles.shadow]}
+              onPress={handleRecenter}
             >
+              <Ionicons name="navigate" size={15} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonsContainer}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              <TouchableOpacity
+                style={styles.circleButton}
+                onPress={() => handleShowPlaces("career center homeless social service")}
+              >
                 <Ionicons name="search" size={20} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => handleShowPlaces("career center homeless social service")}
-            >
-              <View style={styles.iconContainer}>
-                <Ionicons name="business" size={20} color="white" />
-              </View>
-              <Text style={styles.buttonText}>Career Center</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => handleShowPlaces("hospital emergency")}
-            >
-              <Text style={styles.buttonText}>Safety</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => handleShowPlaces("public shower OR park")}
-            >
-              <Text style={styles.buttonText}>Public Areas</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => handleShowPlaces("food bank free food")}
-            >
-              <Text style={styles.buttonText}>Food Bank</Text>
-            </TouchableOpacity>
-          </ScrollView>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleShowPlaces("career center homeless social service")}
+              >
+                <View style={styles.iconContainer}>
+                  <Ionicons name="business" size={20} color="white" />
+                </View>
+                <Text style={styles.buttonText}>Career Center</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleShowPlaces("hospital emergency")}
+              >
+                <Text style={styles.buttonText}>Safety</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleShowPlaces("public shower OR park")}
+              >
+                <Text style={styles.buttonText}>Public Areas</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleShowPlaces("food bank free food")}
+              >
+                <Text style={styles.buttonText}>Food Bank</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
         </View>
+        <BottomSheetModal
+          ref={locationListModalRef}
+          index={0}
+          snapPoints={snapPointsLocationList}
+          backgroundStyle={{ backgroundColor: "#F8F8F8" }}
+        >
+          <LocationList
+            places={places}
+            onPlacePress={handlePlacePress}
+            searchFunc={(keyword) => handleShowPlaces(keyword)}
+            onClose = {() => locationListModalRef.current.close()}
+          />
+        </BottomSheetModal>
+        <BottomSheetModal
+          ref={locationDetailsModalRef}
+          index={0}
+          snapPoints={snapPointsLocationDetails}
+          backgroundStyle={{ backgroundColor: "#F8F8F8" }}
+        >
+          <LocationDetails
+            place={selectedPlace}
+            onClose={() => locationDetailsModalRef.current.close()}
+          />
+        </BottomSheetModal>
       </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <LocationList places={places} onClose={() => setModalVisible(false)}
-        searchFunc={(keyWord) => handleShowPlaces(keyWord)}
-        />
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalDetailsVisible}
-        onRequestClose={() => setModalDetailsVisible(false)}
-      >
-        <LocationDetails place={onePlaceToTest} onClose={() => setModalDetailsVisible(false)}
-        />
-      </Modal>
-    </View>
+    </BottomSheetModalProvider>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -230,9 +234,9 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     backgroundColor: "#fff",
     flexDirection: "row",
-    paddingVertical: 13, 
+    paddingVertical: 13,
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20, 
+    borderTopRightRadius: 20,
   },
   button: {
     backgroundColor: colors.belowPage,
@@ -245,8 +249,8 @@ const styles = StyleSheet.create({
   circleButton: {
     backgroundColor: colors.belowPage,
     borderRadius: 100,
-    height:50,
-    width:50,
+    height: 50,
+    width: 50,
     padding: 10,
     marginHorizontal: 3,
     flexDirection: 'row',
@@ -259,14 +263,12 @@ const styles = StyleSheet.create({
     color: "black",
   },
   iconContainer: {
-    backgroundColor: "#1E90FF", 
-    borderRadius: 100, 
-    height: 30, 
-    width: 30, 
+    backgroundColor: "#1E90FF",
+    borderRadius: 100,
+    height: 30,
+    width: 30,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 6,
   },
 });
-
-
