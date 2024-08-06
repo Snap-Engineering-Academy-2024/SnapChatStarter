@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
   Square: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
-    gap: 20,
+    justifyContent: "flex-start",
     width: "100%",
     borderRadius: 20,
     flexWrap: "wrap",
+    margin: 6,
   },
   FeedImage: {
     width: 200,
