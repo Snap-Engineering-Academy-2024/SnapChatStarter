@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
@@ -109,7 +110,7 @@ export default function SnapTogetherScreen() {
         }}
       >
         <Image
-          source={require("../../assets/SnapTogether/SnapTogetherHeartLogoBlack.png")}
+          source={require("../../assets/SnapTogether/SnapTogetherLogoPurple.png")}
           style={styles.logo}
         />
 
@@ -145,6 +146,12 @@ export default function SnapTogetherScreen() {
             />
           )}
         </View>
+        <View style = {styles.pressableContainer}>
+          <Pressable style = {styles.pressable}>
+            <Text >Press Me</Text>
+          </Pressable>
+        </View>
+        
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             title={"Mom & Pops"}
@@ -187,7 +194,7 @@ export default function SnapTogetherScreen() {
               horizontal={true}
               // numColumns={2}
               ItemSeparatorComponent={() => (
-                <View style={{ width: 30, marginBottom: 500 }} />
+                <View style={{ width: 30, marginBottom: 350 }} />
               )}
               renderItem={({ item }) => (
                 <SnapTogetherFeed
@@ -210,7 +217,13 @@ export default function SnapTogetherScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  pressableContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+    container: {
     flex: 1,
     backgroundColor: "#FFF",
   },
@@ -247,4 +260,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     textDecorationLine: "underline",
   },
+  pressable: {
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 25,
+    elevation: 3,
+  }
 });

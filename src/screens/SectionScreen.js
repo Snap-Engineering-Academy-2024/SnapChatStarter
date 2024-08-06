@@ -65,7 +65,6 @@ export default function SectionScreen() {
             <Text style={styles.buttonText}>{ethnicity.acronym}</Text>
           </TouchableOpacity>
         ))}
-        
 
         </ScrollView>
         <ScrollView>

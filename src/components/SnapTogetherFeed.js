@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 20,
     flexWrap: "wrap",
+    margin: 6,
   },
   FeedImage: {
     width: 200,
