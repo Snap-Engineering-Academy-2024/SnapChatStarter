@@ -12,10 +12,11 @@ import InfoSheet from "../components/InfoSheet";
 import SnapTogetherFeed from "../components/SnapTogetherFeed";
 import SnapTogetherStories from "../components/SnapTogetherStories";
 import StoryModal from "../components/StoryModal";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaFrameContext, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import SectionHeader from "../components/SectionHeader";
 import { useRaceSelection } from "../utils/hooks/useRaceSelection";
 import { useFilteredData } from "../utils/hooks/useFilteredData";
+
 
 const ethnicities = [
   { label: "All Inclusive", acronym: "All" },
@@ -39,15 +40,9 @@ export default function SectionScreen() {
   const subtitleText = selectedRaces.length === 1 ? selectedRaces[0] : "Multi-Inclusive";
 
   return (
-    <View
+    <SafeAreaView
       style={{
-        flex: 0.9,
-        flexDirection: "column",
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom,
-        paddingLeft: insets.left,
-        paddingRight: insets.right,
-        backgroundColor: "#FFF",
+        height: "100%",
       }}
     >
       <SectionHeader />
@@ -70,7 +65,10 @@ export default function SectionScreen() {
             <Text style={styles.buttonText}>{ethnicity.acronym}</Text>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+        
+
+        </ScrollView>
+        <ScrollView>
       {/* Title */}
       <Text style={styles.title}>{buttonTitle}</Text>
       {/* Current filter selection */}
@@ -115,6 +113,7 @@ export default function SectionScreen() {
             />
           )}
           keyExtractor={(item) => item.id}
+          
         />
       )}
       {/* If infosheet is shown */}
@@ -130,15 +129,17 @@ export default function SectionScreen() {
           selectedCompany={selectedCompany}
         />
       </View>
-    </View>
+      </ScrollView>
+
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   scrollView: {
-    maxHeight: 50,
-    paddingBottom: 60,
+    paddingBottom: 0,
     paddingTop: 10,
+    height: 70,
   },
   scrollViewContent: {
     justifyContent: "center",
