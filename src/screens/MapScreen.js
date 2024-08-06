@@ -22,7 +22,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Location from "expo-location";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+import { supabase } from "../utils/hooks/supabase";
 
 export default function MapScreen({ navigation }) {
   const bottomSheetRef = useRef(null);
@@ -39,6 +39,7 @@ export default function MapScreen({ navigation }) {
     type:"",
     time:0,
   })
+
   const [pins, setPins] = useState([
     {
       title:"First", //user inpit (organization)
@@ -84,42 +85,34 @@ export default function MapScreen({ navigation }) {
   const RepeatInfoSheet = useRef(null);
   const TypeInfoSheet = useRef(null);
   const [expanded, setExpanded] = useState(false);
-  const [checkAllDay, setCheckAllDay] = useState(false);
-  const [deal, setDeal] = useState('');
+  const [checkAllDay, setCheckAllDay] = useState(true);
+  const [pinDescription, setPinDescription] = useState('');
   const [organization, setOrganization] = useState('');
   const [lastAddedPinIndex, setLastAddedPinIndex] = useState(null);
   const [clickedUsers, setClickedUsers] = useState({}); // State to track clicked users
 
 
-  const insertData = async (newPin) => {
-    // New Pin is the object
-    // title:"First", //user inpit (organization)
-    //   location: {
-    //     latitude: 34.0211573,
-    //     longitude:  -118.4503864,
-    //   }, //not user input
-    //   address: "", //figure out how to implement when clickig on pin, not user input
-    //   description:"new location", //not required, user input
-    //   deals: {
-    //     name:"", //the discounted item's name
-    //     discount:"", //either free or some percentage off
-    //     time:"", //default is all day for that day
-    //   },
-    // console.log(eventData)
-
-    onClose()
+  const insertData = async (currentPin) => {
     try {
-    const { data, error } = await supabase
-        .from("event_table") // 
-        .insert([eventData]); // Insert the event data
-
-    if (error) {
-        console.error("Event already exists:", error);
-    } else {
-        console.log("Data inserted:", data);
-    }
+      let currentTimestamp = new Date().toISOString();
+      const { data, error } = await supabase
+          .from("pins") // 
+          .insert({
+            title: organization,
+            description: pinDescription,
+            location: currentPin?.location,
+            address: "String",
+            deals: {},
+            type: currentPin?.type,
+            time: currentTimestamp
+          }); // Insert the event data
+      if (error) {
+          console.error("Error:", error);
+      } else {
+          console.log("[SUCCESS] > Data inserted: ", data);
+      }
     } catch (error) {
-    console.error("Unexpected error:", error);
+        console.error("Unexpected error:", error);
     }
   }
   const handleUserClick = () => {
@@ -152,7 +145,8 @@ export default function MapScreen({ navigation }) {
       setSendButton(true)
       setCheckAllDay(false)
       PinInfoSheet.current?.close();
-      console.log("sent")
+      insertData(currentPin)
+      // console.log("sent")
       //push downn the modal
     }
     function selectRepeatDays(day){
@@ -189,18 +183,19 @@ export default function MapScreen({ navigation }) {
     
   }
 
-  useEffect(() => {
-    console.log(currentPin);
-  }, [currentPin]);
+  // useEffect(() => {
+  //   console.log(currentPin);
+    
+  // }, [currentPin]);
+
   const handleMapPress = (e) => {
     if(showPins){
       const newPin = {
-        title: `Pin ${pins.length + 1}`,
+        title: "Default Name",
         location: e.nativeEvent.coordinate,
-        description: "User added pin",
+        description: "Default Description",
         type:"food",
         time:24,
-
       };
       // console.log(newPin.location)
       // console.log(e.nativeEvent.coordinate)
@@ -211,20 +206,8 @@ export default function MapScreen({ navigation }) {
         description:newPin.description,
         time:newPin.time,
         type:newPin.type,
-      })
+      });
 
-// title:"First", //user inpit (organization)
-    //   location: {
-    //     latitude: 34.0211573,
-    //     longitude:  -118.4503864,
-    //   }, //not user input
-    //   address: "", //figure out how to implement when clickig on pin, not user input
-    //   description:"new location", //not required, user input
-    //   deals: {
-    //     name:"", //the discounted item's name
-    //     discount:"", //either free or some percentage off
-    //     time:"", //default is all day for that day
-    //   },
       setLastAddedPinIndex(pins.length);
       createPinInfo();
     }
@@ -241,7 +224,7 @@ export default function MapScreen({ navigation }) {
       setPins(pins.filter((_, index) => index !== lastAddedPinIndex));
       setLastAddedPinIndex(null); // Reset the tracker
     }
-    }
+  }
 
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
@@ -288,7 +271,6 @@ export default function MapScreen({ navigation }) {
         showsUserLocation={true}
         showsMyLocationButton={true}
         onLongPress={handleMapPress}
-
       >
         {showLocations()}
       </MapView>
@@ -297,7 +279,6 @@ export default function MapScreen({ navigation }) {
         index={0}
         snapPoints={snapPoints}
         onDismiss={deletePin}
-
       >
         <View>
           <View flexDirection={"row"} alignItems= {'center'}>
@@ -308,8 +289,8 @@ export default function MapScreen({ navigation }) {
           <Text style={styles.information}>Deal Information</Text>
           <TextInput 
           style={styles.input} 
-          onChangeText={(deal)=> setDeal(deal)}
-          value ={deal}
+          onChangeText={(pinDescription)=> setPinDescription(pinDescription)}
+          value ={pinDescription}
           />
           <Text style={styles.information}>Organization Name</Text>
           <TextInput 
@@ -546,6 +527,7 @@ export default function MapScreen({ navigation }) {
                   🍽 Restaurants</Button>
                   </View>
                   </ScrollView>
+                  
               </View>
 
               <View style = {styles.shareContainer}>
@@ -594,6 +576,9 @@ export default function MapScreen({ navigation }) {
                   </View>
 
               </View>
+
+
+
               <ScrollView > 
                 <View style = {styles.dealsContainer}>
                   <View style = {styles.dealContainer}>
@@ -927,10 +912,20 @@ const styles = StyleSheet.create({
   },
   categoryScrollView:{
     marginTop:10,
+    marginLeft:20,
   },
   sendButton: {
     color: "white",
-    fontWeight: "600"
+    fontWeight: "500"
+  },
+  shareContainer:{
+    display:"flex",
+    justifyContent:"space-between",
+    alignItems:"center",
+    gap:10,
+    flexDirection:"row",
+    marginLeft:20, marginRight:20,
+    marginTop:20,
   },
   InfoHeader: {
     textAlign: 'center',
@@ -945,7 +940,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 12,
   }
-
-
-
 });
