@@ -14,6 +14,7 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { Button, ButtonGroup, Icon, withTheme, CheckBox } from '@rneui/themed';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
@@ -57,6 +58,25 @@ export default function MapScreen({ navigation }) {
       //pin disappears after 7 days of NO DEALS at the place
     },
   ])
+  const infoData = [
+  {
+    title: "Time",
+    subtitle: "From what time is this deal available?",
+    onPress: TimeInfo,
+  },
+  {
+    title: "Repeat",
+    subtitle: "If applicable, enter the days this deal reoccurs.",
+    onPress: RepeatInfo,
+  },
+  {
+    title: "Resource Type",
+    subtitle: "Select all filters that apply to this resource.",
+    onPress: TypeInfo,
+  },
+];
+  const weekName = ["M", "T", "W", "Th", "F", "S", "Su"]
+  const [dayofWeek, setDayOfWeek] = useState([0,0,0,0,0,0,0])
   const [sendButton, setSendButton] = useState(false);
   const [showPins, setShowPins] = useState(false); 
   const PinInfoSheet = useRef(null);
@@ -64,10 +84,11 @@ export default function MapScreen({ navigation }) {
   const RepeatInfoSheet = useRef(null);
   const TypeInfoSheet = useRef(null);
   const [expanded, setExpanded] = useState(false);
-  const [checkAllDay, setCheckAllDay] = useState(true);
+  const [checkAllDay, setCheckAllDay] = useState(false);
   const [deal, setDeal] = useState('');
   const [organization, setOrganization] = useState('');
   const [lastAddedPinIndex, setLastAddedPinIndex] = useState(null);
+  const [clickedUsers, setClickedUsers] = useState({}); // State to track clicked users
 
 
   const insertData = async (newPin) => {
@@ -101,6 +122,14 @@ export default function MapScreen({ navigation }) {
     console.error("Unexpected error:", error);
     }
   }
+  const handleUserClick = () => {
+    setCheckAllDay(!checkAllDay)
+    console.log(checkAllDay)
+    setClickedUsers((prevState) => {
+      const newState = { ...prevState, [0]: !prevState[0] };
+      return newState;
+    });
+  };
 
 
     function createPinInfo() {
@@ -116,13 +145,27 @@ export default function MapScreen({ navigation }) {
     function TypeInfo(){
       TypeInfoSheet.current?.present();
     }
-
-
     function sendToDatabase(){
+      setDeal('')
+      setOrganization('')
+      setDayOfWeek([0,0,0,0,0,0,0])
       setSendButton(true)
+      setCheckAllDay(false)
       PinInfoSheet.current?.close();
       console.log("sent")
       //push downn the modal
+    }
+    function selectRepeatDays(day){
+      let dayindex = weekName.indexOf(day)
+      const newdayselect = dayofWeek.map((d,i)=> {
+        if (i == dayindex){
+          return !d
+        }
+        else{
+          return d
+        }
+      })
+      setDayOfWeek(newdayselect)
     }
 
 
@@ -190,6 +233,11 @@ export default function MapScreen({ navigation }) {
 
   function deletePin(){
     if ((lastAddedPinIndex !== null) && (sendButton == false)) {
+      setDeal('')
+      setOrganization('')
+      setDayOfWeek([0,0,0,0,0,0,0])
+      setCheckAllDay(false)
+      PinInfoSheet.current?.close();
       setPins(pins.filter((_, index) => index !== lastAddedPinIndex));
       setLastAddedPinIndex(null); // Reset the tracker
     }
@@ -254,7 +302,7 @@ export default function MapScreen({ navigation }) {
         <View>
           <View flexDirection={"row"} alignItems= {'center'}>
             <Text style={styles.headerPinSheet}> SnapServe Pin</Text>
-            <TouchableOpacity style={styles.exitCreatePin}><Icon name="close" size="20"></Icon></TouchableOpacity>
+            <TouchableOpacity style={styles.exitCreatePin} onPress={deletePin}><Icon name="close" size="20"></Icon></TouchableOpacity>
           </View>
           <Text style={styles.subheadingPinSheet}>Enter additional details about your resource pin below.</Text>
           <Text style={styles.information}>Deal Information</Text>
@@ -269,48 +317,40 @@ export default function MapScreen({ navigation }) {
           onChangeText={(organization)=> setOrganization(organization)}
           value ={organization}
           />
+
+          <TouchableOpacity onPress={handleUserClick}>
           <View paddingTop={30} style={styles.moreInfoContainer}>
             <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
               <View flexDirection={"column"}>
                 <Text style={styles.moreInfoTitle}>All Day</Text>
                 <Text style={styles.moreInfoSub}>This deal runs for 24 hours.</Text>
               </View>
-               <CheckBox 
-               checked={checkAllDay}
-              onPress={() => setCheckAllDay(!checkAllDay)}/>
+              <Ionicons
+            name={clickedUsers[0] ? "checkmark-circle" : "ellipse-outline"}
+            size={24}
+            color={clickedUsers[0] ? "#3CB2E2" : "lightgrey"}
+            />
             </View>
           </View>
-
-          <TouchableOpacity style ={styles.moreInfoContainer} onPress={TimeInfo}>
-            <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
-              <View flexDirection={"column"}>
-                <Text style = {styles.moreInfoTitle}>Time</Text>
-                <Text style = {styles.moreInfoSub}>From what time is this deal available?</Text>
-              </View>
-              <Icon name="arrow-forward-ios" size={15}/>
-            </View> 
           </TouchableOpacity>
-          <TouchableOpacity style ={styles.moreInfoContainer} onPress={RepeatInfo}>
-            <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
-              <View flexDirection={"column"}>
-                <Text style = {styles.moreInfoTitle}>Repeat</Text>
-                <Text style = {styles.moreInfoSub}>If applicable, enter the days this deal reoccurs.</Text>
-              </View>
-              <Icon name="arrow-forward-ios" size={15}/>
-            </View> 
-          </TouchableOpacity>
-          <TouchableOpacity style ={styles.moreInfoContainer} onPress={TypeInfo}>
-            <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
-              <View flexDirection={"column"}>
-                <Text style = {styles.moreInfoTitle}>Resource Type</Text>
-                <Text style = {styles.moreInfoSub}>Select all filters that apply to this resource.</Text>
-              </View>
-              <Icon name="arrow-forward-ios" size={15}/>
-            </View> 
-          </TouchableOpacity>
+          {infoData.map((item, index) => (
+          <TouchableOpacity
+          key={index}
+          style={styles.moreInfoContainer}
+          onPress={item.onPress}
+          >
+          <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
+            <View flexDirection={"column"}>
+              <Text style={styles.moreInfoTitle}>{item.title}</Text>
+              <Text style={styles.moreInfoSub}>{item.subtitle}</Text>
+            </View>
+            <Icon name="arrow-forward-ios" size={15} />
+          </View>
+        </TouchableOpacity>
+          ))}
           <Button
           onPress = {sendToDatabase} 
-           buttonStyle={{backgroundColor: '#33BBFF', borderRadius: 30, width: 370}} 
+           buttonStyle={{backgroundColor: '#0FADFF', borderRadius: 30, width: 370}} 
            style={styles.postPin}>
             <Text style={styles.sendButton}>Send</Text>
             <Icon color={"white"} name="send" size={"15"}/>
@@ -322,7 +362,7 @@ export default function MapScreen({ navigation }) {
       index={0}
       snapPoints={snapPoints}
       >
-        <Text style={styles.InfoHeader}> Time </Text>
+        <Text style={styles.InfoHeader} marginBottom={15}> Time </Text>
         <View style={styles.moreInfoContainer}>
             <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
               <View flexDirection={"column"}>
@@ -334,7 +374,7 @@ export default function MapScreen({ navigation }) {
               onPress={() => setCheckAllDay(!checkAllDay)}/>
             </View>
          </View>
-         <View style={styles.moreInfoContainer}>
+         <View color={'none'} padding={15}>
             <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
               <View flexDirection={"column"}>
                 <Text style={styles.moreInfoTitle}>End</Text>
@@ -345,19 +385,41 @@ export default function MapScreen({ navigation }) {
               onPress={() => setCheckAllDay(!checkAllDay)}/>
             </View>
          </View>
+         <Button
+           buttonStyle={{backgroundColor: '#0FADFF', borderRadius: 30, width: 370}} 
+           style={styles.postPin}>
+            <Text style={styles.sendButton}>Save</Text>
+          </Button>
       </BottomSheetModal>
       <BottomSheetModal
       ref={RepeatInfoSheet}
       index={0}
       snapPoints={snapPoints}
       >
-        <Text style={styles.InfoHeader}> Repeat </Text>
+        <Text style={styles.InfoHeader} marginBottom={15}> Repeat </Text>
         <View style={styles.moreInfoContainer}>
               <View flexDirection={"column"}>
                 <Text style={styles.moreInfoTitle}>Repeat on</Text>
                 <Text style={styles.moreInfoSub}>Select the day this deal repeats on.</Text>
               </View>
         </View>
+        <View flexDirection={"row"} height={80} width={"100%"} justifyContent={"space-between"} padding={10} marginTop={20}>
+          {weekName.map((week) => {
+            return(
+            <Pressable onPress={()=>{selectRepeatDays(week)}} height={40} width={40} backgroundColor={dayofWeek[weekName.indexOf(week)]?"#0FADFF":"#EDEEEF"} borderRadius={20}>
+              <Text style={{color:dayofWeek[weekName.indexOf(week)]?"white":"#0FADFF",
+    fontWeight: "500",
+    textAlign: 'center',
+    paddingVertical: 12,}} >{week}</Text>
+            </Pressable>
+            )
+          })}
+        </View>
+        <Button
+           buttonStyle={{backgroundColor: '#0FADFF', borderRadius: 30, width: 370}} 
+           style={styles.postPin}>
+            <Text style={styles.sendButton}>Save</Text>
+          </Button>
       </BottomSheetModal>
       <BottomSheetModal
       ref={TypeInfoSheet}
@@ -532,9 +594,6 @@ export default function MapScreen({ navigation }) {
                   </View>
 
               </View>
-
-
-
               <ScrollView > 
                 <View style = {styles.dealsContainer}>
                   <View style = {styles.dealContainer}>
@@ -620,7 +679,7 @@ export default function MapScreen({ navigation }) {
                     handlePresentModal();
                   }}
                   style = {styles.buttonsInside}
-                  title="Snap Serve"
+                  title="Plateful"
                   titleStyle={{ fontWeight: "500", color:"black", fontSize: 13, margin:3 }}
                   buttonStyle={{
                     backgroundColor: '#EDEEEF',
@@ -763,7 +822,7 @@ const styles = StyleSheet.create({
     marginRight:10,
     marginTop: 5,
     marginBottom:20,
-    borderLeftColor: "#33BBFF",
+    borderLeftColor: "#0FADFF",
     borderLeftWidth: 5,
     padding: 5,
     backgroundColor: "#EDEEEF",
@@ -785,6 +844,7 @@ const styles = StyleSheet.create({
   moreInfoTitle: {
     fontSize: 15,
     fontWeight: 500,
+    paddingBottom: 4,
   },
   moreInfoSub: {
     fontSize:11,
@@ -870,7 +930,22 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     color: "white",
-    fontWeight: "500"
+    fontWeight: "600"
+  },
+  InfoHeader: {
+    textAlign: 'center',
+    fontWeight: '400',
+    fontSize: 17,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  weekCircle: {
+    color: "white",
+    fontWeight: "500",
+    textAlign: 'center',
+    paddingVertical: 12,
   }
+
+
 
 });
