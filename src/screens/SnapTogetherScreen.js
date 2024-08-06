@@ -1,20 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
   StyleSheet,
-  Button,
   Image,
   TouchableOpacity,
+  FlatList,
+  ScrollView,
 } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import SnapTogetherHeader from "../components/SnapTogetherHeader";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { useFilteredData } from "../utils/hooks/useFilteredData";
+import SnapTogetherFeed from "../components/SnapTogetherFeed";
 
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const [story1, setStory1] = useState([]);
+  const [story2, setStory2] = useState([]);
+  const [story3, setStory3] = useState([]);
+  const [showStory, setShowStory] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState(null);
 
   const handleSectionPress = async (buttonTitle) => {
     let table;
@@ -46,51 +57,155 @@ export default function SnapTogetherScreen() {
     }
   };
 
+  const pullStories = async () => {
+    try {
+      const [careerBoost, momNPops, showcase] = await Promise.all([
+        supabase.from("career_boost_profiles").select("*"),
+        supabase.from("mom_pop_profiles").select("*"),
+        supabase.from("showcase_profiles").select("*"),
+      ]);
+
+      if (careerBoost.error) {
+        console.error("Error fetching career boost data:", careerBoost.error);
+      } else {
+        setStory1(careerBoost.data || []);
+      }
+
+      if (momNPops.error) {
+        console.error("Error fetching mom & pops data:", momNPops.error);
+      } else {
+        setStory2(momNPops.data || []);
+      }
+
+      if (showcase.error) {
+        console.error("Error fetching showcase data:", showcase.error);
+      } else {
+        setStory3(showcase.data || []);
+      }
+    } catch (error) {
+      console.error("Error fetching stories:", error);
+    }
+  };
+
+  useEffect(() => {
+    pullStories();
+  }, []);
+
+  const filteredStory1 = useFilteredData(story1, ["All Inclusive"]);
+  const filteredStory2 = useFilteredData(story2, ["All Inclusive"]);
+  const filteredStory3 = useFilteredData(story3, ["All Inclusive"]);
+
   return (
-    <View
-      style={{
-        flex: 0.9,
-        flexDirection: "column",
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom,
-        paddingLeft: insets.left,
-        paddingRight: insets.right,
-      }}
-    >
+    <SafeAreaView style={{height: "100%"}}>
       <SnapTogetherHeader />
-      <Image
-        source={require("../../assets/SnapTogether/SnapTogetherHeartLogoBlack.png")}
-        style={styles.logo}
-      />
+      <ScrollView
+        style={{
+          flex: 0.9,
+          flexDirection: "column",
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        }}
+      >
+        <Image
+          source={require("../../assets/SnapTogether/SnapTogetherHeartLogoBlack.png")}
+          style={styles.logo}
+        />
 
-      <Text style={styles.snapTogetherText}>SnapTogether</Text>
-      <Text style={styles.info}>An accessible resource hub</Text>
+        <Text style={styles.snapTogetherText}>SnapTogether</Text>
+        <Text style={styles.info}>An accessible resource hub</Text>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          title={"Career Boost"}
-          onPress={() => handleSectionPress("Career Boost")}
-        >
-          <Text style={styles.button}>Career Boost</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          title={"Mom & Pops"}
-          onPress={() => handleSectionPress("Mom & Pops")}
-        >
-          <Text style={styles.button}>Mom & Pops</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          title={"Showcase"}
-          onPress={() => handleSectionPress("Showcase")}
-        >
-          <Text style={styles.button}>Showcase</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            title={"Career Boost"}
+            onPress={() => handleSectionPress("Career Boost")}
+          >
+            <Text style={styles.button}>Career Boost</Text>
+          </TouchableOpacity>
+          {story1.length > 0 && (
+            <FlatList
+              data={filteredStory1}
+              horizontal={true}
+              // numColumns={2}
+              ItemSeparatorComponent={() => (
+                <View style={{ width: 30, marginBottom: 350 }} />
+              )}
+              renderItem={({ item }) => (
+                <SnapTogetherFeed
+                  title={item.username}
+                  eventImage={item.poster_url}
+                  handlePress={() => {
+                    setShowStory(true);
+                    setSelectedCompany(item);
+                  }}
+                />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          )}
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            title={"Mom & Pops"}
+            onPress={() => handleSectionPress("Mom & Pops")}
+          >
+            <Text style={styles.button}>Mom & Pops</Text>
+          </TouchableOpacity>
+          {story2.length > 0 && (
+            <FlatList
+              data={filteredStory2}
+              horizontal={true}
+              // numColumns={2}
+              ItemSeparatorComponent={() => (
+                <View style={{ width: 30, marginBottom: 350 }} />
+              )}
+              renderItem={({ item }) => (
+                <SnapTogetherFeed
+                  title={item.username}
+                  eventImage={item.poster_url}
+                  handlePress={() => {
+                    setShowStory(true);
+                    setSelectedCompany(item);
+                  }}
+                />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          )}
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            title={"Showcase"}
+            onPress={() => handleSectionPress("Showcase")}
+          >
+            <Text style={styles.button}>Showcase</Text>
+          </TouchableOpacity>
+          {story3.length > 0 && (
+            <FlatList
+              data={filteredStory3}
+              horizontal={true}
+              // numColumns={2}
+              ItemSeparatorComponent={() => (
+                <View style={{ width: 30, marginBottom: 500 }} />
+              )}
+              renderItem={({ item }) => (
+                <SnapTogetherFeed
+                  title={item.username}
+                  eventImage={item.poster_url}
+                  handlePress={() => {
+                    setShowStory(true);
+                    setSelectedCompany(item);
+                  }}
+                />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          )}
+        </View>
+        {/* <View style={{height: 300}}> </View> */}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -101,32 +216,10 @@ const styles = StyleSheet.create({
   },
   logo: {
     alignSelf: "center",
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 200,
     borderRadius: 75,
     marginBottom: 10,
-  },
-  userButton: {
-    padding: 25,
-    display: "flex",
-    borderBottomColor: "lightgrey",
-    borderBottomWidth: 1,
-  },
-  userIcon: {
-    position: "absolute",
-    left: 5,
-    top: 5,
-  },
-  userName: {
-    position: "absolute",
-    left: 50,
-    top: 14,
-    fontSize: 18,
-  },
-  userCamera: {
-    position: "absolute",
-    right: 15,
-    top: 10,
   },
   snapTogetherText: {
     fontSize: 36,
@@ -141,10 +234,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 20,
   },
-  sections: {
-    fontSize: 20,
-    fontWeight: "semibold",
-  },
   buttonContainer: {
     alignItems: "left",
   },
@@ -156,6 +245,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 10,
     paddingLeft: 10,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
   },
 });
