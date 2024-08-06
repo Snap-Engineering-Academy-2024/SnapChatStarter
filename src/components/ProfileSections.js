@@ -6,14 +6,11 @@ import {
   TouchableOpacity,
   Image,
   SectionList,
-  ScrollView,
-  Dimensions,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 import { findJoinStatus } from "../utils/hooks/findJoinStatus";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import DraggableButtonList from "../components/DraggableButtons";
 import { supabase } from "../utils/hooks/supabase";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
@@ -45,8 +42,6 @@ const ProfileSections = ({ onPressHandlers }) => {
   const [astrology, setAstrology] = useState("Taurus");
   const userSign = findAstrologySign();
   const userJoinStatus = findJoinStatus();
-  const [showAbout, setShowAbout] = useState(false);
-  const insets = useSafeAreaInsets();
   const [name, setName] = useState("Name")
   const [username, setUsername] = useState("username")
 
