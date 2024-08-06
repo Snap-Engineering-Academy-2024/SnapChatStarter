@@ -25,7 +25,7 @@ export default function MapScreen({ navigation }) {
   const mapRef = useRef(null);
   const locationListModalRef = useRef(null);
   const locationDetailsModalRef = useRef(null);
-  const snapPointsLocationList = ["25%","50%", "92%"];
+  const snapPointsLocationList = ["50%", "92%"];
   const snapPointsLocationDetails = ["50%", "92%"];
   useEffect(() => {
     const getLocation = async () => {
@@ -174,7 +174,7 @@ export default function MapScreen({ navigation }) {
           ref={locationDetailsModalRef}
           index={0}
           snapPoints={snapPointsLocationDetails}
-          backgroundStyle={{ backgroundColor: "#F8F8F8" }}
+          backgroundStyle={{ backgroundColor: "#FFFFFF" }}
         >
           <LocationDetails
             place={selectedPlace}
