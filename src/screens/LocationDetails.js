@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView,  TouchableOpacity, Dimensions} from 'react-native';
 import { colors } from "../../assets/themes/colors";
@@ -36,8 +35,7 @@ export default function LocationDetails({ place, onClose }) {
   // console.log("TYPES", place.types[0])
 
   return (
-
-    <View style={styles.modalOverlay}>
+    //<View style={styles.modalOverlay}>
       <ScrollView style={styles.container}>
 
         {/* HEADER OF LOCATION DETAILS*/} 
@@ -108,17 +106,23 @@ export default function LocationDetails({ place, onClose }) {
           <Rectangle></Rectangle>
         </View>
     </ScrollView>
-    </View>    
+    //</View>    
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
-
+  modalOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    //justifyContent: 'flex-end',
+  },
   title: {
     fontSize: 25,
     fontWeight: 'bold',
@@ -126,7 +130,6 @@ const styles = StyleSheet.create({
   },
   details: {
     fontSize: 16,
-
     marginBottom: 10,
   },
   circle: {
@@ -226,5 +229,3 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
-
-export default LocationDetails;
