@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
+import PopupLocationNotification from "../components/PopupLocationNotification";
+import { useNavigation } from "@react-navigation/native";
+
 
 const interests = {
   Technology: ["Programming", "Gadgets", "AI", "Blockchain"],
@@ -9,7 +12,10 @@ const interests = {
 };
 
 export default function InterestSelectionScreen() {
+  const navigation = useNavigation();
   const [selectedInterests, setSelectedInterests] = useState([]);
+  const [popupTrigger, setPopupTrigger] = useState(false);
+
 
   const toggleInterest = (interest) => {
     if (selectedInterests.includes(interest)) {
@@ -19,12 +25,28 @@ export default function InterestSelectionScreen() {
     }
   };
 
-  const handleSubmit = () => {
-    console.log("Selected Interests:", selectedInterests);
-  };
+  // const handleSubmit = () => {
+  //   console.log("Selected Interests:", selectedInterests);
+  // };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <PopupLocationNotification trigger={popupTrigger} setTrigger={setPopupTrigger}>
+         <Text style={{fontSize: 40, marginTop: 20 }}>Community Ping</Text>
+         <Text style={{fontSize: 20, marginTop: 20 }}>Warning: Location Privacy</Text>
+         <Image
+          source={{ uri: "https://i.imgur.com/wWeONMN_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+          style={{ width: 300, height: 500, borderRadius: 15}}
+        />
+        <TouchableOpacity style={styles.understandButton} onPress={() => {navigation.navigate("Profile"); }}>
+              <Text style={styles.understandText}>I Understand</Text>
+            </TouchableOpacity>
+
+      </PopupLocationNotification>
+
+
+
+
       <Text style={styles.title}>Select Your Interests</Text>
       {Object.keys(interests).map((category) => (
         <View key={category} style={styles.categoryContainer}>
@@ -52,7 +74,8 @@ export default function InterestSelectionScreen() {
           </View>
         </View>
       ))}
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+      <TouchableOpacity style={styles.submitButton} 
+      onPress={() => {setPopupTrigger(true); }}>
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -119,5 +142,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "black",
+  },
+  understandButton: {
+    backgroundColor: 'lightgrey',
+    borderRadius: 100,
+    padding: 10,
+    flex: 1,
+    marginVertical: 35,
+    alignItems: 'center',
+  },
+  
+  understandText: {
+    color: 'black',
+    fontSize: 19,
   },
 });

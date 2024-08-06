@@ -54,9 +54,9 @@ export default function CameraScreen({ navigation, focused }) {
       <SafeAreaView style={styles.container}>
 
         <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
-          <Image style={{ width: 100, height: 100 }} source={defaultPhoto}
+          <Image style={{ width: 150, height: 150 }} source={defaultPhoto}
           />
-          <Text style={{fontSize: 20}}>Community Ping!</Text>
+          <Text style={{fontSize: 27}}>Community Ping!</Text>
           <Text>Will allow you to join a community and find others within your community who share the same interests.</Text>
           
           <TouchableOpacity 
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   buttonText2: {
-    fontSize: 13,
+    fontSize: 16,
     lineHeight: 21,
     letterSpacing: 0.5,
     color: 'black',

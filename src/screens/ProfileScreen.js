@@ -1,25 +1,22 @@
-import { Image, Text, View, Button, StyleSheet, TouchableOpacity } from "react-native";
-import { supabase } from "../utils/hooks/supabase";
+import { Image, Text, View, Button, StyleSheet, TouchableOpacity, FlatList, StatusBar } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 import PopupCommInfo from "../components/PopupCommInfo";
 import Onboarding from 'react-native-onboarding-swiper';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView } from "react-native-gesture-handler";
 
 const handleSignOut = async () => {
   try {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Error signing out:", error.message);
-    } else {
-      // Handle successful sign out (e.g., redirect to login screen)
-    }
   } catch (error) {
     console.error("Unexpected error:", error);
   }
 };
 
 export default function ProfileScreen() {
+  const [badges, setBadges] = useState([]);
+
   const navigation = useNavigation();
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
@@ -29,128 +26,194 @@ export default function ProfileScreen() {
     setAstrology(userSign.sign);
   }, []);
 
-  const Done = ({...props}) => (
-    <TouchableOpacity
-    {...props}
-    >
-    <Text style={{fontSize:20, marginHorizontal:50, marginTop: 10}}>Done</Text>
+  const Done = ({ ...props }) => (
+    <TouchableOpacity {...props}>
+      <Text style={{ fontSize: 20, marginHorizontal: 50, marginTop: 10 }}>Done</Text>
     </TouchableOpacity>
-);
-const Next = ({...props}) => (
-  <TouchableOpacity
-  {...props}
-  >
-  <Text style={{fontSize:20, marginHorizontal:50, marginTop: 10}}>Next</Text>
-  </TouchableOpacity>
-);
-const Skip = ({...props}) => (
-  <TouchableOpacity
-  {...props}
-  >
-  <Text style={{fontSize:20, marginHorizontal:50, marginTop: 10}}>Skip</Text>
-  </TouchableOpacity>
-);
+  );
+
+  const Next = ({ ...props }) => (
+    <TouchableOpacity {...props}>
+      <Text style={{ fontSize: 20, marginHorizontal: 50, marginTop: 10 }}>Next</Text>
+    </TouchableOpacity>
+  );
+
+  const Skip = ({ ...props }) => (
+    <TouchableOpacity {...props}>
+      <Text style={{ fontSize: 20, marginHorizontal: 50, marginTop: 10 }}>Skip</Text>
+    </TouchableOpacity>
+  );
+
+  
+  const staticBadges = [
+    {
+      id: 1,
+      title: "Community Badge",
+      description: "Joined a Community!",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmqoyhZloidNX8kejEVjmZWiG5tXA3Jt0Oxg&s"
+    },
+    {
+      id: 2,
+      title: "Badge 2",
+      description: "",
+      image: "https://example.com/product2.jpg"
+    },
+    {
+      id: 3,
+      title: "Badge 3",
+      description: "",
+      image: "https://example.com/product3.jpg"
+    }
+  ];
+
+  useEffect(() => {
+    setBadges(staticBadges);
+  }, []);
+
+  const renderProductCard = ({ item }) => (
+    <View style={styles.cardContainer}>
+      <Image style={styles.cardImage} source={{ uri: item.image }} />
+      <Text style={styles.cardTitle}>{item.title.slice(0, 20)}</Text>
+      <Text style={styles.cardTitle}>{item.description}</Text>
+    </View>
+  );
 
   return (
-    <View style={{ alignItems: "center" }}>
-      <PopupCommInfo trigger={popupTrigger} setTrigger={setPopupTrigger}>
-        <Onboarding
-       
-          onSkip={() => navigation.replace("Profile")}
-          onDone={() => navigation.replace("Profile")}
-          DoneButtonComponent={Done}
-          SkipButtonComponent={Skip}
-          NextButtonComponent={Next}
-          nextLabel="Next"
-          pages={[
-            {
-              backgroundColor: 'white',
-              bottomBarHeight: 80,
-              image: (
-                <>
-                  <Text style={{ fontSize: 30, textAlign: 'center', marginBotton: 50 }}> Community Ping </Text>
-                  <Image
-                    source={{ uri: "https://static-prod.adweek.com/wp-content/uploads/2021/05/VansBitmojiHero.jpg" }}
-                    style={{ width: 350, height: 200, borderRadius: 25, marginLeft: 25 }}
-                  />
-                  <Text style={{marginLeft: 35, marginRight: 20}}>Information about Community Ping - MIGUEL this pop up will happen once user is navigated to profile from pressing the "check out new feature!" button on the new feature notification - yellow pill button is temporary:)</Text>
-                </>
-              ),
-              title: '',
-              subtitle: '',
-            },
-            {
-              backgroundColor: 'white',
-              image: (
-                <>
-                  <Text style={{ fontSize: 30, textAlign: 'center', marginLeft: 50}}> Explore Features </Text>
-                  <Image
-                    source={{ uri: "https://static-prod.adweek.com/wp-content/uploads/2021/05/VansBitmojiHero.jpg" }}
-                    style={{ width: 350, height: 200, borderRadius: 25, marginLeft: 60, marginRight: 20 }}
-                  />
-                  <Text style={{marginLeft: 50, marginRight: 30}}>Small text here on the description of what community ping is:0</Text>
-                </>
-              ),
-              title: '',
-              subtitle: '',
-            },
-            {
-              backgroundColor: 'white',
-              image: (
-                <>
-                  <Text style={{ fontSize: 30, textAlign: 'center', marginRight: 20}}> Explore Features </Text>
-                  <Image
-                    source={{ uri: "https://static-prod.adweek.com/wp-content/uploads/2021/05/VansBitmojiHero.jpg" }}
-                    style={{ width: 350, height: 200, borderRadius: 25, marginLeft: 55 }}
-                  />
-                  <Text style={{marginLeft: 60, marginRight: 30}}>Small text here on the description of what community ping is:0</Text>
-                </>
-              ),
-              title: '',
-              subtitle: '',
-            },
-          ]}
-        />
-      </PopupCommInfo>
+    <ScrollView>
+      <View style={{ alignItems: "center" }}>
+        <PopupCommInfo trigger={popupTrigger} setTrigger={setPopupTrigger}>
+          <Onboarding
+            onSkip={() => navigation.replace("Profile")}
+            onDone={() => navigation.replace("Profile")}
+            DoneButtonComponent={Done}
+            SkipButtonComponent={Skip}
+            NextButtonComponent={Next}
+            nextLabel="Next"
+            pages={[
+              {
+                backgroundColor: 'white',
+                bottomBarHeight: 80,
+                image: (
+                  <>
+                    <Text style={{ fontSize: 30, textAlign: 'center', marginBottom: 50, marginLeft: 25 }}>Community Ping</Text>
+                    <Image
+                      source={{ uri: "https://static-prod.adweek.com/wp-content/uploads/2021/05/VansBitmojiHero.jpg" }}
+                      style={{ width: 350, height: 200, borderRadius: 25, marginLeft: 40 }}
+                    />
+                    <Text style={{ marginLeft: 53, marginRight: 20 }}>NEW FEATURE FROM SNAPCHAT: Join a community that you identify most with and be pinged when you cross paths with someone within the same community that has the same interests as you.</Text>
+                  </>
+                ),
+                title: '',
+                subtitle: '',
+              },
+              {
+                backgroundColor: 'white',
+                image: (
+                  <>
+                    <Text style={{ fontSize: 30, textAlign: 'center', marginLeft: 50 }}>Explore Features</Text>
+                    <Image
+                      source={{ uri: "https://static-prod.adweek.com/wp-content/uploads/2021/05/VansBitmojiHero.jpg" }}
+                      style={{ width: 350, height: 200, borderRadius: 25, marginLeft: 60, marginRight: 20 }}
+                    />
+                    <Text style={{ marginLeft: 50, marginRight: 30 }}>When you opt into having ping notifications, anytime you open up Snap we will see if there's anyone within your radius who'll possibly friend match with.</Text>
+                  </>
+                ),
+                title: '',
+                subtitle: '',
+              },
+              {
+                backgroundColor: 'white',
+                image: (
+                  <>
+                    <Text style={{ fontSize: 30, textAlign: 'center', marginRight: 20 }}>Explore Features</Text>
+                    <Image
+                      source={{ uri: "https://static-prod.adweek.com/wp-content/uploads/2021/05/VansBitmojiHero.jpg" }}
+                      style={{ width: 350, height: 200, borderRadius: 25, marginRight: 20 }}
+                    />
+                    <Text style={{ marginLeft: 60, marginRight: 80 }}>Private information is anonymous until both parties confirm that they want to be friends. That's when the magic starts!</Text>
+                  </>
+                ),
+                title: '',
+                subtitle: '',
+              },
+            ]}
+          />
+        </PopupCommInfo>
 
-      <Image
-        source={{ uri: "https://i.imgur.com/S28V6YH.jpeg" }}
-        style={{ width: 400, height: 250 }}
-      />
-
-      <TouchableOpacity 
-        style={styles.buttonStyle2} 
-        onPress={() => {
-          navigation.navigate("CommunitySelection");
-        }}>
-        <Text style={styles.buttonText2}> + Add Community</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity 
-        style={styles.buttonStyle2} 
-        onPress={() => {
-          setPopupTrigger(true);
-        }}>
-        <Text style={styles.buttonText2}> Community Ping Info</Text>
-      </TouchableOpacity>
-
-      <Text style={{ justifyContent: "center", fontWeight: "bold", fontSize: 30, marginRight: 100 }}>
         <Image
-          source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
+          source={{ uri: "https://i.imgur.com/YtlzPfc_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
+          style={{ width: 380, height: 350 }}
+        />
+
+       <View style={styles.profileContainer}>
+        <Image
+          source={{ uri: "https://i.imgur.com/y6nKGQF_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //pfp
           style={{ width: 100, height: 100, borderRadius: 15, marginRight: 20 }}
         />
-        UserName
-      </Text>
-      <Button
-        onPress={() => {
-          navigation.navigate("Astrology");
-        }}
-        title={astrology}
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-      <Button onPress={handleSignOut} title="Log Out" />
-    </View>
+        <View>
+          <Text style={styles.realName}>Tyson Aguilar</Text>
+          <Text style={styles.username}>tysonaguilar</Text>
+        </View>
+      </View>
+
+
+        <Button
+          onPress={() => {
+            navigation.navigate("Astrology");
+          }}
+          title={astrology}
+          color="#841584"
+          accessibilityLabel="Learn more about this purple button"
+        />
+
+        <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.buttonStyle3}>
+          <Text style={styles.buttonText2}>👻 1,709</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonStyle3}>
+          <Text style={styles.buttonText2}>♑︎Capricorn</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.buttonStyle3}>
+          <Text style={styles.buttonText2}>+ Add College</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.buttonStyle2}
+          onPress={() => {
+            navigation.navigate("CommunitySelection");
+          }}>
+          <Text style={styles.buttonText2}>+ Add Community</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.buttonStyle2}
+          onPress={() => {
+            setPopupTrigger(true);
+          }}>
+          <Text style={styles.buttonText2}>Community Ping Info</Text>
+        </TouchableOpacity>
+      </View>
+
+        <FlatList
+          data={badges}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderProductCard}
+        />
+
+        <Button onPress={handleSignOut} title="Log Out" />
+
+
+        <View style={{ marginBottom: 20 }}></View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -168,21 +231,66 @@ const styles = StyleSheet.create({
   },
   buttonStyle2: {
     alignItems: 'center',
-    justifyContent: 'center',
     margin: 10,
     paddingVertical: 5,
-    paddingHorizontal: 2,
+    paddingHorizontal: 5,
     borderRadius: 20,
     elevation: 3,
     backgroundColor: '#FFFC00',
     borderColor: 'black',
     borderWidth: 1,
-    marginLeft: 200,
+  },
+  buttonStyle3: {
+    alignItems: 'center',
+    margin: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: 'lightgrey',
+    
+    
   },
   buttonText2: {
     fontSize: 13,
     lineHeight: 21,
     letterSpacing: 0.5,
     color: 'black',
+  },
+  cardContainer: {
+    margin: 20,
+    width: 200,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    overflow: 'hidden',
+    height: 160,
+    padding: 10,
+    marginBottom: 50,
+  },
+  cardImage: {
+    height: 100,
+    width: '90%',
+    resizeMode: 'contain',
+  },
+  cardTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+  },
+  profileContainer: {
+    flexDirection: 'row',
+    marginVertical: 20,
+    marginRight: 50,
+    marginBottom: 0,
+  },
+  realName: {
+    fontWeight: "bold",
+    fontSize: 30,
+  },
+  username: {
+    fontSize: 16,
+    color: 'gray',
   },
 });

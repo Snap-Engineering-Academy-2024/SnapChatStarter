@@ -65,6 +65,7 @@ export default function App() {
           component={InterestFormScreen}
           options={{ headerShown: true }}
         />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
