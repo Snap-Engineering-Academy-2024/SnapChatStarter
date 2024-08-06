@@ -24,7 +24,7 @@ export default function AuthStack() {
         <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false}}/>
         <Stack.Screen name="AddFriend" component={AddFriendScreen} options={{ headerShown: false}}/>
-        <Stack.Screen name="CommunitySelection" component={CommSelectionScreen} options={{ headerShown: false}}/>
+        <Stack.Screen name="Select Identity !" component={CommSelectionScreen} options={{ headerShown: false}}/>
         <Stack.Screen name="InterestSelection" component={InterestFormScreen} options={{ headerShown: false}}/>
 
       </Stack.Navigator>

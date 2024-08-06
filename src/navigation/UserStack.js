@@ -56,7 +56,7 @@ export default function App() {
 
         />
         <Stack.Screen
-          name="CommunitySelection"
+          name="Select Identity!"
           component={CommSelectionScreen}
           options={{ headerShown: true }}
         />
