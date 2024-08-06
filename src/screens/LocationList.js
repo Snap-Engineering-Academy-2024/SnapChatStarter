@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput , ScrollView} from "react-native";
 import { colors } from "../../assets/themes/colors";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const LocationList = ({ places, onPlacePress, searchFunc }) => {
   const renderItem = ({ item }) => (
@@ -18,6 +19,38 @@ const LocationList = ({ places, onPlacePress, searchFunc }) => {
         placeholder="Search for places"
         onSubmitEditing={(event) => searchFunc(event.nativeEvent.text)}
       />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => searchFunc("career center homeless social service")}
+        >
+          <View style={styles.iconContainer}>
+            <Ionicons name="business" size={20} color="white" />
+          </View>
+          <Text style={styles.buttonText}>Career Center</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => searchFunc("hospital emergency")}
+        >
+          <Text style={styles.buttonText}>Safety</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => searchFunc("public shower OR park")}
+        >
+          <Text style={styles.buttonText}>Public Areas</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => searchFunc("food bank free food")}
+        >
+          <Text style={styles.buttonText}>Food Bank</Text>
+        </TouchableOpacity>
+      </ScrollView>
       <FlatList
         data={places}
         renderItem={renderItem}
@@ -54,6 +87,39 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+  button: {
+    backgroundColor: colors.belowPage,
+    borderRadius: 80,
+    padding: 10,
+    marginHorizontal: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  circleButton: {
+    backgroundColor: colors.belowPage,
+    borderRadius: 100,
+    height: 50,
+    width: 50,
+    padding: 10,
+    marginHorizontal: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "center",
+  },
+  buttonText: {
+    fontSize: 13,
+    fontWeight: "bold",
+    color: "black",
+  },
+  iconContainer: {
+    backgroundColor: "#1E90FF",
+    borderRadius: 100,
+    height: 30,
+    width: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 6,
   },
 });
 
