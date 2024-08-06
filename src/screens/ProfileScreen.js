@@ -48,7 +48,7 @@ export default function ProfileScreen() {
   const staticBadges = [
     {
       id: 1,
-      title: "Community Badge",
+      title: "Community Charm",
       description: "Joined a Community!",
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmqoyhZloidNX8kejEVjmZWiG5tXA3Jt0Oxg&s"
     },
@@ -203,6 +203,8 @@ export default function ProfileScreen() {
           <Text style={styles.buttonText2}>Community Ping Info</Text>
         </TouchableOpacity>
       </View>
+
+      <Text style={{marginRight: 300, fontWeight:'bold', marginTop: 30}}>Charms</Text>
 
         <FlatList
           data={badges}

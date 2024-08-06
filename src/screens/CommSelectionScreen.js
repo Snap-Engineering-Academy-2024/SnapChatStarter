@@ -5,10 +5,12 @@ import PopupCommInfo from "../components/PopupCommInfo";
 
 export default function CommSelectionScreen() {
   const navigation = useNavigation();
-  const [theCommunities, setTheCommunities] = useState([]);
+  const [theGenders, setTheGenders] = useState([]);
+  const [theOrientations, setTheOrientations] = useState([]);
+  const [theBackgrounds, setTheBackgrounds] = useState([]);
   const [activePopup, setActivePopup] = useState(null);
 
-  const communities = [
+  const genders = [
     {
       id: 'transgender',
       title: 'Transgender',
@@ -22,9 +24,24 @@ export default function CommSelectionScreen() {
       image: 'https://i.imgur.com/zGcHKVl.png',
     },
     {
-      id: 'intersexual',
-      title: 'Intersexual',
-      description: 'Information about the Intersexual community    boobie doobie do',
+      id: 'agender',
+      title: 'Agender',
+      description: 'Information about the Agender community    boobie doobie do',
+      image: 'https://i.imgur.com/zGcHKVl.png',
+    },
+    {
+      id: 'another gender',
+      title: 'Another gender',
+      description: 'Information about another community    boobie doobie do',
+      image: 'https://i.imgur.com/zGcHKVl.png',
+    },
+  ];
+
+  const orientations = [
+    {
+      id: 'bisexual',
+      title: 'Bisexual',
+      description: 'Information about the Bisexual community    boobie doobie do',
       image: 'https://i.imgur.com/zGcHKVl.png',
     },
     {
@@ -33,11 +50,58 @@ export default function CommSelectionScreen() {
       description: 'Information about the Pansexual community    boobie doobie do',
       image: 'https://i.imgur.com/zGcHKVl.png',
     },
+    {
+      id: 'another sexuality',
+      title: 'n/a',
+      description: 'Information about a sexual identity1    boobie doobie do',
+      image: 'https://i.imgur.com/zGcHKVl.png',
+    },
+    {
+      id: 'another sexuality2',
+      title: 'n/a',
+      description: 'Information about a sexual identity    boobie doobie do',
+      image: 'https://i.imgur.com/zGcHKVl.png',
+    },
+  ];
+
+  const backgrounds = [
+    {
+      id: 'background1',
+      title: 'background1',
+      description: 'Information about the Bisexual community    boobie doobie do',
+      image: 'https://i.imgur.com/zGcHKVl.png',
+    },
+    {
+      id: 'background2',
+      title: 'background2',
+      description: 'Information about the Pansexual community    boobie doobie do',
+      image: 'https://i.imgur.com/zGcHKVl.png',
+    },
+    {
+      id: 'background3',
+      title: 'background3',
+      description: 'Information about a sexual identity1    boobie doobie do',
+      image: 'https://i.imgur.com/zGcHKVl.png',
+    },
+    {
+      id: 'background4',
+      title: 'background4',
+      description: 'Information about a sexual identity    boobie doobie do',
+      image: 'https://i.imgur.com/zGcHKVl.png',
+    },
   ];
 
   useEffect(() => {
-    setTheCommunities(communities);
+    setTheGenders(genders);
   }, []);
+
+  useEffect(() => {
+    setTheOrientations(orientations);
+  }, []);
+  useEffect(() => {
+    setTheBackgrounds(backgrounds);
+  }, []);
+
 
   const renderProductCard = ({ item }) => (
     <TouchableOpacity style={styles.cardContainer} onPress={() => setActivePopup(item.id)}>
@@ -50,14 +114,57 @@ export default function CommSelectionScreen() {
   return (
     <ScrollView>
       <View style={styles.container}>
-        {communities.map((community) => (
-          <PopupCommInfo key={community.id} trigger={activePopup === community.id} setTrigger={() => setActivePopup(null)}>
-            <Text style={styles.popupTitle}>{community.title}</Text>
+        {genders.map((gender) => (
+          <PopupCommInfo key={gender.id} trigger={activePopup === gender.id} setTrigger={() => setActivePopup(null)}>
+            <Text style={styles.popupTitle}>{gender.title}</Text>
             <Image
-              source={{ uri: community.image }}
+              source={{ uri: gender.image }}
               style={styles.popupImage}
             />
-            <Text style={styles.popupDescription}>{community.description}</Text>
+            <Text style={styles.popupDescription}>{gender.description}</Text>
+            <View style={styles.popupFooter}>
+              <Text style={styles.popupFooterText}>Would you like to join the community?</Text>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.buttonStyle3}>
+                  <Text style={styles.buttonText3}>Don't Join</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("InterestSelection")}>
+                  <Text style={styles.buttonText3}>Join!</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </PopupCommInfo>
+        ))}
+        {orientations.map((orientation) => (
+          <PopupCommInfo key={orientation.id} trigger={activePopup === orientation.id} setTrigger={() => setActivePopup(null)}>
+            <Text style={styles.popupTitle}>{orientation.title}</Text>
+            <Image
+              source={{ uri: orientation.image }}
+              style={styles.popupImage}
+            />
+            <Text style={styles.popupDescription}>{orientation.description}</Text>
+            <View style={styles.popupFooter}>
+              <Text style={styles.popupFooterText}>Would you like to join the community?</Text>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.buttonStyle3}>
+                  <Text style={styles.buttonText3}>Don't Join</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("InterestSelection")}>
+                  <Text style={styles.buttonText3}>Join!</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </PopupCommInfo>
+        ))}
+
+        {backgrounds.map((background) => (
+          <PopupCommInfo key={background.id} trigger={activePopup === background.id} setTrigger={() => setActivePopup(null)}>
+            <Text style={styles.popupTitle}>{background.title}</Text>
+            <Image
+              source={{ uri: background.image }}
+              style={styles.popupImage}
+            />
+            <Text style={styles.popupDescription}>{background.description}</Text>
             <View style={styles.popupFooter}>
               <Text style={styles.popupFooterText}>Would you like to join the community?</Text>
               <View style={styles.buttonContainer}>
@@ -99,7 +206,7 @@ export default function CommSelectionScreen() {
         ))} */}
 
         <FlatList
-          data={theCommunities}
+          data={theGenders}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
@@ -107,6 +214,22 @@ export default function CommSelectionScreen() {
         />
 
         <Text style={styles.sectionTitle}>Sexual Orientation</Text>
+        <FlatList
+          data={theOrientations}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderProductCard}
+        />
+
+        <Text style={styles.sectionTitle}>Ethnic Background</Text>
+        <FlatList
+          data={theBackgrounds}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderProductCard}
+        />
       </View>
     </ScrollView>
   );
@@ -117,7 +240,6 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "column",
     alignItems: "center",
-    padding: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
