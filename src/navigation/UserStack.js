@@ -10,6 +10,8 @@ import AstrologyScreen from "../screens/AstrologyScreen";
 import MemoryScreen from "../screens/MemoryScreen";
 import CommSelectionScreen from "../screens/CommSelectionScreen";
 import InterestFormScreen from  "../screens/InterestFormScreen";
+import MeetingConnections from  "../screens/MeetingConnections";
+
 
 
 const Stack = createStackNavigator();
@@ -61,8 +63,13 @@ export default function App() {
           options={{ headerShown: true }}
         />
         <Stack.Screen
-          name="InterestSelection"
+          name="Add Current Interests!"
           component={InterestFormScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="Meeting Connections"
+          component={MeetingConnections}
           options={{ headerShown: true }}
         />
         

@@ -15,7 +15,6 @@ import { Button } from "react-native-elements";
 import Popup from "../components/Popup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-import { useAuthentication } from "../utils/hooks/useAuthentication";
 
 
 import defaultPhoto from "../../assets/snapchat/notificationPic.png";
@@ -35,36 +34,6 @@ export default function CameraScreen({ navigation, focused })
   const { user } = useAuthentication();
   const [communities, setCommunities] = useState("");
   const [popupTrigger, setPopupTrigger] = useState(false);
-
-
-  const fetchUserData = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles') // Replace with your table name
-        .select('community')
-        .eq('id', user.id)
-        .single();
-
-      if (error) throw error;
-
-      setCommunities(data);
-      console.log(data.community);
-      if (data.community === null)
-        {
-          setPopupTrigger(true);
-          console.log("shows popup.");
-        }
-        else
-        {
-          console.log("doesnt show popup");
-        }
-
-    } catch (error) {
-      console.error('Error fetching user data:', error.message);
-      setLoading(false);
-    }
-  };
-  
 
 
   useEffect(() => {
@@ -87,6 +56,24 @@ export default function CameraScreen({ navigation, focused })
   if (!permission.granted) {
     return (
       <SafeAreaView style={styles.container}>
+        <PopupPingNotification trigger={popupTriggePing} setTrigger={setPopupTriggerPing}>
+        <Image style={{ width: 150, height: 150 }} 
+        source={{ uri: "https://i.imgur.com/j8qg2QK_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+          />
+          <Text style={{fontSize: 27}}>You've Been Pinged!</Text>
+          <Text>We've found a friend with your interests!</Text>
+          
+          <TouchableOpacity 
+          style={styles.buttonStyle2} 
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}
+          >
+
+          <Text style={styles.buttonText2}>Chat with Friend!</Text>
+
+          </TouchableOpacity>
+        </PopupPingNotification>
 
         <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
           <Image style={{ width: 150, height: 150 }} source={defaultPhoto}
@@ -105,6 +92,17 @@ export default function CameraScreen({ navigation, focused })
 
           </TouchableOpacity>
         </Popup>
+        <TouchableOpacity onPress={() => setPopupTrigger(true)} style={styles.button}>
+          <Text style={styles.text}>Show Popup</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.buttonStyle2}
+          onPress={() => {
+            setPopupTriggerPing(true);
+          }}>
+          <Text style={styles.buttonText2}>Ping Notification</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }

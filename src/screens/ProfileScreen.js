@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from '../utils/hooks/supabase';
+import defaultPhoto from "../../assets/snapchat/notificationPic.png";
 
 
 const handleSignOut = async () => {
@@ -50,6 +51,7 @@ export default function ProfileScreen() {
       
     }
   };
+
 
   useEffect(() => {
     setAstrology(userSign.sign);
@@ -175,6 +177,7 @@ export default function ProfileScreen() {
           />
         </PopupCommInfo>
 
+
         <Image
           source={{ uri: "https://i.imgur.com/YtlzPfc_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
           style={{ width: 380, height: 350 }}
@@ -200,24 +203,24 @@ export default function ProfileScreen() {
           color="#841584"
           accessibilityLabel="Learn more about this purple button"
         />
-
-        <View style={styles.buttonContainer}>
+         
+        <View style={styles.buttonContainer}> 
         <TouchableOpacity
-          style={styles.buttonStyle3}>
+          style={styles.buttonStyle_Stats}>
           <Text style={styles.buttonText2}>👻 1,709</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonStyle3}>
+        <TouchableOpacity style={styles.buttonStyle_Stats}>
           <Text style={styles.buttonText2}>♑︎Capricorn</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.buttonStyle3}>
+          style={styles.buttonStyle_Stats}>
           <Text style={styles.buttonText2}>+ Add College</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.buttonContainer}>
+      <View style={styles.buttonContainer}> 
         <TouchableOpacity
           style={styles.buttonStyle2}
           onPress={() => {
@@ -228,6 +231,19 @@ export default function ProfileScreen() {
 
 
       </View>
+
+      <Text style={{marginRight: 280, fontWeight:'bold', marginTop: 30, marginBottom: 10}}>My Stories</Text>
+      <Image
+          source={{ uri: "https://i.imgur.com/HCIsOeC_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
+          style={{ width: 360, height: 170 }}
+        />
+
+      <Text style={{marginRight: 280, fontWeight:'bold', marginTop: 30, marginBottom: 10}}>Friends</Text>
+      <Image
+          source={{ uri: "https://i.imgur.com/60qiS5e_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
+          style={{ width: 350, height: 230 }}
+        />
+
 
       <Text style={{marginRight: 300, fontWeight:'bold', marginTop: 30}}>Charms</Text>
 
@@ -271,15 +287,14 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
   },
-  buttonStyle3: {
-    alignItems: 'center',
+  buttonStyle_Stats: {
     margin: 10,
+    marginRight: 10,
     paddingVertical: 5,
     paddingHorizontal: 5,
     borderRadius: 20,
     elevation: 3,
     backgroundColor: 'lightgrey',
-    
     
   },
   buttonText2: {
@@ -309,6 +324,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
+    marginRight: 60,
   },
   profileContainer: {
     flexDirection: 'row',
