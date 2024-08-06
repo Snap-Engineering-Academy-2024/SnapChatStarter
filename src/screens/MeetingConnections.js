@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, ImageBackground, TouchableOpacity} from 'react-native';
 
 const App = () => {
   return (
@@ -9,9 +9,12 @@ const App = () => {
       source={{ uri: 'https://i.imgur.com/JW36I7L_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
       style={styles.backgroundImage}
     >
-      {/* <View>
-        <Text style={styles.text}>Hello, World!</Text>
-      </View> */}
+        <View style={styles.buttonContainer}> 
+      <TouchableOpacity
+          style={styles.buttonStyle_Stats}>
+          <Text style={styles.buttonText2}>Yes</Text>
+        </TouchableOpacity>
+        </View>
       </ImageBackground>
     </SafeAreaView>
    
@@ -34,6 +37,28 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: 750,
+  },
+  buttonStyle_Stats: {
+    margin: 10,
+    marginRight: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 50,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: 'white',
+    
+  },
+  buttonText2: {
+    fontSize: 13,
+    lineHeight: 21,
+    letterSpacing: 0.5,
+    color: 'black',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    
+    marginLeft: 121,
+    marginTop: 470,
   },
 });
 
