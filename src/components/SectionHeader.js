@@ -8,6 +8,7 @@ import { useAuthentication } from "../utils/hooks/useAuthentication";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import SnapTogetherSearchModal from "./SnapTogetherSearchModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { SearchBar } from "react-native-elements";
 
 export default function SectionHeader() {
   const navigation = useNavigation();
@@ -15,6 +16,8 @@ export default function SectionHeader() {
   const { user } = useAuthentication();
 
   const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
 
   return (
     <View style={styles.container}>
@@ -27,19 +30,33 @@ export default function SectionHeader() {
         >
           <Icon name="arrow-back" size={24} />
         </Pressable>
-        <Pressable
-          style={[styles.search, styles.buttons]}
-          onPress={() => {
-            setShowSearch(true)
+          <SearchBar
+          containerStyle={{
+            flex: 1,
+            backgroundColor: "transparent",
+            borderTopColor: "transparent",
+            borderBottomColor: "transparent",
           }}
-        >
-          <Ionicons
-          style={{ fontSize: 26}}
-          name={"search"}
-          size={30}
-          color="black"
-          />
-        </Pressable>
+          inputContainerStyle={{ width: 270, height: 40, backgroundColor: "#EBECEE" }}
+          width="100"
+          placeholder="Search/Filter"
+          lightTheme="true"
+          round="true"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          // {ethnicities.map((ethnicity, index) => (
+          //   <TouchableOpacity
+          //     key={index}
+          //     style={[
+          //       styles.button,
+          //       selectedRaces.includes(ethnicity.label) && styles.buttonSelected,
+          //     ]}
+          //     onPress={() => raceSelection(ethnicity.label)}
+          //   >
+          //     <Text style={styles.buttonText}>{ethnicity.acronym}</Text>
+          //   </TouchableOpacity>
+          // ))}
+        />
       </View>
       <View style={styles.headerRight}>
         <TouchableOpacity
