@@ -1,5 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Image, View, StyleSheet,ScrollView } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Image,
+  View,
+  StyleSheet,
+  Dimensions,
+  Text,
+  ImageBackground,
+} from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
@@ -9,18 +16,12 @@ import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 import ProfileSections from "../components/ProfileSections";
 import ProfileHeader from "../components/ProfileHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import { BottomSheet } from "@rneui/themed";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
-const handleSignOut = async () => {
-  try {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Error signing out:", error.message);
-    } else {
-    }
-  } catch (error) {
-    console.error("Unexpected error:", error);
-  }
-};
+const { height: SCREEN_HEIGHT } = Dimensions.get("window");
+const avatarBackground =
+  "../../assets/SnapTogether/JadeBitmojiPlusBackground.png";
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -29,6 +30,7 @@ export default function ProfileScreen() {
   const userJoinStatus = findJoinStatus();
   const [showAbout, setShowAbout] = useState(false);
   const insets = useSafeAreaInsets();
+  const sheetRef = useRef(null);
 
   useEffect(() => {
     setAstrology(userSign.sign);
@@ -55,68 +57,46 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View
-      style={{
-        flex: 0.9,
-        flexDirection: "column",
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom,
-        paddingLeft: insets.left,
-        paddingRight: insets.right,
-      }}
-    >
-      <ProfileHeader />
-      <View style={styles.topContainer}>
-        <Image
-           source={require("../../assets/SnapTogether/JadeBitmojiPicture.png")}
-          style={styles.avatar}
-        />
-        <DraggableButtonList
-          onPressHandlers={badgeOnPressHandlers}
-          astrology={astrology}
-        />
+    <View style={styles.container}>
+      <ImageBackground source={require(avatarBackground)} style={styles.image}>
+        <BottomSheet ref={sheetRef} snapPoints={["65", "70", "75", "80", "85"]}>
+          <View style={styles.sections}>
+            <ProfileSections onPressHandlers={sectionOnPressHandlers} />
+          </View>
+        </BottomSheet>
+        <View style={{ paddingTop: insets.top }}>
+          <ProfileHeader />
+        </View>
         <View>
           <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
         </View>
-      </View>
-      <View style={styles.sections}>
-        <ProfileSections onPressHandlers={sectionOnPressHandlers} />
-      </View>
+        {/* Buttons for Profile Sections */}
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  topContainer: {
-    width: "100%",
+  container: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "top",
-    marginTop: 20,
+    justifyContent: "center",
   },
-  draggableContainer: {
-    height: 100,
-    marginBottom: 20,
-  },
-  avatar: {
-    width: "100%",
+  image: {
+    flex: 1,
+    resizeMode: "cover",
     height: "100%",
-    // borderRadius: 75,
-    marginBottom: 20,
+    width: "100%",
   },
-  button: {
-    padding: 20,
-    marginHorizontal: 10,
-    borderRadius: 5,
+  bottomsheet: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0)",
+  },
+  content: {
     backgroundColor: "white",
-    borderColor: "black",
+    padding: 25,
+    height: SCREEN_HEIGHT,
+    borderRadius: 25,
+    alignItems: "center",
+    top: SCREEN_HEIGHT / 3.5,
   },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  sections: {
-    paddingTop: 100,
-  }
 });
