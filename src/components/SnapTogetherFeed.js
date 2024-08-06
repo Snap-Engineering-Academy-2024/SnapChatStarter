@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   Square: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "flex-start",
     gap: 20,
     width: "100%",
     borderRadius: 20,
