@@ -6,6 +6,9 @@ import PopupCommInfo from "../components/PopupCommInfo";
 import Onboarding from 'react-native-onboarding-swiper';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
+import { supabase } from '../utils/hooks/supabase';
+
 
 const handleSignOut = async () => {
   try {
@@ -22,10 +25,37 @@ export default function ProfileScreen() {
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
   const [popupTrigger, setPopupTrigger] = useState(false);
+  const fetchUserData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles') // Replace with your table name
+        .select('community')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+      console.log(data.community);
+      if (data.community === null)
+        {
+          setPopupTrigger(true);
+          console.log("shows popup.");
+        }
+        else
+        {
+          console.log("doesnt show popup");
+        }
+
+    } catch (error) {
+      console.error('Error fetching user data:', error.message);
+      
+    }
+  };
 
   useEffect(() => {
     setAstrology(userSign.sign);
-  }, []);
+    if (user !== null)
+      fetchUserData();
+  }, [popupTrigger, user]);
 
   const Done = ({ ...props }) => (
     <TouchableOpacity {...props}>
@@ -82,7 +112,7 @@ export default function ProfileScreen() {
   return (
     <ScrollView>
       <View style={{ alignItems: "center" }}>
-        <PopupCommInfo trigger={popupTrigger} setTrigger={setPopupTrigger}>
+      <PopupCommInfo trigger={popupTrigger} setTrigger={setPopupTrigger}>
           <Onboarding
             onSkip={() => navigation.replace("Profile")}
             onDone={() => navigation.replace("Profile")}
@@ -196,13 +226,7 @@ export default function ProfileScreen() {
           <Text style={styles.buttonText2}>+ Add Community</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.buttonStyle2}
-          onPress={() => {
-            setPopupTrigger(true);
-          }}>
-          <Text style={styles.buttonText2}>Community Ping Info</Text>
-        </TouchableOpacity>
+
       </View>
 
       <Text style={{marginRight: 300, fontWeight:'bold', marginTop: 30}}>Charms</Text>

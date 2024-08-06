@@ -2,6 +2,10 @@ import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, FlatList }
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import PopupCommInfo from "../components/PopupCommInfo";
+import { useAuthentication } from '../utils/hooks/useAuthentication';
+import { supabase } from '../utils/hooks/supabase';
+
+
 
 export default function CommSelectionScreen() {
   const navigation = useNavigation();
@@ -9,7 +13,44 @@ export default function CommSelectionScreen() {
   const [theOrientations, setTheOrientations] = useState([]);
   const [theBackgrounds, setTheBackgrounds] = useState([]);
   const [activePopup, setActivePopup] = useState(null);
+  const { user } = useAuthentication();
 
+const writeToTableComm = async (text) => {
+  // Step 1: Fetch the existing record
+  const { data: existingData, error: fetchError } = await supabase
+    .from('profiles')
+    .select('community')
+    .eq('id', user.id)
+    .single();
+
+  if (fetchError) {
+    console.error('Error fetching existing data:', fetchError);
+  } else {
+    // Step 2: Set the community field to the new text
+    const updatedCommunity = text;
+
+    // Step 3: Upsert the updated record
+    const { data: upsertedData, error: upsertError } = await supabase
+      .from('profiles')
+      .upsert({
+        id: user.id, // Use the user ID to identify the record
+        community: updatedCommunity // Set the community field to the new text
+      });
+
+    if (upsertError) {
+      console.error('Error upserting data:', upsertError);
+    } else {
+      console.log('Upsert successful:', upsertedData);
+    }
+  }
+};
+
+
+  const handlePress = async (text) => {
+    await writeToTableComm(text);
+    navigation.replace("InterestSelection");
+  };
+  
   const genders = [
     {
       id: 'transgender',
@@ -102,6 +143,9 @@ export default function CommSelectionScreen() {
     setTheBackgrounds(backgrounds);
   }, []);
 
+  useEffect(() => {
+    
+  }, [user]);
 
   const renderProductCard = ({ item }) => (
     <TouchableOpacity style={styles.cardContainer} onPress={() => setActivePopup(item.id)}>
@@ -128,7 +172,7 @@ export default function CommSelectionScreen() {
                 <TouchableOpacity style={styles.buttonStyle3}>
                   <Text style={styles.buttonText3}>Don't Join</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("InterestSelection")}>
+                <TouchableOpacity style={styles.buttonStyle3} onPress={() => handlePress(gender.id)}>
                   <Text style={styles.buttonText3}>Join!</Text>
                 </TouchableOpacity>
               </View>
@@ -149,7 +193,7 @@ export default function CommSelectionScreen() {
                 <TouchableOpacity style={styles.buttonStyle3}>
                   <Text style={styles.buttonText3}>Don't Join</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("InterestSelection")}>
+                <TouchableOpacity style={styles.buttonStyle3} onPress={() => handlePress(orientation.id)}>
                   <Text style={styles.buttonText3}>Join!</Text>
                 </TouchableOpacity>
               </View>
@@ -171,7 +215,7 @@ export default function CommSelectionScreen() {
                 <TouchableOpacity style={styles.buttonStyle3}>
                   <Text style={styles.buttonText3}>Don't Join</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("InterestSelection")}>
+                <TouchableOpacity style={styles.buttonStyle3} onPress={() => handlePress(background.id)}>
                   <Text style={styles.buttonText3}>Join!</Text>
                 </TouchableOpacity>
               </View>

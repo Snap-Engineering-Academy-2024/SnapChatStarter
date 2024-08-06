@@ -15,6 +15,7 @@ import { Button } from "react-native-elements";
 import Popup from "../components/Popup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
+import { useAuthentication } from "../utils/hooks/useAuthentication";
 
 
 import defaultPhoto from "../../assets/snapchat/notificationPic.png";
@@ -32,33 +33,38 @@ export default function CameraScreen({ navigation, focused })
   const [photo, setPhoto] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
   const { user } = useAuthentication();
-  const [communitiesArray, setCommunitiesArray] = useState([]);
-
+  const [communities, setCommunities] = useState("");
+  const [popupTrigger, setPopupTrigger] = useState(false);
 
 
   const fetchUserData = async () => {
     try {
       const { data, error } = await supabase
         .from('profiles') // Replace with your table name
-        .select('identity_communities')
+        .select('community')
         .eq('id', user.id)
         .single();
 
       if (error) throw error;
 
-      setCommunitiesArray(data);
-      console.log(data.identity_communities);
-      if (data.identity_communities === null)
-        console.log("shows popup.");
-      else
-        console.log("doesnt show popup");
+      setCommunities(data);
+      console.log(data.community);
+      if (data.community === null)
+        {
+          setPopupTrigger(true);
+          console.log("shows popup.");
+        }
+        else
+        {
+          console.log("doesnt show popup");
+        }
 
     } catch (error) {
       console.error('Error fetching user data:', error.message);
       setLoading(false);
     }
   };
-  const [popupTrigger, setPopupTrigger] = useState(false);
+  
 
 
   useEffect(() => {
@@ -72,13 +78,7 @@ export default function CameraScreen({ navigation, focused })
       const { status: mediaLibraryStatus } = await MediaLibrary.requestPermissionsAsync();
       setHasMediaLibraryPermission(mediaLibraryStatus === 'granted');
     })();
-  }, []);
-
-  useEffect(() => {
-    if (permission && permission.granted) {
-      setPopupTrigger(true);
-    }
-  }, [permission]);
+  }, [user]);
 
   if (!permission) {
     return <View />;
@@ -105,9 +105,6 @@ export default function CameraScreen({ navigation, focused })
 
           </TouchableOpacity>
         </Popup>
-        <TouchableOpacity onPress={() => setPopupTrigger(true)} style={styles.button}>
-          <Text style={styles.text}>Show Popup</Text>
-        </TouchableOpacity>
       </SafeAreaView>
     );
   }

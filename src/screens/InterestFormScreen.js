@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
 import PopupLocationNotification from "../components/PopupLocationNotification";
 import { useNavigation } from "@react-navigation/native";
+import { useAuthentication } from '../utils/hooks/useAuthentication';
+import { supabase } from '../utils/hooks/supabase';
 
 
 const interests = {
@@ -15,6 +17,41 @@ export default function InterestSelectionScreen() {
   const navigation = useNavigation();
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [popupTrigger, setPopupTrigger] = useState(false);
+  const { user } = useAuthentication();
+
+  const handlePress = async (text) => {
+    await writeToTable(text);
+    setPopupTrigger(true);
+  };
+
+  const writeToTable = async () => {
+    // Step 1: Fetch the existing record
+      const { data: existingData, error: fetchError } = await supabase
+      .from('profiles')
+      .select('interests')
+      .eq('id', user.id)
+      .single();
+      if (fetchError) {
+        console.error('Error fetching existing data:', fetchError);
+      } else {
+
+    
+        // Step 3: Upsert the updated record
+        const { data: upsertedData, error: upsertError } = await supabase
+          .from('profiles')
+          .upsert({
+            id: user.id, // Use the user ID to identify the record
+            interests: selectedInterests // Set the updated interests array
+          });
+    
+        if (upsertError) {
+          console.error('Error upserting data:', upsertError);
+        } else {
+          console.log('Upsert successful:', upsertedData);
+        }
+      }
+    
+    };
 
 
   const toggleInterest = (interest) => {
@@ -28,6 +65,14 @@ export default function InterestSelectionScreen() {
   // const handleSubmit = () => {
   //   console.log("Selected Interests:", selectedInterests);
   // };
+
+  useEffect(() => {
+    
+  }, [user]);
+  useEffect(() => {
+    if (selectedInterests.length === 3)
+      console.log(selectedInterests);
+  }, [selectedInterests]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -75,7 +120,7 @@ export default function InterestSelectionScreen() {
         </View>
       ))}
       <TouchableOpacity style={styles.submitButton} 
-      onPress={() => {setPopupTrigger(true); }}>
+      onPress={() => {handlePress()}}>
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
     </ScrollView>
