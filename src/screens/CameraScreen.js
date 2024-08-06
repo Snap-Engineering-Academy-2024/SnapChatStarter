@@ -1,15 +1,3 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  SafeAreaView,
-  TouchableOpacity,
-  Modal,
-  Pressable,
-} from "react-native";
-import { useEffect, useRef, useState } from "react";
-import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Modal, Pressable, SafeAreaView, Image } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
@@ -21,27 +9,26 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CameraActions from "../components/CameraActions";
 import CameraOptions from "../components/CameraOptions";
 import PostcaptureOptions from "../components/PostcaptureActions";
-// Add supabase to store:
-import { supabase } from "../utils/hooks/supabase";
+import { supabase } from '../utils/hooks/supabase';
 import CameraGalleryMenu from "../components/CameraGalleryMenu";
 import { Button } from "react-native-elements";
 import Popup from "../components/Popup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 
-import defaultPhoto from "../../assets/snapchat/notificationPic.png";
 
 import { useAuthentication } from '../utils/hooks/useAuthentication';
+
+import defaultPhoto from "../../assets/snapchat/notificationPic.png";
 
 
 export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const cameraRef = useRef(null);
-  const [facing, setFacing] = useState("back");
+  const [facing, setFacing] = useState("back"); 
   const [permission, requestPermission] = useCameraPermissions();
-  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] =
-    useState(null);
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
   const [popupTrigger, setPopupTrigger] = useState(false);
@@ -63,15 +50,22 @@ export default function CameraScreen({ navigation, focused }) {
       setCommunitiesArray(data);
       console.log(data.identity_communities);
       if (data.identity_communities === null)
+      {
+        setPopupTrigger(true);
         console.log("shows popup.");
+      }
       else
+      {
         console.log("doesnt show popup");
-
+      }
+        
     } catch (error) {
       console.error('Error fetching user data:', error.message);
       setLoading(false);
     }
   };
+
+
 
   useEffect(() => {
     if (user !== null) {
@@ -79,26 +73,16 @@ export default function CameraScreen({ navigation, focused }) {
       // console.log(JSON.stringify(user, null, 4))
 
     }
-
     (async () => {
-      // Request media library permissions
-      const { status: mediaLibraryStatus } =
-        await MediaLibrary.requestPermissionsAsync();
-      setHasMediaLibraryPermission(mediaLibraryStatus === "granted");
+      const { status: mediaLibraryStatus } = await MediaLibrary.requestPermissionsAsync();
+      setHasMediaLibraryPermission(mediaLibraryStatus === 'granted');
     })();
-  }, []);
+  }, [user]);
 
-  useEffect(() => {
-    if (permission && permission.granted) {
-      setPopupTrigger(true);
-    }
-  }, [permission]);
 
   if (!permission) {
     return <View />;
   }
-
-
 
   if (!permission.granted) {
     return (
@@ -118,9 +102,6 @@ export default function CameraScreen({ navigation, focused }) {
 
           </TouchableOpacity>
         </Popup>
-        <TouchableOpacity onPress={() => setPopupTrigger(true)} style={styles.button}>
-          <Text style={styles.text}>Show Popup</Text>
-        </TouchableOpacity>
       </SafeAreaView>
     );
   }
@@ -134,8 +115,7 @@ export default function CameraScreen({ navigation, focused }) {
   }
 
   async function checkGallery() {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert("Permission to access camera roll is required!");
       return;
@@ -152,43 +132,12 @@ export default function CameraScreen({ navigation, focused }) {
       const options = { quality: 1, base64: true, exif: false };
       const newPhoto = await cameraRef.current.takePictureAsync(options);
       setPhoto(newPhoto);
-      // This part is to insert URI to "gallery" table
-      console.log(" Before Insert to table!");
-      const { error } = await supabase
-        .from("gallery")
-        .insert({ photo: newPhoto.uri });
-      console.log("After Insert to table!");
       const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });    
       if (error) {
-        console.error("Error inserting photo:", error.message);
+        console.error('Error inserting photo:', error.message);
       }
-      // This part is to store images in a folder bucket named "pictureStorage"
-      //uploadImage(newPhoto.uri);
-      
     }
   }
-
-  // async function uploadImage (photoUri) {
-  //   // console.log("1")
-  //   const response = await fetch(photoUri);
-
-  //   const blob = await response.blob();
-
-  //   const arrayBuffer = await new Response(blob).arrayBuffer();
-  //   // console.log("2")
-  //   const fileName = `public/${Date.now()}.jpg`;
-  //   const { error1} = await supabase
-  //     .storage
-  //     .from('pictureStorage')
-  //     .upload(fileName, arrayBuffer, { contentType: 'image/jpeg', upsert: false });
-  //   // console.log("3")
-  //   if (error1) {
-  //     console.error('Error uploading image:', error1.message);
-  //   } else {
-  //     console.log('Image successfully uploaded:', data);
-  //   }
-
-  // }
 
   function savePhoto() {
     MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
@@ -207,16 +156,12 @@ export default function CameraScreen({ navigation, focused }) {
       <View style={[styles.container, { marginBottom: tabBarHeight, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <Image style={facing === "front" ? styles.frontPreview : styles.preview} source={{ uri: photo.uri }} />
         {hasMediaLibraryPermission && (
-          <PostcaptureOptions
-            deletePhoto={() => setPhoto(null)}
-            savePhoto={savePhoto}
-          />
+          <PostcaptureOptions deletePhoto={() => setPhoto(null)} savePhoto={savePhoto} />
         )}
       </View>
     );
   }
 
-  if (showGalleryMenu) {
   if (showGalleryMenu) {
     return (
       <View style={[styles.container, { marginBottom: tabBarHeight, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
@@ -282,11 +227,11 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     marginTop: 400,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 15,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -296,14 +241,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonStyle: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     margin: 5,
     paddingVertical: 20,
     paddingHorizontal: 32,
     borderRadius: 20,
     elevation: 3,
-    backgroundColor: "#2196F3",
+    backgroundColor: '#2196F3',
   },
   buttonStyle2: {
     alignItems: 'center',
@@ -316,20 +261,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFC00',
   },
   closeButtonStyle: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     margin: 5,
     paddingVertical: 20,
     paddingHorizontal: 32,
     borderRadius: 20,
     elevation: 3,
-    backgroundColor: "red",
+    backgroundColor: 'red',
   },
   buttonText: {
     fontSize: 20,
     lineHeight: 21,
     letterSpacing: 0.5,
-    color: "white",
+    color: 'white',
   },
   buttonText2: {
     fontSize: 13,
@@ -355,4 +300,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
