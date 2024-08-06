@@ -1,14 +1,12 @@
-import { Text, View, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { colors } from "../../assets/themes/colors";
-import { fontHeader } from "../../assets/themes/font";
-import { Followers, More, Search } from "../../assets/snapchat/HeaderIcons";
-import { createStackNavigator } from "@react-navigation/stack";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from "../utils/hooks/supabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { BottomSheet, Button } from "@rneui/themed";
 
 export default function ProfileHeader() {
   const navigation = useNavigation();
@@ -19,36 +17,25 @@ export default function ProfileHeader() {
     <View style={styles.container}>
       <View style={styles.headerLeft}>
         <Pressable
-          style={[styles.profile, styles.buttons]}
+          style={styles.buttons}
           onPress={() => {
             navigation.navigate("Camera");
           }}
         >
-          <Icon name="arrow-back" size={24} />
+          <Icon name="arrow-back" size={22} />
         </Pressable>
-      </View>
-      <View style={styles.headerCenter}>
-        <Text style={styles.emailText}>
-          {user &&
-            user.user_metadata &&
-            user.user_metadata.email.slice(
-              0,
-              user.user_metadata.email.indexOf("@")
-            )}
-        </Text>
       </View>
       <View style={styles.headerRight}>
         <TouchableOpacity
-          style={styles.shareButton}
-          //   onPress={() => navigation.navigate("Settings")}
+          style={styles.buttons}
         >
-          <Icon name="share" size={24} />
+          <Icon name="share" size={22} />
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.settingsButton}
+          style={styles.buttons}
           onPress={() => navigation.navigate("Settings")}
         >
-          <Icon name="settings" size={24} />
+          <Icon name="settings" size={22} />
         </TouchableOpacity>
       </View>
     </View>
@@ -64,28 +51,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  title: {
-    textAlign: "center",
-    color: colors.primary,
-    fontSize: fontHeader.fontSize,
-    fontFamily: fontHeader.fontFamily,
-    fontWeight: fontHeader.fontWeight,
-  },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-start',
     flex: 1,
-  },
-  headerCenter: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    gap: 8,
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
     flex: 1,
+    gap: 8,
   },
   buttons: {
     borderRadius: 100,
@@ -95,19 +73,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
-  },
-  shareButton: {
-    alignSelf: "flex-end",
-    marginBottom: 16,
-    marginRight: 10,
-  },
-  settingsButton: {
-    alignSelf: "flex-end",
-    marginBottom: 16,
-    marginRight: 25,
-  },
-  emailText: {
-    fontWeight: "bold",
-    fontSize: 18
-  },
+  }
 });
