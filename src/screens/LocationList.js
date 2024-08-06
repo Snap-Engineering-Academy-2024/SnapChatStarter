@@ -1,13 +1,19 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput , ScrollView} from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, ScrollView, Image } from "react-native";
 import { colors } from "../../assets/themes/colors";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-const LocationList = ({ places, onPlacePress, searchFunc, onClose}) => {
+// Placeholder image URL (can be replaced with any image URL or local image)
+const placeholderImage = "https://via.placeholder.com/50";
+
+const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.item} onPress={() => onPlacePress(item)}>
-      <Text style={styles.title}>{item.name}</Text>
-      <Text>{item.vicinity}</Text>
+      <Image source={{ uri: placeholderImage }} style={styles.image} />
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>{item.name}</Text>
+        <Text>{item.vicinity}</Text>
+      </View>
     </TouchableOpacity>
   );
 
@@ -81,9 +87,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   item: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  textContainer: {
+    flex: 1,
   },
   title: {
     fontSize: 18,
