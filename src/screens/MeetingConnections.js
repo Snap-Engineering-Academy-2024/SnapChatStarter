@@ -1,7 +1,10 @@
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet, ImageBackground, TouchableOpacity} from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 
-const App = () => {
+
+const MeetingConnections = () => {
+    const navigation = useNavigation();
   return (
     
     <SafeAreaView style={styles.container}>
@@ -11,7 +14,8 @@ const App = () => {
     >
         <View style={styles.buttonContainer}> 
       <TouchableOpacity
-          style={styles.buttonStyle_Stats}>
+          style={styles.buttonStyle_Stats}
+          onPress={() => navigation.replace("Add Current Interests!")}>
           <Text style={styles.buttonText2}>Yes</Text>
         </TouchableOpacity>
         </View>
@@ -62,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default MeetingConnections;
