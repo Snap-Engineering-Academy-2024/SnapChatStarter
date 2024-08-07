@@ -70,7 +70,7 @@ const ProfileSections = ({ onPressHandlers, badgeOnPressHandlers, astrology, use
           source={require("../../assets/snapchat-logo.png")}
         />
         <View>
-          <Text style={{ fontSize: 18 }}>{name}</Text>
+          <Text style={{ fontSize: 26, fontWeight: "bold" }}>{name}</Text>
           <Text style={{ fontSize: 14 }}>{username}</Text>
         </View>
       </View>

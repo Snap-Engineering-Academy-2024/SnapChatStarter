@@ -37,7 +37,7 @@ export default function ProfileScreen() {
   };
   const badgeOnPressHandlers = {
     [astrology]: () => navigation.navigate("Astrology"),
-    "🫶🏻🫶🏽🫶🏿": SnapTogetherRedirect,
+    "SnapTogether": SnapTogetherRedirect,
   };
 
   const sectionOnPressHandlers = {
@@ -51,10 +51,13 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <ImageBackground source={require(avatarBackground)} style={styles.image}>
+      <View style={{ paddingTop: insets.top }}>
+          <ProfileHeader />
+        </View>
         <BottomSheet
           ref={sheetRef}
           index={3}
-          snapPoints={["35", "48", "58", "68", "78", "85"]}
+          snapPoints={["35", "48", "58", "68", "78", "85", "95"]}
         >
           <View style={styles.sections}>
             <ProfileSections
@@ -65,9 +68,6 @@ export default function ProfileScreen() {
             />
           </View>
         </BottomSheet>
-        <View style={{ paddingTop: insets.top }}>
-          <ProfileHeader />
-        </View>
         <AboutSheet aref={aboutSheetRef} />
         {/* Buttons for Profile Sections */}
       </ImageBackground>
