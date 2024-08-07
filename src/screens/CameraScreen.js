@@ -16,13 +16,12 @@ import Popup from "../components/Popup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 
-
-import { useAuthentication } from '../utils/hooks/useAuthentication';
-
 import defaultPhoto from "../../assets/snapchat/notificationPic.png";
+>>>>>>>>> Temporary merge branch 2
 
 
-export default function CameraScreen({ navigation, focused }) {
+export default function CameraScreen({ navigation, focused }) 
+{
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const cameraRef = useRef(null);
@@ -31,17 +30,19 @@ export default function CameraScreen({ navigation, focused }) {
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
-  const [popupTrigger, setPopupTrigger] = useState(false);
+<<<<<<<<< Temporary merge branch 1
   const { user } = useAuthentication();
-  const [communitiesArray, setCommunitiesArray] = useState([]);
+  const [communities, setCommunities] = useState("");
+  const [popupTrigger, setPopupTrigger] = useState(false);
 
+  const [popupTriggePing, setPopupTriggerPing] = useState(false);
 
 
   const fetchUserData = async () => {
     try {
       const { data, error } = await supabase
         .from('profiles') // Replace with your table name
-        .select('identity_communities')
+        .select('community')
         .eq('id', user.id)
         .single();
 
@@ -50,22 +51,18 @@ export default function CameraScreen({ navigation, focused }) {
       setCommunitiesArray(data);
       console.log(data.identity_communities);
       if (data.identity_communities === null)
-      {
-        setPopupTrigger(true);
         console.log("shows popup.");
-      }
       else
-      {
         console.log("doesnt show popup");
-      }
-        
+
     } catch (error) {
       console.error('Error fetching user data:', error.message);
-      setLoading(false);
+      
     }
   };
-
-
+=========
+  const [popupTrigger, setPopupTrigger] = useState(false);
+>>>>>>>>> Temporary merge branch 2
 
   useEffect(() => {
     if (user !== null) {
@@ -79,6 +76,11 @@ export default function CameraScreen({ navigation, focused }) {
     })();
   }, [user]);
 
+  useEffect(() => {
+    if (permission && permission.granted) {
+      setPopupTrigger(true);
+    }
+  }, [permission]);
 
   if (!permission) {
     return <View />;
@@ -106,11 +108,17 @@ export default function CameraScreen({ navigation, focused }) {
     );
   }
 
+
   function flipCamera() {
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
   function galleryMenu() {
+<<<<<<<<< Temporary merge branch 1
+    // console.log("HELLO, is the gallery menu being shown?\n", !showGalleryMenu)
+    // return <CameraGalleryMenu />
+=========
+>>>>>>>>> Temporary merge branch 2
     setShowGalleryMenu(!showGalleryMenu);
   }
 
@@ -123,7 +131,12 @@ export default function CameraScreen({ navigation, focused }) {
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
     setShowGalleryMenu(false);
     if (!pickerResult.canceled) {
+<<<<<<<<< Temporary merge branch 1
+      //setImage(pickerResult.uri);
+      setPhoto(pickerResult.assets[0]); //By Ryan
+=========
       setPhoto(pickerResult.assets[0]);
+>>>>>>>>> Temporary merge branch 2
     }
   }
 
@@ -134,11 +147,41 @@ export default function CameraScreen({ navigation, focused }) {
       setPhoto(newPhoto);
       const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });    
       if (error) {
-        console.error('Error inserting photo:', error.message);
+        console.error("Error inserting photo:", error.message);
       }
+<<<<<<<<< Temporary merge branch 1
+      // This part is to store images in a folder bucket named "pictureStorage"
+      //uploadImage(newPhoto.uri);
     }
   }
 
+  // async function uploadImage (photoUri) {
+  //   // console.log("1")
+  //   const response = await fetch(photoUri);
+
+  //   const blob = await response.blob();
+
+  //   const arrayBuffer = await new Response(blob).arrayBuffer();
+  //   // console.log("2")
+  //   const fileName = `public/${Date.now()}.jpg`;
+  //   const { error1} = await supabase
+  //     .storage
+  //     .from('pictureStorage')
+  //     .upload(fileName, arrayBuffer, { contentType: 'image/jpeg', upsert: false });
+  //   // console.log("3")
+  //   if (error1) {
+  //     console.error('Error uploading image:', error1.message);
+  //   } else {
+  //     console.log('Image successfully uploaded:', data);
+  //   }
+
+  // }
+
+=========
+    }
+  }
+
+>>>>>>>>> Temporary merge branch 2
   function savePhoto() {
     MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
       setPhoto(null);
@@ -199,6 +242,7 @@ export default function CameraScreen({ navigation, focused }) {
         /> */}
         <Text>My popup</Text>
       </Popup>
+>>>>>>>>> Temporary merge branch 2
     </View>
   );
 }
@@ -277,7 +321,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   buttonText2: {
-    fontSize: 13,
+    fontSize: 16,
     lineHeight: 21,
     letterSpacing: 0.5,
     color: 'black',
@@ -300,3 +344,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+>>>>>>>>> Temporary merge branch 2
