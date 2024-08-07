@@ -54,7 +54,7 @@ export default function ProfileScreen() {
         <BottomSheet
           ref={sheetRef}
           index={3}
-          snapPoints={["35", "45", "55", "65", "75", "85"]}
+          snapPoints={["35", "48", "58", "68", "78", "85"]}
         >
           <View style={styles.sections}>
             <ProfileSections
