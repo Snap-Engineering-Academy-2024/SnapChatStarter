@@ -21,7 +21,7 @@ export default function SnapTogetherHeader() {
             navigation.navigate("Profile");
           }}
         >
-          <Icon name="arrow-back" size={24} />
+          <Icon name="arrow-back-ios" size={22} color="white"/>
         </Pressable>
       </View>
       <View style={styles.headerRight}>
@@ -32,18 +32,17 @@ export default function SnapTogetherHeader() {
           }}
           accessibilityLabel="Show About Sheet"
         >
-          <Ionicons
-            style={{ alignSelf: "center" }}
-            name={"information-circle"}
-            size={24}
-            color="black"
+          <Icon
+            name="info"
+            size={22}
+            color="white"
           />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.settingsButton}
           onPress={() => navigation.navigate("Settings")}
         >
-          <Icon name="settings" size={24} />
+          <Icon name="settings" size={22} color="white"/>
         </TouchableOpacity>
       </View>
       <View>
@@ -93,6 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
+    backgroundColor: "rgba(0, 0, 0, .5)"
   },
   shareButton: {
     alignSelf: "flex-end",
@@ -103,6 +103,13 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginBottom: 16,
     marginRight: 25,
+    backgroundColor: "rgba(0, 0, 0, .5)",
+    borderRadius: 100,
+    height: 44,
+    width: 44,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
   emailText: {
     fontWeight: "bold",

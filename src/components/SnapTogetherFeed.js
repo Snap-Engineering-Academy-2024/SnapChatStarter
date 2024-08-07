@@ -5,9 +5,11 @@ import {
   ImageBackground,
   Pressable,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 
-export default function SnapTogetherFeed({ title, eventImage, handlePress }) {
+export default function SnapTogetherFeed({ title, eventImage, handlePress, selectedCompany }) {
+  const navigation = useNavigation();
   return (
     <View style={styles.FeedContainer}>
       <View style={styles.Square}>
@@ -23,7 +25,14 @@ export default function SnapTogetherFeed({ title, eventImage, handlePress }) {
               uri: eventImage,
             }}
           >
+            <Pressable
+          onPress={() => {
+            navigation.navigate("CompanyPage",{ selectedCompany });
+          }}
+          style={styles.nameBox}
+        >
             <Text style={styles.FeedText}>{title}</Text>
+            </Pressable>
           </ImageBackground>
         </Pressable>
       </View>
@@ -73,9 +82,6 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     fontSize: 16,
     color: "white",
-    position: "absolute",
-    right: 15,
-    bottom: 15,
     textShadowColor: "black",
     textShadowRadius: 15,
     textShadowOpacity: 0.5,
@@ -87,5 +93,12 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.75,
+    // alignSelf: "center"
   },
+  nameBox: {
+    position: "absolute",
+    right: 15,
+    bottom: 15,
+    // width: "80%",
+  }
 });

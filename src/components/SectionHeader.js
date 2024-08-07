@@ -44,18 +44,7 @@ export default function SectionHeader() {
           round="true"
           value={searchQuery}
           onChangeText={setSearchQuery}
-          // {ethnicities.map((ethnicity, index) => (
-          //   <TouchableOpacity
-          //     key={index}
-          //     style={[
-          //       styles.button,
-          //       selectedRaces.includes(ethnicity.label) && styles.buttonSelected,
-          //     ]}
-          //     onPress={() => raceSelection(ethnicity.label)}
-          //   >
-          //     <Text style={styles.buttonText}>{ethnicity.acronym}</Text>
-          //   </TouchableOpacity>
-          // ))}
+
         />
       </View>
       <View style={styles.headerRight}>

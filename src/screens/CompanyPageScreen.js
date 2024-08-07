@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 import ProfileSections from "../components/ProfileSections";
-import ProfileHeader from "../components/ProfileHeader";
+import CompanyPageHeader from "../components/CompanyPageHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { useRoute } from "@react-navigation/native";
@@ -41,7 +41,7 @@ export default function CompanyPageScreen() {
     return (
         <View style={styles.container}>
             <View style={{ paddingTop: insets.top }}>
-                <ProfileHeader />
+                <CompanyPageHeader />
             </View>
             <BottomSheet
                 ref={sheetRef}

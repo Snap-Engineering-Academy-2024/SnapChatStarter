@@ -14,7 +14,7 @@ export default function SnapTogetherStories({company, handlePress}) {
   const navigation = useNavigation();
   return (
     <View style={styles.myBitmoji}>
-      <Pressable //added a presable to give the story interaction
+      <Pressable
         style={[styles.profile, styles.buttons]}
         onPress={() => {
           handlePress()
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   bitmojiImage: {
-    width: 60,
-    height: 60,
+    width: 100,
+    height: 100,
     borderRadius:50,
   },
   bitmojiTextContainer: {
