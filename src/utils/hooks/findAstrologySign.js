@@ -58,17 +58,21 @@ export function findAstrologySign() {
       { month: "09", cutoffDay: 23, signs: [zodiac[8][0], zodiac[8][1]] },
       { month: "10", cutoffDay: 23, signs: [zodiac[9][0], zodiac[9][1]] },
       { month: "11", cutoffDay: 22, signs: [zodiac[10][0], zodiac[10][1]] },
-      { month: "12", cutoffDay: 22, signs: [zodiac[11][0], zodiac[11][1]] }
+      { month: "12", cutoffDay: 22, signs: [zodiac[11][0], zodiac[11][1]] },
     ];
-  
+
     const birthMonth = birthday[0];
     const birthDay = parseInt(birthday[1]);
-  
-    const zodiacSign = zodiacSigns.find(sign => sign.month === birthMonth);
+
+    const zodiacSign = zodiacSigns.find((sign) => sign.month === birthMonth);
     if (zodiacSign) {
-      setSign(birthDay <= zodiacSign.cutoffDay ? zodiacSign.signs[0] : zodiacSign.signs[1]);
+      setSign(
+        birthDay <= zodiacSign.cutoffDay
+          ? zodiacSign.signs[0]
+          : zodiacSign.signs[1],
+      );
     }
   }, [birthday]);
-  
+
   return { sign };
 }

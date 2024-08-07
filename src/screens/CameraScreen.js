@@ -15,106 +15,82 @@ import { Button } from "react-native-elements";
 import Popup from "../components/Popup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-
+import { useAuthentication } from "../utils/hooks/useAuthentication";
 import PopupPingNotification from "../components/PopupPingNotification";
+import defaultPhoto from "../../assets/snapchat/notificationPic.png";
 
-export default function CameraScreen({ navigation, focused }) {
+export default function CameraScreen({ navigation, focused }) 
+{
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const cameraRef = useRef(null);
-  const [facing, setFacing] = useState("back"); 
+  const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
-  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] =
+    useState(null);
   const [photo, setPhoto] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
+  const { user } = useAuthentication();
+  const [communities, setCommunities] = useState("");
   const [popupTrigger, setPopupTrigger] = useState(false);
 
   const [popupTriggePing, setPopupTriggerPing] = useState(false);
 
 
+  const fetchUserData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles') 
+        .select('community')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+      console.log(data.community);
+      if (data.community === null)
+        {
+          setPopupTrigger(true);
+          console.log("shows popup.");
+        }
+        else
+        {
+          console.log("doesnt show initial popup");
+        }
+
+    } catch (error) {
+      console.error('Error fetching user data:', error.message);
+      
+    }
+  };
+
 
   useEffect(() => {
+    if (user !== null) {
+      fetchUserData();
+      // console.log(JSON.stringify(user, null, 4))
+
+    }
+
     (async () => {
       const { status: mediaLibraryStatus } = await MediaLibrary.requestPermissionsAsync();
       setHasMediaLibraryPermission(mediaLibraryStatus === 'granted');
     })();
-  }, []);
-
-  useEffect(() => {
-    if (permission && permission.granted) {
-      setPopupTrigger(true);
-    }
-  }, [permission]);
+  }, [user]);
 
   if (!permission) {
     return <View />;
   }
-
-  if (!permission.granted) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <PopupPingNotification trigger={popupTriggePing} setTrigger={setPopupTriggerPing}>
-        <Image style={{ width: 150, height: 150 }} 
-        source={{ uri: "https://i.imgur.com/j8qg2QK_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
-          />
-          <Text style={{fontSize: 27}}>You've Been Pinged!</Text>
-          <Text>We've found a friend with your interests!</Text>
-          
-          <TouchableOpacity 
-          style={styles.buttonStyle2} 
-          onPress={() => {
-            navigation.navigate("Profile");
-          }}
-          >
-
-          <Text style={styles.buttonText2}>Chat with Friend!</Text>
-
-          </TouchableOpacity>
-        </PopupPingNotification>
-
-        <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
-          <Image style={{ width: 310, height: 200 }} 
-        source={{ uri: "https://i.imgur.com/8uEEtly_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
-        />
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>Introducing Community Ping!</Text>
-          <Text>Join your community and find others within your community who share your interests.</Text>
-          
-          <TouchableOpacity 
-          style={styles.buttonStyle2} 
-          onPress={() => {
-            navigation.navigate("Profile");
-          }}
-          >
-
-          <Text style={styles.buttonText2}>Let's Go!</Text>
-
-          </TouchableOpacity>
-        </Popup>
-        <TouchableOpacity onPress={() => setPopupTrigger(true)} style={styles.button}>
-          <Text style={styles.text}>Show Popup</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.buttonStyle2}
-          onPress={() => {
-            setPopupTriggerPing(true);
-          }}>
-          <Text style={styles.buttonText2}>Ping Notification</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
-  }
-
   function flipCamera() {
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
-  function galleryMenu() {
+  function galleryMenu(){
     setShowGalleryMenu(!showGalleryMenu);
   }
 
   async function checkGallery() {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert("Permission to access camera roll is required!");
       return;
@@ -122,7 +98,8 @@ export default function CameraScreen({ navigation, focused }) {
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
     setShowGalleryMenu(false);
     if (!pickerResult.canceled) {
-      setPhoto(pickerResult.assets[0]);
+      //setImage(pickerResult.uri);
+      setPhoto(pickerResult.assets[0]); //By Ryan
     }
   }
 
@@ -133,7 +110,7 @@ export default function CameraScreen({ navigation, focused }) {
       setPhoto(newPhoto);
       const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });    
       if (error) {
-        console.error('Error inserting photo:', error.message);
+        console.error("Error inserting photo:", error.message);
       }
     }
   }
@@ -155,7 +132,10 @@ export default function CameraScreen({ navigation, focused }) {
       <View style={[styles.container, { marginBottom: tabBarHeight, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <Image style={facing === "front" ? styles.frontPreview : styles.preview} source={{ uri: photo.uri }} />
         {hasMediaLibraryPermission && (
-          <PostcaptureOptions deletePhoto={() => setPhoto(null)} savePhoto={savePhoto} />
+          <PostcaptureOptions
+            deletePhoto={() => setPhoto(null)}
+            savePhoto={savePhoto}
+          />
         )}
       </View>
     );
@@ -226,11 +206,11 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     marginTop: 400,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 15,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -240,14 +220,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonStyle: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     margin: 5,
     paddingVertical: 20,
     paddingHorizontal: 32,
     borderRadius: 20,
     elevation: 3,
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   buttonStyle2: {
     alignItems: 'center',
@@ -267,7 +247,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 20,
     elevation: 3,
-    backgroundColor: 'red',
+    backgroundColor: "red",
   },
   buttonText: {
     fontSize: 20,

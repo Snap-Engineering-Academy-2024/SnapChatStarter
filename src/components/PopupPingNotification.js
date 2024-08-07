@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+
 function Popup({ trigger, setTrigger, children }) {
   if (!trigger) return null; // Early return if trigger is false
 

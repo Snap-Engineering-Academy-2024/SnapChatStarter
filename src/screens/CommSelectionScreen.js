@@ -1,292 +1,56 @@
-// import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground } from "react-native";
-// import { useEffect, useState } from "react";
-// import { useNavigation } from "@react-navigation/native";
-
-// export default function CommSelectionScreen() {
-//   const navigation = useNavigation();
-//   const [theGenders, setTheGenders] = useState([]);
-//   const [theOrientations, setTheOrientations] = useState([]);
-//   const [theBackgrounds, setTheBackgrounds] = useState([]);
-//   const [selectedGender, setSelectedGender] = useState(null);
-//   const [selectedOrientation, setSelectedOrientation] = useState(null);
-//   const [selectedBackground, setSelectedBackground] = useState(null);
-
-//   const genders = [
-//     {
-//       id: 'n/aGender',
-//       title: 'Prefer Not to Respond',
-//       description: 'Will not associate with a community.',
-//       image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'cisgender female',
-//       title: 'Cisgender Female',
-//       description: 'Identifies with the gender assigned to her at birth.',
-//       image: 'https://i.imgur.com/ivr8j5I_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'cisgender male',
-//       title: 'Cisgender Male',
-//       description: 'Identifies with the gender assigned to him at birth',
-//       image: 'https://i.imgur.com/avZBiIT_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'transgender',
-//       title: 'Transgender',
-//       description: 'Different gender from the one assigned at birth.',
-//       image: 'https://i.imgur.com/41jJ7kP_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'bisgender',
-//       title: 'Bigender',
-//       description: 'Information about the Bigender community boobie doobie do',
-//       image: 'https://i.imgur.com/6HKmTPb_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'agender',
-//       title: 'Agender',
-//       description: 'Information about the Agender community boobie doobie do',
-//       image: 'https://i.imgur.com/jIR7GpM_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'genderfluid',
-//       title: 'Genderfluid',
-//       description: 'Information about the Genderfluid community boobie doobie do',
-//       image: 'https://i.imgur.com/Xh5GPp5_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//   ];
-
-//   const orientations = [
-//     {
-//       id: 'n/aOrientation',
-//       title: 'Prefer Not to Respond',
-//       description: 'Will not associate with a community.',
-//       image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'heterosexual',
-//       title: 'Heterosexual',
-//       description: 'Information about the Heterosexual community boobie doobie do',
-//       image: 'https://i.imgur.com/28OQ5ry_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'pansexual',
-//       title: 'Pansexual',
-//       description: 'Information about the Pansexual community boobie doobie do',
-//       image: 'https://i.imgur.com/oSYZBD0_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'another sexuality2',
-//       title: 'n/a',
-//       description: 'Information about a sexual identity boobie doobie do',
-//       image: 'https://i.imgur.com/zGcHKVl.png',
-//     },
-//   ];
-
-//   const backgrounds = [
-//     {
-//       id: 'n/aBackground',
-//       title: 'Prefer Not to Respond',
-//       description: 'Will not associate with a community.',
-//       image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//     },
-//     {
-//       id: 'background2',
-//       title: 'background2',
-//       description: 'Information about the Pansexual community boobie doobie do',
-//       image: 'https://i.imgur.com/zGcHKVl.png',
-//     },
-//     {
-//       id: 'background3',
-//       title: 'background3',
-//       description: 'Information about a sexual identity1 boobie doobie do',
-//       image: 'https://i.imgur.com/zGcHKVl.png',
-//     },
-//     {
-//       id: 'background4',
-//       title: 'background4',
-//       description: 'Information about a sexual identity boobie doobie do',
-//       image: 'https://i.imgur.com/zGcHKVl.png',
-//     },
-//   ];
-
-//   useEffect(() => {
-//     setTheGenders(genders);
-//   }, []);
-
-//   useEffect(() => {
-//     setTheOrientations(orientations);
-//   }, []);
-//   useEffect(() => {
-//     setTheBackgrounds(backgrounds);
-//   }, []);
-
-//   const handleGenderPress = (id) => {
-//     setSelectedGender(id);
-//   };
-
-//   const handleOrientationPress = (id) => {
-//     setSelectedOrientation(id);
-//   };
-
-//   const handleBackgroundPress = (id) => {
-//     setSelectedBackground(id);
-//   };
-
-//   const handleContinue = () => {
-//     console.log('Selected Gender:', selectedGender);
-//     console.log('Selected Orientation:', selectedOrientation);
-//     console.log('Selected Background:', selectedBackground);
-//   };
-
-//   const renderProductCard = (item, handlePress, selectedId) => (
-//     <TouchableOpacity
-//       style={[
-//         styles.cardContainer,
-//         selectedId === item.id && styles.selectedCard
-//       ]}
-//       onPress={() => handlePress(item.id)}
-//     >
-//       <Image style={styles.cardImage} source={{ uri: item.image }} />
-//       <Text style={styles.cardTitle}>{item.title}</Text>
-//       <Text style={styles.cardDescription}>{item.description}</Text>
-//     </TouchableOpacity>
-//   );
-
-//   return (
-//     <ImageBackground 
-//       source={{ uri: 'https://i.imgur.com/yVDecp2_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
-//       style={styles.backgroundImage}
-//     >
-//       <ScrollView>
-//         <View style={styles.container}>
-//           <Image
-//             source={{ uri: "https://i.imgur.com/dLbjZr8_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
-//             style={styles.headerImage}
-//           />
-//           <Text style={styles.headerText}>Select any identities that best suit you!</Text>
-//           <Text style={styles.sectionTitle}>Gender</Text>
-//           <FlatList
-//             data={theGenders}
-//             horizontal
-//             showsHorizontalScrollIndicator={false}
-//             keyExtractor={(item) => item.id.toString()}
-//             renderItem={({ item }) => renderProductCard(item, handleGenderPress, selectedGender)}
-//           />
-//           <Text style={styles.sectionTitle}>Sexual Orientation</Text>
-//           <FlatList
-//             data={theOrientations}
-//             horizontal
-//             showsHorizontalScrollIndicator={false}
-//             keyExtractor={(item) => item.id.toString()}
-//             renderItem={({ item }) => renderProductCard(item, handleOrientationPress, selectedOrientation)}
-//           />
-//           <Text style={styles.sectionTitle}>Ethnic Background</Text>
-//           <FlatList
-//             data={theBackgrounds}
-//             horizontal
-//             showsHorizontalScrollIndicator={false}
-//             keyExtractor={(item) => item.id.toString()}
-//             renderItem={({ item }) => renderProductCard(item, handleBackgroundPress, selectedBackground)}
-//           />
-//           <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
-//             <Text style={styles.continueButtonText}>></Text>
-//           </TouchableOpacity>
-//         </View>
-//       </ScrollView>
-//     </ImageBackground>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     width: "100%",
-//     flexDirection: "column",
-//     alignItems: "center",
-//   },
-//   backgroundImage: {
-//     flex: 1,
-//     width: "100%",
-//   },
-//   cardContainer: {
-//     margin: 20,
-//     width: 200,
-//     backgroundColor: '#ffffff',
-//     borderRadius: 10,
-//     overflow: 'hidden',
-//     height: 230,
-//     padding: 10,
-//     marginBottom: 10,
-//     borderColor: 'transparent',
-//     borderWidth: 2,
-//   },
-//   selectedCard: {
-//     borderColor: 'blue',
-//   },
-//   cardImage: {
-//     marginLeft: 10,
-//     height: 150,
-//     width: '90%',
-//     resizeMode: 'contain',
-//   },
-//   cardTitle: {
-//     textAlign: 'center',
-//     fontSize: 15,
-//     fontWeight: 'bold',
-//     marginVertical: 30,
-//   },
-//   cardDescription: {
-//     textAlign: 'center',
-//     marginTop: 10,
-//     fontSize: 14,
-//     color: '#333',
-//   },
-//   headerImage: {
-//     width: 328,
-//     height: 200,
-//   },
-//   headerText: {
-//     marginTop: 10,
-//     fontSize: 15,
-//     textAlign: 'center',
-//     color: 'grey',
-//   },
-//   sectionTitle: {
-//     marginRight: 175,
-//     fontWeight: "bold",
-//     fontSize: 20,
-//     marginTop: 20,
-//   },
-//   continueButton: {
-//     bottom: 30,
-//     left: 120,
-//     backgroundColor: '#2196F3',
-//     paddingVertical: 5,
-//     paddingHorizontal: 20,
-//     borderRadius: 25,
-//     marginTop: 60,
-//   },
-//   continueButtonText: {
-//     color: 'white',
-//     fontSize: 30,
-//     fontWeight: 'bold',
-//   },
-// });
-
 import React, { useEffect, useState, useRef } from "react";
 import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground, Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import PopupCommInfo from "../components/PopupCommInfo";
+import { useAuthentication } from '../utils/hooks/useAuthentication';
+import { supabase } from '../utils/hooks/supabase';
+
+
 
 export default function CommSelectionScreen() {
   const navigation = useNavigation();
   const [theGenders, setTheGenders] = useState([]);
   const [theOrientations, setTheOrientations] = useState([]);
   const [theBackgrounds, setTheBackgrounds] = useState([]);
-  const [selectedGender, setSelectedGender] = useState(null);
-  const [selectedOrientation, setSelectedOrientation] = useState(null);
-  const [selectedBackground, setSelectedBackground] = useState(null);
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const [activePopup, setActivePopup] = useState(null);
+  const { user } = useAuthentication();
 
+const writeToTableComm = async (text) => {
+  // Step 1: Fetch the existing record
+  const { data: existingData, error: fetchError } = await supabase
+    .from('profiles')
+    .select('community')
+    .eq('id', user.id)
+    .single();
+
+  if (fetchError) {
+    console.error('Error fetching existing data:', fetchError);
+  } else {
+    // Step 2: Set the community field to the new text
+    const updatedCommunity = text;
+
+    // Step 3: Upsert the updated record
+    const { data: upsertedData, error: upsertError } = await supabase
+      .from('profiles')
+      .upsert({
+        id: user.id, // Use the user ID to identify the record
+        community: updatedCommunity // Set the community field to the new text
+      });
+
+    if (upsertError) {
+      console.error('Error upserting data:', upsertError);
+    } else {
+      console.log('Upsert successful:', upsertedData);
+    }
+  }
+};
+
+
+  const handlePress = async (text) => {
+    await writeToTableComm(text);
+    navigation.replace("Add Current Interests!");
+  };
+  
   const genders = [
     {
       id: 'n/aGender',
@@ -397,9 +161,9 @@ export default function CommSelectionScreen() {
     setTheBackgrounds(backgrounds);
   }, []);
 
-  const handleGenderPress = (id) => {
-    setSelectedGender(id);
-  };
+  useEffect(() => {
+    
+  }, [user]);
 
   const handleOrientationPress = (id) => {
     setSelectedOrientation(id);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Polygon } from "react-native-maps";
 import {
   StyleSheet,
   View,
@@ -7,26 +7,178 @@ import {
   Image,
   Text,
   TouchableOpacity,
-} from "react-native";
+  Pressable,
+} 
+from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import * as Location from "expo-location";
-
+import { supabase } from '../utils/hooks/supabase';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import defaultPhoto from "../../assets/snapchat/notificationPic.png";
+import PopupPingNotification from "../components/PopupPingNotification";
+import { useAuthentication } from '../utils/hooks/useAuthentication';
+
+const saveUserLocation = async (location, user) => {
+  try {
+    // Construct the location object
+    const locationData = {
+      latitude: location.latitude,
+      longitude: location.longitude
+    };
+
+    // Perform upsert to insert or update the location data
+    const { data, error } = await supabase
+      .from('profiles')
+      .upsert({ 
+        id: user.id, // Use the user ID to identify the record
+        location: locationData // Set the location column
+      });
+
+    if (error) throw error;
+
+    console.log('Location data saved:', data);
+
+  } catch (error) {
+    console.error('Error saving user location:', error.message);
+  }
+};
+
+
+function calculateBoundingBox(latitude, longitude, radius) {
+  const earthRadius = 6371; // Earth's radius in kilometers
+
+  const radLat = radius / earthRadius * (180 / Math.PI);
+  const radLng = radius / (earthRadius * Math.cos(latitude * Math.PI / 180)) * (180 / Math.PI);
+
+  const minLat = latitude - radLat;
+  const maxLat = latitude + radLat;
+  const minLng = longitude - radLng;
+  const maxLng = longitude + radLng;
+
+  return {
+    minLatitude: minLat,
+    maxLatitude: maxLat,
+    minLongitude: minLng,
+    maxLongitude: maxLng,
+  };
+}
+
+
+
+
+
 
 export default function MapScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-
+  const [boundingBox, setBoundingBox] = useState({});
+  const [popupTriggePing, setPopupTriggerPing] = useState(false);
+  const { user } = useAuthentication();
   const [currentRegion, setCurrentRegion] = useState({
     latitude: 34.0211573,
-    longitude:  -118.4503864,
+    longitude: -118.4503864,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
+  const testRegion = 
+  {
+    "latitude": 37.785834,
+    "longitude": -122.406417
+  }
+
+  function determineSelection(objArr)
+{
+  for(let i = 0; i < objArr.length; i++)
+  {
+    isTargetWithinBoundingBox(testRegion, objArr[i], 5);
+  }
+}
+
+
+  async function fetchProfilesWithInterest() {
+    try {
+      // Perform the query to get profiles where the first element in the interests array is "ball"
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('username, location')
+        .filter('interests->>0', 'eq', 'ball'); // Postgres JSONB array index operator
+  
+      if (error) {
+        throw error;
+      }
+  
+      console.log('Usernames with interest "ball" as the first element:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching profiles:', error.message);
+      return null;
+    }
+  }
+
+  const fetchAndSaveLocationData = async () => {
+    try {
+      // Request permission to access location
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.error('Permission to access location was denied');
+        return;
+      }
+  
+      // Get current location
+      let location = await Location.getCurrentPositionAsync({});
+      //console.log('Location:', location);
+  
+      // Define the region
+      const region = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      };
+  
+      // Calculate the bounding box
+      // const boundingBoxSetter = calculateBoundingBox(region.latitude, region.longitude, 5);
+      // setBoundingBox(boundingBoxSetter);
+      // console.log('Bounding Box:', boundingBox);
+  
+      // Save to database or perform other operations
+      await saveUserLocation(region, user);
+  
+    } catch (error) {
+      console.error('Error fetching location or calculating bounding box:', error);
+    }
+  };
+
+
+  function isTargetWithinBoundingBox(source, target, radius) {
+    const earthRadius = 6371; // Earth's radius in kilometers
+    //console.log("within test func: ", target);
+  
+    const radLat = radius / earthRadius * (180 / Math.PI);
+    const radLng = radius / (earthRadius * Math.cos(source.latitude * Math.PI / 180)) * (180 / Math.PI);
+  
+    const minLat = source.latitude - radLat;
+    const maxLat = source.latitude + radLat;
+    const minLng = source.longitude - radLng;
+    const maxLng = source.longitude + radLng;
+  
+    // Check if target location falls within the bounding box
+    if ( target.location.latitude >= minLat && target.location.latitude <= maxLat && target.location.longitude >= minLng && target.location.longitude <= maxLng)
+    {
+      setPopupTriggerPing(true);
+      console.log("this worked: ", target.username);
+    }
+    // return (
+    //   target.latitude >= minLat &&
+    //   target.latitude <= maxLat &&
+    //   target.longitude >= minLng &&
+    //   target.longitude <= maxLng
+    // );
+  }
 
   useEffect(() => {
     (async () => {
@@ -36,16 +188,32 @@ export default function MapScreen({ navigation }) {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      setCurrentRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+      
+      let currLocation = await Location.getCurrentPositionAsync({});
+      setLocation(currLocation);
+      const region = {
+        latitude: currLocation.coords.latitude,
+        longitude: currLocation.coords.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
-      });
+      };
+      setCurrentRegion(region);
+      if (user !== null)
+      {
+        await fetchAndSaveLocationData();
+        const usernamesLoc = await fetchProfilesWithInterest();
+        determineSelection(usernamesLoc);
+
+      }
+        
+      // setBoundingBox(calculateBoundingBox(currLocation.coords.latitude, currLocation.coords.longitude, 5));
+      //fetchAndSaveLocationData(user);
     })();
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    
+  }, [popupTriggePing]);
 
   let text = "Waiting...";
   text = JSON.stringify(location);
@@ -57,7 +225,26 @@ export default function MapScreen({ navigation }) {
         region={currentRegion}
         showsUserLocation={true}
         showsMyLocationButton={true}
-      />
+      >
+        <PopupPingNotification trigger={popupTriggePing} setTrigger={setPopupTriggerPing}>
+          <Image style={{ width: 150, height: 150 }} 
+          source={{ uri: "https://i.imgur.com/j8qg2QK_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+            />
+            <Text style={{fontSize: 27}}>You've Been Pinged!</Text>
+            <Text>We've found a friend with your interests!</Text>
+            
+            <TouchableOpacity 
+            style={styles.buttonStyle2} 
+            onPress={() => {
+              navigation.navigate("Chat");
+            }}
+            >
+          <Text style={styles.buttonText2}>Chat with Friend!</Text>
+
+          </TouchableOpacity>
+        </PopupPingNotification>
+      </MapView>
+
 
       <View style={[styles.mapFooter]}>
         <View style={styles.locationContainer}>
@@ -73,15 +260,19 @@ export default function MapScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={[styles.bitmojiContainer, styles.shadow]}>
-          <View style={styles.myBitmoji}>
-            <Image
-              style={styles.bitmojiImage}
-              source={require("../../assets/snapchat/personalBitmoji.png")}
-            />
-            <View style={styles.bitmojiTextContainer}>
-              <Text style={styles.bitmojiText}>My Bitmoji</Text>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Event");
+            }}
+          >
+            <View style={styles.myBitmoji}>
+              <Ionicons name="calendar-outline" size={50} color="gray" />
+              <View style={styles.bitmojiTextContainer}>
+                <Text style={styles.bitmojiText}>Events</Text>
+              </View>
             </View>
-          </View>
+          </Pressable>
+
           <View style={styles.places}>
             <Image
               style={styles.bitmojiImage}
@@ -192,4 +383,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  buttonStyle2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 32,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#FFFC00',
+  },
+  calendarIcon: {},
 });

@@ -2,9 +2,8 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, StyleSheet, Pressable, Text, Button } from "react-native";
-import { supabase } from '../utils/hooks/supabase'; // Import the Supabase client
+import { supabase } from "../utils/hooks/supabase"; // Import the Supabase client
 // Screens
-import EventScreen from "../screens/EventScreen"; //New component by Sona and Christian
 import MapScreen from "../screens/MapScreen";
 import CameraScreen from "../screens/CameraScreen";
 import StoriesScreen from "../screens/StoriesScreen";
@@ -29,7 +28,6 @@ import {
 import { colors } from "../../assets/themes/colors";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-
 const Tab = createBottomTabNavigator();
 
 export default function UserStack({ route, navigation }) {
@@ -49,9 +47,7 @@ export default function UserStack({ route, navigation }) {
 
   const screenOptions = {
     tabBarShowLabel: false,
-    headerLeft: () => (
-      <Button onPress={handleSignOut} title="Log Out" />
-    ),
+    headerLeft: () => <Button onPress={handleSignOut} title="Log Out" />,
   };
 
   return (
@@ -62,10 +58,6 @@ export default function UserStack({ route, navigation }) {
       barStyle={{ backgroundColor: "black" }}
       initialRouteName="Camera"
     >
-      <Tab.Screen
-        name="Event"
-        component={EventScreen}
-      />
       <Tab.Screen
         name="Map"
         component={MapScreen}
@@ -91,8 +83,6 @@ export default function UserStack({ route, navigation }) {
         component={SpotlightScreen}
         options={screenOptions}
       />
-      
-      
     </Tab.Navigator>
   );
 }
