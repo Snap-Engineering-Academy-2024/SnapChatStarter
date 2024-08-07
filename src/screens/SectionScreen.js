@@ -87,6 +87,7 @@ export default function SectionScreen() {
       }}
     >
       <View style={styles.container}>
+        <View style={styles.header}>
       <View style={styles.headerLeft}>
         <Pressable
           style={[styles.profile, styles.buttons]}
@@ -94,8 +95,10 @@ export default function SectionScreen() {
             navigation.navigate("SnapTogether");
           }}
         >
-          <Icon name="arrow-back" size={24} />
+          <Icon name="arrow-back" size={22} color={"white"}/>
         </Pressable>
+        </View>
+        <View style={styles.headerCenter}>
           <SearchBar
           containerStyle={{
             flex: 1,
@@ -117,8 +120,9 @@ export default function SectionScreen() {
           style={styles.settingsButton}
           onPress={() => navigation.navigate("Settings")}
         >
-          <Icon name="settings" size={30} />
+          <Icon name="settings" size={22} color="white"/>
         </TouchableOpacity>
+      </View>
       </View>
       <View>
         <SnapTogetherSearchModal
@@ -296,6 +300,7 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingRight: 30,
   },
   headerRight: {
     flexDirection: 'row',
@@ -303,12 +308,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flex: 1,
     gap: 8,
+    
   },
   buttons: {
+    alignSelf: "flex-start",
+    marginBottom: 16,
+    marginRight: 25,
+    backgroundColor: "rgba(0, 0, 0, .5)",
     borderRadius: 100,
     height: 44,
     width: 44,
-    backgroundColor: colors.interactionGraySubtle,
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
@@ -322,9 +331,23 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginBottom: 16,
     marginRight: 25,
+    backgroundColor: "rgba(0, 0, 0, .5)",
+    borderRadius: 100,
+    height: 44,
+    width: 44,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
   emailText: {
     fontWeight: "bold",
     fontSize: 18
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "center",
+    flex: 1,
+    gap: 8,
+  }
 });

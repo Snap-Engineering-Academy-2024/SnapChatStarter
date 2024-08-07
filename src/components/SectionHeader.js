@@ -28,7 +28,7 @@ export default function SectionHeader() {
             navigation.navigate("SnapTogether");
           }}
         >
-          <Icon name="arrow-back" size={24} />
+          <Icon name="arrow-back" size={22} />
         </Pressable>
           <SearchBar
           containerStyle={{
@@ -48,11 +48,11 @@ export default function SectionHeader() {
         />
       </View>
       <View style={styles.headerRight}>
-        <TouchableOpacity
+      <TouchableOpacity
           style={styles.settingsButton}
           onPress={() => navigation.navigate("Settings")}
         >
-          <Icon name="settings" size={30} />
+          <Icon name="settings" size={22} color="white"/>
         </TouchableOpacity>
       </View>
       <View>
@@ -117,6 +117,13 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginBottom: 16,
     marginRight: 25,
+    backgroundColor: "rgba(0, 0, 0, .5)",
+    borderRadius: 100,
+    height: 44,
+    width: 44,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
   emailText: {
     fontWeight: "bold",

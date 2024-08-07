@@ -21,7 +21,7 @@ export default function SnapTogetherHeader() {
             navigation.navigate("Profile");
           }}
         >
-          <Icon name="arrow-back-ios" size={22} color="white"/>
+          <Icon name="arrow-back" size={22} color="white"/>
         </Pressable>
       </View>
       <View style={styles.headerRight}>
