@@ -61,6 +61,7 @@ export default function ProfileScreen() {
               onPressHandlers={sectionOnPressHandlers}
               badgeOnPressHandlers={badgeOnPressHandlers}
               astrology={astrology}
+              userJoinStatus={userJoinStatus}
             />
           </View>
         </BottomSheet>
