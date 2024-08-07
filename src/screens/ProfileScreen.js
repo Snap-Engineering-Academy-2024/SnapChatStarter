@@ -16,6 +16,17 @@ const handleSignOut = async () => {
     console.error("Unexpected error:", error);
   }
 };
+function formatInterests (arr)
+{
+  let holdString = "";
+  for (let i =0; i < arr.length; i++ )
+  {
+    holdString += arr[i];
+    if (i !== arr.length-1)
+      holdString += "|";
+  }
+  return holdString;
+}
 
 export default function ProfileScreen() {
   const [badges, setBadges] = useState([]);
@@ -25,11 +36,13 @@ export default function ProfileScreen() {
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
   const [popupTrigger, setPopupTrigger] = useState(false);
+  const [community, setCommunity] = useState("Test");
+  const [interests, setInterests] = useState(["Wee", "Wee", "Wee"]);
   const fetchUserData = async () => {
     try {
       const { data, error } = await supabase
         .from('profiles') // Replace with your table name
-        .select('community')
+        .select('community, interests')
         .eq('id', user.id)
         .single();
 
@@ -37,12 +50,14 @@ export default function ProfileScreen() {
       console.log(data.community);
       if (data.community === null)
         {
-          setPopupTrigger(true);
-          console.log("shows popup.");
+          console.log("Shows add community");
         }
         else
         {
-          console.log("doesnt show popup");
+          setPopupTrigger(true);
+          setCommunity(data.community);
+          setInterests(data.interests)
+          console.log("Shows specific community")
         }
 
     } catch (error) {
@@ -52,11 +67,27 @@ export default function ProfileScreen() {
   };
 
 
+
+  // useEffect(() => {
+  //   setAstrology(userSign.sign);
+  //   const checkCondition = async () => {
+  //     if (user != null)
+  //       await fetchUserData();
+  //   };
+
+  // }, [popupTrigger, user]);
   useEffect(() => {
-    setAstrology(userSign.sign);
-    if (user !== null)
-      fetchUserData();
-  }, [popupTrigger, user]);
+    const fetchData = async () => {
+      setAstrology(userSign.sign);
+
+      if (user != null) {
+        await fetchUserData();
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
 
   const Done = ({ ...props }) => (
     <TouchableOpacity {...props}>
@@ -98,9 +129,6 @@ export default function ProfileScreen() {
     }
   ];
 
-  useEffect(() => {
-    setBadges(staticBadges);
-  }, []);
 
   const renderProductCard = ({ item }) => (
     <View style={styles.cardContainer}>
@@ -113,6 +141,10 @@ export default function ProfileScreen() {
   return (
     <ScrollView>
       <View style={{ alignItems: "center" }}>
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin
         <Image
           source={{ uri: "https://i.imgur.com/Ht4cY9d_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
           style={{ width: 400, height: 200 }}
@@ -159,11 +191,30 @@ export default function ProfileScreen() {
         <TouchableOpacity
           style={styles.buttonStyle2}
           onPress={() => {
+<<<<<<< HEAD
             navigation.navigate("Identity");
+=======
+            if (!popupTrigger)
+              navigation.navigate("Select Identity!");
+>>>>>>> origin
           }}>
-          <Text style={styles.buttonText2}>+ Add Community</Text>
+          <Text style={styles.buttonText2}>
+          {popupTrigger ? community : '+ Add Community'}
+          </Text>
         </TouchableOpacity>
-
+        {
+          popupTrigger && <TouchableOpacity
+                      style={styles.buttonStyle2}
+          onPress={() => {
+            if (!popupTrigger)
+              navigation.navigate("Select Identity!");
+          }}>
+          <Text style={styles.buttonText2}>
+          {popupTrigger ? formatInterests(interests) : '+ Add Community'}
+          </Text>
+            
+          </TouchableOpacity>
+        }
 
       </View>
 
