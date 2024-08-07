@@ -135,6 +135,7 @@ export default function SnapTogetherScreen() {
                 <SnapTogetherFeed
                   title={item.username}
                   eventImage={item.poster_url}
+                  selectedCompany={item}
                   handlePress={() => {
                     setShowStory(true);
                     setSelectedCompany(item);

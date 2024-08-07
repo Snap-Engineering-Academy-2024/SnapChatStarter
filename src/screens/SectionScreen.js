@@ -105,6 +105,7 @@ export default function SectionScreen() {
             <SnapTogetherFeed
               title={item.username}
               eventImage={item.poster_url}
+              selectedCompany={item}
               handlePress={() => {
                 setShowAbout(true);
                 setSelectedCompany(item);
