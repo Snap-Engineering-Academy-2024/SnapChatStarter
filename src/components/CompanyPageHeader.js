@@ -25,7 +25,7 @@ export default function CompanyPageHeader() {
             navigation.navigate("Camera");
           }}
         >
-          <Icon name="arrow-back-ios" size={22} color="white"/>
+          <Icon name="arrow-back" size={22} color="white"/>
         </Pressable>
       </View>
       <View style={styles.headerRight}>
