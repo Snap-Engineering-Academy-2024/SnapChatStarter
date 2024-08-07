@@ -97,13 +97,12 @@ export default function SnapTogetherScreen() {
   const filteredStory3 = useFilteredData(story3, ["All Inclusive"]);
 
   return (
-    <SafeAreaView style={{height: "100%"}}>
+    <SafeAreaView style={{ height: "100%" }}>
       <SnapTogetherHeader />
       <ScrollView
         style={{
           flex: 0.9,
           flexDirection: "column",
-          paddingTop: insets.top,
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,
@@ -146,12 +145,15 @@ export default function SnapTogetherScreen() {
             />
           )}
         </View>
-        <View style = {styles.pressableContainer}>
-          <Pressable style = {styles.pressable}>
-            <Text >Press Me</Text>
+        <View style={styles.pressableContainer}>
+          <Pressable
+            style={styles.pressable}
+            onPress={() => handleSectionPress("Career Boost")}
+          >
+            <Text style={styles.buttonText}>See more</Text>
           </Pressable>
         </View>
-        
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             title={"Mom & Pops"}
@@ -180,6 +182,14 @@ export default function SnapTogetherScreen() {
               keyExtractor={(item) => item.id.toString()}
             />
           )}
+        </View>
+        <View style={styles.pressableContainer}>
+          <Pressable
+            style={styles.pressable}
+            onPress={() => handleSectionPress("Mom & Pops")}
+          >
+            <Text style={styles.buttonText}>See more</Text>
+          </Pressable>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -210,6 +220,14 @@ export default function SnapTogetherScreen() {
             />
           )}
         </View>
+        <View style={styles.pressableContainer}>
+          <Pressable
+            style={styles.lastPressable}
+            onPress={() => handleSectionPress("Showcase")}
+          >
+            <Text style={styles.buttonText}>See more</Text>
+          </Pressable>
+        </View>
         {/* <View style={{height: 300}}> </View> */}
       </ScrollView>
     </SafeAreaView>
@@ -219,11 +237,11 @@ export default function SnapTogetherScreen() {
 const styles = StyleSheet.create({
   pressableContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10,
   },
-    container: {
+  container: {
     flex: 1,
     backgroundColor: "#FFF",
   },
@@ -260,10 +278,26 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     textDecorationLine: "underline",
   },
+  buttonText: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
+    alignSelf: "center",
+    fontFamily: "avenir",
+    paddingBottom: 5,
+    paddingTop: 10,
+    paddingLeft: 10,
+  },
   pressable: {
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 25,
-    elevation: 3,
-  }
+    backgroundColor: "#10adff",
+    marginBottom: 26,
+    borderRadius: 20,
+    width: "95%",
+  },
+  lastPressable: {
+    backgroundColor: "#10adff",
+    marginBottom: 80,
+    borderRadius: 20,
+    width: "95%",
+  },
 });
