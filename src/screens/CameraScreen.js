@@ -85,6 +85,27 @@ export default function CameraScreen({ navigation, focused })
     return <View />;
   }
 
+  if (!permission.granted) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
+          <Image style={{ width: 100, height: 100 }} source={defaultPhoto}
+          />
+          <Text style={{fontSize: 20}}>Community Ping!</Text>
+          <Text>Will allow you to join a community and find others within your community who share the same interests.</Text>
+          <TouchableOpacity 
+          style={styles.buttonStyle2} 
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}>
+
+          <Text style={styles.buttonText2}>Check Out New Feature!</Text>
+
+          </TouchableOpacity>
+        </Popup>
+      </SafeAreaView>
+    );
+  }
 
 
   function flipCamera() {
@@ -178,13 +199,6 @@ export default function CameraScreen({ navigation, focused })
       <CameraView style={styles.camera} facing={facing} ref={cameraRef} /> 
       <CameraOptions flipCamera={flipCamera} />
       <CameraActions galleryMenu={galleryMenu} checkGallery={checkGallery} takePhoto={takePhoto} />
-      <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
-        {/* <Image 
-          source={require('../snapchat/notificationPic.png')} // Replace with the path to your image
-          style={{ width: 100, height: 100 }}
-        /> */}
-        <Text>My popup</Text>
-      </Popup>
     </View>
   );
 }

@@ -232,7 +232,6 @@ export default function MapScreen({ navigation }) {
             />
             <Text style={{fontSize: 27}}>You've Been Pinged!</Text>
             <Text>We've found a friend with your interests!</Text>
-            
             <TouchableOpacity 
             style={styles.buttonStyle2} 
             onPress={() => {
@@ -240,7 +239,6 @@ export default function MapScreen({ navigation }) {
             }}
             >
           <Text style={styles.buttonText2}>Chat with Friend!</Text>
-
           </TouchableOpacity>
         </PopupPingNotification>
       </MapView>

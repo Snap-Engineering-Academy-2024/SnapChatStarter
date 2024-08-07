@@ -17,6 +17,17 @@ const handleSignOut = async () => {
     console.error("Unexpected error:", error);
   }
 };
+function formatInterests (arr)
+{
+  let holdString = "";
+  for (let i =0; i < arr.length; i++ )
+  {
+    holdString += arr[i];
+    if (i !== arr.length-1)
+      holdString += "|";
+  }
+  return holdString;
+}
 
 export default function ProfileScreen() {
   const [badges, setBadges] = useState([]);
@@ -26,11 +37,13 @@ export default function ProfileScreen() {
   const [astrology, setAstrology] = useState("Pisces");
   const userSign = findAstrologySign();
   const [popupTrigger, setPopupTrigger] = useState(false);
+  const [community, setCommunity] = useState("Test");
+  const [interests, setInterests] = useState(["Wee", "Wee", "Wee"]);
   const fetchUserData = async () => {
     try {
       const { data, error } = await supabase
         .from('profiles') // Replace with your table name
-        .select('community')
+        .select('community, interests')
         .eq('id', user.id)
         .single();
 
@@ -38,12 +51,14 @@ export default function ProfileScreen() {
       console.log(data.community);
       if (data.community === null)
         {
-          setPopupTrigger(true);
-          console.log("shows popup.");
+          console.log("Shows add community");
         }
         else
         {
-          console.log("doesnt show popup");
+          setPopupTrigger(true);
+          setCommunity(data.community);
+          setInterests(data.interests)
+          console.log("Shows specific community")
         }
 
     } catch (error) {
@@ -53,11 +68,27 @@ export default function ProfileScreen() {
   };
 
 
+
+  // useEffect(() => {
+  //   setAstrology(userSign.sign);
+  //   const checkCondition = async () => {
+  //     if (user != null)
+  //       await fetchUserData();
+  //   };
+
+  // }, [popupTrigger, user]);
   useEffect(() => {
-    setAstrology(userSign.sign);
-    if (user !== null)
-      fetchUserData();
-  }, [popupTrigger, user]);
+    const fetchData = async () => {
+      setAstrology(userSign.sign);
+
+      if (user != null) {
+        await fetchUserData();
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
 
   const Done = ({ ...props }) => (
     <TouchableOpacity {...props}>
@@ -99,9 +130,6 @@ export default function ProfileScreen() {
     }
   ];
 
-  useEffect(() => {
-    setBadges(staticBadges);
-  }, []);
 
   const renderProductCard = ({ item }) => (
     <View style={styles.cardContainer}>
@@ -114,69 +142,6 @@ export default function ProfileScreen() {
   return (
     <ScrollView>
       <View style={{ alignItems: "center" }}>
-      <PopupCommInfo trigger={popupTrigger} setTrigger={setPopupTrigger}>
-          <Onboarding
-            onSkip={() => navigation.replace("Profile")}
-            onDone={() => navigation.replace("Profile")}
-            DoneButtonComponent={Done}
-            SkipButtonComponent={Skip}
-            NextButtonComponent={Next}
-            nextLabel="Next"
-            pages={[
-              {
-                backgroundColor: 'white',
-                bottomBarHeight: 80,
-                image: (
-                  <>
-                   <Image
-                      source={{ uri: "https://i.imgur.com/Mf9d31I_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
-                      style={{ width: 300, height: 200, borderRadius: 25, marginLeft: 40, marginBottom: 20, borderRadius: 0}}
-                    />
-                    <Text style={{ fontSize: 35, textAlign: 'center', marginBottom: 20, marginLeft: 25 }}>Community Ping</Text>
-                    <Image
-                      source={{ uri: "https://static-prod.adweek.com/wp-content/uploads/2021/05/VansBitmojiHero.jpg" }}
-                      style={{ width: 350, height: 200, borderRadius: 25, marginLeft: 40 }}
-                    />
-                    <Text style={{ marginLeft: 53, marginRight: 20, marginBottom: 100 }}>NEW FEATURE FROM SNAPCHAT: Join a community that you identify most with and be pinged when you cross paths with someone within the same community that has the same interests as you.</Text>
-                  </>
-                ),
-                title: '',
-                subtitle: '',
-              },
-              {
-                backgroundColor: 'white',
-                image: (
-                  <>
-                    <Text style={{ fontSize: 30, textAlign: 'center', marginLeft: 50 }}>Explore Feature</Text>
-                    <Image
-                      // source={{ uri: "https://images.ctfassets.net/o1znirz7lzo4/7L9eorD4YKmaCOOKPi3BDm/8c1c03915dfd38420ce0176288b3fb68/New_Bitmoji_Avatar_Launch_Hero_Image.png?q=40&h=1080" }}
-                      style={{ width: 350, height: 200, borderRadius: 25, marginLeft: 60, marginRight: 20 }}
-                    />
-                    <Text style={{ marginLeft: 50, marginRight: 30 }}>When you opt into having ping notifications, anytime you open up Snap we will see if there's anyone within your radius who'll possibly friend match with.</Text>
-                  </>
-                ),
-                title: '',
-                subtitle: '',
-              },
-              {
-                backgroundColor: 'white',
-                image: (
-                  <>
-                    <Text style={{ fontSize: 30, textAlign: 'center', marginRight: 20 }}>Connect!</Text>
-                    <Image
-                      source={{ uri: "https://mystickermania.com/cdn/stickers/logo/snapchat-heart-logo-512x512.png" }}
-                      style={{ width: 350, height: 320, borderRadius: 25, marginRight: 20 }}
-                    />
-                    <Text style={{ marginLeft: 60, marginRight: 80 }}>Private information is anonymous until both parties confirm that they want to be friends. That's when the magic starts!</Text>
-                  </>
-                ),
-                title: '',
-                subtitle: '',
-              },
-            ]}
-          />
-        </PopupCommInfo>
-
 
         <Image
           source={{ uri: "https://i.imgur.com/YtlzPfc_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
@@ -224,11 +189,26 @@ export default function ProfileScreen() {
         <TouchableOpacity
           style={styles.buttonStyle2}
           onPress={() => {
-            navigation.navigate("Select Identity!");
+            if (!popupTrigger)
+              navigation.navigate("Select Identity!");
           }}>
-          <Text style={styles.buttonText2}>+ Add Community</Text>
+          <Text style={styles.buttonText2}>
+          {popupTrigger ? community : '+ Add Community'}
+          </Text>
         </TouchableOpacity>
-
+        {
+          popupTrigger && <TouchableOpacity
+                      style={styles.buttonStyle2}
+          onPress={() => {
+            if (!popupTrigger)
+              navigation.navigate("Select Identity!");
+          }}>
+          <Text style={styles.buttonText2}>
+          {popupTrigger ? formatInterests(interests) : '+ Add Community'}
+          </Text>
+            
+          </TouchableOpacity>
+        }
 
       </View>
 
