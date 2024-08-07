@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image , TextInput} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image , TextInput, ImageBackground} from "react-native";
 import PopupLocationNotification from "../components/PopupLocationNotification";
 import { useNavigation } from "@react-navigation/native";
 import { useAuthentication } from '../utils/hooks/useAuthentication';
@@ -78,8 +78,19 @@ export default function InterestSelectionScreen() {
   }, [selectedInterests]);
 
   return (
+    <ImageBackground 
+      source={{ uri: 'https://i.imgur.com/l1oUU7G_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
+      style={styles.backgroundImage}
+    >
+    
     <ScrollView contentContainerStyle={styles.container}>
+    <Image
+            source={{ uri: "https://i.imgur.com/tT6wWW3_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+            style={styles.headerImage}
+          />
+          <Text style={styles.headerText}>Select any identities that best suit you!</Text>
       <ScrollView contentContainerStyle={styles.container}>
+    
   <PopupLocationNotification trigger={popupTrigger} setTrigger={setPopupTrigger}>
      <Text style={{fontSize: 40, marginTop: 20 }}>Community Ping</Text>
      <Text style={{fontSize: 20, marginTop: 20 }}>Warning: Location Privacy</Text>
@@ -99,7 +110,7 @@ export default function InterestSelectionScreen() {
     onChangeText={setSearchQuery}
   />
 
-  <Text style={styles.title}>Select Your Top 3 Interests</Text>
+
   {Object.keys(interests).map((category) => (
     <View key={category} style={styles.categoryContainer}>
       <Text style={styles.categoryTitle}>{category}</Text>
@@ -144,6 +155,7 @@ export default function InterestSelectionScreen() {
 
       </PopupLocationNotification>
     </ScrollView>
+    </ImageBackground>
   );
 }
 
@@ -227,5 +239,16 @@ const styles = StyleSheet.create({
   understandText: {
     color: 'black',
     fontSize: 19,
+  },
+  headerImage: {
+    width: 318,
+    height: 280,
+    marginTop: 20,
+  },
+  headerText: {
+    marginTop: 10,
+    fontSize: 15,
+    textAlign: 'center',
+    color: 'grey',
   },
 });

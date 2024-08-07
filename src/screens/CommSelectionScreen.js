@@ -1,56 +1,50 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground, Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import PopupCommInfo from "../components/PopupCommInfo";
 import { useAuthentication } from '../utils/hooks/useAuthentication';
 import { supabase } from '../utils/hooks/supabase';
-
-
 
 export default function CommSelectionScreen() {
   const navigation = useNavigation();
   const [theGenders, setTheGenders] = useState([]);
   const [theOrientations, setTheOrientations] = useState([]);
-  const [theBackgrounds, setTheBackgrounds] = useState([]);
-  const [activePopup, setActivePopup] = useState(null);
+  const [selectedGender, setSelectedGender] = useState(null);
+  const [selectedOrientation, setSelectedOrientation] = useState(null);
+  const scrollY = useRef(new Animated.Value(0)).current;
   const { user } = useAuthentication();
 
-const writeToTableComm = async (text) => {
-  // Step 1: Fetch the existing record
-  const { data: existingData, error: fetchError } = await supabase
-    .from('profiles')
-    .select('community')
-    .eq('id', user.id)
-    .single();
-
-  if (fetchError) {
-    console.error('Error fetching existing data:', fetchError);
-  } else {
-    // Step 2: Set the community field to the new text
-    const updatedCommunity = text;
-
-    // Step 3: Upsert the updated record
-    const { data: upsertedData, error: upsertError } = await supabase
+  const writeToTableComm = async (text) => {
+    const { data: existingData, error: fetchError } = await supabase
       .from('profiles')
-      .upsert({
-        id: user.id, // Use the user ID to identify the record
-        community: updatedCommunity // Set the community field to the new text
-      });
+      .select('community')
+      .eq('id', user.id)
+      .single();
 
-    if (upsertError) {
-      console.error('Error upserting data:', upsertError);
+    if (fetchError) {
+      console.error('Error fetching existing data:', fetchError);
     } else {
-      console.log('Upsert successful:', upsertedData);
-    }
-  }
-};
+      const updatedCommunity = text;
 
+      const { data: upsertedData, error: upsertError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          community: updatedCommunity
+        });
+
+      if (upsertError) {
+        console.error('Error upserting data:', upsertError);
+      } else {
+        console.log('Upsert successful:', upsertedData);
+      }
+    }
+  };
 
   const handlePress = async (text) => {
     await writeToTableComm(text);
     navigation.replace("Add Current Interests!");
   };
-  
+
   const genders = [
     {
       id: 'n/aGender',
@@ -123,33 +117,6 @@ const writeToTableComm = async (text) => {
     },
   ];
 
-  const backgrounds = [
-    {
-      id: 'n/aBackground',
-      title: 'Prefer Not to Respond',
-      description: 'Will not associate with a community.',
-      image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-    },
-    {
-      id: 'background2',
-      title: 'background2',
-      description: 'Information about the Pansexual community boobie doobie do',
-      image: 'https://i.imgur.com/zGcHKVl.png',
-    },
-    {
-      id: 'background3',
-      title: 'background3',
-      description: 'Information about a sexual identity1 boobie doobie do',
-      image: 'https://i.imgur.com/zGcHKVl.png',
-    },
-    {
-      id: 'background4',
-      title: 'background4',
-      description: 'Information about a sexual identity boobie doobie do',
-      image: 'https://i.imgur.com/zGcHKVl.png',
-    },
-  ];
-
   useEffect(() => {
     setTheGenders(genders);
   }, []);
@@ -157,26 +124,20 @@ const writeToTableComm = async (text) => {
   useEffect(() => {
     setTheOrientations(orientations);
   }, []);
-  useEffect(() => {
-    setTheBackgrounds(backgrounds);
-  }, []);
-
-  useEffect(() => {
-    
-  }, [user]);
+  
+  const handleGenderPress = (id) => {
+    setSelectedGender(id);
+    setSelectedOrientation(null);
+  };
 
   const handleOrientationPress = (id) => {
     setSelectedOrientation(id);
-  };
-
-  const handleBackgroundPress = (id) => {
-    setSelectedBackground(id);
+    setSelectedGender(null);
   };
 
   const handleContinue = () => {
     console.log('Selected Gender:', selectedGender);
     console.log('Selected Orientation:', selectedOrientation);
-    console.log('Selected Background:', selectedBackground);
   };
 
   const renderProductCard = (item, handlePress, selectedId) => (
@@ -227,14 +188,6 @@ const writeToTableComm = async (text) => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => renderProductCard(item, handleOrientationPress, selectedOrientation)}
           />
-          {/* <Text style={styles.sectionTitle}>Ethnic Background</Text>
-          <FlatList
-            data={theBackgrounds}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => renderProductCard(item, handleBackgroundPress, selectedBackground)}
-          /> */}
         </View>
       </ScrollView>
       <Animated.View style={[styles.continueButtonContainer, {
@@ -246,16 +199,18 @@ const writeToTableComm = async (text) => {
           })
         }]
       }]}>
-        <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+        <TouchableOpacity style={styles.continueButton} 
+        onPress={() => {
+            navigation.navigate("Interests");
+          }}>
           <Text style={styles.continueButtonText}>
             <Image
-              source={{ uri: "https://i.imgur.com/D3rCbG0_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+              source={{ uri: "https://i.imgur.com/71FOGMX_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
               style={{ width: 40, height: 30 }}
             />
           </Text>
         </TouchableOpacity>
       </Animated.View>
-      {/* <View style={{marginTop: 100}}></View> */}
     </ImageBackground>
   );
 }
@@ -331,7 +286,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0fadfe',
     paddingVertical: 13,
     paddingHorizontal: 13,
-    borderRadius: 100,
+    borderRadius: 400,
     
   },
   continueButtonText: {

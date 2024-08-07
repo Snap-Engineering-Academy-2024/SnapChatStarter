@@ -63,7 +63,7 @@ export default function App() {
           options={{ headerShown: true }}
         />
         <Stack.Screen
-          name="Add Current Interests!"
+          name="Interests"
           component={InterestFormScreen}
           options={{ headerShown: true }}
         />

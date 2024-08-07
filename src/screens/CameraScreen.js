@@ -1,5 +1,15 @@
+
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Modal, Pressable, SafeAreaView, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Modal,
+  Pressable,
+  SafeAreaView,
+  Image
+} from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { shareAsync } from "expo-sharing";
@@ -8,19 +18,14 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CameraActions from "../components/CameraActions";
 import CameraOptions from "../components/CameraOptions";
-import PostcaptureOptions from "../components/PostcaptureActions";
 import { supabase } from '../utils/hooks/supabase';
 import CameraGalleryMenu from "../components/CameraGalleryMenu";
 import { Button } from "react-native-elements";
-import Popup from "../components/Popup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
-import PopupPingNotification from "../components/PopupPingNotification";
-import defaultPhoto from "../../assets/snapchat/notificationPic.png";
 
-export default function CameraScreen({ navigation, focused }) 
-{
+export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const cameraRef = useRef(null);
@@ -32,45 +37,11 @@ export default function CameraScreen({ navigation, focused })
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
   const { user } = useAuthentication();
   const [communities, setCommunities] = useState("");
-  const [popupTrigger, setPopupTrigger] = useState(false);
-
-  const [popupTriggePing, setPopupTriggerPing] = useState(false);
-
-
-  const fetchUserData = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles') 
-        .select('community')
-        .eq('id', user.id)
-        .single();
-
-      if (error) throw error;
-      console.log(data.community);
-      if (data.community === null)
-        {
-          setPopupTrigger(true);
-          console.log("shows popup.");
-        }
-        else
-        {
-          console.log("doesnt show initial popup");
-        }
-
-    } catch (error) {
-      console.error('Error fetching user data:', error.message);
-      
-    }
-  };
-
 
   useEffect(() => {
     if (user !== null) {
-      fetchUserData();
       // console.log(JSON.stringify(user, null, 4))
-
     }
-
     (async () => {
       const { status: mediaLibraryStatus } = await MediaLibrary.requestPermissionsAsync();
       setHasMediaLibraryPermission(mediaLibraryStatus === 'granted');
@@ -80,17 +51,24 @@ export default function CameraScreen({ navigation, focused })
   if (!permission) {
     return <View />;
   }
+  if (!permission.granted) {
+    return (
+      <SafeAreaView style={styles.container}>
+    
+      </SafeAreaView>
+    );
+  }
+
   function flipCamera() {
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
-  function galleryMenu(){
+  function galleryMenu() {
     setShowGalleryMenu(!showGalleryMenu);
   }
 
   async function checkGallery() {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert("Permission to access camera roll is required!");
       return;
@@ -98,8 +76,7 @@ export default function CameraScreen({ navigation, focused })
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
     setShowGalleryMenu(false);
     if (!pickerResult.canceled) {
-      //setImage(pickerResult.uri);
-      setPhoto(pickerResult.assets[0]); //By Ryan
+      setPhoto(pickerResult.assets[0]); // By Ryan
     }
   }
 
@@ -108,7 +85,7 @@ export default function CameraScreen({ navigation, focused })
       const options = { quality: 1, base64: true, exif: false };
       const newPhoto = await cameraRef.current.takePictureAsync(options);
       setPhoto(newPhoto);
-      const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });    
+      const { error } = await supabase.from('gallery').insert({ photo: newPhoto.uri });
       if (error) {
         console.error("Error inserting photo:", error.message);
       }
@@ -127,7 +104,6 @@ export default function CameraScreen({ navigation, focused })
         setPhoto(null);
       });
     };
-
     return (
       <View style={[styles.container, { marginBottom: tabBarHeight, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <Image style={facing === "front" ? styles.frontPreview : styles.preview} source={{ uri: photo.uri }} />
@@ -144,7 +120,7 @@ export default function CameraScreen({ navigation, focused })
   if (showGalleryMenu) {
     return (
       <View style={[styles.container, { marginBottom: tabBarHeight, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-        <CameraView style={styles.camera} facing={facing} ref={cameraRef} /> 
+        <CameraView style={styles.camera} facing={facing} ref={cameraRef} />
         <CameraOptions flipCamera={flipCamera} />
         <CameraActions galleryMenu={galleryMenu} checkGallery={checkGallery} takePhoto={takePhoto} />
         <Modal animationType="slide" transparent={true} visible={showGalleryMenu} onRequestClose={() => setShowGalleryMenu(!showGalleryMenu)}>
@@ -168,16 +144,9 @@ export default function CameraScreen({ navigation, focused })
 
   return (
     <View style={[styles.container, { marginBottom: tabBarHeight, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-      <CameraView style={styles.camera} facing={facing} ref={cameraRef} /> 
+      <CameraView style={styles.camera} facing={facing} ref={cameraRef} />
       <CameraOptions flipCamera={flipCamera} />
       <CameraActions galleryMenu={galleryMenu} checkGallery={checkGallery} takePhoto={takePhoto} />
-      <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
-        {/* <Image 
-          source={require('../snapchat/notificationPic.png')} // Replace with the path to your image
-          style={{ width: 100, height: 100 }}
-        /> */}
-        <Text>My popup</Text>
-      </Popup>
     </View>
   );
 }
@@ -235,9 +204,9 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingVertical: 20,
     paddingHorizontal: 32,
-    borderRadius: 50,
+    borderRadius: 20,
     elevation: 3,
-    backgroundColor: '#2196F3',
+    backgroundColor: '#FFFC00',
   },
   closeButtonStyle: {
     alignItems: 'center',
@@ -259,8 +228,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 21,
     letterSpacing: 0.5,
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'black',
   },
   message: {
     color: 'white',
@@ -280,4 +248,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+
+
+
+
+
+
+
+
 
