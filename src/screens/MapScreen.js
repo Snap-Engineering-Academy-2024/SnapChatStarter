@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View, Dimensions, Text, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, View, Dimensions, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Location from "expo-location";
@@ -11,8 +11,8 @@ import { colors } from "../../assets/themes/colors";
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import LocationList from "./LocationList";
 import LocationDetails from "./LocationDetails";
-import onePlaceToTest from "./oneTestPlace.json";
 import placesListTest from "./placesListTest.json"
+import mixPlacesTest from "./mixPlacesTest.json"
 
 
 export default function MapScreen({ navigation }) {
@@ -50,11 +50,13 @@ export default function MapScreen({ navigation }) {
     };
     getLocation();
   }, []);
+
   const handleRecenter = () => {
     if (location && mapRef.current) {
       mapRef.current.animateToRegion(currentRegion,1000);
     }
   };
+
   const getImageCanSee = async (photoReference) => {
     const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY; 
     const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&photoreference=${photoReference}&key=${apiKey}`;
@@ -68,29 +70,77 @@ export default function MapScreen({ navigation }) {
     }
   };
 
+  const fetchPlacesWithImages = async (location, keyword, apiKey) => {
+    const radius = 2 * 1609.34;
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.coords.latitude},${location.coords.longitude}&radius=${radius}&keyword=${keyword}&key=${apiKey}`;
+  
+    const mapIconImage = (keyword == "career center homeless social service") ? 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png' :
+      (keyword == "police hospital emergency") ? 'https://i.postimg.cc/j2n0VtFj/Safety-Icon.png' :
+      (keyword == "free wifi place") ? 'https://i.postimg.cc/brnyxx8L/Wi-Fi-Icon.png' :
+      (keyword == "food bank free food salvation army") ? 'https://i.postimg.cc/5t92hQqN/Food-Banks-Icon.png' :
+      (keyword == "free shower library") ? 'https://i.postimg.cc/pLJdcJj6/Public-Areas-Icon.png' :
+      'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png';
+  
+    try {
+      const response = await axios.get(url);
+      const places = response.data.results;
+  
+      const placesWithImages = await Promise.all(places.map(async place => {
+        if (place.photos && place.photos.length > 0) {
+          const imageUrl = await getImageCanSee(place.photos[0].photo_reference);
+          return { ...place, imageUrl, mapIconImage };
+        }
+        return { ...place, imageUrl: 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg', mapIconImage };
+      }));
+  
+      return placesWithImages;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
   const handleShowPlaces = async (keyword) => {
     if (!location) {
       setErrorMsg("Location not available");
       return;
     }
   
-    // const radius = 2 * 1609.34;
-    // const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
-    // const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.coords.latitude},${location.coords.longitude}&radius=${radius}&keyword=${keyword}&key=${apiKey}`;
+    const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
   
     try {
-      // const response = await axios.get(url);
-      // const places = response.data.results;
-      const places = placesListTest
-      const placesWithImages = await Promise.all(places.map(async place => {
-        if (place.photos && place.photos.length > 0) {
-          const imageUrl = await getImageCanSee(place.photos[0].photo_reference);
-          return { ...place, imageUrl };
-        }
-        return { ...place, imageUrl: 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg' };
-      }));
-  
+      const placesWithImages = await fetchPlacesWithImages(location, keyword, apiKey);
       setPlaces(placesWithImages);
+      locationListModalRef.current.present();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleShowSafeHaven = async () => {
+    if (!location) {
+      setErrorMsg("Location not available");
+      return;
+    }
+
+    // const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
+    // const categories = [
+    //   "career center homeless social service",
+    //   "police hospital emergency",
+    //   "free wifi place",
+    //   "food bank free food salvation army",
+    //   "free shower library"
+    // ];
+
+    try {
+      // const allPlaces = [];
+      // for (const category of categories) {
+      //   const placesWithImages = await fetchPlacesWithImages(location, category, apiKey);
+      //   allPlaces.push(...placesWithImages.slice(0, 4));
+      // }
+      // console.log(JSON.stringify(allPlaces));
+      // setPlaces(allPlaces);
+      setPlaces(mixPlacesTest)
       locationListModalRef.current.present();
     } catch (error) {
       console.error(error);
@@ -119,6 +169,7 @@ export default function MapScreen({ navigation }) {
     }
   }, []);
 
+
   return (
     <BottomSheetModalProvider>
       <View style={[styles.container, { marginBottom: tabBarHeight }]}>
@@ -138,7 +189,9 @@ export default function MapScreen({ navigation }) {
               }}
               title={place.name}
               description={place.vicinity}
-            />
+            >
+              <Image style={{ height: 50, width:40 }} source={{uri: place.mapIconImage}}/>
+            </Marker>
           ))}
         </MapView>
         <View style={styles.mapFooter}>
@@ -161,33 +214,16 @@ export default function MapScreen({ navigation }) {
               >
                 <Ionicons name="search" size={20} color="black" />
               </TouchableOpacity>
+
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleShowPlaces("career center homeless social service")}
+                onPress={() => handleShowSafeHaven()}
               >
-                <View style={styles.iconContainer}>
-                  <Ionicons name="business" size={20} color="white" />
-                </View>
-                <Text style={styles.buttonText}>Career Center</Text>
+                <Text style={styles.buttonText}>SafeHaven</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleShowPlaces("hospital emergency")}
-              >
-                <Text style={styles.buttonText}>Safety</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleShowPlaces("public shower OR park")}
-              >
-                <Text style={styles.buttonText}>Public Areas</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleShowPlaces("food bank free food")}
-              >
-                <Text style={styles.buttonText}>Food Bank</Text>
-              </TouchableOpacity>
+
+              
+              
             </ScrollView>
           </View>
         </View>
