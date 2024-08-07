@@ -20,12 +20,15 @@ export default function SnapTogetherStories({company, handlePress}) {
           handlePress()
         }}
       >
-        <Image
+        <View style = {styles.bitmojiContainer}>
+          <Image
           style={styles.bitmojiImage}
           source={{
             uri: company.logo_url
           }}
         />
+        </View>
+        
       </Pressable>
       <View style={styles.bitmojiTextContainer}>
         <Text style={styles.bitmojiText}>{company.username}</Text>
@@ -41,9 +44,16 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   bitmojiImage: {
-    width: 100,
-    height: 100,
-    borderRadius:50,
+    width: 98,
+    height: 98,
+    borderRadius: 90,
+  },
+  bitmojiContainer: {
+    borderRadius: 100, 
+    borderWidth: 3,
+    borderColor: '#10adff',
+    padding: 3.2, 
+    marginBottom: 5, 
   },
   bitmojiTextContainer: {
     backgroundColor: "white",

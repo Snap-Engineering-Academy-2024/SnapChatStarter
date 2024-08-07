@@ -13,7 +13,11 @@ import InfoSheet from "../components/InfoSheet";
 import SnapTogetherFeed from "../components/SnapTogetherFeed";
 import SnapTogetherStories from "../components/SnapTogetherStories";
 import StoryModal from "../components/StoryModal";
-import { SafeAreaFrameContext, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaFrameContext,
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import SectionHeader from "../components/SectionHeader";
 import { useRaceSelection } from "../utils/hooks/useRaceSelection";
 import { useFilteredData } from "../utils/hooks/useFilteredData";
@@ -24,9 +28,6 @@ import { SearchBar } from "react-native-elements";
 import SnapTogetherSearchModal from "../components/SnapTogetherSearchModal";
 import { colors } from "../../assets/themes/colors";
 import { fontHeader } from "../../assets/themes/font";
-
-
-
 
 const ethnicities = [
   { label: "All Inclusive", acronym: "All" },
@@ -50,11 +51,14 @@ export default function SectionScreen() {
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-
-  const { selectedRaces, raceSelection } = useRaceSelection(["All Inclusive"], ethnicities);
+  const { selectedRaces, raceSelection } = useRaceSelection(
+    ["All Inclusive"],
+    ethnicities
+  );
   const filteredData = useFilteredData(companyData, selectedRaces);
 
-  const subtitleText = selectedRaces.length === 1 ? selectedRaces[0] : "Multi-Inclusive";
+  const subtitleText =
+    selectedRaces.length === 1 ? selectedRaces[0] : "Multi-Inclusive";
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -62,23 +66,28 @@ export default function SectionScreen() {
 
   let filteredData2 = useMemo(() => {
     return companyData.filter((company) => {
-      return selectedRaces.some(selectedRaces => {
+      return selectedRaces.some((selectedRaces) => {
         if (!selectedRaces) return true;
-        return (company.categories.includes(searchQuery.toLowerCase()) || company.communities.includes(searchQuery));
+        return (
+          company.categories.includes(searchQuery.toLowerCase()) ||
+          company.communities.includes(searchQuery)
+        );
       });
     });
   }, [companyData, searchQuery, selectedRaces]);
 
   let filteredData3 = useMemo(() => {
-    if(selectedRaces[0] === "All Inclusive"){
+    if (selectedRaces[0] === "All Inclusive") {
       return filteredData2;
+    } else if (!searchQuery) {
+      return filteredData;
     }
-    else if(!searchQuery){
-      return filteredData
-    }
-    return [...new Set(filteredData.filter(element => filteredData2.includes(element)))];
-  })
-
+    return [
+      ...new Set(
+        filteredData.filter((element) => filteredData2.includes(element))
+      ),
+    ];
+  });
 
   return (
     <SafeAreaView
@@ -88,49 +97,54 @@ export default function SectionScreen() {
     >
       <View style={styles.container}>
         <View style={styles.header}>
-      <View style={styles.headerLeft}>
-        <Pressable
-          style={[styles.profile, styles.buttons]}
-          onPress={() => {
-            navigation.navigate("SnapTogether");
-          }}
-        >
-          <Icon name="arrow-back" size={22} color={"white"}/>
-        </Pressable>
+          <View style={styles.headerLeft}>
+            <Pressable
+              style={[styles.profile, styles.buttons]}
+              onPress={() => {
+                navigation.navigate("SnapTogether");
+              }}
+            >
+              <Icon name="arrow-back" size={22} color={"white"} />
+            </Pressable>
+          </View>
+          <View style={styles.headerCenter}>
+            <SearchBar
+              containerStyle={{
+                flex: 1,
+                backgroundColor: "transparent",
+                borderTopColor: "transparent",
+                borderBottomColor: "transparent",
+              }}
+              inputContainerStyle={{
+                marginTop: -10,
+                width: 270,
+                height: 45,
+                backgroundColor: "#EBECEE",
+              }}
+              width="100"
+              placeholder="Search/Filter"
+              lightTheme="true"
+              round="true"
+              value={searchQuery}
+              onChangeText={handleSearch}
+            />
+          </View>
+          <View style={styles.headerRight}>
+            <TouchableOpacity
+              style={styles.settingsButton}
+              onPress={() => navigation.navigate("Settings")}
+            >
+              <Icon name="settings" size={22} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.headerCenter}>
-          <SearchBar
-          containerStyle={{
-            flex: 1,
-            backgroundColor: "transparent",
-            borderTopColor: "transparent",
-            borderBottomColor: "transparent",
-          }}
-          inputContainerStyle={{ width: 270, height: 40, backgroundColor: "#EBECEE" }}
-          width="100"
-          placeholder="Search/Filter"
-          lightTheme="true"
-          round="true"
-          value={searchQuery}
-          onChangeText={handleSearch}
-        />
+        <View>
+          <SnapTogetherSearchModal
+            showSearch={showSearch}
+            setShowSearch={setShowSearch}
+          />
+        </View>
       </View>
-      <View style={styles.headerRight}>
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={() => navigation.navigate("Settings")}
-        >
-          <Icon name="settings" size={22} color="white"/>
-        </TouchableOpacity>
-      </View>
-      </View>
-      <View>
-        <SnapTogetherSearchModal
-          showSearch={showSearch}
-          setShowSearch={setShowSearch}
-        />
-      </View>
-    </View>
       {/* Filter buttons */}
       <ScrollView
         horizontal
@@ -150,80 +164,75 @@ export default function SectionScreen() {
             <Text style={styles.buttonText}>{ethnicity.acronym}</Text>
           </TouchableOpacity>
         ))}
-
-        </ScrollView>
-        <ScrollView>
-      {/* Title */}
-      <Text style={styles.title}>{buttonTitle}</Text>
-      {/* Current filter selection */}
-      <Text style={styles.subtitle}>{subtitleText}</Text>
-      {/* Story bar */}
-      <Text style={styles.sectionTitle}>Stories</Text>
-      {companyData && (
-        <View style={styles.storyBar}>
+      </ScrollView>
+      <ScrollView>
+        {/* Title */}
+        <Text style={styles.title}>{buttonTitle}</Text>
+        {/* Current filter selection */}
+        <Text style={styles.subtitle}>{subtitleText}</Text>
+        {/* Story bar */}
+        <Text style={styles.sectionTitle}>Stories</Text>
+        {companyData && (
+          <View style={styles.storyBar}>
+            <FlatList
+              data={filteredData3}
+              horizontal={true}
+              ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
+              renderItem={({ item }) => (
+                <SnapTogetherStories
+                  company={item}
+                  handlePress={() => {
+                    setShowStory(true);
+                    setSelectedCompany(item);
+                  }}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
+        )}
+        {/* Event discover list */}
+        <Text style={styles.sectionTitle}>Events</Text>
+        {companyData && (
           <FlatList
             data={filteredData3}
-            horizontal={true}
-            ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
+            horizontal={false}
+            numColumns={2}
+            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
             renderItem={({ item }) => (
-              <SnapTogetherStories
-                company={item}
+              <SnapTogetherFeed
+                title={item.username}
+                eventImage={item.poster_url}
+                selectedCompany={item}
                 handlePress={() => {
-                  setShowStory(true);
+                  setShowAbout(true);
                   setSelectedCompany(item);
                 }}
               />
             )}
             keyExtractor={(item) => item.id}
           />
+        )}
+        {/* If infosheet is shown */}
+        <View>
+          <InfoSheet
+            showAbout={showAbout}
+            setShowAbout={setShowAbout}
+            selectedCompany={selectedCompany}
+          />
+          <StoryModal
+            showStory={showStory}
+            setShowStory={setShowStory}
+            selectedCompany={selectedCompany}
+          />
         </View>
-      )}
-      {/* Event discover list */}
-      <Text style={styles.sectionTitle}>Events</Text>
-      {companyData && (
-        <FlatList
-          data={filteredData3}
-          horizontal={false}
-          numColumns={2}
-          ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-          renderItem={({ item }) => (
-            <SnapTogetherFeed
-              title={item.username}
-              eventImage={item.poster_url}
-              selectedCompany={item}
-              handlePress={() => {
-                setShowAbout(true);
-                setSelectedCompany(item);
-              }}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          
-        />
-      )}
-      {/* If infosheet is shown */}
-      <View>
-        <InfoSheet
-          showAbout={showAbout}
-          setShowAbout={setShowAbout}
-          selectedCompany={selectedCompany}
-        />
-        <StoryModal
-          showStory={showStory}
-          setShowStory={setShowStory}
-          selectedCompany={selectedCompany}
-        />
-      </View>
       </ScrollView>
-
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   scrollView: {
-    paddingBottom: 0,
-    paddingTop: 10,
     height: 70,
   },
   scrollViewContent: {
@@ -248,7 +257,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   title: {
-    fontSize: 30,
     fontWeight: "bold",
     alignSelf: "center",
     fontFamily: "avenir",
@@ -286,29 +294,28 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     color: colors.primary,
-    fontSize: fontHeader.fontSize,
     fontFamily: fontHeader.fontFamily,
     fontWeight: fontHeader.fontWeight,
+    fontSize : 33,
   },
   headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
     gap: 8,
   },
   headerCenter: {
     flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingRight: 30,
   },
   headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
     flex: 1,
     gap: 8,
-    
   },
   buttons: {
     alignSelf: "flex-start",
@@ -341,13 +348,13 @@ const styles = StyleSheet.create({
   },
   emailText: {
     fontWeight: "bold",
-    fontSize: 18
+    fontSize: 18,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "center",
     flex: 1,
     gap: 8,
-  }
+  },
 });
