@@ -32,7 +32,7 @@ export default function ProfileScreen() {
       navigation.navigate("SnapTogether");
     } else {
       console.log("Should be closing");
-      aboutSheetRef.current.snapToPosition("65");
+      aboutSheetRef.current.snapToIndex(0);
     }
   };
   const badgeOnPressHandlers = {
@@ -41,8 +41,7 @@ export default function ProfileScreen() {
   };
 
   const sectionOnPressHandlers = {
-    // "Add to My Story": () => navigation.navigate("Camera"),
-    "Add to My Story": () => sheetRef.current.snapToPosition("65"),
+    "Add to My Story": () => navigation.navigate("Camera"),
     "Add Friends": () => navigation.navigate("AddFriend"),
     "My Friends": () => navigation.navigate("Chat"),
     "Add Your School": () => navigation.navigate("Profile"),

@@ -35,7 +35,7 @@ const AboutSheet = ({aref}) => {
   };
 
   return (
-    <BottomSheet enablePanDownToClose ref={aref} index={-1} snapPoints={["15", "50"]}>
+    <BottomSheet enablePanDownToClose ref={aref} index={-1} snapPoints={["65"]}>
       <View style={styles.content}>
       <Image
           source={require("../../assets/SnapTogether/SnapTogetherLogoPurple.png")}
