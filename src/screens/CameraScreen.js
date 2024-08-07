@@ -36,7 +36,6 @@ export default function CameraScreen({ navigation, focused }) {
   const [photo, setPhoto] = useState(null);
   const [showGalleryMenu, setShowGalleryMenu] = useState(false);
   const { user } = useAuthentication();
-  const [communities, setCommunities] = useState("");
 
   useEffect(() => {
     if (user !== null) {

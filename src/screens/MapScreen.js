@@ -40,24 +40,6 @@ const saveUserLocation = async (location, user) => {
   }
 };
 
-function calculateBoundingBox(latitude, longitude, radius) {
-  const earthRadius = 6371;
-
-  const radLat = radius / earthRadius * (180 / Math.PI);
-  const radLng = radius / (earthRadius * Math.cos(latitude * Math.PI / 180)) * (180 / Math.PI);
-
-  const minLat = latitude - radLat;
-  const maxLat = latitude + radLat;
-  const minLng = longitude - radLng;
-  const maxLng = longitude + radLng;
-
-  return {
-    minLatitude: minLat,
-    maxLatitude: maxLat,
-    minLongitude: minLng,
-    maxLongitude: maxLng,
-  };
-}
 
 export default function MapScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -66,6 +48,7 @@ export default function MapScreen({ navigation }) {
   const [errorMsg, setErrorMsg] = useState(null);
   const [boundingBox, setBoundingBox] = useState({});
   const [popupTriggerPing, setPopupTriggerPing] = useState(false);
+  const [showNearbyUsers, setShowNearbyUsers] = useState(false);
   const { user } = useAuthentication();
   const [currentRegion, setCurrentRegion] = useState({
     latitude: 34.0211573,
@@ -74,6 +57,10 @@ export default function MapScreen({ navigation }) {
     longitudeDelta: 0.0421,
   });
   const [popupTrigger, setPopupTrigger] = useState(false);
+  const testRegion = {
+    latitude: 37.785834,
+    longitude: -122.406417
+  };
 
   const fetchUserData = async () => {
     try {
@@ -86,8 +73,11 @@ export default function MapScreen({ navigation }) {
       console.log(data.community);
       if (data.community === null) {
         setPopupTrigger(true);
-        console.log("shows popup.");
+        setPopupTriggerPing(false);
+        console.log("shows initial popup.");
       } else {
+        setPopupTrigger(false);
+        setPopupTriggerPing(true);
         console.log("doesn't show initial popup");
       }
     } catch (error) {
@@ -132,7 +122,7 @@ export default function MapScreen({ navigation }) {
       };
   
       await saveUserLocation(region, user);
-  
+      
     } catch (error) {
       console.error('Error fetching location or calculating bounding box:', error);
     }
@@ -150,12 +140,13 @@ export default function MapScreen({ navigation }) {
     const maxLng = source.longitude + radLng;
   
     if (target.location.latitude >= minLat && target.location.latitude <= maxLat && target.location.longitude >= minLng && target.location.longitude <= maxLng) {
-      setPopupTriggerPing(true);
+      //setPopupTriggerPing(true);
       console.log("this worked: ", target.username);
     }
   }
 
   function determineSelection(objArr) {
+
     for (let i = 0; i < objArr.length; i++) {
       isTargetWithinBoundingBox(testRegion, objArr[i], 5);
     }
@@ -168,6 +159,9 @@ export default function MapScreen({ navigation }) {
         setErrorMsg("Permission to access location was denied");
         return;
       }
+      if (user !== null) {
+        await fetchUserData();
+      }
 
       let currLocation = await Location.getCurrentPositionAsync({});
       setLocation(currLocation);
@@ -179,19 +173,20 @@ export default function MapScreen({ navigation }) {
       };
       setCurrentRegion(region);
       if (user !== null) {
-        await fetchAndSaveLocationData();
-        const usernamesLoc = await fetchProfilesWithInterest();
-        console.log("Here");
-        determineSelection(usernamesLoc);
+          await fetchAndSaveLocationData();
+          if (popupTriggerPing)
+          {
+            const usernamesLoc = await fetchProfilesWithInterest();
+            determineSelection(usernamesLoc);
+          }
+
       }
     })();
-  }, [user]);
+  }, [user, popupTrigger, popupTriggerPing]);
 
-  useEffect(() => {
-    if (user !== null) {
-      fetchUserData();
-    }
-  }, [user]);
+  // useEffect(() => {
+
+  // }, [user]);
 
   let text = "Waiting...";
   text = JSON.stringify(location);

@@ -73,8 +73,14 @@ export default function InterestSelectionScreen() {
     
   }, [user]);
   useEffect(() => {
-    if (selectedInterests.length === 3)
-      console.log(selectedInterests);
+    const updateTable = async () => {
+      if (selectedInterests.length === 3) {
+        console.log(selectedInterests);
+        await writeToTable(selectedInterests);
+      }
+    };
+  
+    updateTable();
   }, [selectedInterests]);
 
   return (
@@ -98,7 +104,7 @@ export default function InterestSelectionScreen() {
       source={{ uri: "https://i.imgur.com/wWeONMN_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
       style={{ width: 300, height: 500, borderRadius: 15}}
     />
-    <TouchableOpacity style={styles.understandButton} onPress={() => {navigation.navigate("Profile"); }}>
+    <TouchableOpacity style={styles.understandButton} onPress={() => {navigation.navigate("Camera"); }}>
           <Text style={styles.understandText}>I Understand</Text>
         </TouchableOpacity>
   </PopupLocationNotification>
@@ -149,7 +155,7 @@ export default function InterestSelectionScreen() {
           source={{ uri: "https://i.imgur.com/wWeONMN_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
           style={{ width: 300, height: 500, borderRadius: 15}}
         />
-        <TouchableOpacity style={styles.understandButton} onPress={() => {navigation.navigate("Profile"); }}>
+        <TouchableOpacity style={styles.understandButton} onPress={() => {navigation.navigate("Camera"); }}>
               <Text style={styles.understandText}>I Understand</Text>
             </TouchableOpacity>
 

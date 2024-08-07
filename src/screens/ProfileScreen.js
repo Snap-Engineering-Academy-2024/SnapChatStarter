@@ -187,9 +187,9 @@ export default function ProfileScreen() {
         <TouchableOpacity
           style={styles.buttonStyle2}
           onPress={() => {
-            navigation.navigate("Identity");
+            
             if (!popupTrigger)
-              navigation.navigate("Select Identity!");
+              navigation.navigate("Identity");;
           }}>
           <Text style={styles.buttonText2}>
           {popupTrigger ? community : '+ Add Community'}
@@ -200,7 +200,7 @@ export default function ProfileScreen() {
                       style={styles.buttonStyle2}
           onPress={() => {
             if (!popupTrigger)
-              navigation.navigate("Select Identity!");
+              navigation.navigate("Identity");;
           }}>
           <Text style={styles.buttonText2}>
           {popupTrigger ? formatInterests(interests) : '+ Add Community'}
@@ -274,7 +274,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonStyle2: {
-    marginRight: 190,
+
+    marginRight: 10,
     paddingVertical: 5,
     paddingHorizontal: 5,
     borderRadius: 20,
@@ -331,6 +332,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     marginRight: 60,
+    justifyContent: 'space-between', // Ensures space between buttons
+    alignItems: 'center', // Centers the buttons vertically
   },
   profileContainer: {
     flexDirection: 'row',

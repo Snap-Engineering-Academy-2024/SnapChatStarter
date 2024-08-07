@@ -11,9 +11,10 @@ export default function CommSelectionScreen() {
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedOrientation, setSelectedOrientation] = useState(null);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const [choice, setChoice] = useState(null);
   const { user } = useAuthentication();
 
-  const writeToTableComm = async (text) => {
+  const writeToTableComm = async () => {
     const { data: existingData, error: fetchError } = await supabase
       .from('profiles')
       .select('community')
@@ -23,7 +24,7 @@ export default function CommSelectionScreen() {
     if (fetchError) {
       console.error('Error fetching existing data:', fetchError);
     } else {
-      const updatedCommunity = text;
+      const updatedCommunity = choice;
 
       const { data: upsertedData, error: upsertError } = await supabase
         .from('profiles')
@@ -39,10 +40,13 @@ export default function CommSelectionScreen() {
       }
     }
   };
-
-  const handlePress = async (text) => {
-    await writeToTableComm(text);
-    navigation.replace("Add Current Interests!");
+  function handleClick (text)
+  {
+    setChoice(text);
+  }
+  const handlePress = async () => {
+    await writeToTableComm();
+    navigation.replace("Interests");
   };
 
   const genders = [
@@ -124,6 +128,12 @@ export default function CommSelectionScreen() {
   useEffect(() => {
     setTheOrientations(orientations);
   }, []);
+
+  useEffect(() => {
+    setTheOrientations(orientations);
+  }, []);
+
+  
   
   const handleGenderPress = (id) => {
     setSelectedGender(id);
@@ -146,7 +156,7 @@ export default function CommSelectionScreen() {
         styles.cardContainer,
         selectedId === item.id && { borderColor: '#2196F3' }
       ]}
-      onPress={() => handlePress(item.id)}
+      onPress={() => handleClick(item.id)}
     >
       <Image style={styles.cardImage} source={{ uri: item.image }} />
       <Text style={styles.cardTitle}>{item.title}</Text>
@@ -201,7 +211,7 @@ export default function CommSelectionScreen() {
       }]}>
         <TouchableOpacity style={styles.continueButton} 
         onPress={() => {
-            navigation.navigate("Interests");
+            handlePress();
           }}>
           <Text style={styles.continueButtonText}>
             <Image
