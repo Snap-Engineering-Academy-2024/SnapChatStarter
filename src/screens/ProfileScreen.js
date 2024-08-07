@@ -141,10 +141,6 @@ export default function ProfileScreen() {
   return (
     <ScrollView>
       <View style={{ alignItems: "center" }}>
-<<<<<<< HEAD
-=======
-
->>>>>>> origin
         <Image
           source={{ uri: "https://i.imgur.com/Ht4cY9d_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
           style={{ width: 400, height: 200 }}
@@ -191,12 +187,9 @@ export default function ProfileScreen() {
         <TouchableOpacity
           style={styles.buttonStyle2}
           onPress={() => {
-<<<<<<< HEAD
             navigation.navigate("Identity");
-=======
             if (!popupTrigger)
               navigation.navigate("Select Identity!");
->>>>>>> origin
           }}>
           <Text style={styles.buttonText2}>
           {popupTrigger ? community : '+ Add Community'}
@@ -281,8 +274,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonStyle2: {
-    // alignItems: 'left',
-    // margin: 10,
     marginRight: 190,
     paddingVertical: 5,
     paddingHorizontal: 5,
