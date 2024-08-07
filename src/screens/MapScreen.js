@@ -13,7 +13,8 @@ import LocationList from "./LocationList";
 import LocationDetails from "./LocationDetails";
 import onePlaceToTest from "./oneTestPlace.json";
 import placesListTest from "./placesListTest.json"
-let GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
+
+
 export default function MapScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
@@ -51,40 +52,73 @@ export default function MapScreen({ navigation }) {
   }, []);
   const handleRecenter = () => {
     if (location && mapRef.current) {
-      mapRef.current.animateToRegion(
-        // {
-        //   latitude: location.coords.latitude,
-        //   longitude: location.coords.longitude,
-        //   latitudeDelta: 0.0922,
-        //   longitudeDelta: 0.0421,
-        // },
-        currentRegion,
-        1000
-      );
+      mapRef.current.animateToRegion(currentRegion,1000);
     }
   };
+  const getImageCanSee = async (photoReference) => {
+    const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY; 
+    const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&photoreference=${photoReference}&key=${apiKey}`;
+    try {
+      const response = await axios.get(url);
+      // console.log(JSON.stringify(response,null,4))
+      return response.config.url;
+    } catch (error) {
+      console.error(error);
+      return 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg'
+    }
+  };
+
   const handleShowPlaces = async (keyword) => {
     if (!location) {
       setErrorMsg("Location not available");
       return;
     }
-    //const radius = 2 * 1609.34;
-    //const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
-    //const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.coords.latitude},${location.coords.longitude}&radius=${radius}&keyword=${keyword}&key=${apiKey}`;
+  
+    // const radius = 2 * 1609.34;
+    // const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
+    // const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.coords.latitude},${location.coords.longitude}&radius=${radius}&keyword=${keyword}&key=${apiKey}`;
+  
     try {
-      //const response = await axios.get(url);
-      //setPlaces(response.data.results);
-      setPlaces(placesListTest)
+      // const response = await axios.get(url);
+      // const places = response.data.results;
+      const places = placesListTest
+      const placesWithImages = await Promise.all(places.map(async place => {
+        if (place.photos && place.photos.length > 0) {
+          const imageUrl = await getImageCanSee(place.photos[0].photo_reference);
+          return { ...place, imageUrl };
+        }
+        return { ...place, imageUrl: 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg' };
+      }));
+  
+      setPlaces(placesWithImages);
       locationListModalRef.current.present();
-      console.log(JSON.stringify(places))
     } catch (error) {
       console.error(error);
     }
   };
-  const handlePlacePress = useCallback((place) => {
-    setSelectedPlace(place);
-    locationDetailsModalRef.current.present();
+  
+  const fetchPlaceDetails = async (placeId) => {
+    const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${apiKey}`;
+    try {
+      const response = await axios.get(url);
+      return response.data.result;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  const handlePlacePress = useCallback(async (place) => {
+    const placeDetails = await fetchPlaceDetails(place.place_id);
+    if (placeDetails) {
+      setSelectedPlace(placeDetails);
+      locationDetailsModalRef.current.present();
+    } else {
+      console.error("Failed to fetch place details");
+    }
   }, []);
+
   return (
     <BottomSheetModalProvider>
       <View style={[styles.container, { marginBottom: tabBarHeight }]}>
