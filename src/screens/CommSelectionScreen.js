@@ -441,7 +441,7 @@ const writeToTableComm = async (text) => {
 
   const handlePress = async (text) => {
     await writeToTableComm(text);
-    navigation.replace("InterestSelection");
+    navigation.replace("Add Current Interests!");
   };
   
   const genders = [
@@ -591,7 +591,7 @@ const writeToTableComm = async (text) => {
                   <TouchableOpacity style={styles.buttonStyle3}>
                     <Text style={styles.buttonText3}>Don't Join</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("Meeting Connections")}>
+                  <TouchableOpacity style={styles.buttonStyle3} onPress={handlePress(gender.id)}>
                     <Text style={styles.buttonText3}>Join!</Text>
                   </TouchableOpacity>
                 </View>
@@ -617,7 +617,7 @@ const writeToTableComm = async (text) => {
                   <TouchableOpacity style={styles.buttonStyle3}>
                     <Text style={styles.buttonText3}>Don't Join</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("Meeting Connections")}>
+                  <TouchableOpacity style={styles.buttonStyle3} onPress={handlePress(orientation.id)}>
                     <Text style={styles.buttonText3}>Join!</Text>
                   </TouchableOpacity>
                 </View>
@@ -644,7 +644,7 @@ const writeToTableComm = async (text) => {
                   <TouchableOpacity style={styles.buttonStyle3}>
                     <Text style={styles.buttonText3}>Don't Join</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("Meeting Connections")}>
+                  <TouchableOpacity style={styles.buttonStyle3} onPress={handlePress(background.id)}>
                     <Text style={styles.buttonText3}>Join!</Text>
                   </TouchableOpacity>
                 </View>

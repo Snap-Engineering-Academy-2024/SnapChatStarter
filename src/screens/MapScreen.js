@@ -20,7 +20,6 @@ import defaultPhoto from "../../assets/snapchat/notificationPic.png";
 import PopupPingNotification from "../components/PopupPingNotification";
 import { useAuthentication } from '../utils/hooks/useAuthentication';
 
-
 const saveUserLocation = async (location, user) => {
   try {
     // Construct the location object
@@ -68,30 +67,7 @@ function calculateBoundingBox(latitude, longitude, radius) {
 
 
 
-function isTargetWithinBoundingBox(source, target, radius) {
-  const earthRadius = 6371; // Earth's radius in kilometers
-  //console.log("within test func: ", target);
 
-  const radLat = radius / earthRadius * (180 / Math.PI);
-  const radLng = radius / (earthRadius * Math.cos(source.latitude * Math.PI / 180)) * (180 / Math.PI);
-
-  const minLat = source.latitude - radLat;
-  const maxLat = source.latitude + radLat;
-  const minLng = source.longitude - radLng;
-  const maxLng = source.longitude + radLng;
-
-  // Check if target location falls within the bounding box
-  if ( target.location.latitude >= minLat && target.location.latitude <= maxLat && target.location.longitude >= minLng && target.location.longitude <= maxLng)
-  {
-    console.log("this worked: ", target.username);
-  }
-  // return (
-  //   target.latitude >= minLat &&
-  //   target.latitude <= maxLat &&
-  //   target.longitude >= minLng &&
-  //   target.longitude <= maxLng
-  // );
-}
 
 
 export default function MapScreen({ navigation }) {
@@ -100,6 +76,7 @@ export default function MapScreen({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [boundingBox, setBoundingBox] = useState({});
+  const [popupTriggePing, setPopupTriggerPing] = useState(false);
   const { user } = useAuthentication();
   const [currentRegion, setCurrentRegion] = useState({
     latitude: 34.0211573,
@@ -176,6 +153,33 @@ export default function MapScreen({ navigation }) {
     }
   };
 
+
+  function isTargetWithinBoundingBox(source, target, radius) {
+    const earthRadius = 6371; // Earth's radius in kilometers
+    //console.log("within test func: ", target);
+  
+    const radLat = radius / earthRadius * (180 / Math.PI);
+    const radLng = radius / (earthRadius * Math.cos(source.latitude * Math.PI / 180)) * (180 / Math.PI);
+  
+    const minLat = source.latitude - radLat;
+    const maxLat = source.latitude + radLat;
+    const minLng = source.longitude - radLng;
+    const maxLng = source.longitude + radLng;
+  
+    // Check if target location falls within the bounding box
+    if ( target.location.latitude >= minLat && target.location.latitude <= maxLat && target.location.longitude >= minLng && target.location.longitude <= maxLng)
+    {
+      setPopupTriggerPing(true);
+      console.log("this worked: ", target.username);
+    }
+    // return (
+    //   target.latitude >= minLat &&
+    //   target.latitude <= maxLat &&
+    //   target.longitude >= minLng &&
+    //   target.longitude <= maxLng
+    // );
+  }
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -202,11 +206,14 @@ export default function MapScreen({ navigation }) {
 
       }
         
-      setBoundingBox(calculateBoundingBox(currLocation.coords.latitude, currLocation.coords.longitude, 5));
+      // setBoundingBox(calculateBoundingBox(currLocation.coords.latitude, currLocation.coords.longitude, 5));
       //fetchAndSaveLocationData(user);
     })();
   }, [user]);
 
+  useEffect(() => {
+    
+  }, [popupTriggePing]);
 
   let text = "Waiting...";
   text = JSON.stringify(location);
@@ -219,6 +226,23 @@ export default function MapScreen({ navigation }) {
         showsUserLocation={true}
         showsMyLocationButton={true}
       >
+        <PopupPingNotification trigger={popupTriggePing} setTrigger={setPopupTriggerPing}>
+          <Image style={{ width: 150, height: 150 }} 
+          source={{ uri: "https://i.imgur.com/j8qg2QK_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+            />
+            <Text style={{fontSize: 27}}>You've Been Pinged!</Text>
+            <Text>We've found a friend with your interests!</Text>
+            
+            <TouchableOpacity 
+            style={styles.buttonStyle2} 
+            onPress={() => {
+              navigation.navigate("Chat");
+            }}
+            >
+          <Text style={styles.buttonText2}>Chat with Friend!</Text>
+
+          </TouchableOpacity>
+        </PopupPingNotification>
       </MapView>
 
 
@@ -358,6 +382,16 @@ const styles = StyleSheet.create({
     height: 70,
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttonStyle2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 32,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#FFFC00',
   },
   calendarIcon: {},
 });
