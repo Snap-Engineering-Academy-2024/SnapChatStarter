@@ -1,18 +1,21 @@
-import React, { useEffect } from "react";
-import { BottomSheet, Button } from "@rneui/themed";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { Button } from "@rneui/themed";
+import { Dimensions, StyleSheet, Text, View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from "../utils/hooks/supabase";
 import { findJoinStatus } from "../utils/hooks/findJoinStatus";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+
 
 // Height for BottomSheet
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
-const AboutSheet = ({ showAbout, setShowAbout }) => {
+const AboutSheet = ({aref}) => {
   const navigation = useNavigation();
   const { user } = useAuthentication();
   const joinStatus = findJoinStatus();
+
 
   const joinButtonPress = async () => {
     if (!joinStatus) {
@@ -27,13 +30,17 @@ const AboutSheet = ({ showAbout, setShowAbout }) => {
         console.error("Error updating join status:", error.message);
       }
     }
+    aref.current.close()
     navigation.navigate("SnapTogether");
   };
 
   return (
-    <BottomSheet isVisible={showAbout} containerStyle={styles.container} modalProps={{}}>
+    <BottomSheet enablePanDownToClose ref={aref} index={-1} snapPoints={["15", "50"]}>
       <View style={styles.content}>
-        <View style={styles.line} />
+      <Image
+          source={require("../../assets/SnapTogether/SnapTogetherLogoPurple.png")}
+          style={styles.logo}
+        />
         <Text style={styles.title}>SnapTogether</Text>
         <Text style={styles.text}>
         This is a vibrant space for people from different backgrounds to share career tips, cool local businesses, and tasty eats. Dive into stories, earn badges and join a network that’s all about you. 
@@ -44,7 +51,6 @@ const AboutSheet = ({ showAbout, setShowAbout }) => {
             <Button
               onPress={() => {
                 joinButtonPress();
-                setShowAbout(false);
               }}
               title={"JOIN"}
               buttonStyle={styles.button}
@@ -52,15 +58,6 @@ const AboutSheet = ({ showAbout, setShowAbout }) => {
               accessibilityLabel="Click to join SnapTogether"
             />
           )}
-          <Button
-            onPress={() => {
-              setShowAbout(false);
-            }}
-            title={"CLOSE"}
-            buttonStyle={styles.button}
-            titleStyle={styles.buttonText}
-            accessibilityLabel="Close Bottomsheet"
-          />
         </View>
       </View>
     </BottomSheet>
@@ -68,17 +65,11 @@ const AboutSheet = ({ showAbout, setShowAbout }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0)",
-  },
   content: {
-    backgroundColor: "#FFFC00",
     padding: 16,
     height: SCREEN_HEIGHT,
     borderRadius: 25,
     alignItems: "center",
-    top: SCREEN_HEIGHT / 2.5,
   },
   text: {
     fontSize: 16,
@@ -99,18 +90,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
   },
-  buttonsView: {
-    flexDirection: "column",
-  },
-  
-  line: {
-    width: 75,
-    height: 4,
-    backgroundColor: "grey",
+  logo: {
     alignSelf: "center",
-    marginTop: 15,
-    marginBottom: 50,
-    borderRadius: 2,
+    width: 200,
+    height: 200,
+    borderRadius: 75,
+    marginBottom: 10,
   },
 });
 

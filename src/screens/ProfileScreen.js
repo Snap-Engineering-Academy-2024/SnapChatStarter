@@ -1,22 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Image,
-  View,
-  StyleSheet,
-  Dimensions,
-  Text,
-  ImageBackground,
-} from "react-native";
+import { View, StyleSheet, Dimensions, ImageBackground } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
-import DraggableButtonList from "../components/DraggableButtons";
 import AboutSheet from "../components/AboutSheet";
 import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 import ProfileSections from "../components/ProfileSections";
 import ProfileHeader from "../components/ProfileHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-// import { BottomSheet } from "@rneui/themed";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -25,12 +16,12 @@ const avatarBackground =
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const [astrology, setAstrology] = useState("Pisces");
+  const [astrology, setAstrology] = useState("Astrology");
   const userSign = findAstrologySign();
   const userJoinStatus = findJoinStatus();
-  const [showAbout, setShowAbout] = useState(false);
   const insets = useSafeAreaInsets();
   const sheetRef = useRef(null);
+  const aboutSheetRef = useRef(null);
 
   useEffect(() => {
     setAstrology(userSign.sign);
@@ -40,7 +31,8 @@ export default function ProfileScreen() {
     if (userJoinStatus) {
       navigation.navigate("SnapTogether");
     } else {
-      setShowAbout(true);
+      console.log("Should be closing");
+      aboutSheetRef.current.snapToPosition("65");
     }
   };
   const badgeOnPressHandlers = {
@@ -49,7 +41,8 @@ export default function ProfileScreen() {
   };
 
   const sectionOnPressHandlers = {
-    "Add to My Story": () => navigation.navigate("Camera"),
+    // "Add to My Story": () => navigation.navigate("Camera"),
+    "Add to My Story": () => sheetRef.current.snapToPosition("65"),
     "Add Friends": () => navigation.navigate("AddFriend"),
     "My Friends": () => navigation.navigate("Chat"),
     "Add Your School": () => navigation.navigate("Profile"),
@@ -59,17 +52,23 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <ImageBackground source={require(avatarBackground)} style={styles.image}>
-        <BottomSheet ref={sheetRef} snapPoints={["65", "70", "75", "80", "85"]}>
+        <BottomSheet
+          ref={sheetRef}
+          index={3}
+          snapPoints={["35", "45", "55", "65", "75", "85"]}
+        >
           <View style={styles.sections}>
-            <ProfileSections onPressHandlers={sectionOnPressHandlers} />
+            <ProfileSections
+              onPressHandlers={sectionOnPressHandlers}
+              badgeOnPressHandlers={badgeOnPressHandlers}
+              astrology={astrology}
+            />
           </View>
         </BottomSheet>
         <View style={{ paddingTop: insets.top }}>
           <ProfileHeader />
         </View>
-        <View>
-          <AboutSheet showAbout={showAbout} setShowAbout={setShowAbout} />
-        </View>
+        <AboutSheet aref={aboutSheetRef} />
         {/* Buttons for Profile Sections */}
       </ImageBackground>
     </View>

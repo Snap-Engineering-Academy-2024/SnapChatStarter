@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 // Height for BottomSheet
-const { height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const InfoSheet = ({ showAbout, setShowAbout, selectedCompany }) => {
   return (
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#10adff",
     marginBottom: 16,
     borderRadius: 20,
-    width: 300,
+    width: SCREEN_WIDTH,
   },
   buttonText: {
     color: "white",

@@ -8,9 +8,6 @@ import {
   SectionList,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { useNavigation } from "@react-navigation/native";
-import { findAstrologySign } from "../utils/hooks/findAstrologySign";
-import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 import DraggableButtonList from "../components/DraggableButtons";
 import { supabase } from "../utils/hooks/supabase";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
@@ -18,48 +15,28 @@ import { useAuthentication } from "../utils/hooks/useAuthentication";
 const DATA = [
   {
     title: "My Stories",
-    data: [{ name: "Add to My Story", description: "Just for Friends" }],
+    data: [{ name: "Add to My Story", description: "Just for Friends", icon: "add-a-photo" }],
   },
   {
     title: "Friends",
     data: [
-      { name: "Add Friends", description: "New Friends" },
-      { name: "My Friends", description: "Old Friends" },
+      { name: "Add Friends", description: "New Friends", icon: "person-add" },
+      { name: "My Friends", description: "Old Friends", icon: "group" },
     ],
   },
   {
     title: "Communities",
     data: [
-      { name: "Add Your School", description: "Stay In Touch" },
-      { name: "SnapTogether", description: "Connect With Your Communities" },
+      { name: "Add Your School", description: "Stay In Touch", icon: "school" },
+      { name: "SnapTogether", description: "Connect With Your Communities", icon: "thumb-up" },
     ],
   },
 ];
 
-const ProfileSections = ({ onPressHandlers }) => {
+const ProfileSections = ({ onPressHandlers, badgeOnPressHandlers, astrology }) => {
   const { user } = useAuthentication();
-  const navigation = useNavigation();
-  const [astrology, setAstrology] = useState("Taurus");
-  const userSign = findAstrologySign();
-  const userJoinStatus = findJoinStatus();
   const [name, setName] = useState("Name")
   const [username, setUsername] = useState("username")
-
-  useEffect(() => {
-    setAstrology(userSign.sign);
-  }, [userSign.sign]);
-
-  const SnapTogetherRedirect = async () => {
-    if (userJoinStatus) {
-      navigation.navigate("SnapTogether");
-    } else {
-      setShowAbout(true);
-    }
-  };
-  const badgeOnPressHandlers = {
-    [astrology]: () => navigation.navigate("Astrology"),
-    "🫶🏻🫶🏽🫶🏿": SnapTogetherRedirect,
-  };
 
   useEffect(() => {
     if (user !== null) {
@@ -114,8 +91,15 @@ const ProfileSections = ({ onPressHandlers }) => {
             onPress={() => onPressHandlers[item.name]()}
           >
             <View style={styles.iconContainer}>
-              <Icon name="school" size={24} color="#000" />
-            </View>
+  {item.name !== "SnapTogether" ? (
+    <Icon name={item.icon} size={24} color="#000" />
+  ) : (
+    <Image
+      source={require("../../assets/SnapTogether/SnapTogetherLogoPurple.png")}
+      style={styles.logo}
+    />
+  )}
+</View>
             <View style={styles.textContainer}>
               <Text style={styles.title}>{item.name}</Text>
               <Text style={styles.subtitle}>{item.description}</Text>
@@ -188,6 +172,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#555",
   },
+  logo: {
+    width: 25,
+    height: 25,
+  }
 });
 
 export default ProfileSections;
