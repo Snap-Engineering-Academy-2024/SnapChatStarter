@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   settingsButton: {
     alignSelf: "flex-end",
     marginBottom: 16,
-    marginRight: 25,
+    marginRight: 8,
     backgroundColor: "rgba(0, 0, 0, .5)",
     borderRadius: 100,
     height: 44,
