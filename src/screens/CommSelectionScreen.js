@@ -1,104 +1,111 @@
 // import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground } from "react-native";
 // import { useEffect, useState } from "react";
 // import { useNavigation } from "@react-navigation/native";
-// import PopupCommInfo from "../components/PopupCommInfo";
 
 // export default function CommSelectionScreen() {
 //   const navigation = useNavigation();
 //   const [theGenders, setTheGenders] = useState([]);
 //   const [theOrientations, setTheOrientations] = useState([]);
 //   const [theBackgrounds, setTheBackgrounds] = useState([]);
-//   const [activePopup, setActivePopup] = useState(null);
+//   const [selectedGender, setSelectedGender] = useState(null);
+//   const [selectedOrientation, setSelectedOrientation] = useState(null);
+//   const [selectedBackground, setSelectedBackground] = useState(null);
 
 //   const genders = [
 //     {
-//       id: 'n/a',
+//       id: 'n/aGender',
 //       title: 'Prefer Not to Respond',
-//       description: '',
+//       description: 'Will not associate with a community.',
 //       image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
 //     },
 //     {
-//         id: 'cisgender female',
-//         title: 'Cisgender Female',
-//         description: '',
-//         image: 'https://i.imgur.com/ivr8j5I_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//       },
-//       {
-//         id: 'cisgender male',
-//         title: 'Cisgender Male',
-//         description: '',
-//         image: 'https://i.imgur.com/avZBiIT_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-//       },
-//     {
-//         id: 'transgender',
-//         title: 'Transgender',
-//         description: 'Information about the Transgender community    boobie doobie do',
-//         image: 'https://i.imgur.com/41jJ7kP_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+//       id: 'cisgender female',
+//       title: 'Cisgender Female',
+//       description: 'Identifies with the gender assigned to her at birth.',
+//       image: 'https://i.imgur.com/ivr8j5I_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
 //     },
 //     {
-//         id: 'cisgender',
-//         title: 'Cisgender',
-//         description: 'Information about the Cisgender community    boobie doobie do',
-//         image: 'https://i.imgur.com/zGcHKVl.png',
+//       id: 'cisgender male',
+//       title: 'Cisgender Male',
+//       description: 'Identifies with the gender assigned to him at birth',
+//       image: 'https://i.imgur.com/avZBiIT_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
 //     },
 //     {
-//         id: 'agender',
-//         title: 'Agender',
-//         description: 'Information about the Agender community    boobie doobie do',
-//         image: 'https://i.imgur.com/zGcHKVl.png',
+//       id: 'transgender',
+//       title: 'Transgender',
+//       description: 'Different gender from the one assigned at birth.',
+//       image: 'https://i.imgur.com/41jJ7kP_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+//     },
+//     {
+//       id: 'bisgender',
+//       title: 'Bigender',
+//       description: 'Information about the Bigender community boobie doobie do',
+//       image: 'https://i.imgur.com/6HKmTPb_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+//     },
+//     {
+//       id: 'agender',
+//       title: 'Agender',
+//       description: 'Information about the Agender community boobie doobie do',
+//       image: 'https://i.imgur.com/jIR7GpM_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+//     },
+//     {
+//       id: 'genderfluid',
+//       title: 'Genderfluid',
+//       description: 'Information about the Genderfluid community boobie doobie do',
+//       image: 'https://i.imgur.com/Xh5GPp5_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
 //     },
 //   ];
 
 //   const orientations = [
 //     {
-//         id: 'n/a',
-//         title: 'Prefer Not to Respond',
-//         description: '',
-//         image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+//       id: 'n/aOrientation',
+//       title: 'Prefer Not to Respond',
+//       description: 'Will not associate with a community.',
+//       image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
 //     },
 //     {
-//         id: 'bisexual',
-//         title: 'Bisexual',
-//         description: 'Information about the Bisexual community    boobie doobie do',
-//         image: 'https://i.imgur.com/zGcHKVl.png',
+//       id: 'heterosexual',
+//       title: 'Heterosexual',
+//       description: 'Information about the Heterosexual community boobie doobie do',
+//       image: 'https://i.imgur.com/28OQ5ry_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
 //     },
 //     {
-//         id: 'pansexual',
-//         title: 'Pansexual',
-//         description: 'Information about the Pansexual community    boobie doobie do',
-//         image: 'https://i.imgur.com/zGcHKVl.png',
+//       id: 'pansexual',
+//       title: 'Pansexual',
+//       description: 'Information about the Pansexual community boobie doobie do',
+//       image: 'https://i.imgur.com/oSYZBD0_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
 //     },
 //     {
 //       id: 'another sexuality2',
 //       title: 'n/a',
-//       description: 'Information about a sexual identity    boobie doobie do',
+//       description: 'Information about a sexual identity boobie doobie do',
 //       image: 'https://i.imgur.com/zGcHKVl.png',
 //     },
 //   ];
 
 //   const backgrounds = [
 //     {
-//         id: 'n/a',
-//         title: 'Prefer Not to Respond',
-//         description: '',
-//         image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+//       id: 'n/aBackground',
+//       title: 'Prefer Not to Respond',
+//       description: 'Will not associate with a community.',
+//       image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
 //     },
 //     {
 //       id: 'background2',
 //       title: 'background2',
-//       description: 'Information about the Pansexual community    boobie doobie do',
+//       description: 'Information about the Pansexual community boobie doobie do',
 //       image: 'https://i.imgur.com/zGcHKVl.png',
 //     },
 //     {
 //       id: 'background3',
 //       title: 'background3',
-//       description: 'Information about a sexual identity1    boobie doobie do',
+//       description: 'Information about a sexual identity1 boobie doobie do',
 //       image: 'https://i.imgur.com/zGcHKVl.png',
 //     },
 //     {
 //       id: 'background4',
 //       title: 'background4',
-//       description: 'Information about a sexual identity    boobie doobie do',
+//       description: 'Information about a sexual identity boobie doobie do',
 //       image: 'https://i.imgur.com/zGcHKVl.png',
 //     },
 //   ];
@@ -114,9 +121,32 @@
 //     setTheBackgrounds(backgrounds);
 //   }, []);
 
+//   const handleGenderPress = (id) => {
+//     setSelectedGender(id);
+//   };
 
-//   const renderProductCard = ({ item }) => (
-//     <TouchableOpacity style={styles.cardContainer} onPress={() => setActivePopup(item.id)}>
+//   const handleOrientationPress = (id) => {
+//     setSelectedOrientation(id);
+//   };
+
+//   const handleBackgroundPress = (id) => {
+//     setSelectedBackground(id);
+//   };
+
+//   const handleContinue = () => {
+//     console.log('Selected Gender:', selectedGender);
+//     console.log('Selected Orientation:', selectedOrientation);
+//     console.log('Selected Background:', selectedBackground);
+//   };
+
+//   const renderProductCard = (item, handlePress, selectedId) => (
+//     <TouchableOpacity
+//       style={[
+//         styles.cardContainer,
+//         selectedId === item.id && styles.selectedCard
+//       ]}
+//       onPress={() => handlePress(item.id)}
+//     >
 //       <Image style={styles.cardImage} source={{ uri: item.image }} />
 //       <Text style={styles.cardTitle}>{item.title}</Text>
 //       <Text style={styles.cardDescription}>{item.description}</Text>
@@ -125,131 +155,45 @@
 
 //   return (
 //     <ImageBackground 
-//       source={{ uri: 'https://i.imgur.com/BrJDOVG_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
+//       source={{ uri: 'https://i.imgur.com/yVDecp2_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
 //       style={styles.backgroundImage}
 //     >
-//     <ScrollView>
-//       <View style={styles.container}>
-//         {genders.map((gender) => (
-//           <PopupCommInfo key={gender.id} trigger={activePopup === gender.id} setTrigger={() => setActivePopup(null)}>
-//             <Text style={styles.popupTitle}>{gender.title}</Text>
-//             <Image
-//               source={{ uri: gender.image }}
-//               style={styles.popupImage}
-//             />
-//             <Text style={styles.popupDescription}>{gender.description}</Text>
-//             <View style={styles.popupFooter}>
-//               <Text style={styles.popupFooterText}>Would you like to join the community?</Text>
-//               <View style={styles.buttonContainer}>
-//                 <TouchableOpacity style={styles.buttonStyle3}>
-//                   <Text style={styles.buttonText3}>Don't Join</Text>
-//                 </TouchableOpacity>
-//                 <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("InterestSelection")}>
-//                   <Text style={styles.buttonText3}>Join!</Text>
-//                 </TouchableOpacity>
-//               </View>
-//             </View>
-//           </PopupCommInfo>
-//         ))}
-//         {orientations.map((orientation) => (
-//           <PopupCommInfo key={orientation.id} trigger={activePopup === orientation.id} setTrigger={() => setActivePopup(null)}>
-//             <Text style={styles.popupTitle}>{orientation.title}</Text>
-//             <Image
-//               source={{ uri: orientation.image }}
-//               style={styles.popupImage}
-//             />
-//             <Text style={styles.popupDescription}>{orientation.description}</Text>
-//             <View style={styles.popupFooter}>
-//               <Text style={styles.popupFooterText}>Would you like to join the community?</Text>
-//               <View style={styles.buttonContainer}>
-//                 <TouchableOpacity style={styles.buttonStyle3}>
-//                   <Text style={styles.buttonText3}>Don't Join</Text>
-//                 </TouchableOpacity>
-//                 <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("InterestSelection")}>
-//                   <Text style={styles.buttonText3}>Join!</Text>
-//                 </TouchableOpacity>
-//               </View>
-              
-//             </View>
-            
-//           </PopupCommInfo>
-//         ))}
-
-//         {backgrounds.map((background) => (
-//           <PopupCommInfo key={background.id} trigger={activePopup === background.id} setTrigger={() => setActivePopup(null)}>
-//             <Text style={styles.popupTitle}>{background.title}</Text>
-//             <Image
-//               source={{ uri: background.image }}
-//               style={styles.popupImage}
-//             />
-//             <Text style={styles.popupDescription}>{background.description}</Text>
-//             <View style={styles.popupFooter}>
-//               <Text style={styles.popupFooterText}>Would you like to join the community?</Text>
-//               <View style={styles.buttonContainer}>
-//                 <TouchableOpacity style={styles.buttonStyle3}>
-//                   <Text style={styles.buttonText3}>Don't Join</Text>
-//                 </TouchableOpacity>
-//                 <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("InterestSelection")}>
-//                   <Text style={styles.buttonText3}>Join!</Text>
-//                 </TouchableOpacity>
-//               </View>
-//             </View>
-//           </PopupCommInfo>
-//         ))}
-
-//         <Image
-//           source={{ uri: "https://pbs.twimg.com/media/FULacdXX0AMqQKq?format=jpg&name=4096x4096" }}
-//           style={styles.headerImage}
-//         />
-//         <Text style={styles.headerText}>Select your identity that best suits you!</Text>
-//         <TouchableOpacity style={styles.filterButton}>
-//           <Text>Filter</Text>
-//         </TouchableOpacity>
-
-//         <Text style={{
-//             marginRight: 270,
-//             fontWeight: "bold",
-//             fontSize: 20,
-//             marginTop: 20,
-//         }}>Gender</Text>
-//         {/* {communities.map((community) => (
-//           <TouchableOpacity
-//             key={community.id}
-//             style={styles.buttonStyle2}
-//             onPress={() => setActivePopup(community.id)}
-//           >
-//             <Text style={styles.buttonText2}>{community.title}</Text>
-//             <Text>Small Description Here Blah Blah</Text>
+//       <ScrollView>
+//         <View style={styles.container}>
+//           <Image
+//             source={{ uri: "https://i.imgur.com/dLbjZr8_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+//             style={styles.headerImage}
+//           />
+//           <Text style={styles.headerText}>Select any identities that best suit you!</Text>
+//           <Text style={styles.sectionTitle}>Gender</Text>
+//           <FlatList
+//             data={theGenders}
+//             horizontal
+//             showsHorizontalScrollIndicator={false}
+//             keyExtractor={(item) => item.id.toString()}
+//             renderItem={({ item }) => renderProductCard(item, handleGenderPress, selectedGender)}
+//           />
+//           <Text style={styles.sectionTitle}>Sexual Orientation</Text>
+//           <FlatList
+//             data={theOrientations}
+//             horizontal
+//             showsHorizontalScrollIndicator={false}
+//             keyExtractor={(item) => item.id.toString()}
+//             renderItem={({ item }) => renderProductCard(item, handleOrientationPress, selectedOrientation)}
+//           />
+//           <Text style={styles.sectionTitle}>Ethnic Background</Text>
+//           <FlatList
+//             data={theBackgrounds}
+//             horizontal
+//             showsHorizontalScrollIndicator={false}
+//             keyExtractor={(item) => item.id.toString()}
+//             renderItem={({ item }) => renderProductCard(item, handleBackgroundPress, selectedBackground)}
+//           />
+//           <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+//             <Text style={styles.continueButtonText}>></Text>
 //           </TouchableOpacity>
-//         ))} */}
-
-//         <FlatList
-//           data={theGenders}
-//           horizontal
-//           showsHorizontalScrollIndicator={false}
-//           keyExtractor={(item) => item.id.toString()}
-//           renderItem={renderProductCard}
-//         />
-
-//         <Text style={styles.sectionTitle}>Sexual Orientation</Text>
-//         <FlatList
-//           data={theOrientations}
-//           horizontal
-//           showsHorizontalScrollIndicator={false}
-//           keyExtractor={(item) => item.id.toString()}
-//           renderItem={renderProductCard}
-//         />
-
-//         <Text style={styles.sectionTitle}>Ethnic Background</Text>
-//         <FlatList
-//           data={theBackgrounds}
-//           horizontal
-//           showsHorizontalScrollIndicator={false}
-//           keyExtractor={(item) => item.id.toString()}
-//           renderItem={renderProductCard}
-//         />
-//       </View>
-//     </ScrollView>
+//         </View>
+//       </ScrollView>
 //     </ImageBackground>
 //   );
 // }
@@ -260,62 +204,9 @@
 //     flexDirection: "column",
 //     alignItems: "center",
 //   },
-//   buttonContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     width: '100%',
-//     marginBottom: 10,
-//     marginTop: 40,
-//   },
-//   buttonStyle2: {
-//     width: '80%',
-//     alignItems: "center",
-//     justifyContent: "center",
-//     margin: 10,
-//     paddingVertical: 50,
-//     paddingHorizontal: 30,
-//     elevation: 3,
-//     backgroundColor: "#FFFC00",
-//     borderColor: "black",
-//     borderWidth: 1,
-//   },
-//   buttonText2: {
-//     fontSize: 25,
-//     letterSpacing: 0.5,
-//     color: "black",
-//   },
-//   buttonStyle3: {
-//     alignItems: "center",
-//     justifyContent: "center",
-//     margin: 10,
-//     marginTop: 0,
-//     width: '40%',
-//     paddingVertical: 10,
-//     paddingHorizontal: 10,
-//     borderRadius: 30,
-//     elevation: 3,
-//     backgroundColor: "#FFFC00",
-//     borderColor: "black",
-//     borderWidth: 1,
-//   },
-//   buttonText3: {
-//     fontSize: 15,
-//     lineHeight: 21,
-//     letterSpacing: 0.5,
-//     color: "black",
-//   },
-//   filterButton: {
-//     alignItems: "center",
-//     justifyContent: "center",
-//     marginLeft: 250,
-//     marginTop: 10,
-//     paddingVertical: 10,
-//     paddingHorizontal: 15,
-//     borderRadius: 30,
-//     elevation: 3,
-//     backgroundColor: "lightgrey",
-//     borderColor: "black",
-//     borderWidth: 1,
+//   backgroundImage: {
+//     flex: 1,
+//     width: "100%",
 //   },
 //   cardContainer: {
 //     margin: 20,
@@ -325,7 +216,12 @@
 //     overflow: 'hidden',
 //     height: 230,
 //     padding: 10,
-//     marginBottom: 50,
+//     marginBottom: 10,
+//     borderColor: 'transparent',
+//     borderWidth: 2,
+//   },
+//   selectedCard: {
+//     borderColor: 'blue',
 //   },
 //   cardImage: {
 //     marginLeft: 10,
@@ -341,46 +237,19 @@
 //   },
 //   cardDescription: {
 //     textAlign: 'center',
-//     marginTop: 20,
+//     marginTop: 10,
 //     fontSize: 14,
 //     color: '#333',
 //   },
-//   popupTitle: {
-//     fontSize: 30,
-//     margin: 20,
-//     fontWeight: 'bold',
-//   },
-//   popupImage: {
-//     width: 350,
-//     height: 300,
-//     borderRadius: 25,
-//   },
-//   popupDescription: {
-//     marginTop: 20,
-//     fontSize: 16,
-//     lineHeight: 22,
-//     textAlign: 'center',
-//   },
-//   popupFooter: {
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center",
-//     backgroundColor: 'lightyellow',
-//     marginTop: 90,
-//     padding: 20,
-//   },
-//   popupFooterText: {
-//     fontSize: 20,
-//     marginTop: 50,
-//   },
 //   headerImage: {
-//     width: 428,
+//     width: 328,
 //     height: 200,
 //   },
 //   headerText: {
 //     marginTop: 10,
-//     fontSize: 18,
+//     fontSize: 15,
 //     textAlign: 'center',
+//     color: 'grey',
 //   },
 //   sectionTitle: {
 //     marginRight: 175,
@@ -388,116 +257,131 @@
 //     fontSize: 20,
 //     marginTop: 20,
 //   },
+//   continueButton: {
+//     bottom: 30,
+//     left: 120,
+//     backgroundColor: '#2196F3',
+//     paddingVertical: 5,
+//     paddingHorizontal: 20,
+//     borderRadius: 25,
+//     marginTop: 60,
+//   },
+//   continueButtonText: {
+//     color: 'white',
+//     fontSize: 30,
+//     fontWeight: 'bold',
+//   },
 // });
 
-
-import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground } from "react-native";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground, Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import PopupCommInfo from "../components/PopupCommInfo";
 
 export default function CommSelectionScreen() {
   const navigation = useNavigation();
   const [theGenders, setTheGenders] = useState([]);
   const [theOrientations, setTheOrientations] = useState([]);
   const [theBackgrounds, setTheBackgrounds] = useState([]);
-  const [activePopup, setActivePopup] = useState(null);
+  const [selectedGender, setSelectedGender] = useState(null);
+  const [selectedOrientation, setSelectedOrientation] = useState(null);
+  const [selectedBackground, setSelectedBackground] = useState(null);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const genders = [
     {
-      id: 'n/a',
+      id: 'n/aGender',
       title: 'Prefer Not to Respond',
       description: 'Will not associate with a community.',
       image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
     },
     {
-        id: 'cisgender female',
-        title: 'Cisgender Female',
-        description: 'Identifies with the gender assigned to her at birth.',
-        image: 'https://i.imgur.com/ivr8j5I_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-      },
-      {
-        id: 'cisgender male',
-        title: 'Cisgender Male',
-        description: 'Identifies with the gender assigned to him at birth',
-        image: 'https://i.imgur.com/avZBiIT_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
-      },
-    {
-        id: 'transgender',
-        title: 'Transgender',
-        description: 'Different gender from the one assigned at birth.',
-        image: 'https://i.imgur.com/41jJ7kP_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+      id: 'cisgender female',
+      title: 'Cisgender Female',
+      description: 'Identifies with the gender assigned to her at birth.',
+      image: 'https://i.imgur.com/ivr8j5I_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
     },
     {
-        id: 'bisgender',
-        title: 'Bigender',
-        description: 'Information about the Bigender community    boobie doobie do',
-        image: 'https://i.imgur.com/6HKmTPb_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+      id: 'cisgender male',
+      title: 'Cisgender Male',
+      description: 'Identifies with the gender assigned to him at birth',
+      image: 'https://i.imgur.com/avZBiIT_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
     },
     {
-        id: 'agender',
-        title: 'Agender',
-        description: 'Information about the Agender community    boobie doobie do',
-        image: 'https://i.imgur.com/jIR7GpM_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+      id: 'transgender',
+      title: 'Transgender',
+      description: 'Different gender from the one assigned at birth.',
+      image: 'https://i.imgur.com/41jJ7kP_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
     },
     {
-        id: 'genderfluid',
-        title: 'Genderfluid',
-        description: 'Information about the Genderfluid community    boobie doobie do',
-        image: 'https://i.imgur.com/Xh5GPp5_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+      id: 'bisgender',
+      title: 'Bigender',
+      description: 'Information about the Bigender community boobie doobie do',
+      image: 'https://i.imgur.com/6HKmTPb_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+    },
+    {
+      id: 'agender',
+      title: 'Agender',
+      description: 'Information about the Agender community boobie doobie do',
+      image: 'https://i.imgur.com/jIR7GpM_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+    },
+    {
+      id: 'genderfluid',
+      title: 'Genderfluid',
+      description: 'Information about the Genderfluid community boobie doobie do',
+      image: 'https://i.imgur.com/Xh5GPp5_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
     },
   ];
 
   const orientations = [
     {
-        id: 'n/a',
-        title: 'Prefer Not to Respond',
-        description: 'Will not associate with a community.',
-        image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+      id: 'n/aOrientation',
+      title: 'Prefer Not to Respond',
+      description: 'Will not associate with a community.',
+      image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
     },
     {
-        id: 'heterosexual',
-        title: 'Heterosexual',
-        description: 'Information about the Heterosexual community    boobie doobie do',
-        image: 'https://i.imgur.com/28OQ5ry_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+      id: 'heterosexual',
+      title: 'Heterosexual',
+      description: 'Information about the Heterosexual community boobie doobie do',
+      image: 'https://i.imgur.com/28OQ5ry_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
     },
     {
-        id: 'pansexual',
-        title: 'Pansexual',
-        description: 'Information about the Pansexual community    boobie doobie do',
-        image: 'https://i.imgur.com/oSYZBD0_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+      id: 'pansexual',
+      title: 'Pansexual',
+      description: 'Information about the Pansexual community boobie doobie do',
+      image: 'https://i.imgur.com/oSYZBD0_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
     },
     {
       id: 'another sexuality2',
       title: 'n/a',
-      description: 'Information about a sexual identity    boobie doobie do',
+      description: 'Information about a sexual identity boobie doobie do',
       image: 'https://i.imgur.com/zGcHKVl.png',
     },
   ];
 
   const backgrounds = [
     {
-        id: 'n/a',
-        title: 'Prefer Not to Respond',
-        description: 'Will not associate with a community.',
-        image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
+      id: 'n/aBackground',
+      title: 'Prefer Not to Respond',
+      description: 'Will not associate with a community.',
+      image: 'https://i.imgur.com/2lscqsC_d.jpg?maxwidth=520&shape=thumb&fidelity=high',
     },
     {
       id: 'background2',
       title: 'background2',
-      description: 'Information about the Pansexual community    boobie doobie do',
+      description: 'Information about the Pansexual community boobie doobie do',
       image: 'https://i.imgur.com/zGcHKVl.png',
     },
     {
       id: 'background3',
       title: 'background3',
-      description: 'Information about a sexual identity1    boobie doobie do',
+      description: 'Information about a sexual identity1 boobie doobie do',
       image: 'https://i.imgur.com/zGcHKVl.png',
     },
     {
       id: 'background4',
       title: 'background4',
-      description: 'Information about a sexual identity    boobie doobie do',
+      description: 'Information about a sexual identity boobie doobie do',
       image: 'https://i.imgur.com/zGcHKVl.png',
     },
   ];
@@ -513,9 +397,32 @@ export default function CommSelectionScreen() {
     setTheBackgrounds(backgrounds);
   }, []);
 
+  const handleGenderPress = (id) => {
+    setSelectedGender(id);
+  };
 
-  const renderProductCard = ({ item }) => (
-    <TouchableOpacity style={styles.cardContainer} onPress={() => setActivePopup(item.id)}>
+  const handleOrientationPress = (id) => {
+    setSelectedOrientation(id);
+  };
+
+  const handleBackgroundPress = (id) => {
+    setSelectedBackground(id);
+  };
+
+  const handleContinue = () => {
+    console.log('Selected Gender:', selectedGender);
+    console.log('Selected Orientation:', selectedOrientation);
+    console.log('Selected Background:', selectedBackground);
+  };
+
+  const renderProductCard = (item, handlePress, selectedId) => (
+    <TouchableOpacity
+      style={[
+        styles.cardContainer,
+        selectedId === item.id && { borderColor: '#2196F3' }
+      ]}
+      onPress={() => handlePress(item.id)}
+    >
       <Image style={styles.cardImage} source={{ uri: item.image }} />
       <Text style={styles.cardTitle}>{item.title}</Text>
       <Text style={styles.cardDescription}>{item.description}</Text>
@@ -524,133 +431,67 @@ export default function CommSelectionScreen() {
 
   return (
     <ImageBackground 
-      source={{ uri: 'https://i.imgur.com/BrJDOVG_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
+      source={{ uri: 'https://i.imgur.com/yVDecp2_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
       style={styles.backgroundImage}
     >
-    <ScrollView>
-      <View style={styles.container}>
-        {genders.map((gender) => (
-          <PopupCommInfo key={gender.id} trigger={activePopup === gender.id} setTrigger={() => setActivePopup(null)}>
-            <ImageBackground 
-              source={{ uri: 'https://i.imgur.com/BrJDOVG_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
-              style={styles.popupBackground}
-            >
-              <Text style={styles.popupTitle}>{gender.title}</Text>
-              <Image
-                source={{ uri: gender.image }}
-                style={styles.popupImage}
-              />
-              <Text style={styles.popupDescription}>{gender.description}</Text>
-              <View style={styles.popupFooter}>
-                <Text style={styles.popupFooterText}>Would you like to join the community?</Text>
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.buttonStyle3}>
-                    <Text style={styles.buttonText3}>Don't Join</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("Meeting Connections")}>
-                    <Text style={styles.buttonText3}>Join!</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ImageBackground>
-          </PopupCommInfo>
-        ))}
-        {orientations.map((orientation) => (
-          <PopupCommInfo key={orientation.id} trigger={activePopup === orientation.id} setTrigger={() => setActivePopup(null)}>
-            <ImageBackground 
-              source={{ uri: 'https://i.imgur.com/BrJDOVG_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
-              style={styles.popupBackground}
-            >
-              <Text style={styles.popupTitle}>{orientation.title}</Text>
-              <Image
-                source={{ uri: orientation.image }}
-                style={styles.popupImage}
-              />
-              <Text style={styles.popupDescription}>{orientation.description}</Text>
-              <View style={styles.popupFooter}>
-                <Text style={styles.popupFooterText}>Would you like to join the community?</Text>
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.buttonStyle3}>
-                    <Text style={styles.buttonText3}>Don't Join</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("Meeting Connections")}>
-                    <Text style={styles.buttonText3}>Join!</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ImageBackground>
-          </PopupCommInfo>
-        ))}
-
-        {backgrounds.map((background) => (
-          <PopupCommInfo key={background.id} trigger={activePopup === background.id} setTrigger={() => setActivePopup(null)}>
-            <ImageBackground 
-              source={{ uri: 'https://i.imgur.com/BrJDOVG_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
-              style={styles.popupBackground}
-            >
-              <Text style={styles.popupTitle}>{background.title}</Text>
-              <Image
-                source={{ uri: background.image }}
-                style={styles.popupImage}
-              />
-              <Text style={styles.popupDescription}>{background.description}</Text>
-              <View style={styles.popupFooter}>
-                <Text style={styles.popupFooterText}>Would you like to join the community?</Text>
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.buttonStyle3}>
-                    <Text style={styles.buttonText3}>Don't Join</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.buttonStyle3} onPress={() => navigation.replace("Meeting Connections")}>
-                    <Text style={styles.buttonText3}>Join!</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ImageBackground>
-          </PopupCommInfo>
-        ))}
-
-        <Image
-          source={{ uri: "https://pbs.twimg.com/media/FULacdXX0AMqQKq?format=jpg&name=4096x4096" }}
-          style={styles.headerImage}
-        />
-        <Text style={styles.headerText}>Select your identity that best suits you!</Text>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text>Filter</Text>
+      <ScrollView
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}
+      >
+        <View style={styles.container}>
+          <Image
+            source={{ uri: "https://i.imgur.com/msUPFJT_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+            style={styles.headerImage}
+          />
+          <Text style={styles.headerText}>Select any identities that best suit you!</Text>
+          <Text style={{ marginRight: 275, fontWeight: "bold", fontSize: 20, marginTop: 20 }}>Gender</Text>
+          <FlatList
+            data={theGenders}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => renderProductCard(item, handleGenderPress, selectedGender)}
+          />
+          <Text style={styles.sectionTitle}>Sexual Orientation</Text>
+          <FlatList
+            data={theOrientations}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => renderProductCard(item, handleOrientationPress, selectedOrientation)}
+          />
+          {/* <Text style={styles.sectionTitle}>Ethnic Background</Text>
+          <FlatList
+            data={theBackgrounds}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => renderProductCard(item, handleBackgroundPress, selectedBackground)}
+          /> */}
+        </View>
+      </ScrollView>
+      <Animated.View style={[styles.continueButtonContainer, {
+        transform: [{
+          translateY: scrollY.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1],
+            extrapolate: 'clamp'
+          })
+        }]
+      }]}>
+        <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+          <Text style={styles.continueButtonText}>
+            <Image
+              source={{ uri: "https://i.imgur.com/D3rCbG0_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+              style={{ width: 40, height: 30 }}
+            />
+          </Text>
         </TouchableOpacity>
-
-        <Text style={{
-            marginRight: 270,
-            fontWeight: "bold",
-            fontSize: 20,
-            marginTop: 20,
-        }}>Gender</Text>
-        <FlatList
-          data={theGenders}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderProductCard}
-        />
-
-        <Text style={styles.sectionTitle}>Sexual Orientation</Text>
-        <FlatList
-          data={theOrientations}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderProductCard}
-        />
-
-        <Text style={styles.sectionTitle}>Ethnic Background</Text>
-        <FlatList
-          data={theBackgrounds}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderProductCard}
-        />
-      </View>
-    </ScrollView>
+      </Animated.View>
+      {/* <View style={{marginTop: 100}}></View> */}
     </ImageBackground>
   );
 }
@@ -660,74 +501,11 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "column",
     alignItems: "center",
+    marginBottom: 90,
   },
   backgroundImage: {
     flex: 1,
     width: "100%",
-  },
-  popupBackground: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-    height: 1000,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: 10,
-    marginTop: 40,
-  },
-  buttonStyle2: {
-    width: '80%',
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 10,
-    paddingVertical: 50,
-    paddingHorizontal: 30,
-    elevation: 3,
-    backgroundColor: "#FFFC00",
-    borderColor: "black",
-    borderWidth: 1,
-  },
-  buttonText2: {
-    fontSize: 25,
-    letterSpacing: 0.5,
-    color: "black",
-  },
-  buttonStyle3: {
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 10,
-    marginTop: 0,
-    width: '40%',
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 30,
-    elevation: 3,
-    backgroundColor: "#FFFC00",
-    borderColor: "black",
-    borderWidth: 1,
-  },
-  buttonText3: {
-    fontSize: 15,
-    lineHeight: 21,
-    letterSpacing: 0.5,
-    color: "black",
-  },
-  filterButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 250,
-    marginTop: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 30,
-    elevation: 3,
-    backgroundColor: "lightgrey",
-    borderColor: "black",
-    borderWidth: 1,
   },
   cardContainer: {
     margin: 20,
@@ -737,7 +515,12 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     height: 230,
     padding: 10,
-    marginBottom: 50,
+    marginBottom: 10,
+    borderColor: 'transparent',
+    borderWidth: 2,
+  },
+  selectedCard: {
+    borderColor: 'blue',
   },
   cardImage: {
     marginLeft: 10,
@@ -757,48 +540,39 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
-  popupTitle: {
-    fontSize: 30,
-    fontWeight: 'bold',
-   
-  },
-  popupImage: {
-    width: 350,
-    height: 370,
-    borderRadius: 25,
-    marginBottom: 20,
-  },
-  popupDescription: {
-    marginTop: 20,
-    fontSize: 16,
-    lineHeight: 22,
-    textAlign: 'center',
-  },
-  popupFooter: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: 'lightyellow',
-    marginTop: 50,
-    padding: 10,
-  },
-  popupFooterText: {
-    fontSize: 20,
-    marginTop: 30,
-  },
   headerImage: {
-    width: 428,
-    height: 200,
+    width: 418,
+    height: 220,
+    marginTop: 20,
   },
   headerText: {
     marginTop: 10,
-    fontSize: 18,
+    fontSize: 15,
     textAlign: 'center',
+    color: 'grey',
   },
   sectionTitle: {
     marginRight: 175,
     fontWeight: "bold",
     fontSize: 20,
     marginTop: 20,
+  },
+  continueButtonContainer: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    zIndex: 1000,
+  },
+  continueButton: {
+    backgroundColor: '#0fadfe',
+    paddingVertical: 13,
+    paddingHorizontal: 13,
+    borderRadius: 100,
+    
+  },
+  continueButtonText: {
+    color: 'white',
+    fontSize: 30,
+    fontWeight: 'bold',
   },
 });

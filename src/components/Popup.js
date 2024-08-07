@@ -8,7 +8,7 @@ function Popup({ trigger, setTrigger, children }) {
     <View style={styles.popup}>
       <View style={styles.popupInner}>
         <TouchableOpacity style={styles.closeBtn} onPress={() => setTrigger(false)}>
-          <Text style={styles.closeText}>Close</Text>
+          <Text style={styles.closeText}>X</Text>
         </TouchableOpacity>
         {children}
       </View>
@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
   },
   popupInner: {
     backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
+    padding: 10,
+    borderRadius: 14,
     width: '80%',
     alignItems: 'center',
   },
@@ -38,8 +38,9 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   closeText: {
-    color: 'red',
+    color: 'black',
     fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

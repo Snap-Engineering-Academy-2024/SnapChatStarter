@@ -150,13 +150,13 @@ export default function ProfileScreen() {
 
 
         <Image
-          source={{ uri: "https://i.imgur.com/YtlzPfc_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
-          style={{ width: 380, height: 350 }}
+          source={{ uri: "https://i.imgur.com/Ht4cY9d_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
+          style={{ width: 400, height: 200 }}
         />
 
        <View style={styles.profileContainer}>
         <Image
-          source={{ uri: "https://i.imgur.com/y6nKGQF_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //pfp
+          source={{ uri: "https://i.imgur.com/xSHVVbN_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //pfp
           style={{ width: 100, height: 100, borderRadius: 15, marginRight: 20 }}
         />
         <View>
@@ -195,7 +195,7 @@ export default function ProfileScreen() {
         <TouchableOpacity
           style={styles.buttonStyle2}
           onPress={() => {
-            navigation.navigate("Select Identity!");
+            navigation.navigate("Identity");
           }}>
           <Text style={styles.buttonText2}>+ Add Community</Text>
         </TouchableOpacity>
@@ -224,6 +224,12 @@ export default function ProfileScreen() {
 
 
       <Text style={{marginRight: 300, fontWeight:'bold', marginTop: 30}}>Charms</Text>
+      <TouchableOpacity style={styles.buttonStyle_Option}>
+        <Text>
+        ⛭Options
+        </Text>
+        </TouchableOpacity>
+
 
         <FlatList
           data={badges}
@@ -232,6 +238,18 @@ export default function ProfileScreen() {
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderProductCard}
         />
+
+        <Text style={{marginRight: 200, fontWeight:'bold', marginTop: 30}}>Spotlight and Snap Map</Text>
+        <TouchableOpacity style={styles.buttonStyle_Option}>
+                <Text>
+                ⛭Options
+                </Text>
+                </TouchableOpacity>
+        <Image
+          source={{ uri: "https://i.imgur.com/AP3Ly6W_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }} //header 
+          style={{ width: 360, height: 130, marginTop: 5, borderRadius: 20 }}
+        />
+
 
         <Button onPress={handleSignOut} title="Log Out" />
 
@@ -272,7 +290,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderRadius: 20,
     elevation: 3,
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#dee0df',
+    
+  },
+  buttonStyle_Option: {
+    marginLeft: 280,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#dee0df',
     
   },
   buttonText2: {
@@ -283,11 +310,11 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     margin: 20,
-    width: 200,
+    width: 170,
     backgroundColor: '#ffffff',
-    borderRadius: 8,
+    borderRadius: 20,
     overflow: 'hidden',
-    height: 160,
+    height: 180,
     padding: 10,
     marginBottom: 50,
   },
@@ -299,6 +326,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 14,
     fontWeight: 'bold',
+    marginTop: 10,
   },
   buttonContainer: {
     flexDirection: 'row',

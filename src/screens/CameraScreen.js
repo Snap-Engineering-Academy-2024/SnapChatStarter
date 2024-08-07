@@ -18,11 +18,6 @@ import { useNavigation } from "@react-navigation/native";
 
 import PopupPingNotification from "../components/PopupPingNotification";
 
-
-
-import defaultPhoto from "../../assets/snapchat/notificationPic.png";
-
-
 export default function CameraScreen({ navigation, focused }) {
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
@@ -78,10 +73,11 @@ export default function CameraScreen({ navigation, focused }) {
         </PopupPingNotification>
 
         <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
-          <Image style={{ width: 150, height: 150 }} source={defaultPhoto}
-          />
-          <Text style={{fontSize: 27}}>Community Ping!</Text>
-          <Text>Will allow you to join a community and find others within your community who share the same interests.</Text>
+          <Image style={{ width: 310, height: 200 }} 
+        source={{ uri: "https://i.imgur.com/8uEEtly_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+        />
+          <Text style={{fontSize: 15, fontWeight: 'bold'}}>Introducing Community Ping!</Text>
+          <Text>Join your community and find others within your community who share your interests.</Text>
           
           <TouchableOpacity 
           style={styles.buttonStyle2} 
@@ -90,7 +86,7 @@ export default function CameraScreen({ navigation, focused }) {
           }}
           >
 
-          <Text style={styles.buttonText2}>Check Out New Feature!</Text>
+          <Text style={styles.buttonText2}>Let's Go!</Text>
 
           </TouchableOpacity>
         </Popup>
@@ -259,9 +255,9 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingVertical: 20,
     paddingHorizontal: 32,
-    borderRadius: 20,
+    borderRadius: 50,
     elevation: 3,
-    backgroundColor: '#FFFC00',
+    backgroundColor: '#2196F3',
   },
   closeButtonStyle: {
     alignItems: 'center',
@@ -283,7 +279,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 21,
     letterSpacing: 0.5,
-    color: 'black',
+    color: 'white',
+    fontWeight: 'bold',
   },
   message: {
     color: 'white',
