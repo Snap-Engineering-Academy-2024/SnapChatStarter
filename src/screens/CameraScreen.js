@@ -15,9 +15,12 @@ import { Button } from "react-native-elements";
 import Popup from "../components/Popup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-
+import { useAuthentication } from "../utils/hooks/useAuthentication";
+import PopupPingNotification from "../components/PopupPingNotification";
 
 import defaultPhoto from "../../assets/snapchat/notificationPic.png";
+
+
 
 
 export default function CameraScreen({ navigation, focused }) 
@@ -34,6 +37,35 @@ export default function CameraScreen({ navigation, focused })
   const { user } = useAuthentication();
   const [communities, setCommunities] = useState("");
   const [popupTrigger, setPopupTrigger] = useState(false);
+
+  const [popupTriggePing, setPopupTriggerPing] = useState(false);
+
+
+  const fetchUserData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles') // Replace with your table name
+        .select('community')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+      console.log(data.community);
+      if (data.community === null)
+        {
+          setPopupTrigger(true);
+          console.log("shows popup.");
+        }
+        else
+        {
+          console.log("doesnt show initial popup");
+        }
+
+    } catch (error) {
+      console.error('Error fetching user data:', error.message);
+      
+    }
+  };
 
 
   useEffect(() => {
@@ -74,7 +106,6 @@ export default function CameraScreen({ navigation, focused })
 
           </TouchableOpacity>
         </PopupPingNotification>
-
         <Popup trigger={popupTrigger} setTrigger={setPopupTrigger}>
           <Image style={{ width: 150, height: 150 }} source={defaultPhoto}
           />
@@ -92,9 +123,6 @@ export default function CameraScreen({ navigation, focused })
 
           </TouchableOpacity>
         </Popup>
-        <TouchableOpacity onPress={() => setPopupTrigger(true)} style={styles.button}>
-          <Text style={styles.text}>Show Popup</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.buttonStyle2}

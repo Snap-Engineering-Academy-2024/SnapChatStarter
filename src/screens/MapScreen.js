@@ -17,7 +17,7 @@ import * as Location from "expo-location";
 import { supabase } from '../utils/hooks/supabase';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import defaultPhoto from "../../assets/snapchat/notificationPic.png";
-
+import PopupPingNotification from "../components/PopupPingNotification";
 import { useAuthentication } from '../utils/hooks/useAuthentication';
 
 
