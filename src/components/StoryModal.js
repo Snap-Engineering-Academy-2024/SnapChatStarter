@@ -9,11 +9,13 @@ import {
   Dimensions,
   SafeAreaView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const StoryModal = ({ showStory, setShowStory, selectedCompany }) => {
+  const navigation = useNavigation();
   return (
     <Modal
       visible={showStory}
@@ -23,7 +25,31 @@ const StoryModal = ({ showStory, setShowStory, selectedCompany }) => {
     >
       <View style={styles.centeredView}>
         <SafeAreaView style={styles.modalView}>
-          <Text style={styles.title}>{selectedCompany.username}</Text>
+          <View style={styles.logoAndName}>
+            <TouchableOpacity
+              style={styles.title}
+              onPress={() => {
+                navigation.navigate("CompanyPage",{ selectedCompany });
+                setShowStory(false);
+              }}
+            >
+              <Image
+                style={styles.bitmojiImage}
+                source={{
+                  uri: selectedCompany.logo_url,
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.title}
+              onPress={() => {
+                navigation.navigate("CompanyPage",{ selectedCompany });
+                setShowStory(false);
+              }}
+            >
+              <Text style={styles.title}>{selectedCompany.username}</Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity onPress={() => setShowStory(false)}>
             <View style={styles.imageContainer}>
               {selectedCompany.header_url && (
@@ -71,10 +97,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    marginBottom: 16,
     fontWeight: "bold",
     color: "white",
-    alignSelf: "flex-start",
   },
   companyPhoto: {
     width: SCREEN_WIDTH / 1,
@@ -84,8 +108,20 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    justifyContent: "center", // Center the image vertically
-    alignItems: "center", // Center the image horizontally
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bitmojiImage: {
+    width: 35,
+    height: 35,
+    borderRadius: 50,
+  },
+  logoAndName: {
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
   },
 });
 

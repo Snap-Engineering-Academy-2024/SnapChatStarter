@@ -8,9 +8,6 @@ import {
   SectionList,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { useNavigation } from "@react-navigation/native";
-import { findAstrologySign } from "../utils/hooks/findAstrologySign";
-import { findJoinStatus } from "../utils/hooks/findJoinStatus";
 import DraggableButtonList from "../components/DraggableButtons";
 import { supabase } from "../utils/hooks/supabase";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
@@ -36,30 +33,10 @@ const DATA = [
   },
 ];
 
-const ProfileSections = ({ onPressHandlers }) => {
+const ProfileSections = ({ onPressHandlers, badgeOnPressHandlers, astrology }) => {
   const { user } = useAuthentication();
-  const navigation = useNavigation();
-  const [astrology, setAstrology] = useState("Taurus");
-  const userSign = findAstrologySign();
-  const userJoinStatus = findJoinStatus();
   const [name, setName] = useState("Name")
   const [username, setUsername] = useState("username")
-
-  useEffect(() => {
-    setAstrology(userSign.sign);
-  }, [userSign.sign]);
-
-  const SnapTogetherRedirect = async () => {
-    if (userJoinStatus) {
-      navigation.navigate("SnapTogether");
-    } else {
-      setShowAbout(true);
-    }
-  };
-  const badgeOnPressHandlers = {
-    [astrology]: () => navigation.navigate("Astrology"),
-    "🫶🏻🫶🏽🫶🏿": SnapTogetherRedirect,
-  };
 
   useEffect(() => {
     if (user !== null) {
