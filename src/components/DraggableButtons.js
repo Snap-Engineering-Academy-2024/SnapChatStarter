@@ -26,7 +26,7 @@ const DraggableBadgeList = ({ badgeOnPressHandlers, astrology }) => {
           { backgroundColor: isActive ? "blue" : item.color },
         ]}
         onLongPress={drag}
-        onPress={() => badgeOnPressHandlers[label]?.()} // Safely call the handler if it exists
+        onPress={() => badgeOnPressHandlers[label]?.()}
       >
         <Text style={styles.badgeText}>{label}</Text>
       </TouchableOpacity>

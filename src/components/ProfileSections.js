@@ -33,7 +33,7 @@ const DATA = [
   },
 ];
 
-const ProfileSections = ({ onPressHandlers, badgeOnPressHandlers, astrology }) => {
+const ProfileSections = ({ onPressHandlers, badgeOnPressHandlers, astrology, userJoinStatus }) => {
   const { user } = useAuthentication();
   const [name, setName] = useState("Name")
   const [username, setUsername] = useState("username")
@@ -77,41 +77,48 @@ const ProfileSections = ({ onPressHandlers, badgeOnPressHandlers, astrology }) =
       {/* Badges */}
       <View style={styles.badges}>
           <DraggableButtonList
-            onPressHandlers={badgeOnPressHandlers}
+            badgeOnPressHandlers={badgeOnPressHandlers}
             astrology={astrology}
           />
         </View>
-      <SectionList
-      sections={DATA}
-      keyExtractor={(item, index) => item.name + index}
-      renderItem={({ item }) => (
-        <View style={styles.item}>
-          <TouchableOpacity
-            style={styles.cardContainer}
-            onPress={() => onPressHandlers[item.name]()}
-          >
-            <View style={styles.iconContainer}>
-  {item.name !== "SnapTogether" ? (
-    <Icon name={item.icon} size={24} color="#000" />
-  ) : (
-    <Image
-      source={require("../../assets/SnapTogether/SnapTogetherLogoPurple.png")}
-      style={styles.logo}
-    />
-  )}
-</View>
-            <View style={styles.textContainer}>
-              <Text style={styles.title}>{item.name}</Text>
-              <Text style={styles.subtitle}>{item.description}</Text>
-            </View>
-            <Icon name="chevron-right" size={24} color="#000" />
-          </TouchableOpacity>
-        </View>
-      )}
-      renderSectionHeader={({ section: { title } }) => (
-        <Text style={styles.header}>{title}</Text>
-      )}
-    />
+        <SectionList
+        sections={DATA}
+        keyExtractor={(item, index) => item.name + index}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <TouchableOpacity
+              style={styles.cardContainer}
+              onPress={() => onPressHandlers[item.name]()}
+            >
+              <View style={styles.iconContainer}>
+                {item.name !== "SnapTogether" ? (
+                  <Icon name={item.icon} size={24} color="#000" />
+                ) : (
+                  <View style={styles.iconContainerWithBadge}>
+                    <Image
+                      source={require("../../assets/SnapTogether/SnapTogetherLogoPurple.png")}
+                      style={styles.logo}
+                    />
+                  </View>
+                )}
+              </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.title}>{item.name}</Text>
+                <Text style={styles.subtitle}>{item.description}</Text>
+              </View>
+              <Icon name="chevron-right" size={24} color="#000" />
+              {item.name === "SnapTogether" && userJoinStatus === false && (
+                <View style={styles.badgeContainer}>
+                  <Text style={styles.badgeText}>New</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
+        renderSectionHeader={({ section: { title } }) => (
+          <Text style={styles.header}>{title}</Text>
+        )}
+      />
     </View>
   );
 };
@@ -175,7 +182,23 @@ const styles = StyleSheet.create({
   logo: {
     width: 25,
     height: 25,
-  }
+  },
+  iconContainerWithBadge: {
+    flex: 1
+  },
+  badgeContainer: {
+    position: "absolute",
+    right: 60,
+    backgroundColor: "#10adff",
+    borderRadius: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+  },
+  badgeText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
 
 export default ProfileSections;

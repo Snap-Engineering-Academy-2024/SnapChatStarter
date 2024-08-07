@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     logoAndName: {
         alignSelf: "flex-start",
         flexDirection: "row",
-        alignItems: "center", // Keep alignment for vertical centering
+        alignItems: "center",
         gap: 10,
         paddingLeft: 10,
         paddingBottom: 150
@@ -132,21 +132,20 @@ const styles = StyleSheet.create({
     buttons: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between", // Align items next to each other
-        width: "100%", // Ensure the container takes full width
-        paddingHorizontal: 10, // Optional: Add some padding for better spacing
+        justifyContent: "space-between",
+        width: "100%",
+        paddingHorizontal: 10,
       },
       subscribe: {
         height: 50,
         width: ScreenWidth / 1.25,
         paddingHorizontal: 20,
-        justifyContent: "center", // Keep for horizontal centering
+        justifyContent: "center",
         marginBottom: 16,
         borderRadius: 20,
         backgroundColor: "#10adff",
         gap: 5,
-        // Adjust this value to fine-tune alignment
-        marginRight: 5, // or 0 for no space
+        marginRight: 5,
       },
       expand:{
         paddingBottom: 15
@@ -168,7 +167,6 @@ const styles = StyleSheet.create({
       selectorButtonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        // margin: 10,
       },
 });
 
