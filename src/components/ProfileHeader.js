@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import { colors } from "../../assets/themes/colors";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -8,6 +8,8 @@ import { supabase } from "../utils/hooks/supabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { BottomSheet, Button } from "@rneui/themed";
 
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
+
 export default function ProfileHeader() {
   const navigation = useNavigation();
 
@@ -15,6 +17,7 @@ export default function ProfileHeader() {
 
   return (
     <View style={styles.container}>
+    <View style={styles.topContainer}>
       <View style={styles.headerLeft}>
         <Pressable
           style={styles.buttons}
@@ -22,28 +25,48 @@ export default function ProfileHeader() {
             navigation.navigate("Camera");
           }}
         >
-          <Icon name="arrow-back" size={22} />
+          <Icon name="arrow-back-ios" size={22} color="white"/>
         </Pressable>
       </View>
       <View style={styles.headerRight}>
         <TouchableOpacity
           style={styles.buttons}
         >
-          <Icon name="share" size={22} />
+          <Icon name="ios-share" size={22} color="white"/>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.buttons}
           onPress={() => navigation.navigate("Settings")}
         >
-          <Icon name="settings" size={22} />
+          <Icon name="settings" size={22} color="white"/>
         </TouchableOpacity>
+      </View>
+    </View>
+    <View style={styles.bottomContainer}>
+    <View style={styles.headerLeft}>
+        <Pressable
+          style={styles.buttons}
+        >
+          <Icon name="checkroom" size={22} color="white"/>
+        </Pressable>
+      </View>
+      <View style={styles.headerRight}>
+        <TouchableOpacity
+          style={styles.buttons}
+        >
+          <Icon name="image" size={22} color="white"/>
+        </TouchableOpacity>
+      </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  container:{
+    height: SCREEN_HEIGHT / 4
+  },
+  topContainer: {
     width: "100%",
     flexDirection: "row",
     paddingHorizontal: 12,
@@ -73,5 +96,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
+    backgroundColor: "rgba(0, 0, 0, .5)"
+  },
+  bottomContainer: {
+    position: "absolute",
+    width: "100%",
+    flexDirection: "row",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    justifyContent: "space-between",
+    alignItems: "center",
+    top: "75%"
   }
 });
