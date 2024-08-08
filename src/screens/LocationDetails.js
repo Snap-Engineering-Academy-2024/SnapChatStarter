@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView,  TouchableOpacity, Dimensions, Image} from 'react-native';
 import { colors } from "../../assets/themes/colors";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { inline } from 'react-native-web/dist/cjs/exports/StyleSheet/compiler';
 import { fontHeader } from '../../assets/themes/font';
 
+const defaultImages = [
+  'https://i.postimg.cc/HsnZ2XZ4/3-Bitmojis-Icon.png',
+  'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg',
+  'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg'
+];
+
 const { height, width} = Dimensions.get('window');
 
-export default function LocationDetails({ place, onClose,  }) {
+export default function LocationDetails({ place, onClose, getImageCanSee  }) {
+  const [images, setImages] = useState([]);
+  // const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const fetchImages = async () => {
+    let fetchedImages = [];
+    if (place.photos && place.photos.length > 0) {
+      fetchedImages = await Promise.all(
+        place.photos.map(photo => getImageCanSee(photo.photo_reference))
+      );
+    }
+
+    if (fetchedImages.length === 0) {
+      fetchedImages = defaultImages;
+    }
+    setImages(fetchedImages);
+    // setLoading(false);
+  };
+
+  fetchImages();
+}, [place]);
 
   let price = "$";
   const Circle = () => {
@@ -117,7 +144,6 @@ let rootDomain;
           </TouchableOpacity>  
           </View>
           
-       
         {/* END OF HEADER SECTION */}
         <TouchableOpacity>
           <View style={styles.donateButton}>
