@@ -380,6 +380,7 @@ export default function MapScreen({ navigation }) {
           <LocationDetails
             place={selectedPlace}
             onClose={() => locationDetailsModalRef.current.close()}
+            getImageCanSee ={getImageCanSee}
           />
         </BottomSheetModal>
       </View>
