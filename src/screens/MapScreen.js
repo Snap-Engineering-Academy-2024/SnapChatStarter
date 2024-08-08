@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View, Dimensions, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import { StyleSheet, View, Dimensions, Text, TouchableOpacity, ScrollView, Image, SafeAreaView } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Location from "expo-location";
@@ -13,6 +13,7 @@ import LocationList from "./LocationList";
 import LocationDetails from "./LocationDetails";
 import placesListTest from "./placesListTest.json"
 import mixPlacesTest from "./mixPlacesTest.json"
+import Header from "../components/Header";
 
 
 export default function MapScreen({ navigation }) {
@@ -21,6 +22,7 @@ export default function MapScreen({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [currentRegion, setCurrentRegion] = useState(null);
+  const [city, setCity] = useState('');
   const [places, setPlaces] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const mapRef = useRef(null);
@@ -28,6 +30,7 @@ export default function MapScreen({ navigation }) {
   const locationDetailsModalRef = useRef(null);
   const snapPointsLocationList = ["50%", "92%"];
   const snapPointsLocationDetails = ["50%", "92%"];
+
   useEffect(() => {
     const getLocation = async () => {
       try {
@@ -37,6 +40,7 @@ export default function MapScreen({ navigation }) {
           return;
         }
         let location = await Location.getCurrentPositionAsync({});
+        setCity(getCityName(location.coords.latitude,location.coords.longitude))
         setLocation(location);
         setCurrentRegion({
           latitude: location.coords.latitude,
@@ -50,6 +54,27 @@ export default function MapScreen({ navigation }) {
     };
     getLocation();
   }, []);
+
+  const getCityName = async (latitude, longitude) => {
+    console.log("call city function!")
+    const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+    
+    try {
+      const response = await axios.get(url);
+      const addressComponents = response.data.results[0]?.address_components || [];
+      const cityComponent = addressComponents.find(component => component.types.includes('locality'));
+      return cityComponent ? cityComponent.long_name : 'Unknown City';
+    } catch (error) {
+      console.error(error);
+      return 'Error retrieving city name';
+    }
+  };
+
+  const handleRegionChangeComplete = async (region) => {
+    const cityName = await getCityName(region.latitude, region.longitude);
+    setCity(cityName);
+  };
 
   const handleRecenter = () => {
     if (location && mapRef.current) {
@@ -82,8 +107,9 @@ export default function MapScreen({ navigation }) {
       'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png';
   
     try {
-      const response = await axios.get(url);
-      const places = response.data.results;
+      // const response = await axios.get(url);
+      // const places = response.data.results;
+      const places = placesListTest;
   
       const placesWithImages = await Promise.all(places.map(async place => {
         if (place.photos && place.photos.length > 0) {
@@ -129,7 +155,6 @@ export default function MapScreen({ navigation }) {
     //   "police hospital emergency",
     //   "free wifi place",
     //   "food bank free food salvation army",
-    //   "free shower library"
     // ];
 
     try {
@@ -177,9 +202,40 @@ export default function MapScreen({ navigation }) {
           ref={mapRef}
           style={styles.map}
           region={currentRegion}
-          showsUserLocation={true}
+          showsUserLocation={false}
           showsMyLocationButton={true}
+          onRegionChangeComplete={handleRegionChangeComplete}
         >
+          {console.log(JSON.stringify(location,null,4))}
+          {location && (
+            <>
+              <Marker
+                coordinate={{
+                  latitude: location.coords.latitude,
+                  longitude: location.coords.longitude,
+                }}
+              >
+                <Image
+                  source={{ uri: 'https://i.postimg.cc/yxYLZHRT/Me-Bitmoji-Icon-1.png' }}
+                  style={{ width: 100, height: 100 }}
+                />
+              </Marker>
+              
+              <Marker
+                coordinate={{
+                  latitude: location.coords.latitude - 0.021,
+                  longitude: location.coords.longitude + 0.02,
+                }}
+              >
+                <Image
+                  source={{ uri: 'https://i.postimg.cc/432bnSGD/Isabella-Bitmoji.png' }}
+                  style={{ width: 100, height: 100 }}
+                />
+              </Marker>
+            </>
+
+          )}
+
           {places.map((place, index) => (
             <Marker
               key={index}
@@ -187,10 +243,11 @@ export default function MapScreen({ navigation }) {
                 latitude: place.geometry.location.lat,
                 longitude: place.geometry.location.lng,
               }}
-              title={place.name}
-              description={place.vicinity}
+              // title={place.name}
+              // description={place.vicinity}
+              onPress={() => handlePlacePress(place)}
             >
-              <Image style={{ height: 50, width:40 }} source={{uri: place.mapIconImage}}/>
+              <Image style={{ height: 40, width:40 }} source={{uri: place.mapIconImage}}/>
             </Marker>
           ))}
         </MapView>
@@ -210,15 +267,37 @@ export default function MapScreen({ navigation }) {
             >
               <TouchableOpacity
                 style={styles.circleButton}
-                onPress={() => handleShowPlaces("career center homeless social service")}
+                onPress={() => console.log("Pressed the useless button!")}
               >
                 <Ionicons name="search" size={20} color="black" />
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.button}
+                onPress={() => console.log("Pressed the useless button!")}
+              >
+                <Image source={require("../../assets/Circle moji.png")}
+                style={styles.image1InButton}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => console.log("Pressed the useless button!")}
+              >
+                <Image source={{uri: 'https://i.postimg.cc/HsnZ2XZ4/3-Bitmojis-Icon.png'}}
+                style={styles.imageInButton}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.button}
                 onPress={() => handleShowSafeHaven()}
               >
+                <View style={styles.iconContainer}>
+                  {/* <Image style={{ height: 40, width:40 }} source={{uri: 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png'}}/> */}
+                  <Ionicons name="home" size={20} color="white" />
+                </View>
                 <Text style={styles.buttonText}>SafeHaven</Text>
               </TouchableOpacity>
 
@@ -227,6 +306,11 @@ export default function MapScreen({ navigation }) {
             </ScrollView>
           </View>
         </View>
+
+        <View style={styles.cityContainer}>
+          <Text style={styles.cityText}>{city}</Text>
+        </View>
+
         <BottomSheetModal
           ref={locationListModalRef}
           index={0}
@@ -311,18 +395,29 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.belowPage,
     borderRadius: 80,
-    padding: 10,
-    marginHorizontal: 3,
+    paddingHorizontal: 10,
+    marginHorizontal: 4,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  imageInButton: {
+    width: 90, 
+    height: 40,
+    resizeMode: 'contain',
+  },
+  image1InButton: {
+    width: 40, 
+    height: 40,
+    resizeMode: 'contain',
   },
   circleButton: {
     backgroundColor: colors.belowPage,
     borderRadius: 100,
-    height: 50,
-    width: 50,
+    height: 48,
+    width: 48,
     padding: 10,
-    marginHorizontal: 3,
+    marginLeft: 10,
+    marginRight: 4,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: "center",
@@ -340,5 +435,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginRight: 6,
+  },
+  cityContainer: {
+    position: 'absolute',
+    top: 60,
+    width: '100%',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  cityText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    padding: 5,
+    borderRadius: 5,
   },
 });
