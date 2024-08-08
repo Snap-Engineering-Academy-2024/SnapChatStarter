@@ -17,7 +17,10 @@ export default {
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/Silkscreen-Regular.ttf"],
+          "fonts": [
+            "./assets/fonts/Silkscreen-Regular.ttf", 
+            "./assets/fonts/PressStart2P-Regular.ttf"
+          ],
         },
       ],
     ],

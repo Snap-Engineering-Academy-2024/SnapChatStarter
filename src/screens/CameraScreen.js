@@ -151,7 +151,7 @@ export default function CameraScreen({ navigation, focused }) {
         },
       ]}
     >
-      <View style={styles.centeredView}>
+      {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -186,7 +186,7 @@ export default function CameraScreen({ navigation, focused }) {
               </View>
             </View>
         </Modal>
-      </View>
+      </View> */}
       {/* <CameraView style={styles.camera} facing={facing} ref={cameraRef} />
       <CameraOptions flipCamera={flipCamera} />
       <CameraActions

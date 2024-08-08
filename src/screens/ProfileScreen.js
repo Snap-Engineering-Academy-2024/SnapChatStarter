@@ -1,36 +1,109 @@
-import { Image, Text, View, Button, StyleSheet, Pressable } from "react-native";
+import { Image, Text, View, StyleSheet, Pressable, ImageBackground } from "react-native";
 import { supabase } from "../utils/hooks/supabase";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { findAstrologySign } from "../utils/hooks/findAstrologySign";
-import { useAuthentication } from "../utils/hooks/useAuthentication";
+// import { findAstrologySign } from "../utils/hooks/findAstrologySign";
+// import { useAuthentication } from "../utils/hooks/useAuthentication";
+import { Button, Icon } from "@rneui/base";
 
-const handleSignOut = async () => {
-  try {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Error signing out:", error.message);
-    } else {
-      // Handle successful sign out (e.g., redirect to login screen)
-    }
-  } catch (error) {
-    console.error("Unexpected error:", error);
-  }
-};
+// const handleSignOut = async () => {
+//   try {
+//     const { error } = await supabase.auth.signOut();
+//     if (error) {
+//       console.error("Error signing out:", error.message);
+//     } else {
+//       // Handle successful sign out (e.g., redirect to login screen)
+//     }
+//   } catch (error) {
+//     console.error("Unexpected error:", error);
+//   }
+// };
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const { user } = useAuthentication();
-  const [astrology, setAstrology] = useState("Pisces");
-  const userSign = findAstrologySign();
+  // const { user } = useAuthentication();
+  // const [profile, setProfile] = useState(null);
+  // const [astrology, setAstrology] = useState("Pisces");
+  // const userSign = findAstrologySign();
 
-  useEffect(() => {
-    setAstrology(userSign.sign);
-  }),
-    [];
+  // useEffect(() => {
+  //   setAstrology(userSign.sign);
+  //   if (user) {
+  //     fetchProfiles();
+  // }
+  // }),
+  //   [], [user];
+
+  // async function fetchProfiles() {
+  //     // console.log("2 FETCHPROFILES CALLED");
+  //     try {
+  //         const { data, error } = await supabase
+  //             .from('profiles')
+  //             .select('*')
+  //             .eq('username', user.email)
+  //             .single();
+  //         if (error) {
+  //             throw error;
+  //         }
+  //         // console.log("DATA", JSON.stringify(data, null, 4));
+  //         if (data) {
+  //             await setProfile(data);
+  //             // console.log("PROFILE", JSON.stringify(profile, null, 4));
+  //         }
+  //     }
+  //     catch (error) {
+  //         console.log("Error fetching profiles: ", error.message);
+  //     }
+  // };
 
   return (
-    <View style={{ alignItems: "center" }}>
+    <ImageBackground 
+      style={styles.backgroundImage} 
+      source={require("../../assets/profile-background.png")}
+    >
+      <Text
+        style={{
+          fontFamily: "Avenir Next",
+          fontSize: 17,
+          fontWeight: "500",
+          color: "#FFFFFF",
+          marginTop: 538,
+          marginLeft: 82,
+        }}
+      >Brain Bites{"\n"}
+        <Text
+          style={{
+            fontSize: 13,
+            color: "gray"
+          }}
+        >Games for learning!
+        </Text>
+      </Text>
+      <Button 
+        title="Play now"
+        titleStyle={{
+          fontFamily: "Avenir Next",
+          fontSize: 10,
+          fontWeight: "600",
+          color: "#FFFFFF"
+        }}
+        buttonStyle={{
+          backgroundColor: "rgba(15, 173, 255, 1)",
+          // marginTop: 540,
+          borderRadius: 10,
+          marginTop: 544,
+          marginLeft: 94,
+        }}
+        onPress={() => navigation.navigate("Welcome")}
+        accessibilityLabel="Navigate to Welcome screen"
+      />
+      <Icon 
+        name="chevron-right" 
+        color="white"
+        marginTop={547}
+        marginLeft={10}
+      />
+    {/* <View style={{ alignItems: "center" }}>
       <Image
         source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
         style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
@@ -41,12 +114,7 @@ export default function ProfileScreen() {
           textAlign: "center",
         }}
       >
-        {user &&
-          user.user_metadata &&
-          user.user_metadata.email.slice(
-            0,
-            user.user_metadata.email.indexOf("@"), // gets part before @ of email address, should use profile username instead
-          )}
+        {profile?.full_name}
       </Text>
       <Button
         onPress={() => {
@@ -72,20 +140,25 @@ export default function ProfileScreen() {
           title="Settings"
         />
       </Pressable>
-    </View>
+    </View> */}
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    flexDirection: "column",
-    alignItems: "center",
+  backgroundImage: {
+    height: "100%",
+    flexDirection: "row",
   },
-  avatar: {
-    width: 150,
-    height: 150,
-    borderRadius: 150 / 2,
-    alignItems: "center",
-  },
+  // container: {
+  //   width: "100%",
+  //   flexDirection: "column",
+  //   alignItems: "center",
+  // },
+  // avatar: {
+  //   width: 150,
+  //   height: 150,
+  //   borderRadius: 150 / 2,
+  //   alignItems: "center",
+  // },
 });

@@ -3,19 +3,21 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { Button } from '@rneui/themed';
 import { useFonts } from "expo-font";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "../utils/hooks/supabase";
 
 export default function TopicsScreen() {
     const navigation = useNavigation();
     const { user } = useAuthentication();
-    const [loaded, error] = useFonts({
+    const [profile, setProfile] = useState(null);
+    const [loaded] = useFonts({
         'Silkscreen-Regular': require('../../assets/fonts/Silkscreen-Regular.ttf'),
       });
     const [topicDropdown, setTopicDropdown] = useState(null);
     const topics = [
         {
             title: "Coding",
-            content: "Coding allows people to understand technology, its functionalities, and its purposes. Here, you will learn critical-thinking and problem-solving skills that apply to daily life.",
+            content: "Coding allows people to understand technology, its functionalities, and its purposes. Hone critical-thinking and problem-solving skills that apply to daily life.",
         },
         {
             title: "Design", 
@@ -24,6 +26,14 @@ export default function TopicsScreen() {
         {
             title: "Education",
             content: "Information about Education.",
+        },
+        {
+            title: "English",
+            content: "Information about English",
+        },
+        {
+            title: "Finance",
+            content: "Information about Finance.",
         },
         {
             title: "Law", 
@@ -38,16 +48,44 @@ export default function TopicsScreen() {
             content: "Information about Storytelling.",
         },
     ]
-    
+
+    useEffect(() => {
+        // console.log("USE EFFECT CALLED");
+        // console.log("1 USER", JSON.stringify(user, null, 4));
+        if (user) {
+            fetchProfiles();
+        }
+    }, [user])
+
+    async function fetchProfiles() {
+        // console.log("2 FETCHPROFILES CALLED");
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('username', user.email)
+                .single();
+            if (error) {
+                throw error;
+            }
+            // console.log("DATA", JSON.stringify(data, null, 4));
+            if (data) {
+                await setProfile(data);
+                // console.log("PROFILE", JSON.stringify(profile, null, 4));
+            }
+        }
+        catch (error) {
+            console.log("Error fetching profiles: ", error.message);
+        }
+    };
+
+    // console.log("PROFILE NAME", profile.full_name);
     return (
-        <SafeAreaView>
+        // <SafeAreaView>
             <View style={styles.container}>
                 <Text style={styles.welcomeHeading}>
-                    Welcome
-                    <Text style={styles.name}> {user &&
-                        user.user_metadata &&
-                        user.user_metadata.email.slice(0,user.user_metadata.email.indexOf("@"), // gets part before @ of email address, should use profile username instead
-                    )}
+                    Welcome{"\n"}
+                    <Text style={styles.name}>{profile?.full_name}
                     </Text>,
                 </Text>
                 <Text style={styles.welcomeParagraph}>
@@ -57,7 +95,6 @@ export default function TopicsScreen() {
                     {topics.map((topic, index) => (
                         <View key={index}>
                             <Button
-                                style={styles.topicButtonContainer}
                                 title={topic.title}
                                 titleStyle={styles.topicTitle}
                                 icon={{
@@ -68,6 +105,7 @@ export default function TopicsScreen() {
                                 }}
                                 iconRight
                                 buttonStyle={styles.topicButton}
+                                containerStyle={styles.topicButtonContainer}
                                 onPress={() => topicDropdown === topic.title ? setTopicDropdown(null) : setTopicDropdown(topic.title)}
                                 accessibilityLabel="Navigate to Levels screen"
                             />
@@ -84,18 +122,18 @@ export default function TopicsScreen() {
                                     </Text>
                                     <View style={styles.tryButtonWrapper}>
                                         <Button
-                                        style={styles.tryButtonContainer}
-                                        title="Try it!"
-                                        titleStyle={styles.tryTitle}
-                                        icon={{
-                                            name: "chevron-right",
-                                            color: "#000000"
-                                        }}
-                                        iconRight
-                                        buttonStyle={styles.tryButton}
-                                        onPress={() => {
-                                            if (topic.title === "Coding") {navigation.navigate("Levels")}
-                                        }}
+                                            title="Try it!"
+                                            titleStyle={styles.tryTitle}
+                                            icon={{
+                                                name: "chevron-right",
+                                                color: "#000000"
+                                            }}
+                                            iconRight
+                                            buttonStyle={styles.tryButton}
+                                            containerStyle={styles.tryButtonContainer}
+                                            onPress={() => {
+                                                if (topic.title === "Coding") {navigation.navigate("Levels")}
+                                            }}
                                         />
                                     </View>
                                 </View>
@@ -164,7 +202,7 @@ export default function TopicsScreen() {
                     accessibilityLabel="Navigate to Resources screen"
                 />
             </View>
-        </SafeAreaView>
+        // </SafeAreaView>
     );
 }
 
@@ -177,7 +215,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#000000',
     }, 
     welcomeHeading: {
-        marginTop: 50,
+        marginTop: 60,
         fontFamily: "Avenir Next",
         fontSize: 40,
         fontWeight: "bold",

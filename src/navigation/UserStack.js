@@ -28,7 +28,7 @@ export default function App() {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ headerShown: true }}
+          options={styles.cleanHeader}
         />
         <Stack.Screen
           name="FriendStory"
@@ -53,7 +53,7 @@ export default function App() {
         <Stack.Screen
           name="Search"
           component={SearchScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="MemoryScreen"
@@ -68,22 +68,22 @@ export default function App() {
         <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
-          options={{ headerShown: true }}
+          options={styles.cleanHeader}
         />
         <Stack.Screen
           name="Topics"
           component={TopicsScreen}
-          options={{ headerShown: true }}
+          options={styles.cleanHeader}
         />
         <Stack.Screen
           name="Resources"
           component={ResourcesScreen}
-          options={{ headerShown: true }}
+          options={styles.cleanHeader}
         />
         <Stack.Screen
           name="Levels"
           component={LevelsScreen}
-          options={{ headerShown: true }}
+          options={styles.cleanHeader}
         />
         <Stack.Screen
           name="Game"
