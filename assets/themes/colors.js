@@ -4,6 +4,7 @@ export const colors = {
   tertiary: "#828385",
   belowPage: "#ECECEE",
   interactionGraySubtle: "#ECECEE",
+  lighttransparent: 'rgba(105, 105, 105, 0.5)'
 };
 
 export const formColors = {

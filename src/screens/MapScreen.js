@@ -13,7 +13,7 @@ import LocationList from "./LocationList";
 import LocationDetails from "./LocationDetails";
 import placesListTest from "./placesListTest.json"
 import mixPlacesTest from "./mixPlacesTest.json"
-import Header from "../components/Header";
+import MapHeader from "../components/MapHeader";
 
 
 export default function MapScreen({ navigation }) {
@@ -30,6 +30,7 @@ export default function MapScreen({ navigation }) {
   const locationDetailsModalRef = useRef(null);
   const snapPointsLocationList = ["50%", "92%"];
   const snapPointsLocationDetails = ["50%", "92%"];
+  const [isSatellite, setIsSatellite] = useState(false);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -196,6 +197,7 @@ export default function MapScreen({ navigation }) {
   return (
     <BottomSheetModalProvider>
       <View style={[styles.container, { marginBottom: tabBarHeight }]}>
+
         <MapView
           ref={mapRef}
           style={styles.map}
@@ -203,6 +205,7 @@ export default function MapScreen({ navigation }) {
           showsUserLocation={false}
           showsMyLocationButton={true}
           onRegionChangeComplete={handleRegionChangeComplete}
+          mapType= {isSatellite? 'hybrid' : 'standard'}
         >
           {/* {console.log(JSON.stringify(location,null,4))} */}
           {location && (
@@ -249,6 +252,9 @@ export default function MapScreen({ navigation }) {
             </Marker>
           ))}
         </MapView>
+        <View style={styles.headerContainer}>
+          <MapHeader navigation={navigation} />
+        </View>
         <View style={styles.mapFooter}>
           <View style={styles.locationContainer}>
             <TouchableOpacity
@@ -306,8 +312,51 @@ export default function MapScreen({ navigation }) {
         </View>
 
         <View style={styles.cityContainer}>
-          <Text style={styles.cityText}>{city}</Text>
+          <View style={styles.circleContainer}>
+            <Image 
+              source={{ uri: 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg' }} 
+              style={styles.circleImage} 
+            />
+          </View>
+          <View style={styles.textContainer} >
+            <Text style={styles.cityText}>{city}</Text>
+          </View>
         </View>
+
+        <View style={styles.barContainer}>
+        <TouchableOpacity>
+          <View style={styles.circleContainerVertical}>
+            <Image 
+              source={{ uri: 'https://i.postimg.cc/RFpH5K01/Heat-Map-Icon.png' }} 
+              style={styles.circleImage} 
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {isSatellite? setIsSatellite(false) : setIsSatellite(true)}}>
+          <View style={styles.circleContainerVertical}>
+            <Image 
+              source={{ uri: 'https://i.postimg.cc/q7LKw9V5/Satellite-Icon.png' }} 
+              style={styles.circleImage} 
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={styles.circleContainerVertical}>
+            <Image 
+              source={{ uri: 'https://i.postimg.cc/ZR5dMVJK/Memories-Icon.png' }} 
+              style={styles.circleImage} 
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={styles.circleContainerVertical}>
+            <Image 
+              source={{ uri: 'https://i.postimg.cc/bv8bQqMn/Arrow-Icon.png' }} 
+              style={styles.circleImage} 
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
 
         <BottomSheetModal
           ref={locationListModalRef}
@@ -437,15 +486,63 @@ const styles = StyleSheet.create({
   cityContainer: {
     position: 'absolute',
     top: 60,
-    width: '100%',
+    left: 112,
+    height:44,
+    width:200,
     alignItems: 'center',
-    zIndex: 1,
+    backgroundColor: colors.lighttransparent,
+    borderRadius: 80,
+    paddingHorizontal: 6,
+    marginHorizontal: 4,
+    flexDirection: 'row',
+  },
+  barContainer: {
+    borderRadius: 80,
+    position: 'absolute',
+    top: 120,
+    right: 12,
+    width: 44, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 5, 
+    paddingBottom: 5,
+    backgroundColor: colors.lighttransparent,
+    gap:5,
+  },
+  circleContainerVertical: {
+    width: 35, 
+    height: 35,
+    borderRadius: 16,
+    borderColor: "#a05dcd", 
+    overflow: 'hidden',
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cityText: {
     fontSize: 18,
     fontWeight: 'bold',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    padding: 5,
-    borderRadius: 5,
+    color: 'white',
+  },
+  circleContainer: {
+    width: 36, 
+    height: 36,
+    borderRadius: 16,
+    borderWidth: 3,
+    borderColor: "#a05dcd", 
+    overflow: 'hidden',
+  },
+  circleImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+
+  headerContainer: {
+    position: 'absolute',
+    top: 60,
+    backgroundColor: 'transparent',
   },
 });
