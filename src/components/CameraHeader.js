@@ -64,7 +64,8 @@ export default function CameraHeader() {
             navigation.navigate("Profile");
           }}
         >
-          <Image style={styles.profileImage} source={{ uri: profilePicUrl }} />
+          {/* <Image style={styles.profileImage} source={{ uri: profilePicUrl }} /> */}
+          <Image style={styles.profileImage} source={require("../../assets/SnapTogether/JadeBitmojiPicture.png")} />
         </Pressable>
         <Pressable
           style={[styles.search, styles.buttons]}
