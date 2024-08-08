@@ -58,6 +58,7 @@ export default function ProfileScreen() {
           setCommunity(data.community);
           setInterests(data.interests)
           console.log("Shows specific community")
+          console.log(data.community);
         }
 
     } catch (error) {
