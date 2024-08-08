@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, FlatList, ImageBackground, Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -40,10 +41,11 @@ export default function CommSelectionScreen() {
       }
     }
   };
-  function handleClick (text)
-  {
+
+  const handleClick = (text) => {
     setChoice(text);
-  }
+  };
+
   const handlePress = async () => {
     await writeToTableComm();
     navigation.replace("Interests");
@@ -129,20 +131,16 @@ export default function CommSelectionScreen() {
     setTheOrientations(orientations);
   }, []);
 
-  useEffect(() => {
-    setTheOrientations(orientations);
-  }, []);
-
-  
-  
   const handleGenderPress = (id) => {
     setSelectedGender(id);
     setSelectedOrientation(null);
+    handleClick(id);
   };
 
   const handleOrientationPress = (id) => {
     setSelectedOrientation(id);
     setSelectedGender(null);
+    handleClick(id);
   };
 
   const handleContinue = () => {
@@ -154,9 +152,9 @@ export default function CommSelectionScreen() {
     <TouchableOpacity
       style={[
         styles.cardContainer,
-        selectedId === item.id && { borderColor: '#2196F3' }
+        selectedId === item.id && { borderColor: '#0fadfe' }
       ]}
-      onPress={() => handleClick(item.id)}
+      onPress={() => handlePress(item.id)}
     >
       <Image style={styles.cardImage} source={{ uri: item.image }} />
       <Text style={styles.cardTitle}>{item.title}</Text>
