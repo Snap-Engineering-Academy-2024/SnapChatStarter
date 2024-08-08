@@ -5,13 +5,12 @@ import {
   Pressable,
   Image,
   ScrollView,
-  Modal,
 } from "react-native";
 import { useState, useEffect } from "react";
 import Timer from "../components/Timer.js";
 import LottieView from "lottie-react-native";
 
-// TO-DO: Hint modal
+// TO-DO: Hint tray
 // TO-DO: Boom image
 
 export default function TopicsScreen() {
@@ -96,8 +95,6 @@ export default function TopicsScreen() {
   const [boomStyle, setBoomStyle] = useState({ opacity: 1 });
 
   const [gameComplete, setGameComplete] = useState(false);
-
-  const [modalVisible, setModalVisible] = useState(true);
 
   let facingUrls = [
     "https://i.imgur.com/EMj6p2q.png",
@@ -325,52 +322,6 @@ export default function TopicsScreen() {
 
   return (
     <View style={[styles.container]}>
-      {/* Hint Modal */}
-      <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalHeading}>
-                Our new Snap feature...{"\n"}~~~~~~~~~~~~~~~~~~~~~~~{"\n"}
-                Introducing Brain Bites!
-              </Text>
-              <Text style={styles.modalParagraph}>
-                {"<"}Games with bite-sized infomation your{"\n"} brain could
-                bite, anywhere and anytime{">"}
-              </Text>
-              <Image
-                style={styles.modalImage}
-                source={require("../../assets/modal-image.png")}
-              ></Image>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => {
-                  navigation.navigate("Welcome");
-                  setModalVisible(!modalVisible);
-                }}
-              >
-                <Text style={styles.textStyle}>I'll bite!</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
-              >
-                <Text style={styles.textStyle}>Nah, not hungry</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-      </View>
-
       {/* Text Area */}
       <View style={{ alignItems: "left", width: 375, marginTop: -35 }}>
         <View style={{ marginBottom: 5 }}>
@@ -683,42 +634,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: "50%",
     top: "58%",
-  },
-  modalView: {
-    margin: 20,
-    marginTop: 50,
-    backgroundColor: "#000000",
-    borderColor: "#FFFFFF",
-    borderWidth: 2,
-    borderRadius: 20,
-    padding: 15,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    position: "absolute",
-  },
-  modalHeading: {
-    marginBottom: 15,
-    color: "#FFFFFF",
-    fontFamily: "Avenir Next",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  modalParagraph: {
-    marginBottom: 15,
-    textAlign: "center",
-    color: "#FFFFFF",
-    fontFamily: "Avenir Next",
-  },
-  modalImage: {
-    height: 200,
-    width: 320,
-    marginBottom: 15,
   },
 });
