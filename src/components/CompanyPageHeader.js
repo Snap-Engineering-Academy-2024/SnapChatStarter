@@ -10,7 +10,7 @@ import { BottomSheet, Button } from "@rneui/themed";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
-export default function CompanyPageHeader() {
+export default function CompanyPageHeader({pageName}) {
   const navigation = useNavigation();
 
   const { user } = useAuthentication();
@@ -22,7 +22,7 @@ export default function CompanyPageHeader() {
         <Pressable
           style={styles.buttons}
           onPress={() => {
-            navigation.navigate("Camera");
+            navigation.navigate(pageName);
           }}
         >
           <Icon name="arrow-back" size={22} color="white"/>

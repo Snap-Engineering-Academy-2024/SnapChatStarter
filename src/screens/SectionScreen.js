@@ -226,6 +226,44 @@ export default function SectionScreen() {
             selectedCompany={selectedCompany}
           />
         </View>
+      )}
+      {/* Event discover list */}
+      <Text style={styles.sectionTitle}>Events</Text>
+      {companyData && (
+        <FlatList
+          data={filteredData3}
+          horizontal={false}
+          numColumns={2}
+          ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+          renderItem={({ item }) => (
+            <SnapTogetherFeed
+              title={item.username}
+              eventImage={item.poster_url}
+              selectedCompany={item}
+              pageName={"SectionScreen"}
+              handlePress={() => {
+                setShowAbout(true);
+                setSelectedCompany(item);
+              }}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          
+        />
+      )}
+      {/* If infosheet is shown */}
+      <View>
+        <InfoSheet
+          showAbout={showAbout}
+          setShowAbout={setShowAbout}
+          selectedCompany={selectedCompany}
+        />
+        <StoryModal
+          showStory={showStory}
+          setShowStory={setShowStory}
+          selectedCompany={selectedCompany}
+        />
+      </View>
       </ScrollView>
     </SafeAreaView>
   );
