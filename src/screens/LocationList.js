@@ -27,39 +27,39 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.scrollContainer}
         >
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => searchFunc("career center homeless social service")}
-          >
-            <View style={styles.iconContainer}>
-              <Ionicons name="business" size={20} color="white" />
-            </View>
-            <Text style={styles.buttonText}>Nonprofits</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => searchFunc("police hospital emergency")}
-          >
-            <Text style={styles.buttonText}>Safety</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => searchFunc("free wifi place")}
-          >
-            <Text style={styles.buttonText}>Wifi</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => searchFunc("food bank free food salvation army")}
-          >
-            <Text style={styles.buttonText}>Food Bank</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => searchFunc("free shower library")}
-          >
-            <Text style={styles.buttonText}>Public Areas</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => searchFunc("career center homeless social service")}
+        >
+          <View style={styles.iconContainer}>
+            <Ionicons name="business" size={20} color="white" />
+          </View>
+          <Text style={styles.buttonText}>Nonprofits</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => searchFunc("police hospital emergency")}
+        >
+          <Text style={styles.buttonText}>Safety</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => searchFunc("free wifi place")}
+        >
+          <Text style={styles.buttonText}>Wifi</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => searchFunc("food bank free food salvation army")}
+        >
+          <Text style={styles.buttonText}>Food Bank</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => searchFunc("free shower library")}
+        >
+          <Text style={styles.buttonText}>Public Areas</Text>
+        </TouchableOpacity>
         </ScrollView>
       </View>
       <FlatList
