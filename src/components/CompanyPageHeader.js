@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Dimensions, Text, Image} from "react-native";
 import { colors } from "../../assets/themes/colors";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -19,14 +19,29 @@ export default function CompanyPageHeader({pageName}) {
     <View style={styles.container}>
     <View style={styles.topContainer}>
       <View style={styles.headerLeft}>
-        <Pressable
+        <TouchableOpacity
           style={styles.buttons}
           onPress={() => {
-            navigation.navigate(pageName);
+            navigation.navigate("SnapTogether");
           }}
         >
           <Icon name="arrow-back" size={22} color="white"/>
-        </Pressable>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttons}
+        >
+          <Icon name="search" size={22} color="white"/>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.headerCenter}>
+        <TouchableOpacity style={styles.location}>
+          <View style={styles.locationImageContainer}>
+          <Image source={require("../../assets/SnapTogether/HoustonStory.jpg")} style={styles.locationImage}/>
+          </View>
+          <Text style={styles.locationText}>
+            Houston
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.headerRight}>
         <TouchableOpacity
@@ -65,6 +80,11 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 8,
   },
+  headerCenter: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -91,5 +111,33 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     top: "75%"
+  },
+  location: {
+    borderRadius: 100,
+    height: 44,
+    width: 150,
+    backgroundColor: colors.interactionGraySubtle,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+    backgroundColor: "rgba(0, 0, 0, .5)",
+    flexDirection: "row",
+    gap: 10
+  },
+  locationText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 18
+  },
+  locationImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+  },
+  locationImageContainer: {
+    borderRadius: 100, 
+    borderWidth: 2.5,
+    borderColor: '#10adff',
+    padding: 2.5, 
   }
 });

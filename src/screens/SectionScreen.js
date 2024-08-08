@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
   FlatList,
   Pressable,
   Keyboard
@@ -15,11 +14,9 @@ import SnapTogetherFeed from "../components/SnapTogetherFeed";
 import SnapTogetherStories from "../components/SnapTogetherStories";
 import StoryModal from "../components/StoryModal";
 import {
-  SafeAreaFrameContext,
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import SectionHeader from "../components/SectionHeader";
 import { useRaceSelection } from "../utils/hooks/useRaceSelection";
 import { useFilteredData } from "../utils/hooks/useFilteredData";
 import { useNavigation } from "@react-navigation/native";
@@ -145,34 +142,36 @@ export default function SectionScreen() {
         </View>
       </View>
       {/* Filter buttons */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
-      >
-        {ethnicities.map((ethnicity, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.button,
-              selectedRaces.includes(ethnicity.label) && styles.buttonSelected,
-            ]}
-            onPress={() => raceSelection(ethnicity.label)}
-          >
-            <Text style={styles.buttonText}>{ethnicity.acronym}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-      <ScrollView>
-        {/* Title */}
-        <Text style={styles.title}>{buttonTitle}</Text>
-        {/* Current filter selection */}
-        <Text style={styles.subtitle}>{subtitleText}</Text>
-        {/* Story bar */}
-        <Text style={styles.sectionTitle}>Stories</Text>
-        {companyData && (
-          <View style={styles.storyBar}>
+      <View style={styles.filterContainer}>
+        <FlatList
+          data={ethnicities}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollViewContent}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={[
+                styles.button,
+                selectedRaces.includes(item.label) && styles.buttonSelected,
+              ]}
+              onPress={() => raceSelection(item.label)}
+            >
+              <Text style={styles.buttonText}>{item.acronym}</Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item.acronym}
+        />
+      </View>
+      <FlatList
+        style={styles.flatlist}
+        ListHeaderComponent={
+          <>
+            {/* Title */}
+            <Text style={styles.title}>{buttonTitle}</Text>
+            {/* Current filter selection */}
+            <Text style={styles.subtitle}>{subtitleText}</Text>
+            {/* Story bar */}
+            <Text style={styles.sectionTitle}>Stories</Text>
             <FlatList
               data={filteredData3}
               horizontal={true}
@@ -188,68 +187,29 @@ export default function SectionScreen() {
               )}
               keyExtractor={(item) => item.id}
             />
-          </View>
-        )}
-        {/* Event discover list */}
-        <Text style={styles.sectionTitle}>Events</Text>
-        {companyData && (
-          <FlatList
-            data={filteredData3}
-            horizontal={false}
-            numColumns={2}
-            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-            renderItem={({ item }) => (
-              <SnapTogetherFeed
-                title={item.username}
-                eventImage={item.poster_url}
-                selectedCompany={item}
-                handlePress={() => {
-                  setShowAbout(true);
-                  setSelectedCompany(item);
-                }}
-              />
-            )}
-            keyExtractor={(item) => item.id}
+            {/* Event discover list */}
+            <Text style={styles.sectionTitle}>Events</Text>
+          </>
+        }
+        data={filteredData3}
+        horizontal={false}
+        numColumns={2}
+        ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+        renderItem={({ item }) => (
+          <SnapTogetherFeed
+            title={item.username}
+            eventImage={item.poster_url}
+            selectedCompany={item}
+            pageName={"Section"}
+            buttonTitle={buttonTitle}
+            handlePress={() => {
+              setShowAbout(true);
+              setSelectedCompany(item);
+            }}
           />
         )}
-        {/* If infosheet is shown */}
-        <View>
-          <InfoSheet
-            showAbout={showAbout}
-            setShowAbout={setShowAbout}
-            selectedCompany={selectedCompany}
-          />
-          <StoryModal
-            showStory={showStory}
-            setShowStory={setShowStory}
-            selectedCompany={selectedCompany}
-          />
-        </View>
-      )}
-      {/* Event discover list */}
-      <Text style={styles.sectionTitle}>Events</Text>
-      {companyData && (
-        <FlatList
-          data={filteredData3}
-          horizontal={false}
-          numColumns={2}
-          ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-          renderItem={({ item }) => (
-            <SnapTogetherFeed
-              title={item.username}
-              eventImage={item.poster_url}
-              selectedCompany={item}
-              pageName={"SectionScreen"}
-              handlePress={() => {
-                setShowAbout(true);
-                setSelectedCompany(item);
-              }}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          
-        />
-      )}
+        keyExtractor={(item) => item.id}
+      />
       {/* If infosheet is shown */}
       <View>
         <InfoSheet
@@ -263,17 +223,18 @@ export default function SectionScreen() {
           selectedCompany={selectedCompany}
         />
       </View>
-      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    height: 70,
+  filterContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   scrollViewContent: {
     justifyContent: "center",
+    alignItems: "center",
   },
   button: {
     paddingVertical: 10,
@@ -313,12 +274,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 10,
     paddingLeft: 10,
-  },
-  storyBar: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 4,
   },
   container: {
     width: "100%",

@@ -7,8 +7,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-
-export default function SnapTogetherFeed({ title, eventImage, handlePress, selectedCompany, pageName }) {
+export default function SnapTogetherFeed({ title, eventImage, handlePress, selectedCompany, pageName, buttonTitle }) {
   const navigation = useNavigation();
 
   return (
@@ -28,12 +27,12 @@ export default function SnapTogetherFeed({ title, eventImage, handlePress, selec
             }}
           >
             <Pressable
-          onPress={() => {
-            navigation.navigate("CompanyPage",{ selectedCompany, pageName });
-          }}
-          style={styles.nameBox}
-        >
-            <Text style={styles.FeedText}>{title}</Text>
+              onPress={() => {
+                navigation.navigate("CompanyPage",{ selectedCompany, pageName, buttonTitle });
+              }}
+              style={styles.nameBox}
+            >
+              <Text style={styles.FeedText}>{title}</Text>
             </Pressable>
           </ImageBackground>
         </Pressable>
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
     height: 277,
     display: "flex",
     justifyContent: "center",
-    borderRadius: 50,
     borderRadius: 20,
     shadowColor: "#000",
     shadowRadius: 3.84,
@@ -76,31 +74,23 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.25,
-    
     elevation: 5,
   },
   FeedText: {
-    padding: 8,
     fontWeight: "900",
     fontSize: 16,
     color: "white",
     textShadowColor: "black",
     textShadowRadius: 15,
     textShadowOpacity: 0.5,
-    backgroundColor: "black",
-    shadowColor: "black",
-    shadowRadius: 3.84,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.75,
-    // alignSelf: "center"
+    textAlign: "center",
   },
   nameBox: {
     position: "absolute",
-    right: 15,
-    bottom: 15,
-    // width: "80%",
-  }
+    bottom: 0,
+    width: "100%",
+    backgroundColor: "rgba(0, 0, 0, .8)",
+    paddingVertical: 8,
+    alignItems: "center",
+  },
 });

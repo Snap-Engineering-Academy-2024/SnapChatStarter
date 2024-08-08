@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  ImageBackground,
 } from "react-native";
 import { Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
@@ -46,7 +47,7 @@ const SelectorButton = ({ title, onPress, isActive }) => {
 
 export default function CompanyPageScreen() {
   const route = useRoute();
-  const { selectedCompany, pageName } = route.params;
+  const { selectedCompany, pageName, buttonTitle } = route.params;
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const sheetRef = useRef(null);
@@ -62,8 +63,18 @@ export default function CompanyPageScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={{ paddingTop: insets.top }}>
-        <CompanyPageHeader pageName={pageName}/>
+      <ImageBackground
+        source={require("../../assets/SnapTogether/AfrotechMap.png")}
+        style={styles.map}
+      >
+        <Image
+              style={styles.mapIcon}
+              source={{ uri: selectedCompany.logo_url }}
+            />
+      <View 
+      // style={{ paddingTop: insets.top }}
+      >
+        <CompanyPageHeader pageName={pageName} buttonTitle={buttonTitle} companyData={selectedCompany}/>
       </View>
       <BottomSheet
         ref={sheetRef}
@@ -77,10 +88,12 @@ export default function CompanyPageScreen() {
               navigation.navigate("CompanyPage", { selectedCompany });
             }}
           >
+            <View style = {styles.bitmojiContainer}>
             <Image
               style={styles.bitmojiImage}
               source={{ uri: selectedCompany.logo_url }}
             />
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.title}
@@ -88,8 +101,9 @@ export default function CompanyPageScreen() {
               navigation.navigate("CompanyPage", { selectedCompany });
             }}
           >
-            <Text style={styles.title}>{selectedCompany.username}</Text>
+            <Text style={styles.title}>{selectedCompany.username.toUpperCase()}</Text>
           </TouchableOpacity>
+          <Icon name="stars" size={25} color={"yellow"} />
         </View>
         <View>
           <Image
@@ -135,6 +149,7 @@ export default function CompanyPageScreen() {
           />
         </View>
       </BottomSheet>
+      </ImageBackground>
     </View>
   );
 }
@@ -154,6 +169,13 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: "center",
     top: SCREEN_HEIGHT / 3.5,
+  },
+  bitmojiContainer: {
+    borderRadius: 100, 
+    borderWidth: 3,
+    borderColor: '#10adff',
+    padding: 3.2, 
+    marginBottom: 5, 
   },
   bitmojiImage: {
     width: 60,
@@ -235,4 +257,19 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 10
   },
+  map: {
+    flex: 1,
+    resizeMode: "cover",
+    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH,
+  },
+  mapIcon: {
+    width: 60,
+    height: 60,
+    borderWidth: 3,
+    borderColor: "white",
+    borderRadius: 50,
+    left: 200,
+    top: 220
+  }
 });
