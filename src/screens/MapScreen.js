@@ -107,9 +107,9 @@ export default function MapScreen({ navigation }) {
       'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png';
   
     try {
-      // const response = await axios.get(url);
-      // const places = response.data.results;
-      const places = placesListTest;
+      const response = await axios.get(url);
+      const places = response.data.results;
+      // const places = placesListTest;
   
       const placesWithImages = await Promise.all(places.map(async place => {
         if (place.photos && place.photos.length > 0) {
@@ -149,23 +149,21 @@ export default function MapScreen({ navigation }) {
       return;
     }
 
-    // const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
-    // const categories = [
-    //   "career center homeless social service",
-    //   "police hospital emergency",
-    //   "free wifi place",
-    //   "food bank free food salvation army",
-    // ];
+    const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
+    const categories = [
+      "career center homeless social service",
+      "free wifi place",
+    ];
 
     try {
-      // const allPlaces = [];
-      // for (const category of categories) {
-      //   const placesWithImages = await fetchPlacesWithImages(location, category, apiKey);
-      //   allPlaces.push(...placesWithImages.slice(0, 4));
-      // }
-      // console.log(JSON.stringify(allPlaces));
-      // setPlaces(allPlaces);
-      setPlaces(mixPlacesTest)
+      const allPlaces = [];
+      for (const category of categories) {
+        const placesWithImages = await fetchPlacesWithImages(location, category, apiKey);
+        allPlaces.push(...placesWithImages.slice(0, 4));
+      }
+      console.log(JSON.stringify(allPlaces));
+      setPlaces(allPlaces);
+      // setPlaces(mixPlacesTest)
       locationListModalRef.current.present();
     } catch (error) {
       console.error(error);
@@ -206,7 +204,7 @@ export default function MapScreen({ navigation }) {
           showsMyLocationButton={true}
           onRegionChangeComplete={handleRegionChangeComplete}
         >
-          {console.log(JSON.stringify(location,null,4))}
+          {/* {console.log(JSON.stringify(location,null,4))} */}
           {location && (
             <>
               <Marker
