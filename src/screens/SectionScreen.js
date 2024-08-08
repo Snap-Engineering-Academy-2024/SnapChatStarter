@@ -6,7 +6,7 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import InfoSheet from "../components/InfoSheet";
@@ -83,7 +83,9 @@ export default function SectionScreen() {
     }
     return [
       ...new Set(
-        filteredData.filter((element) => searchBarFilteredData.includes(element))
+        filteredData.filter((element) =>
+          searchBarFilteredData.includes(element)
+        )
       ),
     ];
   });
@@ -194,19 +196,21 @@ export default function SectionScreen() {
         data={dataShown}
         horizontal={false}
         numColumns={2}
-        ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         renderItem={({ item }) => (
-          <SnapTogetherFeed
-            title={item.username}
-            eventImage={item.poster_url}
-            selectedCompany={item}
-            pageName={"Section"}
-            buttonTitle={buttonTitle}
-            handlePress={() => {
-              setShowAbout(true);
-              setSelectedCompany(item);
-            }}
-          />
+          <View style={{paddingLeft:12}}>
+            <SnapTogetherFeed
+              title={item.username}
+              eventImage={item.poster_url}
+              selectedCompany={item}
+              pageName={"Section"}
+              buttonTitle={buttonTitle}
+              handlePress={() => {
+                setShowAbout(true);
+                setSelectedCompany(item);
+              }}
+            />
+          </View>
         )}
         keyExtractor={(item) => item.id}
       />
@@ -350,19 +354,19 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   searchBarContainer: {
-    backgroundColor: 'transparent',
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
+    backgroundColor: "transparent",
+    borderTopColor: "transparent",
+    borderBottomColor: "transparent",
   },
   searchBarInputContainer: {
     marginTop: -10,
     width: 270,
     height: 45,
-    backgroundColor: '#EBECEE',
+    backgroundColor: "#EBECEE",
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
