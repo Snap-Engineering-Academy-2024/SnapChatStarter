@@ -13,7 +13,8 @@ import MemoryScreen from "../screens/MemoryScreen";
 import EventScreen from "../screens/EventScreen";
 import SectionScreen from "../screens/SectionScreen";
 import SnapTogetherScreen from "../screens/SnapTogetherScreen";
-import CompanyPageScreen from "../screens/CompanyPageScreen";
+// import CompanyPageScreen from "../screens/CompanyPageScreen";
+import CompanyPageScreen from "../screens/CompanyPageScreenCopy";
 
 const Stack = createStackNavigator();
 
