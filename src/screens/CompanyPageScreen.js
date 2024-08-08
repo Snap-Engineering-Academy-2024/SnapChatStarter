@@ -60,30 +60,11 @@ export default function CompanyPageScreen() {
   const [location, setLocation] = useState(null);
 
   const currentRegion = {
-    latitude: selectedCompany.location[0] - .0350, // 29.7150
-    longitude: selectedCompany.location[1] - .0050, // -95.3650
+    latitude: selectedCompany.location[0] - .0350,
+    longitude: selectedCompany.location[1] - .0050,
     latitudeDelta: 0.09,
     longitudeDelta: 0.09,
   };
-
-  // useEffect(() => {
-  //   (async () => {
-  //     let { status } = await Location.requestForegroundPermissionsAsync();
-  //     if (status !== "granted") {
-  //       setErrorMsg("Permission to access location was denied");
-  //       return;
-  //     }
-
-  //     let location = await Location.getCurrentPositionAsync({});
-  //     setLocation(location);
-  //     setCurrentRegion({
-  //       latitude: location.coords.latitude,
-  //       longitude: location.coords.longitude,
-  //       latitudeDelta: 0.0922,
-  //       longitudeDelta: 0.0421,
-  //     });
-  //   })();
-  // }, []);
 
   let text = "Waiting...";
   text = JSON.stringify(location);

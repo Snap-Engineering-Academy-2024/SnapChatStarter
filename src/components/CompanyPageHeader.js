@@ -1,12 +1,8 @@
 import { View, StyleSheet, TouchableOpacity, Dimensions, Text, Image} from "react-native";
 import { colors } from "../../assets/themes/colors";
-import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
-import { supabase } from "../utils/hooks/supabase";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { BottomSheet, Button } from "@rneui/themed";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
