@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
+  Keyboard
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import InfoSheet from "../components/InfoSheet";
@@ -25,6 +26,7 @@ import { SearchBar } from "react-native-elements";
 import SnapTogetherSearchModal from "../components/SnapTogetherSearchModal";
 import { colors } from "../../assets/themes/colors";
 import { fontHeader } from "../../assets/themes/font";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const ethnicities = [
   { label: "All Inclusive", acronym: "All" },
@@ -86,6 +88,10 @@ export default function SectionScreen() {
     ];
   });
 
+  const handleTouchOutside = () => {
+    Keyboard.dismiss();
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -104,28 +110,21 @@ export default function SectionScreen() {
               <Icon name="arrow-back" size={22} color={"white"} />
             </Pressable>
           </View>
+
           <View style={styles.headerCenter}>
-            <SearchBar
-              containerStyle={{
-                flex: 1,
-                backgroundColor: "transparent",
-                borderTopColor: "transparent",
-                borderBottomColor: "transparent",
-              }}
-              inputContainerStyle={{
-                marginTop: -10,
-                width: 270,
-                height: 45,
-                backgroundColor: "#EBECEE",
-              }}
-              width="100"
-              placeholder="Search/Filter"
-              lightTheme="true"
-              round="true"
-              value={searchQuery}
-              onChangeText={handleSearch}
-            />
+            <TouchableWithoutFeedback onPress={handleTouchOutside}>
+              <SearchBar
+                containerStyle={styles.searchBarContainer}
+                inputContainerStyle={styles.searchBarInputContainer}
+                placeholder="Search/Filter"
+                lightTheme
+                round
+                value={searchQuery}
+                onChangeText={handleSearch}
+              />
+            </TouchableWithoutFeedback>
           </View>
+
           <View style={styles.headerRight}>
             <TouchableOpacity
               style={styles.settingsButton}
@@ -350,5 +349,20 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 8,
   },
-  flatlist: {},
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderBottomColor: 'transparent',
+  },
+  searchBarInputContainer: {
+    marginTop: -10,
+    width: 270,
+    height: 45,
+    backgroundColor: '#EBECEE',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
