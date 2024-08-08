@@ -88,7 +88,7 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
             style={styles.button}
             onPress={() => searchFunc("career center homeless social service")}
           >
-            <Text style={styles.buttonText}>Career Center</Text>
+            <Text style={styles.buttonText}>Nonprofits</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
