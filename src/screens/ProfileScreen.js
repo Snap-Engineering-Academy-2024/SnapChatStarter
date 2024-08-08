@@ -31,7 +31,6 @@ export default function ProfileScreen() {
     if (userJoinStatus) {
       navigation.navigate("SnapTogether");
     } else {
-      console.log("Should be closing");
       aboutSheetRef.current.snapToIndex(0);
     }
   };

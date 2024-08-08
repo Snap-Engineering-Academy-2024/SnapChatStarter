@@ -27,11 +27,7 @@ export default function CompanyPageHeader({pageName}) {
         >
           <Icon name="arrow-back" size={22} color="white"/>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttons}
-        >
-          <Icon name="search" size={22} color="white"/>
-        </TouchableOpacity>
+        
       </View>
       <View style={styles.headerCenter}>
         <TouchableOpacity style={styles.location}>

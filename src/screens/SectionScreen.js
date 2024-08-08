@@ -63,7 +63,7 @@ export default function SectionScreen() {
     setSearchQuery(query);
   };
 
-  let filteredData2 = useMemo(() => {
+  let searchBarFilteredData = useMemo(() => {
     return companyData.filter((company) => {
       return selectedRaces.some((selectedRaces) => {
         if (!selectedRaces) return true;
@@ -75,15 +75,15 @@ export default function SectionScreen() {
     });
   }, [companyData, searchQuery, selectedRaces]);
 
-  let filteredData3 = useMemo(() => {
+  let dataShown = useMemo(() => {
     if (selectedRaces[0] === "All Inclusive") {
-      return filteredData2;
+      return searchBarFilteredData;
     } else if (!searchQuery) {
       return filteredData;
     }
     return [
       ...new Set(
-        filteredData.filter((element) => filteredData2.includes(element))
+        filteredData.filter((element) => searchBarFilteredData.includes(element))
       ),
     ];
   });
@@ -173,7 +173,7 @@ export default function SectionScreen() {
             {/* Story bar */}
             <Text style={styles.sectionTitle}>Stories</Text>
             <FlatList
-              data={filteredData3}
+              data={dataShown}
               horizontal={true}
               ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
               renderItem={({ item }) => (
@@ -191,7 +191,7 @@ export default function SectionScreen() {
             <Text style={styles.sectionTitle}>Events</Text>
           </>
         }
-        data={filteredData3}
+        data={dataShown}
         horizontal={false}
         numColumns={2}
         ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
