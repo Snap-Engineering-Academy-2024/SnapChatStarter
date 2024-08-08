@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function SnapTogetherFeed({ title, eventImage, handlePress, selectedCompany, pageName, buttonTitle }) {
+export default function SnapTogetherFeed({ title, eventImage, handlePress, selectedCompany }) {
   const navigation = useNavigation();
 
   return (
@@ -28,7 +28,7 @@ export default function SnapTogetherFeed({ title, eventImage, handlePress, selec
           >
             <Pressable
               onPress={() => {
-                navigation.navigate("CompanyPage",{ selectedCompany, pageName, buttonTitle });
+                navigation.navigate("CompanyPage",{ selectedCompany});
               }}
               style={styles.nameBox}
             >

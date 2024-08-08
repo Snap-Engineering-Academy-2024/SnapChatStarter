@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   Pressable,
+  TouchableOpacity
 } from "react-native";
 import { fontHeader } from "../../assets/themes/font";
 import { colors } from "../../assets/themes/colors";
@@ -30,9 +31,13 @@ export default function SnapTogetherStories({company, handlePress}) {
         </View>
         
       </Pressable>
-      <View style={styles.bitmojiTextContainer}>
+      <TouchableOpacity style={styles.bitmojiTextContainer}
+      onPress={() => {
+        navigation.navigate("CompanyPage",{ selectedCompany: company});
+      }}
+      >
         <Text style={styles.bitmojiText}>{company.username}</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }

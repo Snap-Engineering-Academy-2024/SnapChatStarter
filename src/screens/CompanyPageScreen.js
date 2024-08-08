@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import MapView, { Marker } from "react-native-maps";
 import {
   View,
   StyleSheet,
@@ -17,6 +18,7 @@ import { useRoute } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScreenWidth } from "@rneui/base";
 import CompanyPageHeader from "../components/CompanyPageHeader";
+import * as Location from "expo-location";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -37,10 +39,13 @@ const SelectorButton = ({ title, onPress, isActive }) => {
       style={[styles.button, isActive && styles.buttonActive]}
       onPress={onPress}
     >
-      <Text style={[styles.buttonText, isActive && styles.buttonActiveText]}
-      onPress={onPress}
-    />
-      <Text style={[styles.buttonText, !isActive && styles.buttonActiveText]}>{title}</Text>
+      <Text
+        style={[styles.buttonText, isActive && styles.buttonActiveText]}
+        onPress={onPress}
+      />
+      <Text style={[styles.buttonText, !isActive && styles.buttonActiveText]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -52,6 +57,36 @@ export default function CompanyPageScreen() {
   const insets = useSafeAreaInsets();
   const sheetRef = useRef(null);
   const [selectedOption, setSelectedOption] = useState("Stories");
+  const [location, setLocation] = useState(null);
+
+  const [currentRegion, setCurrentRegion] = useState({
+    latitude: 34.0211573,
+    longitude: -118.4503864,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      setCurrentRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    })();
+  }, []);
+
+  let text = "Waiting...";
+  text = JSON.stringify(location);
 
   const handlePress = (option) => {
     setSelectedOption(option);
@@ -66,89 +101,99 @@ export default function CompanyPageScreen() {
       <ImageBackground
         source={require("../../assets/SnapTogether/AfrotechMap.png")}
         style={styles.map}
-      >
+        region={currentRegion}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+        >
+          
         <Image
-              style={styles.mapIcon}
-              source={{ uri: selectedCompany.logo_url }}
-            />
-      <View 
-      // style={{ paddingTop: insets.top }}
-      >
-        <CompanyPageHeader pageName={pageName} buttonTitle={buttonTitle} companyData={selectedCompany}/>
-      </View>
-      <BottomSheet
-        ref={sheetRef}
-        index={3}
-        snapPoints={["35", "45", "55", "65", "75", "85"]}
-      >
-        <View style={styles.logoAndName}>
-          <TouchableOpacity
-            style={styles.title}
-            onPress={() => {
-              navigation.navigate("CompanyPage", { selectedCompany });
-            }}
-          >
-            <View style = {styles.bitmojiContainer}>
-            <Image
-              style={styles.bitmojiImage}
-              source={{ uri: selectedCompany.logo_url }}
-            />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.title}
-            onPress={() => {
-              navigation.navigate("CompanyPage", { selectedCompany });
-            }}
-          >
-            <Text style={styles.title}>{selectedCompany.username.toUpperCase()}</Text>
-          </TouchableOpacity>
-          <Icon name="stars" size={25} color={"yellow"} />
-        </View>
-        <View>
-          <Image
-            source={require("../../assets/SnapTogether/CompanyFriends.png")}
-            style={styles.companyFriends}
+          style={styles.mapIcon}
+          source={{ uri: selectedCompany.logo_url }}
+        />
+        <View
+        // style={{ paddingTop: insets.top }}
+        >
+          <CompanyPageHeader
+            pageName={pageName}
+            buttonTitle={buttonTitle}
+            companyData={selectedCompany}
           />
         </View>
-        <View style={styles.buttons}>
-          <Button buttonStyle={styles.subscribe}>
-            <Icon name="bookmark-add" size={20} color={"white"} />
-            <Text
-              style={{ color: "white", fontSize: 16, fontWeight: "semibold" }}
+        <BottomSheet
+          ref={sheetRef}
+          index={3}
+          snapPoints={["35", "45", "55", "65", "75", "85"]}
+        >
+          <View style={styles.logoAndName}>
+            <TouchableOpacity
+              style={styles.title}
+              onPress={() => {
+                navigation.navigate("CompanyPage", { selectedCompany });
+              }}
             >
-              Subscribe
-            </Text>
-          </Button>
-          <TouchableOpacity style={styles.expand}>
-            <Icon name="expand-circle-down" size={50} color={"lightgray"} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.selectorButtonContainer}>
-          <SelectorButton
-            title="Stories"
-            onPress={() => handlePress("Stories")}
-            isActive={selectedOption === "Stories"}
-          />
-          <SelectorButton
-            title="Communities"
-            onPress={() => handlePress("Communities")}
-            isActive={selectedOption === "Communities"}
-          />
-        </View>
-        <View style={styles.storyGrid}>
-          <FlatList
-            data={getData()}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity>
-              <Image source={item} style={styles.storyImage} />
-              </TouchableOpacity>
-            )}
-            numColumns={3}
-          />
-        </View>
-      </BottomSheet>
+              <View style={styles.bitmojiContainer}>
+                <Image
+                  style={styles.bitmojiImage}
+                  source={{ uri: selectedCompany.logo_url }}
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.title}
+              onPress={() => {
+                navigation.navigate("CompanyPage", { selectedCompany });
+              }}
+            >
+              <Text style={styles.title}>
+                {selectedCompany.username.toUpperCase()}
+              </Text>
+            </TouchableOpacity>
+            <Icon name="stars" size={25} color={"yellow"} />
+          </View>
+          <View>
+            <Image
+              source={require("../../assets/SnapTogether/CompanyFriends.png")}
+              style={styles.companyFriends}
+            />
+          </View>
+          <View style={styles.buttons}>
+            <Button buttonStyle={styles.subscribe}>
+              <Icon name="bookmark-add" size={20} color={"white"} />
+              <Text
+                style={{ color: "white", fontSize: 16, fontWeight: "semibold" }}
+              >
+                Subscribe
+              </Text>
+            </Button>
+            <TouchableOpacity style={styles.expand}>
+              <Icon name="expand-circle-down" size={50} color={"lightgray"} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.selectorButtonContainer}>
+            <SelectorButton
+              title="Stories"
+              onPress={() => handlePress("Stories")}
+              isActive={selectedOption === "Stories"}
+            />
+            <SelectorButton
+              title="Communities"
+              onPress={() => handlePress("Communities")}
+              isActive={selectedOption === "Communities"}
+            />
+          </View>
+          <View style={styles.storyGrid}>
+            <FlatList
+              data={getData()}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity>
+                  <Image source={item} style={styles.storyImage} />
+                </TouchableOpacity>
+              )}
+              numColumns={3}
+            />
+          </View>
+        </BottomSheet>
       </ImageBackground>
     </View>
   );
@@ -171,11 +216,11 @@ const styles = StyleSheet.create({
     top: SCREEN_HEIGHT / 3.5,
   },
   bitmojiContainer: {
-    borderRadius: 100, 
+    borderRadius: 100,
     borderWidth: 3,
-    borderColor: '#10adff',
-    padding: 3.2, 
-    marginBottom: 5, 
+    borderColor: "#10adff",
+    padding: 3.2,
+    marginBottom: 5,
   },
   bitmojiImage: {
     width: 60,
@@ -231,10 +276,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  buttonActiveText:{
+  buttonActiveText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "grey"
+    color: "grey",
   },
   selectorButtonContainer: {
     flexDirection: "row",
@@ -255,7 +300,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH / 3 - 20,
     height: SCREEN_WIDTH / 1.75 - 20,
     margin: 5,
-    borderRadius: 10
+    borderRadius: 10,
   },
   map: {
     flex: 1,
@@ -270,6 +315,6 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 50,
     left: 200,
-    top: 220
-  }
+    top: 220,
+  },
 });
