@@ -271,14 +271,12 @@ const styles = StyleSheet.create({
     alignItems: "left",
   },
   button: {
-    fontSize: 20,
+    fontSize: 26,
     fontWeight: "bold",
     alignSelf: "flex-start",
     fontFamily: "avenir",
-    paddingBottom: 5,
     paddingTop: 10,
     paddingLeft: 10,
-    textDecorationLine: "underline",
   },
   buttonText: {
     color: "white",

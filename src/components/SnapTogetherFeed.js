@@ -12,7 +12,8 @@ export default function SnapTogetherFeed({ title, eventImage, handlePress, selec
   const navigation = useNavigation();
 
   return (
-    <View style={styles.FeedContainer}>
+    <View style = {{ paddingTop:5 }}>
+      <View style={styles.FeedContainer}>
       <View style={styles.Square}>
         <Pressable
           onPress={() => {
@@ -38,6 +39,8 @@ export default function SnapTogetherFeed({ title, eventImage, handlePress, selec
         </Pressable>
       </View>
     </View>
+    </View>
+    
   );
 }
 
@@ -46,10 +49,8 @@ const styles = StyleSheet.create({
     width: "100%",
     display: "flex",
     flex: 2,
-    gap: 10,
     justifyContent: "space-between",
     flexWrap: "wrap",
-    paddingTop: 20
   },
   Square: {
     display: "flex",
@@ -62,8 +63,8 @@ const styles = StyleSheet.create({
     margin: 6,
   },
   FeedImage: {
-    width: 200,
-    height: 300,
+    width: 185,
+    height: 277,
     display: "flex",
     justifyContent: "center",
     borderRadius: 50,
