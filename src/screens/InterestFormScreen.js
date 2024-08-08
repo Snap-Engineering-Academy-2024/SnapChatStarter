@@ -1,20 +1,280 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image , TextInput, ImageBackground} from "react-native";
+// import React, { useEffect, useState } from "react";
+// import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image, TextInput, ImageBackground, Animated, scrollY } from "react-native";
+// import PopupLocationNotification from "../components/PopupLocationNotification";
+// import { useNavigation } from "@react-navigation/native";
+// import { useAuthentication } from '../utils/hooks/useAuthentication';
+// import { supabase } from '../utils/hooks/supabase';
+
+// const trendingInterests = [
+//   { name: "Charli XCX", category: "Music" },
+//   { name: "Twilight", category: "Pop Culture & Entertainment" },
+//   { name: "Cooking", category: "Hobby" },
+//   { name: "Skating", category: "Sport" },
+//   { name: "Dance", category: "Hobby" }
+// ];
+
+// function InterestSelectionScreen() {
+//   const navigation = useNavigation();
+//   const [selectedInterests, setSelectedInterests] = useState([]);
+//   const [popupTrigger, setPopupTrigger] = useState(false);
+//   const { user } = useAuthentication();
+
+//   const handlePress = async (text) => {
+//     await writeToTable(text);
+//     setPopupTrigger(true);
+//   };
+
+//   const writeToTable = async () => {
+//     const { data: existingData, error: fetchError } = await supabase
+//       .from('profiles')
+//       .select('interests')
+//       .eq('id', user.id)
+//       .single();
+
+//     if (fetchError) {
+//       console.error('Error fetching existing data:', fetchError);
+//     } else {
+//       const { data: upsertedData, error: upsertError } = await supabase
+//         .from('profiles')
+//         .upsert({
+//           id: user.id,
+//           interests: selectedInterests
+//         });
+
+//       if (upsertError) {
+//         console.error('Error upserting data:', upsertError);
+//       } else {
+//         console.log('Upsert successful:', upsertedData);
+//       }
+//     }
+//   };
+
+//   const [searchQuery, setSearchQuery] = useState("");
+
+//   const toggleInterest = (interest) => {
+//     if (selectedInterests.includes(interest)) {
+//       setSelectedInterests(selectedInterests.filter((i) => i !== interest));
+//     } else {
+//       setSelectedInterests([...selectedInterests, interest]);
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (selectedInterests.length === 3) {
+//       console.log(selectedInterests);
+//     }
+//   }, [selectedInterests]);
+
+//   return (
+//     <ImageBackground
+//       source={{ uri: 'https://i.imgur.com/l1oUU7G_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }}
+//       style={styles.backgroundImage}
+//     >
+//       <ScrollView contentContainerStyle={styles.container}>
+//         <TextInput
+//           style={styles.searchBar}
+//           placeholder="Find Interests"
+//           value={searchQuery}
+//           onChangeText={setSearchQuery}
+//         />
+//         <Image
+//           source={{ uri: "https://i.imgur.com/tT6wWW3_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+//           style={styles.headerImage}
+//         />
+//         <Text style={styles.headerText}>Add 3 of your current interests to connect with others!</Text>
+//         <View style={styles.trendingContainer}>
+//           <Text style={styles.trendingTitle}>Trending Interests</Text>
+//           <TouchableOpacity>
+//             <Text style={styles.seeMore}>See More</Text>
+//           </TouchableOpacity>
+//         </View>
+//         <View style={styles.interestsContainer}>
+//           {trendingInterests.map((interest) => (
+//             <View key={interest.name} style={styles.interestItem}>
+//               <View style={styles.interestTextContainer}>
+//                 <Text style={styles.interestName}>{interest.name}</Text>
+//                 <Text style={styles.interestCategory}>{interest.category}</Text>
+//               </View>
+//               <TouchableOpacity
+//                 style={[
+//                   styles.addButton,
+//                   selectedInterests.includes(interest.name) && styles.selectedAddButton,
+//                 ]}
+//                 onPress={() => toggleInterest(interest.name)}
+//               >
+//                 <Text style={styles.addButtonText}>
+//                   {selectedInterests.includes(interest.name) ? "Added" : "+ Add"}
+//                 </Text>
+//               </TouchableOpacity>
+//             </View>
+//           ))}
+//         </View>
+//         {/* <TouchableOpacity style={styles.submitButton} onPress={() => { setPopupTrigger(true); }}>
+//           <Text style={styles.submitButtonText}>Submit</Text>
+//         </TouchableOpacity> */}
+//         <Animated.View style={[styles.continueButtonContainer, {
+//         transform: [{
+//           translateY: scrollY.interpolate({
+//             inputRange: [0, 1],
+//             outputRange: [0, 1],
+//             extrapolate: 'clamp'
+//           })
+//         }]
+//       }]}>
+//         <TouchableOpacity style={styles.continueButton} 
+//         onPress={() => {
+//             navigation.navigate("Interests");
+//           }}>
+//           <Text style={styles.continueButtonText}>
+//             <Image
+//               source={{ uri: "https://i.imgur.com/71FOGMX_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+//               style={{ width: 40, height: 30 }}
+//             />
+//           </Text>
+//         </TouchableOpacity>
+//         </Animated.View>
+//       </ScrollView>
+//     </ImageBackground>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flexGrow: 1,
+//     alignItems: "center",
+//     justifyContent: "center",
+//     padding: 20,
+//   },
+//   searchBar: {
+//     width: '100%',
+//     padding: 10,
+//     marginBottom: 20,
+//     borderColor: 'gray',
+//     borderWidth: 1,
+//     borderRadius: 20,
+//     backgroundColor: 'white',
+//   },
+//   headerImage: {
+//     width: 380,
+//     height: 280,
+//   },
+//   headerText: {
+//     marginTop: 10,
+//     fontSize: 15,
+//     textAlign: 'center',
+//     color: 'grey',
+//   },
+//   trendingContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     width: '100%',
+//     paddingVertical: 10,
+//   },
+//   trendingTitle: {
+//     fontSize: 17,
+//     fontWeight: "bold",
+//   },
+//   seeMore: {
+//     fontSize: 14,
+//     color: 'black',
+//   },
+//   interestsContainer: {
+//     width: '100%',
+//   },
+//   interestItem: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//     paddingVertical: 10,
+//     borderBottomWidth: 1,
+//     borderColor: 'lightgrey',
+//     backgroundColor: 'white',
+//     borderRadius: 10,
+//     paddingRight: 10, 
+//     paddingLeft: 10,
+//   },
+//   interestTextContainer: {
+//     flexDirection: 'column',
+   
+//   },
+//   interestName: {
+//     fontSize: 16,
+//   },
+//   interestCategory: {
+//     fontSize: 12,
+//     color: 'grey',
+//   },
+//   addButton: {
+//     backgroundColor: "#0fadfe",
+//     paddingVertical: 5,
+//     paddingHorizontal: 15,
+//     borderRadius: 20,
+//   },
+//   selectedAddButton: {
+//     backgroundColor: "#0fadfe",
+//   },
+//   addButtonText: {
+//     color: "white",
+//     fontSize: 14,
+//   },
+//   submitButton: {
+//     marginTop: 20,
+//     backgroundColor: "#FFFC00",
+//     paddingVertical: 10,
+//     paddingHorizontal: 30,
+//     borderRadius: 20,
+//     borderColor: "black",
+//     borderWidth: 1,
+//   },
+//   submitButtonText: {
+//     fontSize: 18,
+//     fontWeight: "bold",
+//     color: "black",
+//   },
+//   backgroundImage: {
+//     flex: 1,
+//     resizeMode: "cover",
+//     justifyContent: "center",
+//   },
+//   continueButtonContainer: {
+//     position: 'absolute',
+//     bottom: 30,
+//     right: 30,
+//     zIndex: 1000,
+//   },
+//   continueButton: {
+//     backgroundColor: '#0fadfe',
+//     paddingVertical: 13,
+//     paddingHorizontal: 13,
+//     borderRadius: 400,
+    
+//   },
+//   continueButtonText: {
+//     color: 'white',
+//     fontSize: 30,
+//     fontWeight: 'bold',
+//   },
+// });
+
+// export default InterestSelectionScreen;
+
+
+import React, { useEffect, useState, useRef } from "react";
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image, TextInput, ImageBackground } from "react-native";
 import PopupLocationNotification from "../components/PopupLocationNotification";
 import { useNavigation } from "@react-navigation/native";
 import { useAuthentication } from '../utils/hooks/useAuthentication';
 import { supabase } from '../utils/hooks/supabase';
 
+const trendingInterests = [
+  { name: "Charli XCX", category: "Music" },
+  { name: "Twilight", category: "Pop Culture & Entertainment" },
+  { name: "Cooking", category: "Hobby" },
+  { name: "Skating", category: "Sport" },
+  { name: "Dance", category: "Hobby" }
+];
 
-const interests = {
-  SelectedInterests:[],
-  Technology: ["Programming", "Gadgets", "AI", "Blockchain"],
-  Arts: ["Music", "Painting", "Dance", "Theater"],
-  Sciences: ["Physics", "Chemistry", "Biology", "Astronomy"],
-  Entertainment: ["Movies", "Gaming", "Travel", "Food"],
-};
-
-export default function InterestSelectionScreen() {
+function InterestSelectionScreen() {
   const navigation = useNavigation();
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [popupTrigger, setPopupTrigger] = useState(false);
@@ -26,36 +286,31 @@ export default function InterestSelectionScreen() {
   };
 
   const writeToTable = async () => {
-    // Step 1: Fetch the existing record
-      const { data: existingData, error: fetchError } = await supabase
+    const { data: existingData, error: fetchError } = await supabase
       .from('profiles')
       .select('interests')
       .eq('id', user.id)
       .single();
-      if (fetchError) {
-        console.error('Error fetching existing data:', fetchError);
+
+    if (fetchError) {
+      console.error('Error fetching existing data:', fetchError);
+    } else {
+      const { data: upsertedData, error: upsertError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          interests: selectedInterests
+        });
+
+      if (upsertError) {
+        console.error('Error upserting data:', upsertError);
       } else {
-
-    
-        // Step 3: Upsert the updated record
-        const { data: upsertedData, error: upsertError } = await supabase
-          .from('profiles')
-          .upsert({
-            id: user.id, // Use the user ID to identify the record
-            interests: selectedInterests // Set the updated interests array
-          });
-    
-        if (upsertError) {
-          console.error('Error upserting data:', upsertError);
-        } else {
-          console.log('Upsert successful:', upsertedData);
-        }
+        console.log('Upsert successful:', upsertedData);
       }
-    
-    };
+    }
+  };
+
   const [searchQuery, setSearchQuery] = useState("");
-
-
 
   const toggleInterest = (interest) => {
     if (selectedInterests.includes(interest)) {
@@ -65,96 +320,70 @@ export default function InterestSelectionScreen() {
     }
   };
 
-  // const handleSubmit = () => {
-  //   console.log("Selected Interests:", selectedInterests);
-  // };
-
   useEffect(() => {
-    
-  }, [user]);
-  useEffect(() => {
-    if (selectedInterests.length === 3)
+    if (selectedInterests.length === 3) {
       console.log(selectedInterests);
+    }
   }, [selectedInterests]);
 
   return (
-    <ImageBackground 
-      source={{ uri: 'https://i.imgur.com/l1oUU7G_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }} 
+    <ImageBackground
+      source={{ uri: 'https://i.imgur.com/l1oUU7G_d.jpg?maxwidth=520&shape=thumb&fidelity=high' }}
       style={styles.backgroundImage}
     >
-    
-    <ScrollView contentContainerStyle={styles.container}>
-    <Image
-            source={{ uri: "https://i.imgur.com/tT6wWW3_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
-            style={styles.headerImage}
-          />
-          <Text style={styles.headerText}>Select any identities that best suit you!</Text>
       <ScrollView contentContainerStyle={styles.container}>
-    
-  <PopupLocationNotification trigger={popupTrigger} setTrigger={setPopupTrigger}>
-     <Text style={{fontSize: 40, marginTop: 20 }}>Community Ping</Text>
-     <Text style={{fontSize: 20, marginTop: 20 }}>Warning: Location Privacy</Text>
-     <Image
-      source={{ uri: "https://i.imgur.com/wWeONMN_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
-      style={{ width: 300, height: 500, borderRadius: 15}}
-    />
-    <TouchableOpacity style={styles.understandButton} onPress={() => {navigation.navigate("Profile"); }}>
-          <Text style={styles.understandText}>I Understand</Text>
-        </TouchableOpacity>
-  </PopupLocationNotification>
-
-  <TextInput
-    style={styles.searchBar}
-    placeholder="Search Interests"
-    value={searchQuery}
-    onChangeText={setSearchQuery}
-  />
-
-
-  {Object.keys(interests).map((category) => (
-    <View key={category} style={styles.categoryContainer}>
-      <Text style={styles.categoryTitle}>{category}</Text>
-      <View style={styles.interestsContainer}>
-        {interests[category].map((interest) => (
-          <TouchableOpacity
-            key={interest}
-            style={[
-              styles.interestButton,
-              selectedInterests.includes(interest) && styles.selectedInterestButton,
-            ]}
-            onPress={() => toggleInterest(interest)}
-          >
-            <Text
-              style={[
-                styles.interestText,
-                selectedInterests.includes(interest) && styles.selectedInterestText,
-              ]}
-            >
-              {interest}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
-  ))}
-  <TouchableOpacity style={styles.submitButton} onPress={() => {setPopupTrigger(true); }}>
-    <Text style={styles.submitButtonText}>Submit</Text>
-  </TouchableOpacity>
-</ScrollView>
-
-      <PopupLocationNotification trigger={popupTrigger} setTrigger={setPopupTrigger}>
-         <Text style={{fontSize: 40, marginTop: 20 }}>Community Ping</Text>
-         <Text style={{fontSize: 20, marginTop: 20 }}>Warning: Location Privacy</Text>
-         <Image
-          source={{ uri: "https://i.imgur.com/wWeONMN_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
-          style={{ width: 300, height: 500, borderRadius: 15}}
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Find Interests"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
         />
-        <TouchableOpacity style={styles.understandButton} onPress={() => {navigation.navigate("Profile"); }}>
-              <Text style={styles.understandText}>I Understand</Text>
-            </TouchableOpacity>
-
-      </PopupLocationNotification>
-    </ScrollView>
+        <Image
+          source={{ uri: "https://i.imgur.com/tT6wWW3_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+          style={styles.headerImage}
+        />
+        <Text style={styles.headerText}>Add 3 of your current interests to connect with others!</Text>
+        <View style={styles.trendingContainer}>
+          <Text style={styles.trendingTitle}>Trending Interests</Text>
+          <TouchableOpacity>
+            <Text style={styles.seeMore}>See More</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.interestsContainer}>
+          {trendingInterests.map((interest) => (
+            <View key={interest.name} style={styles.interestItem}>
+              <View style={styles.interestTextContainer}>
+                <Text style={styles.interestName}>{interest.name}</Text>
+                <Text style={styles.interestCategory}>{interest.category}</Text>
+              </View>
+              <TouchableOpacity
+                style={[
+                  styles.addButton,
+                  selectedInterests.includes(interest.name) && styles.selectedAddButton,
+                ]}
+                onPress={() => toggleInterest(interest.name)}
+              >
+                <Text style={styles.addButtonText}>
+                  {selectedInterests.includes(interest.name) ? "Added" : "+ Add"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+      <View style={styles.continueButtonContainer}>
+        <TouchableOpacity style={styles.continueButton}
+          onPress={() => {
+            navigation.navigate("Interests");
+          }}>
+          <Text style={styles.continueButtonText}>
+            <Image
+              source={{ uri: "https://i.imgur.com/71FOGMX_d.jpg?maxwidth=520&shape=thumb&fidelity=high" }}
+              style={{ width: 40, height: 30 }}
+            />
+          </Text>
+        </TouchableOpacity>
+      </View>
     </ImageBackground>
   );
 }
@@ -165,6 +394,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
+    marginBottom: 900, 
   },
   searchBar: {
     width: '100%',
@@ -173,46 +403,69 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 20,
+    backgroundColor: 'white',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+  headerImage: {
+    width: 380,
+    height: 280,
   },
-  categoryContainer: {
+  headerText: {
+    marginTop: 10,
+    fontSize: 15,
+    textAlign: 'center',
+    color: 'grey',
+  },
+  trendingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 20,
+    paddingVertical: 10,
   },
-  categoryTitle: {
+  trendingTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: 'left',
-    width: '100%',
+  },
+  seeMore: {
+    fontSize: 14,
+    color: 'black',
   },
   interestsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    width: '100%',
   },
-  interestButton: {
-    backgroundColor: "#f0f0f0",
+  interestItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    margin: 5,
+    borderBottomWidth: 1,
+    borderColor: 'lightgrey',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingRight: 10,
+    paddingLeft: 10,
+  },
+  interestTextContainer: {
+    flexDirection: 'column',
+  },
+  interestName: {
+    fontSize: 16,
+  },
+  interestCategory: {
+    fontSize: 12,
+    color: 'grey',
+  },
+  addButton: {
+    backgroundColor: "#0fadfe",
+    paddingVertical: 5,
+    paddingHorizontal: 15,
     borderRadius: 20,
-    borderColor: "black",
-    borderWidth: 1,
   },
-  selectedInterestButton: {
-    backgroundColor: "#FFFC00",
+  selectedAddButton: {
+    backgroundColor: "#0fadfe",
   },
-  interestText: {
+  addButtonText: {
+    color: "white",
     fontSize: 14,
-    color: "black",
-  },
-  selectedInterestText: {
-    fontWeight: "bold",
   },
   submitButton: {
     marginTop: 20,
@@ -228,27 +481,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
   },
-  understandButton: {
-    backgroundColor: 'lightgrey',
-    borderRadius: 100,
-    padding: 10,
+  backgroundImage: {
     flex: 1,
-    marginVertical: 35,
-    alignItems: 'center',
+    resizeMode: "cover",
+    justifyContent: "center",
   },
-  understandText: {
-    color: 'black',
-    fontSize: 19,
+  continueButtonContainer: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    zIndex: 1000,
   },
-  headerImage: {
-    width: 318,
-    height: 280,
-    marginTop: 20,
+  continueButton: {
+    backgroundColor: '#0fadfe',
+    paddingVertical: 13,
+    paddingHorizontal: 13,
+    borderRadius: 400,
   },
-  headerText: {
-    marginTop: 10,
-    fontSize: 15,
-    textAlign: 'center',
-    color: 'grey',
+  continueButtonText: {
+    color: 'white',
+    fontSize: 30,
+    fontWeight: 'bold',
   },
 });
+
+export default InterestSelectionScreen;
