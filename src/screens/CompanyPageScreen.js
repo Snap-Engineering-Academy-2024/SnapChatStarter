@@ -59,31 +59,31 @@ export default function CompanyPageScreen() {
   const [selectedOption, setSelectedOption] = useState("Stories");
   const [location, setLocation] = useState(null);
 
-  const [currentRegion, setCurrentRegion] = useState({
-    latitude: 34.0211573,
-    longitude: -118.4503864,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
+  const currentRegion = {
+    latitude: selectedCompany.location[0] - .0350, // 29.7150
+    longitude: selectedCompany.location[1] - .0050, // -95.3650
+    latitudeDelta: 0.09,
+    longitudeDelta: 0.09,
+  };
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
+  // useEffect(() => {
+  //   (async () => {
+  //     let { status } = await Location.requestForegroundPermissionsAsync();
+  //     if (status !== "granted") {
+  //       setErrorMsg("Permission to access location was denied");
+  //       return;
+  //     }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      setCurrentRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
-    })();
-  }, []);
+  //     let location = await Location.getCurrentPositionAsync({});
+  //     setLocation(location);
+  //     setCurrentRegion({
+  //       latitude: location.coords.latitude,
+  //       longitude: location.coords.longitude,
+  //       latitudeDelta: 0.0922,
+  //       longitudeDelta: 0.0421,
+  //     });
+  //   })();
+  // }, []);
 
   let text = "Waiting...";
   text = JSON.stringify(location);
@@ -98,14 +98,16 @@ export default function CompanyPageScreen() {
 
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require("../../assets/SnapTogether/AfrotechMap.png")}
+      <View
+        style={styles.map}
+        >
+         <MapView
         style={styles.map}
         region={currentRegion}
         showsUserLocation={true}
-        showsMyLocationButton={true}
-        >
-          
+        // scrollEnabled={false} // Disable panning
+        // zoomEnabled={false} // Disable zooming
+      /> 
         <Image
           style={styles.mapIcon}
           source={{ uri: selectedCompany.logo_url }}
@@ -194,7 +196,7 @@ export default function CompanyPageScreen() {
             />
           </View>
         </BottomSheet>
-      </ImageBackground>
+      </View>
     </View>
   );
 }
@@ -303,8 +305,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   map: {
-    flex: 1,
-    resizeMode: "cover",
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     height: SCREEN_HEIGHT,
     width: SCREEN_WIDTH,
   },
