@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView,  TouchableOpacity, Dimensions} from 'react-native';
+import { View, Text, StyleSheet, ScrollView,  TouchableOpacity, Dimensions, Image} from 'react-native';
 import { colors } from "../../assets/themes/colors";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { inline } from 'react-native-web/dist/cjs/exports/StyleSheet/compiler';
@@ -13,6 +13,30 @@ export default function LocationDetails({ place, onClose,  }) {
   const Circle = () => {
     return <View style={styles.circle} />;
   };
+let rootDomain;
+  if (typeof place.website !='undefined') {
+    const parsedUrl = new URL(place.website);
+    const hostname = parsedUrl.hostname;
+    const domainParts = hostname.split('.');
+    rootDomain = domainParts.slice(-2).join('.');
+  }
+  
+
+  // const urlRegex = /<a href="([^"]*)">/;
+  // const match = place.photos[0].html_attributions[0].match(urlRegex);
+  // let photoURL;
+  // // If a match is found, return the URL
+  // if (match && match[1]) {
+  //   photoURL = match[1];
+  // }
+
+  // const getDayOfWeek = () => {
+  //   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  //   const today = new Date();
+  //   return daysOfWeek[today.getDay()];
+  // };
+
+  // const todayDayOfWeek = getDayOfWeek();
 
   const Rectangle = () => {
     return <View style={styles.rectangle} />;
@@ -26,19 +50,38 @@ export default function LocationDetails({ place, onClose,  }) {
         {/* HEADER OF LOCATION DETAILS*/} 
         <View style={styles.header}>
           <Circle></Circle> 
-          <View> 
-            <View style={styles.inline}> 
+          <View style={{width: width/2, flexDirection:"row"}}> 
+            <View style={{flexDirection: "row", flexWrap: "wrap", width: width/2}}> 
+            <View style={{width: width/2}}>
               <Text style={styles.title}>{place.name}</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeButton}>Close</Text>
-            </TouchableOpacity>
             </View>
-                
-            <Text style={{ textTransform: 'capitalize' }}>{place.types[0]} - ${price.repeat(place.price_level)}</Text>
-            <Text>{(typeof place.opening_hours !='undefined')? (place.opening_hours.open_now? 'Open Now - ' : 'Closed - '):''}The Rocks</Text>
+              
+            {/* <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <Ionicons name="close" size={20} color="black" />
+            </TouchableOpacity> */}   
+            <Text style={{ textTransform: 'capitalize', width: width/2, color: "grey" }}>{place.types[0]} - ${price.repeat(place.price_level)}</Text>
+            {
+              typeof place.opening_hours != "undefined" && 
+              <Text>     
+              {
+                place.opening_hours.open_now && 
+                <Text style={{color: "green"}}>Open Now</Text>
+              }
+              {
+                !place.opening_hours.open_now &&
+                <Text style={{color: "red"}}>Closed</Text>
+              }
+              <Text style={{color: "grey"}}> - {place.address_components[2].long_name}, {place.address_components[3].long_name}</Text>
+              </Text>
+            }
             {/* <View style={styles.iconContainer}>
                 <Ionicons name="star-outline" size={20} color="black" />
-            </View> */}
+            </View> */}</View>
+            <View style={{width: width/8, direction: "rtl"}}>
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <Ionicons name="close" size={20} color="black" />
+            </TouchableOpacity>
+            </View>
           </View>
          </View>
 
@@ -89,11 +132,12 @@ export default function LocationDetails({ place, onClose,  }) {
         </TouchableOpacity>
         
         {/* SPOTLIGHT SECTION */}
-        <View style={styles.spotlight}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.spotlight}>
+          {/* <Image source={{uri: photoURL}}/> */}
           <Rectangle></Rectangle>
           <Rectangle></Rectangle>
           <Rectangle></Rectangle>
-        </View>
+        </ScrollView>
 
 {
   typeof place.opening_hours !='undefined' && 
@@ -125,7 +169,12 @@ export default function LocationDetails({ place, onClose,  }) {
                 <View style={styles.iconContainer}>
                   <Ionicons name="location-outline" size={20} color="black" />
                 </View>
-                <Text style={{width: width / 1.5,}}>Address</Text>
+                <View>
+                  <Text style={{width: width / 1.5,}}>Address</Text>
+                  <Text style={{color: "grey"}}>{place.address_components[0].long_name} {place.address_components[1].short_name}</Text>
+                  <Text style={{color: "grey"}}>{place.address_components[3].long_name}, {place.address_components[5].long_name} {place.address_components[7].long_name}</Text>
+                </View>
+                
                 <View style={styles.iconContainer}>
               <Ionicons name="chevron-forward-outline" size={20} color="grey"/>
             </View>
@@ -137,31 +186,42 @@ export default function LocationDetails({ place, onClose,  }) {
                 <View style={styles.iconContainer}>
                   <Ionicons name="call-outline" size={20} color="black" />
                 </View>
-                <Text style={{width: width / 1.5,}}>Call</Text>
+                <View>
+                  <Text style={{width: width / 1.5,}}>Call</Text>
+                  <Text style={{color: "grey"}}>{place.formatted_phone_number}</Text>
+                </View>
+                
                 <View style={styles.iconContainer}>
               <Ionicons name="chevron-forward-outline" size={20} color="grey"/>
             </View>
               </View>
             </TouchableOpacity>
-
-            <TouchableOpacity>
+{
+typeof place.website !='undefined' && 
+<TouchableOpacity>
               <View style={styles.footerButton}>
                 <View style={styles.iconContainer}>
                   <Ionicons name="earth-outline" size={20} color="black" />
                 </View>
-                <Text style={{width: width / 1.5,}}>Visit Website</Text>
+                <View>
+                  <Text style={{width: width / 1.5,}}>Visit Website</Text>
+                  <Text style={{width: width / 1.5, color: "grey"}}>{rootDomain}</Text>
+                </View>
+                
                 <View style={styles.iconContainer}>
               <Ionicons name="chevron-forward-outline" size={20} color="grey"/>
             </View>
               </View>
             </TouchableOpacity>
+}
+            
 
             <TouchableOpacity>
               <View style={styles.footerButton}>
                 <View style={styles.iconContainer}>
                   <Ionicons name="flag-outline" size={20} color="black" />
                 </View>
-                <Text style={{width: width / 1.5,}}>Report an issue</Text>
+                <Text style={{width: width / 1.5, alignSelf: "center"}}>Report an issue</Text>
                 <View style={styles.iconContainer}>
               <Ionicons name="chevron-forward-outline" size={20} color="grey"/>
             </View>
@@ -177,7 +237,7 @@ export default function LocationDetails({ place, onClose,  }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingLeft: 20,
     backgroundColor: '#fff',
   },
   modalOverlay: {
@@ -188,13 +248,13 @@ const styles = StyleSheet.create({
     //justifyContent: 'flex-end',
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '600',
     // marginBottom: 10,
     flexWrap: "wrap"
   },
   details: {
-    fontSize: 16,
+    //fontSize: 16,
     marginBottom: 10,
   },
   circle: {
@@ -205,21 +265,10 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    // flexWrap: "wrap",
-    columnGap: 20,
-    justifyContent: "flex-start",
-    marginBottom: 10,
-    width: width/2,
-    alignSelf: "stretch",
+    columnGap: 10,
+    marginBottom: 25,
+    width: width/1.5 ,
   }, 
-  closeButton: {
-    alignSelf: "center",
-    direction: "rtl"
-  },
-  inline: {
-    flexDirection: "row",
-    columnGap: 25,
-  },
   button: {
     backgroundColor: colors.belowPage,
     borderRadius: 80,
@@ -237,7 +286,7 @@ const styles = StyleSheet.create({
     width: 30, 
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 6,
+    //marginRight: 6,
     flexDirection: "row",
     alignSelf: "center"
   },
@@ -245,7 +294,8 @@ const styles = StyleSheet.create({
     width: 70 * 2,
     height: 200,
     backgroundColor: "grey",
-    borderRadius: 5
+    borderRadius: 5,
+    marginRight: 20
   },
   buttonSection: {
     flexDirection: "row",
@@ -256,13 +306,11 @@ const styles = StyleSheet.create({
   tagButtonText: {
     fontSize: 9,
     paddingRight: 5,
-    columnGap: 0,
+    columnGap: 0
   },
   tagButton: {
     backgroundColor: colors.belowPage,
-    // borderColor: "black",
     borderRadius: 80,
-   // padding: 3,
     marginHorizontal: 3,
     flexDirection: 'row',
     alignItems: 'center',
@@ -304,7 +352,8 @@ const styles = StyleSheet.create({
   },
   spotlight: {
     flexDirection: "row",
-    columnGap: 25,
+    columnGap: 30,
+    paddingRight: 30,
     marginBottom: 15
   },
   scheduleButton: {
@@ -336,5 +385,18 @@ const styles = StyleSheet.create({
     shadowOffset: 10,
     borderRadius: 5,
     columnGap: 10
-  }
+  },
+  closeButton: {
+    top: 20,
+    right: 20,
+    backgroundColor: colors.belowPage,
+    borderRadius: 25,
+    height: 35,
+    width: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#DDDDDD',
+    direction: "rtl"
+  },
 });
