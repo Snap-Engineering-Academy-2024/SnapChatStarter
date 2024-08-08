@@ -16,6 +16,7 @@ import TopicsScreen from "../screens/TopicsScreen";
 import ResourcesScreen from "../screens/ResourcesScreen";
 import LevelsScreen from "../screens/LevelsScreen";
 import GameScreen from "../screens/GameScreen";
+import { StyleSheet } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -87,7 +88,7 @@ export default function App() {
         <Stack.Screen
           name="Game"
           component={GameScreen}
-          options={{ headerShown: true }}
+          options={styles.cleanHeader}
         />
         <Stack.Screen
           name="Settings"
@@ -103,3 +104,13 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  cleanHeader: {
+    headerShown: true,
+    headerTransparent: true,
+    headerTitle: "",
+    headerBackTitle: "",
+    headerTintColor: "white",
+  },
+});
