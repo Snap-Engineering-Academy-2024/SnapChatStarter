@@ -47,7 +47,7 @@ export default function () {
           component={MemoryScreen}
           options={{ headerShown: true }}
         />
-        <Stack.Screen name="MapScreen" component={MapScreen} />
+        <Stack.Screen name="MapScreen" component={MapScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="LocationList" component={LocationList} />
 
       </Stack.Navigator>
