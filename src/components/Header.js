@@ -20,32 +20,32 @@ export default function Header({ title }) {
   const navigation = useNavigation();
 
   const [profilePicUrl, setProfilePicUrl] = useState(
-    "https://i.imgur.com/FxsJ3xy.jpg",
+    require("../../assets/edwina-pfp.png"),
   );
 
-  const { user } = useAuthentication();
+  // const { user } = useAuthentication();
 
-  useEffect(() => {
-    async function fetchProfilePic() {
-      if (user === null) {
-        return;
-      }
+  // useEffect(() => {
+  //   async function fetchProfilePic() {
+  //     if (user === null) {
+  //       return;
+  //     }
 
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("avatar_url")
-        .eq("id", user.id)
-        .single();
+  //     const { data, error } = await supabase
+  //       .from("profiles")
+  //       .select("avatar_url")
+  //       .eq("id", user.id)
+  //       .single();
 
-      if (error) {
-        console.log("Profile pic fetch failure");
-      } else if (data.avatar_url) {
-        setProfilePicUrl(data.avatar_url);
-      }
-    }
+  //     if (error) {
+  //       console.log("Profile pic fetch failure");
+  //     } else if (data.avatar_url) {
+  //       setProfilePicUrl(data.avatar_url);
+  //     }
+  //   }
 
-    fetchProfilePic();
-  }, [user]);
+  //   fetchProfilePic();
+  // }, [user]);
 
   const [showMenu, setShowMenu] = useState(false);
   // console.log(showMenu);
@@ -64,7 +64,7 @@ export default function Header({ title }) {
             navigation.navigate("Profile");
           }}
         >
-          <Image style={styles.profileImage} source={{ uri: profilePicUrl }} />
+          <Image style={styles.profileImage} source={profilePicUrl} />
         </Pressable>
         <Pressable
           style={[styles.search, styles.buttons]}
@@ -126,10 +126,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: "#000000",
   },
   title: {
     textAlign: "center",
-    color: colors.primary,
+    color: "#FFFFFF",
     fontSize: fontHeader.fontSize,
     fontFamily: fontHeader.fontFamily,
     fontWeight: fontHeader.fontWeight,
@@ -146,10 +147,11 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     height: 44,
     width: 44,
-    backgroundColor: colors.interactionGraySubtle,
+    // backgroundColor: colors.interactionGraySubtle,
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
+    backgroundColor: "#000000"
   },
   profileImage: {
     width: "100%",

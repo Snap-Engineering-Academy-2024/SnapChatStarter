@@ -6,7 +6,7 @@ export default function TopicsScreen() {
     const navigation = useNavigation();
     
     return (
-        <SafeAreaView>
+        // <SafeAreaView>
             <View style={styles.container}>
                 <View style={styles.backgroundWrapper}>
                     <ImageBackground 
@@ -15,7 +15,7 @@ export default function TopicsScreen() {
                         imageStyle={{ borderRadius: 10 }}
                     >
                         <Text style={styles.levelsHeading}>
-                            Coding Map
+                            Weekly Roadmap
                         </Text>
                         <View style={styles.startButtonWrapper}>
                             <Button
@@ -33,36 +33,50 @@ export default function TopicsScreen() {
                         </View>
                         <View style={styles.secondButtonWrapper}>
                             <Button
-                                style={styles.grayButtonContainer}
                                 icon={styles.lockedButtonIcon}
                                 buttonStyle={styles.grayButton}
+                                containerStyle={styles.grayButtonContainer}
                             />
                         </View>
                         <View style={styles.halfwayButtonWrapper}>
                             <Button
-                                style={styles.grayButtonContainer}
                                 icon={styles.lockedButtonIcon}
                                 buttonStyle={styles.grayButton}
+                                containerStyle={styles.grayButtonContainer}
                             />
                         </View>
                         <View style={styles.fourthButtonWrapper}>
                             <Button
-                                style={styles.grayButtonContainer}
                                 icon={styles.lockedButtonIcon}
                                 buttonStyle={styles.grayButton}
+                                containerStyle={styles.grayButtonContainer}
+                            />
+                        </View>
+                        <View style={styles.fifthButtonWrapper}>
+                            <Button
+                                icon={styles.lockedButtonIcon}
+                                buttonStyle={styles.grayButton}
+                                containerStyle={styles.grayButtonContainer}
+                            />
+                        </View>
+                        <View style={styles.sixthButtonWrapper}>
+                            <Button
+                                icon={styles.lockedButtonIcon}
+                                buttonStyle={styles.grayButton}
+                                containerStyle={styles.grayButtonContainer}
                             />
                         </View>
                         <View style={styles.endButtonWrapper}>
                             <Button
-                                style={styles.grayButtonContainer}
                                 icon={styles.endButtonIcon}
                                 buttonStyle={styles.grayButton}
+                                containerStyle={styles.grayButtonContainer}
                             />
                         </View>
                     </ImageBackground>
                 </View>
             </View>
-        </SafeAreaView>
+        // </SafeAreaView>
     );
 }
 
@@ -74,7 +88,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(21, 23, 22, 1)',
     },
     backgroundWrapper: {
-        width: '80%', 
+        width: '100%', 
         height: 'auto', 
         alignItems: 'center',
         borderRadius: 10,
@@ -85,12 +99,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     levelsHeading: {
-        marginTop: 45,
+        marginTop: 180,
         fontFamily: "Avenir Next",
-        fontSize: 50,
+        fontSize: 40,
         fontWeight: "300",
         color: "white",
-        marginBottom: 50,
+        marginBottom: 106,
     },
     colorButtonContainer: {
         borderWidth: 4,
@@ -102,44 +116,49 @@ const styles = StyleSheet.create({
         width: 50,
     },
     colorButton: {
+        height: 82,
+        width: 123,
         backgroundColor: "#FEC608", 
         borderRadius: 50,
     },
-        startButtonWrapper: {
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        paddingHorizontal: 50,
-        marginBottom: 45,
+    startButtonWrapper: {
+        position: "absolute",
+        top: 286,
+        left: 75,
     },
     secondButtonWrapper: {
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        paddingHorizontal: 100,
-        marginBottom: 55,
+        position: "absolute",
+        top: 365,
+        right: 15
     },
     halfwayButtonWrapper: {
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "center",
-        paddingHorizontal: 100,
-        marginBottom: 50,
+        position: "absolute",
+        top: 437,
+        left: 170,
     },
     fourthButtonWrapper: {
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        paddingHorizontal: 85,
-        marginBottom: 50,
+        position: "absolute",
+        top: 530,
+        left: 16,
+    },
+    fifthButtonWrapper: {
+        position: "absolute",
+        top: 600,
+        left: 173,
+    },
+    sixthButtonWrapper: {
+        position: "absolute",
+        top: 690,
+        right: 12,
     },
     endButtonWrapper: {
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        paddingHorizontal: 50,
+        position: "absolute",
+        top: 725,
+        left: 76,
     },
     grayButtonContainer: {
+        height: 80,
+        width: 104,
         borderWidth: 4,
         borderRadius: 50,
         borderColor: "#FFFFFF",
@@ -152,6 +171,8 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     grayButton: {
+        height: 80,
+        width: 100,
         backgroundColor: "rgba(229, 229, 229, 1)", 
         borderRadius: 50,
     },
