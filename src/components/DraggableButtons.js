@@ -21,7 +21,7 @@ const sign = {
 const DraggableBadgeList = ({
   badgeOnPressHandlers,
   astrology,
-  snapScore = "1,738",
+  snapScore = "1,738,000",
 }) => {
   const [data, setData] = useState([
     {

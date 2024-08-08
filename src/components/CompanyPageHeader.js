@@ -10,7 +10,7 @@ import { BottomSheet, Button } from "@rneui/themed";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
-export default function CompanyPageHeader({pageName}) {
+export default function CompanyPageHeader({pageName, companyData}) {
   const navigation = useNavigation();
 
   const { user } = useAuthentication();
@@ -35,7 +35,7 @@ export default function CompanyPageHeader({pageName}) {
           <Image source={require("../../assets/SnapTogether/HoustonStory.jpg")} style={styles.locationImage}/>
           </View>
           <Text style={styles.locationText}>
-            Houston
+            {companyData.location[2]}
           </Text>
         </TouchableOpacity>
       </View>
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   location: {
     borderRadius: 100,
     height: 44,
-    width: 150,
+    width: 200,
     backgroundColor: colors.interactionGraySubtle,
     justifyContent: "center",
     alignItems: "center",
