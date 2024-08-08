@@ -85,7 +85,7 @@ export default function MapScreen({ navigation }) {
 
   const getImageCanSee = async (photoReference) => {
     const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY; 
-    const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&photoreference=${photoReference}&key=${apiKey}`;
+    const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&photoreference=${photoReference}&key=${apiKey}`;
     try {
       const response = await axios.get(url);
       // console.log(JSON.stringify(response,null,4))
@@ -162,7 +162,7 @@ export default function MapScreen({ navigation }) {
         const placesWithImages = await fetchPlacesWithImages(location, category, apiKey);
         allPlaces.push(...placesWithImages.slice(0, 4));
       }
-      console.log(JSON.stringify(allPlaces));
+      // console.log(JSON.stringify(allPlaces));
       setPlaces(allPlaces);
       // setPlaces(mixPlacesTest)
       locationListModalRef.current.present();
@@ -188,6 +188,7 @@ export default function MapScreen({ navigation }) {
     if (placeDetails) {
       setSelectedPlace(placeDetails);
       locationDetailsModalRef.current.present();
+
     } else {
       console.error("Failed to fetch place details");
     }
@@ -380,7 +381,6 @@ export default function MapScreen({ navigation }) {
           <LocationDetails
             place={selectedPlace}
             onClose={() => locationDetailsModalRef.current.close()}
-            getImageCanSee ={getImageCanSee}
           />
         </BottomSheetModal>
       </View>

@@ -139,7 +139,6 @@ let rootDomain;
           </TouchableOpacity>  
           </View>
           
-       
         {/* END OF HEADER SECTION */}
         <TouchableOpacity>
           <View style={styles.donateButton}>
