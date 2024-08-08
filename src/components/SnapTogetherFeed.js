@@ -8,8 +8,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 
-export default function SnapTogetherFeed({ title, eventImage, handlePress, selectedCompany }) {
+export default function SnapTogetherFeed({ title, eventImage, handlePress, selectedCompany, pageName }) {
   const navigation = useNavigation();
+
   return (
     <View style={styles.FeedContainer}>
       <View style={styles.Square}>
@@ -27,7 +28,7 @@ export default function SnapTogetherFeed({ title, eventImage, handlePress, selec
           >
             <Pressable
           onPress={() => {
-            navigation.navigate("CompanyPage",{ selectedCompany });
+            navigation.navigate("CompanyPage",{ selectedCompany, pageName });
           }}
           style={styles.nameBox}
         >
