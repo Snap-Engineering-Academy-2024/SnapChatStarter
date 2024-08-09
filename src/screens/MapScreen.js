@@ -14,6 +14,7 @@ import LocationDetails from "./LocationDetails";
 import placesListTest from "./placesListTest.json"
 import mixPlacesTest from "./mixPlacesTest.json"
 import MapHeader from "../components/MapHeader";
+import FavoriteScreen from "./FavoriteScreen";
 
 
 export default function MapScreen({ navigation }) {
@@ -28,6 +29,7 @@ export default function MapScreen({ navigation }) {
   const mapRef = useRef(null);
   const locationListModalRef = useRef(null);
   const locationDetailsModalRef = useRef(null);
+  const favoritelocationModalRef = useRef(null);
   const snapPointsLocationList = ["50%", "92%"];
   const snapPointsLocationDetails = ["50%", "92%"];
   const [isSatellite, setIsSatellite] = useState(false);
@@ -194,6 +196,11 @@ export default function MapScreen({ navigation }) {
     }
   }, []);
 
+  const handleShowFavorite = ()=> {
+    setPlaces(mixPlacesTest)
+    favoritelocationModalRef.current.present();
+  }
+
 
   return (
     <BottomSheetModalProvider>
@@ -299,11 +306,21 @@ export default function MapScreen({ navigation }) {
                 style={styles.button}
                 onPress={() => handleShowSafeHaven()}
               >
-                <View style={styles.iconContainer}>
+                <View style={[styles.iconContainer, { backgroundColor: "#1E90FF" }]}>
                   {/* <Image style={{ height: 40, width:40 }} source={{uri: 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png'}}/> */}
                   <Ionicons name="home" size={20} color="white" />
                 </View>
                 <Text style={styles.buttonText}>SafeHaven</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleShowFavorite()}
+              >
+                <View style={[styles.iconContainer, { backgroundColor: "#f94449" }]}>
+                  {/* <Image style={{ height: 40, width:40 }} source={{uri: 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png'}}/> */}
+                  <Ionicons name="heart" size={20} color="white" />
+                </View>
+                <Text style={styles.buttonText}>Favorite</Text>
               </TouchableOpacity>
 
               
@@ -382,6 +399,18 @@ export default function MapScreen({ navigation }) {
             place={selectedPlace}
             onClose={() => locationDetailsModalRef.current.close()}
             getImageCanSee={getImageCanSee}
+          />
+        </BottomSheetModal>
+        <BottomSheetModal
+          ref={favoritelocationModalRef}
+          index={0}
+          snapPoints={snapPointsLocationDetails}
+          backgroundStyle={{ backgroundColor: "#FFFFFF" }}
+        >
+          <FavoriteScreen
+            places={places}
+            onClose={() => favoritelocationModalRef.current.close()}
+            onPlacePress={handlePlacePress}
           />
         </BottomSheetModal>
       </View>
@@ -477,7 +506,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   iconContainer: {
-    backgroundColor: "#1E90FF",
+    
     borderRadius: 100,
     height: 30,
     width: 30,
