@@ -11,7 +11,7 @@ import AddFriendScreen from "../screens/AddFriendScreen";
 import CommSelectionScreen from "../screens/CommSelectionScreen";
 import InterestFormScreen from  "../screens/InterestFormScreen";
 import MeetingConnections from  "../screens/MeetingConnections";
-
+import CommunityChatScreen from "../screens/CommunityChatScreen";
 
 
 
@@ -29,6 +29,7 @@ export default function AuthStack() {
         <Stack.Screen name="Identity" component={CommSelectionScreen} options={{ headerShown: false}}/>
         <Stack.Screen name="Interests" component={InterestFormScreen} options={{ headerShown: false}}/>
         <Stack.Screen name="Meeting Connections" component={MeetingConnections} options={{ headerShown: false}}/>
+        <Stack.Screen name="CommunityChat" component={CommunityChatScreen} />
 
 
       </Stack.Navigator>
