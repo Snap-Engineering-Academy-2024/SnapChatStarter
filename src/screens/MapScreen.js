@@ -15,6 +15,7 @@ import placesListTest from "./placesListTest.json"
 import mixPlacesTest from "./mixPlacesTest.json"
 import MapHeader from "../components/MapHeader";
 import FavoriteScreen from "./FavoriteScreen";
+import {supabase} from '../utils/hooks/supabase';
 
 
 export default function MapScreen({ navigation }) {
@@ -196,10 +197,24 @@ export default function MapScreen({ navigation }) {
     }
   }, []);
 
-  const handleShowFavorite = ()=> {
-    setPlaces(mixPlacesTest)
-    favoritelocationModalRef.current.present();
-  }
+  const handleShowFavorite = async () => {
+    try {
+      const { data, error } = await supabase.from('favorite_places').select('place_object');
+  
+      if (error) {
+        console.error("Error fetching favorite places:", error);
+        return;
+      }
+      if (data) {
+        const favoritePlaces = data.map(record => record.place_object);
+        console.log(favoritePlaces)
+        setPlaces(favoritePlaces);
+        favoritelocationModalRef.current.present();
+      }
+    } catch (error) {
+      console.error("Error fetching favorite places:", error);
+    }
+  };
 
 
   return (
