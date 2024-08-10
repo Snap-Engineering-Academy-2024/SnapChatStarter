@@ -20,8 +20,12 @@ const ChatScreen = ({ navigation }) => {
     { isChatbot: false, chatId: "Cassie Lu", avatar: "https://i.imgur.com/Ht4cY9d_d.jpg?maxwidth=520&shape=thumb&fidelity=high", status: "New Chat • 2h" }
   ];
   const requests = [
-    { isChatbot: false, chatId: "My AI", avatar: "https://i.imgur.com/gVhTRnu_d.jpg?maxwidth=520&shape=thumb&fidelity=high", status: "Took a Screenshot • 2h" },
-    { isChatbot: false, chatId: "Rob Black", avatar: "https://i.imgur.com/Ht4cY9d_d.jpg?maxwidth=520&shape=thumb&fidelity=high", status: "New Snap • 2h" },
+    { isChatbot: false, chatId: "Rob Black", avatar: "https://i.imgur.com/Ht4cY9d_d.jpg?maxwidth=520&shape=thumb&fidelity=high", community: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASIAAACuCAMAAAClZfCTAAAAFVBMVEVbzvr1qbj////8p7T1prb5zdV6yfHLPJLlAAABBElEQVR4nO3dwQmDAAAEwdMY+y85JexLhDBTwr4PbgMAAAAAAAAAAIDH3IR9CDsIEiWJkkRJoiRRkihJlCRKEiWJkkRJoiRRkihJlCRKEiWJkkRJoiRRkihJlCRKEiWJkkRJoiRRkihJlHYR9iXsJEiUJEoSJYmSREmiJFGSKEmUJEoSJYmSREmiJFGSKEmUJEoSJYmSREmiJFGSKEmUJEoSJYmSREmiJFGSKEmUDPmSOWgyKk4SJYmSREmiJFGSKEmUJEoSJYmSREmiJFGSKEmUJEoSJYmSREmiJFGSKEmUJEoSJYmSREmiJFGSKEmUnKIm17rp7fNjAAAAAAAAAAAA/tkP8mG+UUNp+GMAAAAASUVORK5CYII=", status: "New Snap • 2h" },
+    { isChatbot: false, chatId: "Jennifer Nguyen", avatar: "https://i.imgur.com/9ejBTJh_d.jpg?maxwidth=520&shape=thumb&fidelity=high", community: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASIAAACuCAMAAAClZfCTAAAAFVBMVEX/IYwhsf//2AD/AJL/2wAArv//4gBTW0lKAAAA+klEQVR4nO3QNwGAAAAEsaf6l4yEWxgTCdkAAAAAAAAAAAAAAAAAAAAA/nMR9hJ2EhQlRUlRUpQUJUVJUVKUFCVFSVFSlBQlRUlRUpQUJUVJUVKUFCVFSVFSlBQlRUlRUpQUJUVJUVKUFCVFSVFSlBQlRUlRUpQUJUVJUVKUFCVFSVFSlBQlRUlRUpQUJUVJUdpN2EPYQVCUFCVFSVFSlBQlRUlRUpQUJUVJUVKUFCVFSVFSlBQlRUlRUpQUJUVJUVKUFCVFSVFSlBQlRUlRUpQUJUVJUVKUFCVFSVFSlBQlRUlRUpQUJUVJUVKUFCVFSVFSlBQlRUlR+gCgNNPXuZWXGQAAAABJRU5ErkJggg==", status: "New Snap • 2h" },
+  ];
+  const accepted = [
+    { isChatbot: false, chatId: "Cindy Lu", avatar: "https://i.imgur.com/Ht4cY9d_d.jpg?maxwidth=520&shape=thumb&fidelity=high", status: "Opened • 2h" },
+    { isChatbot: false, chatId: "Cassie Che", avatar: "https://i.imgur.com/Ht4cY9d_d.jpg?maxwidth=520&shape=thumb&fidelity=high", status: "New Chat • 2h" }
   ];
 
   const renderItem = ({ item }) => (
@@ -40,7 +44,10 @@ const ChatScreen = ({ navigation }) => {
       />
       <View style={styles.userInfo}>
         <View>
-          <Text style={styles.userName}>{item.chatId}</Text>
+          <Text style={styles.userName}>{item.chatId} <Image
+        style={styles.community}
+        source={{ uri: item.community }}
+      /></Text>
           <Text style={styles.userStatus}>{item.status}</Text>
         </View>
         <Ionicons name="camera-outline" size={24} color="lightgrey" />
@@ -118,6 +125,14 @@ const ChatScreen = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.chatId}
         />
+
+        <Text style={{fontWeight:'bold', fontSize: 20, marginLeft: 10, marginTop: 10}}>Accepted</Text>
+
+        <FlatList
+        data={accepted}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.chatId}
+        />
         </View>
       )}
     </View>
@@ -191,6 +206,14 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     marginRight: 10,
+  },
+  community: {
+    width: 15,
+    height: 15,
+    borderRadius: 20,
+    // marginLeft: 245,
+    marginLeft: 100,
+    
   },
   userInfo: {
     flexDirection: "row",
