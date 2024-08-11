@@ -101,81 +101,109 @@ export default function MapScreen({ navigation }) {
     }
   };
 
-  const fetchPlacesWithImages = async (location, keyword) => {
-    const radius = 2 * 1609.34;
+  const getMapIconImage = (keyword) => {
+    const keywordMap = {
+      "nonprofit organization": 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png',
+      "police hospital emergency": 'https://i.postimg.cc/j2n0VtFj/Safety-Icon.png',
+      "free wifi place": 'https://i.postimg.cc/brnyxx8L/Wi-Fi-Icon.png',
+      "food bank free food salvation army": 'https://i.postimg.cc/5t92hQqN/Food-Banks-Icon.png',
+      "free shower library": 'https://i.postimg.cc/pLJdcJj6/Public-Areas-Icon.png',
+    };
+  
+    return keywordMap[keyword] || 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png';
+  };
+  
+  const fetchNearbyPlaces = async (keyword) => {
+    const radius = 2 * 1609.34; // 2 miles in meters
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.coords.latitude},${location.coords.longitude}&radius=${radius}&keyword=${keyword}&key=${apiKey}`;
   
-    const mapIconImage = (keyword == "nonprofit organization") ? 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png' :
-      (keyword == "police hospital emergency") ? 'https://i.postimg.cc/j2n0VtFj/Safety-Icon.png' :
-      (keyword == "free wifi place") ? 'https://i.postimg.cc/brnyxx8L/Wi-Fi-Icon.png' :
-      (keyword == "food bank free food salvation army") ? 'https://i.postimg.cc/5t92hQqN/Food-Banks-Icon.png' :
-      (keyword == "free shower library") ? 'https://i.postimg.cc/pLJdcJj6/Public-Areas-Icon.png' :
-      'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png';
+    const mapIconImage = getMapIconImage(keyword);
   
     try {
       const response = await axios.get(url);
       const places = response.data.results;
-      // const places = placesListTest;
   
-      const placesWithImages = await Promise.all(places.map(async place => {
-        if (place.photos && place.photos.length > 0) {
-          const imageUrl = await getImageCanSee(place.photos[0].photo_reference, apiKey);
-          return { ...place, imageUrl, mapIconImage };
-        }
-        return { ...place, imageUrl: 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg', mapIconImage };
+      const placesWithMapIconImages = places.map(place => ({
+        ...place,
+        mapIconImage
       }));
   
-      return placesWithImages;
+      return placesWithMapIconImages;
     } catch (error) {
       console.error(error);
-      throw error;
+      return [];
     }
   };
-
+  
+  
   const handleShowPlaces = async (keyword) => {
     if (!location) {
       setErrorMsg("Location not available");
       return;
     }
   
-    const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
-  
-    try {
-      const placesWithImages = await fetchPlacesWithImages(location, keyword);
-      setPlaces(placesWithImages);
-      locationListModalRef.current.present();
-    } catch (error) {
-      console.error(error);
-    }
+    const placesWithMapIconImages = await fetchNearbyPlaces(keyword);
+    
+    setPlaces(placesWithMapIconImages);
+    locationListModalRef.current.present();
   };
-
+  
+  
   const handleShowSafeHaven = async () => {
     if (!location) {
       setErrorMsg("Location not available");
       return;
     }
-
-    const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
+  
     const categories = [
       "nonprofit organization",
       "free wifi place"
-
     ];
-
+  
     try {
       const allPlaces = [];
       for (const category of categories) {
-        const placesWithImages = await fetchPlacesWithImages(location, category);
-        allPlaces.push(...placesWithImages.slice(0, 4));
+        const result = await fetchNearbyPlaces(category);
+        allPlaces.push(...result.slice(0, 4));
       }
-      // console.log(JSON.stringify(allPlaces));
+      
       setPlaces(allPlaces);
-      // setPlaces(mixPlacesTest)
       locationListModalRef.current.present();
     } catch (error) {
       console.error(error);
     }
   };
+
+//   const handleShowSafeHaven = async () => {
+//     if (!location) {
+//         setErrorMsg("Location not available");
+//         return;
+//     }
+//     const iconKeywords = [
+//         "nonprofit organization",
+//         "police hospital emergency",
+//         "free wifi place",
+//         "food bank free food salvation army",
+//         "free shower library"
+//     ];
+//     try {
+//         const places = await fetchNearbyPlaces('housing resources');
+//         const updatedPlaces = places.map(place => {
+//             const randomKeyword = iconKeywords[Math.floor(Math.random() * iconKeywords.length)];
+//             return {
+//                 ...place,
+//                 mapIconImage: getMapIconImage(randomKeyword)
+//             };
+//         });
+//         setPlaces(updatedPlaces);
+//         locationListModalRef.current.present();
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
+
+  
+  
   
   const fetchPlaceDetails = async (placeId) => {
     const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
@@ -191,11 +219,13 @@ export default function MapScreen({ navigation }) {
 
   const handlePlacePress = useCallback(async (place) => {
     const placeDetails = await fetchPlaceDetails(place.place_id);
-
+  
     if (placeDetails) {
+      const photoReference = place.photos?.[0]?.photo_reference;
+      const imageTop = place.imageUrl ? place.imageUrl : (photoReference ? await getImageCanSee(photoReference) : 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg');
       const placeWithImageUrl = {
         ...placeDetails,
-        imageUrl: place.imageUrl,
+        imageUrl: imageTop,
         isNonProfit: place.mapIconImage == 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png'? true : false
       };
 
@@ -365,6 +395,7 @@ export default function MapScreen({ navigation }) {
             onPlacePress={handlePlacePress}
             searchFunc={(keyword) => handleShowPlaces(keyword)}
             onClose = {() => locationListModalRef.current.close()}
+            getImageCanSee = {getImageCanSee}
           />
         </BottomSheetModal>
         <BottomSheetModal

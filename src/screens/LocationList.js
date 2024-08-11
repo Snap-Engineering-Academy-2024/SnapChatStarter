@@ -12,11 +12,34 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 
-const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
+const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose, getImageCanSee }) => {
   const [activeButton, setActiveButton] = useState(null);
   const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [places, setPlaces] = useState([]);
   
+  //This image in case there is no image in that place
+  const defaultImageUrl = 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg';
 
+  useEffect(() => {
+    const fetchImages = async () => {
+      setLoading(true);
+      try {
+        const updatedPlaces = await Promise.all(initialPlaces.map(async (place) => {
+          const photoReference = place.photos?.[0]?.photo_reference;
+          const imageUrl = photoReference ? await getImageCanSee(photoReference) : defaultImageUrl;
+          return { ...place, imageUrl };
+        }));
+        setPlaces(updatedPlaces);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, [initialPlaces]);
 
   const handleButtonPress = (buttonKey, searchQuery) => {
     setActiveButton(buttonKey);
@@ -46,7 +69,7 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
     const isOpen = item.opening_hours ? item.opening_hours.open_now : null;
     const isOpenStatus = isOpen !== null ? (isOpen ? 'Open Now' : 'Closed') : 'Status Not Available';
     const statusColor = isOpen !== null ? (isOpen ? 'green' : 'red') : 'gray';
-
+    
     return (
       <View style={styles.itemContainer}>
         <TouchableOpacity style={styles.item} onPress={() => onPlacePress(item)}>
@@ -67,6 +90,7 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
   };
 
   return (
+    
     <View style={styles.container}>
       
       {/* Header Container */}
@@ -144,12 +168,16 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
       
       {/* List Container */}
       <View style={styles.listContainer}>
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
           <FlatList
             data={showAll ? places : places.slice(0, 4)}
             renderItem={renderItem}
             keyExtractor={(item) => item.place_id}
             style={styles.list}
           />
+        )}
       </View>
 
       {/* Spotlights Section */}
