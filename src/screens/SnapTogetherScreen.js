@@ -18,6 +18,7 @@ import {
 } from "react-native-safe-area-context";
 import { useFilteredData } from "../utils/hooks/useFilteredData";
 import SnapTogetherFeed from "../components/SnapTogetherFeed";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
@@ -121,7 +122,10 @@ export default function SnapTogetherScreen() {
             title={"Career Boost"}
             onPress={() => handleSectionPress("Career Boost")}
           >
-            <Text style={styles.button}>Career Boost</Text>
+            <View style={{flexDirection: "row", alignContent: "center"}}>
+              <Text style={styles.button}>Career Boost</Text>
+              <Icon name="event" size={32} color="black" style={styles.subTitle}/>
+            </View>
           </TouchableOpacity>
           {story1.length > 0 && (
             <FlatList
@@ -161,7 +165,11 @@ export default function SnapTogetherScreen() {
             title={"Mom & Pops"}
             onPress={() => handleSectionPress("Mom & Pops")}
           >
-            <Text style={styles.button}>Mom & Pops</Text>
+            
+            <View style={{flexDirection: "row", alignContent: "center"}}>
+              <Text style={styles.button}>Mom & Pops</Text>
+              <Icon name="event" size={32} color="black" style={styles.subTitle}/>
+            </View>
           </TouchableOpacity>
           {story2.length > 0 && (
             <FlatList
@@ -198,7 +206,10 @@ export default function SnapTogetherScreen() {
             title={"Showcase"}
             onPress={() => handleSectionPress("Showcase")}
           >
-            <Text style={styles.button}>Showcase</Text>
+            <View style={{flexDirection: "row", alignContent: "center"}}>
+              <Text style={styles.button}>Showcase</Text>
+              <Icon name="event" size={32} color="black" style={styles.subTitle}/>
+            </View>
           </TouchableOpacity>
           {story3.length > 0 && (
             <FlatList
@@ -271,11 +282,21 @@ const styles = StyleSheet.create({
     alignItems: "left",
   },
   button: {
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: "bold",
     alignSelf: "flex-start",
     fontFamily: "avenir",
+    paddingBottom: 5,
     paddingTop: 10,
+    paddingLeft: 10,
+    textDecorationLine: "underline",
+  },
+  subTitle: {
+    // fontWeight: "semibold",
+    // alignSelf: "flex-start",
+    // fontFamily: "avenir",
+    paddingBottom: 5,
+    paddingTop: 5,
     paddingLeft: 10,
   },
   buttonText: {

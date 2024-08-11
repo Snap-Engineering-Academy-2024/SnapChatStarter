@@ -51,7 +51,7 @@ const DraggableBadgeList = ({
   useEffect(() => {
     setData((prevData) =>
       prevData.map((item) =>
-        item.key === "2" ? { ...item, label: astrology } : item
+        item.key === "2" ? { ...item, label: astrology, logo: sign[astrology] } : item
       )
     );
   }, [astrology]);
@@ -73,10 +73,7 @@ const DraggableBadgeList = ({
         onLongPress={drag}
         onPress={() => badgeOnPressHandlers[label]?.()}
       >
-        <Image
-          source={ logo }
-          style={styles.badgeIcon}
-        /> 
+        <Image source={logo} style={styles.badgeIcon} />
         <Text style={[styles.badgeText, { color: textColor }]}>{label}</Text>
       </Pressable>
     );
@@ -117,7 +114,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   badgeIcon: {
-    fontSize: 14,
     width: 22,
     height: 22,
     fontWeight: "bold",
