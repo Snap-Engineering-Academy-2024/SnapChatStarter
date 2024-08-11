@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View, Dimensions, Text, TouchableOpacity, ScrollView, Image, SafeAreaView } from "react-native";
+import { StyleSheet, View, Dimensions, Text, TouchableOpacity, ScrollView, Image, Modal } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Location from "expo-location";
@@ -17,6 +17,8 @@ import MapHeader from "../components/MapHeader";
 import FavoriteScreen from "./FavoriteScreen";
 import {supabase} from '../utils/hooks/supabase';
 import CityAndRightBar from '../components/CityAndRightBar';
+import IntroSafeHavenModal from '../components/IntroSafeHavenModal';
+
 
 const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY; 
 
@@ -33,9 +35,10 @@ export default function MapScreen({ navigation }) {
   const locationListModalRef = useRef(null);
   const locationDetailsModalRef = useRef(null);
   const favoritelocationModalRef = useRef(null);
-  const snapPointsLocationList = ["50%", "92%"];
+  const snapPointsLocationList = ["60%", "92%"];
   const snapPointsLocationDetails = ["50%", "92%"];
   const [isSatellite, setIsSatellite] = useState(false);
+  const [isIntroModalVisible, setIsIntroModalVisible] = useState(true);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -86,6 +89,9 @@ export default function MapScreen({ navigation }) {
     if (location && mapRef.current) {
       mapRef.current.animateToRegion(currentRegion,1000);
     }
+  };
+  const handleContinue = () => {
+    setIsIntroModalVisible(false);
   };
 
   const getImageCanSee = async (photoReference) => {
@@ -383,6 +389,13 @@ export default function MapScreen({ navigation }) {
             </ScrollView>
           </View>
         </View>
+        
+        {isIntroModalVisible && (
+          <IntroSafeHavenModal
+            isIntroModalVisible={isIntroModalVisible}
+            handleContinue={handleContinue}
+          />
+        )}
 
         <BottomSheetModal
           ref={locationListModalRef}
