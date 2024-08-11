@@ -10,44 +10,13 @@ import {
   Image
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import axios from "axios";
 
-const GOOGLE_PLACES_API_KEY = 'AIzaSyD1TVCW8x7v_HYXD0tS3rmFfx5BOn_TOxI';
 
 const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
-  const [placeDetails, setPlaceDetails] = useState({});
-  const [loading, setLoading] = useState(true);
   const [activeButton, setActiveButton] = useState(null);
   const [showAll, setShowAll] = useState(false);
+  
 
-  useEffect(() => {
-    const fetchPlaceDetails = async () => {
-      setLoading(true);
-      try {
-        const details = {};
-        for (const place of places) {
-          try {
-            const response = await axios.get(
-              `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&key=${GOOGLE_PLACES_API_KEY}`
-            );
-            const result = response.data.result || {};
-            const openingHours = result.opening_hours;
-            details[place.place_id] = openingHours ? openingHours.open_now : null;
-          } catch (error) {
-            console.error(`Error fetching details for place_id ${place.place_id}:`, error);
-            details[place.place_id] = null;
-          }
-        }
-        setPlaceDetails(details);
-      } catch (error) {
-        console.error("Error fetching place details:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPlaceDetails();
-  }, [places]);
 
   const handleButtonPress = (buttonKey, searchQuery) => {
     setActiveButton(buttonKey);
@@ -74,7 +43,7 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
   };
 
   const renderItem = ({ item }) => {
-    const isOpen = placeDetails[item.place_id];
+    const isOpen = item.opening_hours ? item.opening_hours.open_now : null;
     const isOpenStatus = isOpen !== null ? (isOpen ? 'Open Now' : 'Closed') : 'Status Not Available';
     const statusColor = isOpen !== null ? (isOpen ? 'green' : 'red') : 'gray';
 
@@ -102,9 +71,7 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
       
       {/* Header Container */}
       <View style={styles.headerContainer}>
-        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Ionicons name="close" size={20} color="#424243" />
-        </TouchableOpacity>
+
         <View style={styles.headerContent}>
           <Image 
             source={{ uri: 'https://i.ibb.co/r6hnGsF/Image.png' }} 
@@ -115,6 +82,9 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
             <Text style={styles.subTitle}>Essential Housing Resources</Text>
           </View>
         </View>
+        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          <Ionicons name="close" size={20} color="#424243" />
+        </TouchableOpacity>
         {/* Buttons */}
         <ScrollView
           horizontal
@@ -123,7 +93,7 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
         >
           <TouchableOpacity
             style={[styles.button, { backgroundColor: getButtonStyles('nonprofits').backgroundColor }]}
-            onPress={() => handleButtonPress('nonprofits', "career center homeless social service")}
+            onPress={() => handleButtonPress('nonprofits', "nonprofit organization")}
           >
             <Ionicons name="business" size={18} color={getButtonStyles('nonprofits').iconColor} style={styles.icon} />
             <Text style={[styles.buttonText, { color: getButtonStyles('nonprofits').color }]}>Nonprofits</Text>
@@ -174,16 +144,12 @@ const LocationList = ({ places, onPlacePress, searchFunc, onClose }) => {
       
       {/* List Container */}
       <View style={styles.listContainer}>
-        {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
           <FlatList
             data={showAll ? places : places.slice(0, 4)}
             renderItem={renderItem}
             keyExtractor={(item) => item.place_id}
             style={styles.list}
           />
-        )}
       </View>
 
       {/* Spotlights Section */}

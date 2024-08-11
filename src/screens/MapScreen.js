@@ -16,7 +16,9 @@ import mixPlacesTest from "./mixPlacesTest.json"
 import MapHeader from "../components/MapHeader";
 import FavoriteScreen from "./FavoriteScreen";
 import {supabase} from '../utils/hooks/supabase';
+import CityAndRightBar from '../components/CityAndRightBar';
 
+const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY; 
 
 export default function MapScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -87,7 +89,7 @@ export default function MapScreen({ navigation }) {
   };
 
   const getImageCanSee = async (photoReference) => {
-    const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY; 
+    
     const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&photoreference=${photoReference}&key=${apiKey}`;
     try {
       const response = await axios.get(url);
@@ -99,11 +101,11 @@ export default function MapScreen({ navigation }) {
     }
   };
 
-  const fetchPlacesWithImages = async (location, keyword, apiKey) => {
+  const fetchPlacesWithImages = async (location, keyword) => {
     const radius = 2 * 1609.34;
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.coords.latitude},${location.coords.longitude}&radius=${radius}&keyword=${keyword}&key=${apiKey}`;
   
-    const mapIconImage = (keyword == "career center homeless social service") ? 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png' :
+    const mapIconImage = (keyword == "nonprofit organization") ? 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png' :
       (keyword == "police hospital emergency") ? 'https://i.postimg.cc/j2n0VtFj/Safety-Icon.png' :
       (keyword == "free wifi place") ? 'https://i.postimg.cc/brnyxx8L/Wi-Fi-Icon.png' :
       (keyword == "food bank free food salvation army") ? 'https://i.postimg.cc/5t92hQqN/Food-Banks-Icon.png' :
@@ -117,7 +119,7 @@ export default function MapScreen({ navigation }) {
   
       const placesWithImages = await Promise.all(places.map(async place => {
         if (place.photos && place.photos.length > 0) {
-          const imageUrl = await getImageCanSee(place.photos[0].photo_reference);
+          const imageUrl = await getImageCanSee(place.photos[0].photo_reference, apiKey);
           return { ...place, imageUrl, mapIconImage };
         }
         return { ...place, imageUrl: 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg', mapIconImage };
@@ -139,7 +141,7 @@ export default function MapScreen({ navigation }) {
     const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
   
     try {
-      const placesWithImages = await fetchPlacesWithImages(location, keyword, apiKey);
+      const placesWithImages = await fetchPlacesWithImages(location, keyword);
       setPlaces(placesWithImages);
       locationListModalRef.current.present();
     } catch (error) {
@@ -155,14 +157,15 @@ export default function MapScreen({ navigation }) {
 
     const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
     const categories = [
-      "career center homeless social service",
-      "free wifi place",
+      "nonprofit organization",
+      "free wifi place"
+
     ];
 
     try {
       const allPlaces = [];
       for (const category of categories) {
-        const placesWithImages = await fetchPlacesWithImages(location, category, apiKey);
+        const placesWithImages = await fetchPlacesWithImages(location, category);
         allPlaces.push(...placesWithImages.slice(0, 4));
       }
       // console.log(JSON.stringify(allPlaces));
@@ -188,10 +191,17 @@ export default function MapScreen({ navigation }) {
 
   const handlePlacePress = useCallback(async (place) => {
     const placeDetails = await fetchPlaceDetails(place.place_id);
-    if (placeDetails) {
-      setSelectedPlace(placeDetails);
-      locationDetailsModalRef.current.present();
 
+    if (placeDetails) {
+      const placeWithImageUrl = {
+        ...placeDetails,
+        imageUrl: place.imageUrl,
+        isNonProfit: place.mapIconImage == 'https://i.postimg.cc/SsvFtJV5/Nonprofit-Icon.png'? true : false
+      };
+
+      setSelectedPlace(placeWithImageUrl);
+
+      locationDetailsModalRef.current.present();
     } else {
       console.error("Failed to fetch place details");
     }
@@ -278,6 +288,9 @@ export default function MapScreen({ navigation }) {
         <View style={styles.headerContainer}>
           <MapHeader navigation={navigation} />
         </View>
+        
+        <CityAndRightBar city={city} isSatellite={isSatellite} setIsSatellite={setIsSatellite} />
+
         <View style={styles.mapFooter}>
           <View style={styles.locationContainer}>
             <TouchableOpacity
@@ -337,59 +350,9 @@ export default function MapScreen({ navigation }) {
                 </View>
                 <Text style={styles.buttonText}>Favorite</Text>
               </TouchableOpacity>
-
-              
-              
             </ScrollView>
           </View>
         </View>
-
-        <View style={styles.cityContainer}>
-          <View style={styles.circleContainer}>
-            <Image 
-              source={{ uri: 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg' }} 
-              style={styles.circleImage} 
-            />
-          </View>
-          <View style={styles.textContainer} >
-            <Text style={styles.cityText}>{city}</Text>
-          </View>
-        </View>
-
-        <View style={styles.barContainer}>
-        <TouchableOpacity>
-          <View style={styles.circleContainerVertical}>
-            <Image 
-              source={{ uri: 'https://i.postimg.cc/RFpH5K01/Heat-Map-Icon.png' }} 
-              style={styles.circleImage} 
-            />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {isSatellite? setIsSatellite(false) : setIsSatellite(true)}}>
-          <View style={styles.circleContainerVertical}>
-            <Image 
-              source={{ uri: 'https://i.postimg.cc/q7LKw9V5/Satellite-Icon.png' }} 
-              style={styles.circleImage} 
-            />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View style={styles.circleContainerVertical}>
-            <Image 
-              source={{ uri: 'https://i.postimg.cc/ZR5dMVJK/Memories-Icon.png' }} 
-              style={styles.circleImage} 
-            />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View style={styles.circleContainerVertical}>
-            <Image 
-              source={{ uri: 'https://i.postimg.cc/bv8bQqMn/Arrow-Icon.png' }} 
-              style={styles.circleImage} 
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
 
         <BottomSheetModal
           ref={locationListModalRef}
@@ -413,7 +376,7 @@ export default function MapScreen({ navigation }) {
           <LocationDetails
             place={selectedPlace}
             onClose={() => locationDetailsModalRef.current.close()}
-            getImageCanSee={getImageCanSee}
+            getImageCanSee = {getImageCanSee}
           />
         </BottomSheetModal>
         <BottomSheetModal
@@ -521,7 +484,6 @@ const styles = StyleSheet.create({
     color: "black",
   },
   iconContainer: {
-    
     borderRadius: 100,
     height: 30,
     width: 30,
@@ -529,63 +491,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 6,
   },
-  cityContainer: {
-    position: 'absolute',
-    top: 60,
-    left: 112,
-    height:44,
-    width:200,
-    alignItems: 'center',
-    backgroundColor: colors.lighttransparent,
-    borderRadius: 80,
-    paddingHorizontal: 6,
-    marginHorizontal: 4,
-    flexDirection: 'row',
-  },
-  barContainer: {
-    borderRadius: 80,
-    position: 'absolute',
-    top: 120,
-    right: 12,
-    width: 44, 
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 5, 
-    paddingBottom: 5,
-    backgroundColor: colors.lighttransparent,
-    gap:5,
-  },
-  circleContainerVertical: {
-    width: 35, 
-    height: 35,
-    borderRadius: 16,
-    borderColor: "#a05dcd", 
-    overflow: 'hidden',
-  },
-  textContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cityText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  circleContainer: {
-    width: 36, 
-    height: 36,
-    borderRadius: 16,
-    borderWidth: 3,
-    borderColor: "#a05dcd", 
-    overflow: 'hidden',
-  },
-  circleImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-
   headerContainer: {
     position: 'absolute',
     top: 60,

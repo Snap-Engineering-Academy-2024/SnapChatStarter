@@ -5,6 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { inline } from 'react-native-web/dist/cjs/exports/StyleSheet/compiler';
 import { fontHeader } from '../../assets/themes/font';
 
+// These 3 defaut image is in case the place from google api have no images in there
 const defaultImages = [
   'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg',
   'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg',
@@ -13,7 +14,7 @@ const defaultImages = [
 
 const { height, width} = Dimensions.get('window');
 
-export default function LocationDetails({ place, onClose, getImageCanSee }) {
+export default function LocationDetails({ place, onClose, getImageCanSee}) {
   const [images, setImages] =useState([]);
   useEffect(() => {
     const fetchImages = async () => {
@@ -26,22 +27,33 @@ export default function LocationDetails({ place, onClose, getImageCanSee }) {
       if (fetchedImages.length === 0) {
         fetchedImages = defaultImages;
       }
+      // console.log(fetchedImages);
       setImages(fetchedImages);
+
     };
     fetchImages();
   }, [place]);
 
   let price = "$";
   const Circle = () => {
-    return <View style={styles.circle} />;
+    return (
+      <View style={styles.circle}>
+        <Image
+          source={{ uri: place.imageUrl }} 
+          style={styles.circleImage}
+          resizeMode="cover"
+        />
+      </View>
+    );
   };
-let rootDomain;
-  if (typeof place.website !='undefined') {
-    const parsedUrl = new URL(place.website);
-    const hostname = parsedUrl.hostname;
-    const domainParts = hostname.split('.');
-    rootDomain = domainParts.slice(-2).join('.');
-  }
+
+  let rootDomain;
+    if (typeof place.website !='undefined') {
+      const parsedUrl = new URL(place.website);
+      const hostname = parsedUrl.hostname;
+      const domainParts = hostname.split('.');
+      rootDomain = domainParts.slice(-2).join('.');
+    }
   
 
   // const urlRegex = /<a href="([^"]*)">/;
@@ -63,7 +75,7 @@ let rootDomain;
   const Rectangle = () => {
     return <View style={styles.rectangle} />;
   };
-  console.log(JSON.stringify(place, null, 4));
+  // console.log(JSON.stringify(place, null, 4));
   // console.log("TYPES", place.types[0])
   return (
     //<View style={styles.modalOverlay}>
@@ -140,24 +152,29 @@ let rootDomain;
           </View>
           
         {/* END OF HEADER SECTION */}
-        <TouchableOpacity>
-          <View style={styles.donateButton}>
-            <View style={styles.donateTextSection}>
-              <Text style={styles.donateText}>Looking to Help? Donate now!</Text>
-              <Text style={{color:"grey"}}>safeplaceforyouth.org</Text>
+        {place.isNonProfit && (
+          <TouchableOpacity>
+            <View style={styles.donateButton}>
+              <View style={styles.donateTextSection}>
+                <Text style={styles.donateText}>Looking to Help? Donate now!</Text>
+                <Text style={{color:"grey"}}>safeplaceforyouth.org</Text>
+              </View>
+              <View style={styles.iconContainer}>
+                <Ionicons name="chevron-forward-outline" size={20} color="grey"/>
+              </View>
             </View>
-            <View style={styles.iconContainer}>
-              <Ionicons name="chevron-forward-outline" size={20} color="grey"/>
-            </View>
-        </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
         
         {/* SPOTLIGHT SECTION */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.spotlight}>
-          {/* <Image source={{uri: photoURL}}/> */}
-          <Rectangle></Rectangle>
-          <Rectangle></Rectangle>
-          <Rectangle></Rectangle>
+          {images.map((image, index) => (
+            <Image 
+              key={index} 
+              source={{ uri: image }} 
+              style={styles.spotlightImage} 
+            />
+          ))}
         </ScrollView>
 
 {
@@ -282,7 +299,8 @@ const styles = StyleSheet.create({
     width: width/6,
     height: width/6,
     borderRadius: 100 / 2,
-    backgroundColor: "grey",
+    overflow: 'hidden',
+    // backgroundColor: "grey",
   },
   header: {
     flexDirection: "row",
@@ -290,6 +308,10 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     width: width/1.5 ,
   }, 
+  circleImage: {
+    width: '100%',
+    height: '100%',
+  },
   button: {
     backgroundColor: colors.belowPage,
     borderRadius: 80,
@@ -376,6 +398,12 @@ const styles = StyleSheet.create({
     columnGap: 30,
     paddingRight: 30,
     marginBottom: 15
+  },
+  spotlightImage: {
+    width: 180,
+    height: 270,
+    borderRadius: 10,
+    marginRight: 10,
   },
   scheduleButton: {
     width: width/1.1,
