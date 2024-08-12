@@ -9,11 +9,15 @@ import {
 import { useState, useEffect } from "react";
 import Timer from "../components/Timer.js";
 import LottieView from "lottie-react-native";
+import { useFonts } from "expo-font";
 
 // TO-DO: Hint tray
 // TO-DO: Boom image
 
 export default function TopicsScreen() {
+  const [loaded, error] = useFonts({
+    "Silkscreen-Regular": require("../../assets/fonts/Silkscreen-Regular.ttf"),
+  })
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
   const [time, setTime] = useState(0);
