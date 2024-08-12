@@ -19,7 +19,7 @@ export default {
         {
           "fonts": [
             "./assets/fonts/Silkscreen-Regular.ttf", 
-            "./assets/fonts/PressStart2P-Regular.ttf"
+            "./assets/fonts/PressStart2P-Regular.ttf",
           ],
         },
       ],

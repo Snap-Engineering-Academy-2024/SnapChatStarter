@@ -53,8 +53,8 @@ export default function UserStack({ route, navigation }) {
   return (
     <Tab.Navigator
       tabBar={(props) => <CustomTabBar {...props} />}
-      activeColor="#f0edf6"
-      inactiveColor="#3e2465"
+      activeColor="rgba(236, 236, 238, 1)"
+      inactiveColor="rgba(236, 236, 238, 1)"
       barStyle={{ backgroundColor: "black" }}
       initialRouteName="Camera"
     >
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     width: "100%",
-    backgroundColor: "white",
+    backgroundColor: "rgba(26, 26, 27, 1)",
     borderRadius: 24,
     padding: 16,
     bottom: 0,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   grayRectangle: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: colors.belowPage,
+    backgroundColor: "rgba(37, 38, 39, 1)",
     borderRadius: 100,
     height: 48,
   },

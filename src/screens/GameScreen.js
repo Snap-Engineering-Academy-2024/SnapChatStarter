@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
     position: "relative",
     width: 375,
     height: 375,
-    borderRadius: "12px",
+    borderRadius: 12,
   },
   button: {
     borderRadius: 20,
@@ -562,7 +562,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     objectFit: "cover",
-    borderRadius: "12px",
+    borderRadius: 12,
   },
   commandDisplay: {
     width: "30%",
@@ -572,7 +572,7 @@ const styles = StyleSheet.create({
     top: "5%",
     left: "65%",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    borderRadius: "12px",
+    borderRadius: 12,
   },
   commandTitle: {
     fontFamily: "Silkscreen-Regular",

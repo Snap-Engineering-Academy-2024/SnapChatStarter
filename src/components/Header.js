@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Button, Image } from "react-native";
+import { Text, View, StyleSheet, Button, Image, Platform } from "react-native";
 import { colors } from "../../assets/themes/colors";
 import { fontHeader } from "../../assets/themes/font";
 import { Followers, More, Search } from "../../assets/snapchat/HeaderIcons";
@@ -18,34 +18,63 @@ const Stack = createStackNavigator();
 
 export default function Header({ title }) {
   const navigation = useNavigation();
+  const { user } = useAuthentication();
+  const [profile, setProfile] = useState(null);
 
-  const [profilePicUrl, setProfilePicUrl] = useState(
-    require("../../assets/edwina-pfp.png"),
-  );
+  // useEffect(() => {
+  //   if (user) {
+  //     fetchProfiles();
+  //   }
+  // }, [user]);
+
+//   async function fetchProfiles() {
+//     // console.log("2 FETCHPROFILES CALLED");
+//     try {
+//         const { data, error } = await supabase
+//             .from('profiles')
+//             .select('*')
+//             .eq('username', user.email)
+//             .single();
+//         if (error) {
+//             throw error;
+//         }
+//         // console.log("DATA", JSON.stringify(data, null, 4));
+//         if (data) {
+//             await setProfile(data);
+//             // console.log("PROFILE", JSON.stringify(profile, null, 4));
+//             setProfilePicUrl(profile?.avatar_url);
+//         }
+//     }
+//     catch (error) {
+//         console.log("Error fetching profiles: ", error.message);
+//     }
+// };
+
+  const [profilePicUrl, setProfilePicUrl] = useState(null);
 
   // const { user } = useAuthentication();
 
-  // useEffect(() => {
-  //   async function fetchProfilePic() {
-  //     if (user === null) {
-  //       return;
-  //     }
+  useEffect(() => {
+    async function fetchProfilePic() {
+      if (user === null) {
+        return;
+      }
 
-  //     const { data, error } = await supabase
-  //       .from("profiles")
-  //       .select("avatar_url")
-  //       .eq("id", user.id)
-  //       .single();
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", user.id)
+        .single();
 
-  //     if (error) {
-  //       console.log("Profile pic fetch failure");
-  //     } else if (data.avatar_url) {
-  //       setProfilePicUrl(data.avatar_url);
-  //     }
-  //   }
+      if (error) {
+        console.log("Profile pic fetch failure");
+      } else if (data.avatar_url) {
+        setProfilePicUrl(data.avatar_url);
+      }
+    }
 
-  //   fetchProfilePic();
-  // }, [user]);
+    fetchProfilePic();
+  }, [user]);
 
   const [showMenu, setShowMenu] = useState(false);
   // console.log(showMenu);
@@ -64,7 +93,7 @@ export default function Header({ title }) {
             navigation.navigate("Profile");
           }}
         >
-          <Image style={styles.profileImage} source={profilePicUrl} />
+          <Image style={styles.profileImage} source={{uri: profilePicUrl}} />
         </Pressable>
         <Pressable
           style={[styles.search, styles.buttons]}
@@ -132,7 +161,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#FFFFFF",
     fontSize: fontHeader.fontSize,
-    fontFamily: fontHeader.fontFamily,
+    fontFamily: Platform.OS === "ios" ? "Avenir Next" : "Roboto",
     fontWeight: fontHeader.fontWeight,
   },
   headerLeft: {

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  ImageBackground
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
@@ -145,12 +146,16 @@ export default function CameraScreen({ navigation, focused }) {
       style={[
         styles.container,
         {
-          marginBottom: tabBarHeight,
+          // marginBottom: tabBarHeight,
           paddingTop: insets.top,
           paddingBottom: insets.bottom,
         },
       ]}
     >
+      <ImageBackground
+        source={require("../../assets/camera-background.png")}
+        style={styles.backgroundImage}
+      />
       {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
@@ -294,6 +299,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+  },
+  backgroundImage: {
+    width: "100%",
+    height: "96%",
   },
   centeredView: {
     flex: 1,
