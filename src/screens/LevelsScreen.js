@@ -32,7 +32,7 @@ export default function TopicsScreen() {
               icon={
                 <Image
                   style={styles.startButtonIcon}
-                  source={require("../../assets/snapchat-ghost.png")}
+                  source={require("../../assets/Ghost Logo (for light backgrounds) 6.png")}
                 />
               }
               buttonStyle={styles.colorButton}
