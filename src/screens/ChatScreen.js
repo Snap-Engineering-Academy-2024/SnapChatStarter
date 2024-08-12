@@ -1,20 +1,27 @@
 import React from "react";
-import { SafeAreaView, View, Text, Image, StyleSheet, Platform } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Platform,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Button, Icon } from "@rneui/base";
 import Header from "../components/Header";
 
 export default function ChatScreen({ navigation }) {
-
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
-  
+
   return (
     <SafeAreaView
       style={[
         styles.container,
         {
+          width: "100%",
           paddingTop: insets.top,
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
@@ -23,38 +30,32 @@ export default function ChatScreen({ navigation }) {
         },
       ]}
     >
-      <Header title="Chat" style={{color: "white"}}/>
+      <Header title="Chat" style={{ color: "white" }} />
       <View style={styles.notification}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require("../../assets/Ghost Logo (for light backgrounds) 6.png")}
-              style={styles.image}
-            />
-          </View>
-          <Text
-            style={styles.heading}
-          >
-            Take a bite with Brain Bites!{"\n"}
-            <Text
-              style={styles.subheading}
-            >
-              Daily games for learning!
-            </Text>
-          </Text>
-          <Button 
-            title="Play now"
-            titleStyle={styles.buttonTitle}
-            buttonStyle={styles.button}
-            onPress={() => navigation.navigate("Welcome")}
-            accessibilityLabel="Navigate to Welcome screen"
-          />
-          <Icon 
-            name="close"  
-            color="white"
-            marginTop={Platform.OS === "ios" ? 24 : 22}
-            margin={10}
+        <View style={styles.imageContainer}>
+          <Image
+            source={require("../../assets/Ghost Logo (for light backgrounds) 6.png")}
+            style={styles.image}
           />
         </View>
+        <Text style={styles.heading}>
+          Take a bite with Brain Bites!{"\n"}
+          <Text style={styles.subheading}>Daily games for learning!</Text>
+        </Text>
+        <Button
+          title="Play now"
+          titleStyle={styles.buttonTitle}
+          buttonStyle={styles.button}
+          onPress={() => navigation.navigate("Welcome")}
+          accessibilityLabel="Navigate to Welcome screen"
+        />
+        <Icon
+          name="close"
+          color="white"
+          marginTop={Platform.OS === "ios" ? 24 : 22}
+          margin={10}
+        />
+      </View>
       <Image
         source={require("../../assets/chat-background.png")}
         style={styles.chatImage}
@@ -65,7 +66,6 @@ export default function ChatScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#000000",
     justifyContent: "center",
     alignItems: "center",
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   image: {
     height: 40,
@@ -101,13 +101,13 @@ const styles = StyleSheet.create({
   },
   subheading: {
     fontSize: Platform.OS === "ios" ? 13 : 12,
-    color: "gray"
+    color: "gray",
   },
   buttonTitle: {
     fontFamily: Platform.OS === "ios" ? "Avenir Next" : "Roboto",
     fontSize: Platform.OS === "ios" ? 10 : 9,
     fontWeight: "600",
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
   button: {
     backgroundColor: "rgba(15, 173, 255, 1)",

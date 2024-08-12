@@ -12,6 +12,7 @@ import SearchScreen from "../screens/SearchScreen";
 import { useState, useEffect } from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from "../utils/hooks/supabase";
+import { useFonts } from "expo-font";
 
 import SelectionMenu from "./SelectionMenu";
 const Stack = createStackNavigator();
@@ -27,28 +28,28 @@ export default function Header({ title }) {
   //   }
   // }, [user]);
 
-//   async function fetchProfiles() {
-//     // console.log("2 FETCHPROFILES CALLED");
-//     try {
-//         const { data, error } = await supabase
-//             .from('profiles')
-//             .select('*')
-//             .eq('username', user.email)
-//             .single();
-//         if (error) {
-//             throw error;
-//         }
-//         // console.log("DATA", JSON.stringify(data, null, 4));
-//         if (data) {
-//             await setProfile(data);
-//             // console.log("PROFILE", JSON.stringify(profile, null, 4));
-//             setProfilePicUrl(profile?.avatar_url);
-//         }
-//     }
-//     catch (error) {
-//         console.log("Error fetching profiles: ", error.message);
-//     }
-// };
+  //   async function fetchProfiles() {
+  //     // console.log("2 FETCHPROFILES CALLED");
+  //     try {
+  //         const { data, error } = await supabase
+  //             .from('profiles')
+  //             .select('*')
+  //             .eq('username', user.email)
+  //             .single();
+  //         if (error) {
+  //             throw error;
+  //         }
+  //         // console.log("DATA", JSON.stringify(data, null, 4));
+  //         if (data) {
+  //             await setProfile(data);
+  //             // console.log("PROFILE", JSON.stringify(profile, null, 4));
+  //             setProfilePicUrl(profile?.avatar_url);
+  //         }
+  //     }
+  //     catch (error) {
+  //         console.log("Error fetching profiles: ", error.message);
+  //     }
+  // };
 
   const [profilePicUrl, setProfilePicUrl] = useState(null);
 
@@ -93,7 +94,7 @@ export default function Header({ title }) {
             navigation.navigate("Profile");
           }}
         >
-          <Image style={styles.profileImage} source={{uri: profilePicUrl}} />
+          <Image style={styles.profileImage} source={{ uri: profilePicUrl }} />
         </Pressable>
         <Pressable
           style={[styles.search, styles.buttons]}
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
-    backgroundColor: "#000000"
+    backgroundColor: "#000000",
   },
   profileImage: {
     width: "100%",

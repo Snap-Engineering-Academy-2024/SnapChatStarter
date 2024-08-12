@@ -24,8 +24,12 @@ import PostcaptureOptions from "../components/PostcaptureActions";
 import { supabase } from "../utils/hooks/supabase";
 import CameraGalleryMenu from "../components/CameraGalleryMenu";
 import { Button } from "react-native-elements";
+import { useFonts } from "expo-font";
 
 export default function CameraScreen({ navigation, focused }) {
+  const [loaded, error] = useFonts({
+    "AvenirNext-Regular": require("../../assets/fonts/AvenirNext-Regular.ttf"),
+  });
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const cameraRef = useRef(null);
@@ -306,8 +310,8 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 22,
   },
   camera: {
@@ -371,22 +375,22 @@ const styles = StyleSheet.create({
     color: "white",
   },
   textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   modalHeading: {
     marginBottom: 15,
     color: "#FFFFFF",
-    fontFamily: "Avenir Next",
+    fontFamily: "AvenirNext-Regular",
     fontSize: 20,
     fontWeight: "bold",
   },
   modalParagraph: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
     color: "#FFFFFF",
-    fontFamily: "Avenir Next",
+    fontFamily: "AvenirNext-Regular",
   },
   modalImage: {
     height: 200,
@@ -400,9 +404,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   buttonOpen: {
-    backgroundColor: '#F194FF',
+    backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
 });

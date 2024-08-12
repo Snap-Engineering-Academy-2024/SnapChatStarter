@@ -13,88 +13,78 @@ export default function ProfileScreen() {
   useEffect(() => {
     if (user) {
       fetchProfiles();
-  }
+    }
   }, [user]);
 
   async function fetchProfiles() {
-      // console.log("2 FETCHPROFILES CALLED");
-      try {
-          const { data, error } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('username', user.email)
-              .single();
-          if (error) {
-              throw error;
-          }
-          // console.log("DATA", JSON.stringify(data, null, 4));
-          if (data) {
-              await setProfile(data);
-              // console.log("PROFILE", JSON.stringify(profile, null, 4));
-          }
+    // console.log("2 FETCHPROFILES CALLED");
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("username", user.email)
+        .single();
+      if (error) {
+        throw error;
       }
-      catch (error) {
-          console.log("Error fetching profiles: ", error.message);
+      // console.log("DATA", JSON.stringify(data, null, 4));
+      if (data) {
+        await setProfile(data);
+        // console.log("PROFILE", JSON.stringify(profile, null, 4));
       }
-  };
+    } catch (error) {
+      console.log("Error fetching profiles: ", error.message);
+    }
+  }
 
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/profile-top.png')}
+        source={require("../../assets/profile-top.png")}
         style={styles.profileTop}
       />
       <View style={styles.accountContainer}>
         <Image
-          source={require('../../assets/edwina-qrcode.png')}
+          source={require("../../assets/edwina-qrcode.png")}
           style={styles.accountCode}
         />
-        <Text
-          style={styles.name}
-        >
-          {profile?.full_name}{"\n"}
-          <Text
-            style={styles.subheading}
-          >
-            edwinaaT
-          </Text>
+        <Text style={styles.name}>
+          {profile?.full_name}
+          {"\n"}
+          <Text style={styles.subheading}>edwinaaT</Text>
         </Text>
       </View>
       <Image
-        source={require('../../assets/profile-middle.png')}
+        source={require("../../assets/profile-middle.png")}
         style={styles.profileMiddle}
       />
       <View style={styles.featureContainer}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={require("../../assets/Ghost Logo (for light backgrounds) 6.png")}
-              style={styles.image}
-            />
-          </View>
-          <Text
-            style={styles.heading}
-          >Take a bite with Brain Bites!{"\n"}
-            <Text
-              style={styles.subheading}
-            >Daily games for learning!
-            </Text>
-          </Text>
-          <Button 
-            title="Play now"
-            titleStyle={styles.buttonTitle}
-            buttonStyle={styles.button}
-            onPress={() => navigation.navigate("Welcome")}
-            accessibilityLabel="Navigate to Welcome screen"
-          />
-          <Icon 
-            name="chevron-right"  
-            color="white"
-            marginTop={Platform.OS === "ios" ? 21 : 21}
-            margin={10}
+        <View style={styles.imageContainer}>
+          <Image
+            source={require("../../assets/Ghost Logo (for light backgrounds) 6.png")}
+            style={styles.image}
           />
         </View>
+        <Text style={styles.heading}>
+          Take a bite with Brain Bites!{"\n"}
+          <Text style={styles.subheading}>Daily games for learning!</Text>
+        </Text>
+        <Button
+          title="Play now"
+          titleStyle={styles.buttonTitle}
+          buttonStyle={styles.button}
+          onPress={() => navigation.navigate("Welcome")}
+          accessibilityLabel="Navigate to Welcome screen"
+        />
+        <Icon
+          name="chevron-right"
+          color="white"
+          marginTop={Platform.OS === "ios" ? 21 : 21}
+          margin={10}
+        />
+      </View>
       <Image
-        source={require('../../assets/profile-bottom.png')}
+        source={require("../../assets/profile-bottom.png")}
         style={styles.profileBottom}
       />
     </View>
@@ -108,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-  },  
+  },
   profileTop: {
     marginTop: 30,
     height: Platform.OS === "ios" ? 320 : 290,
@@ -152,7 +142,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   image: {
     height: 35,
@@ -167,13 +157,13 @@ const styles = StyleSheet.create({
   },
   subheading: {
     fontSize: 13,
-    color: "gray"
+    color: "gray",
   },
   buttonTitle: {
     fontFamily: Platform.OS === "ios" ? "Avenir Next" : "Roboto",
     fontSize: 10,
     fontWeight: "600",
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
   button: {
     backgroundColor: "rgba(15, 173, 255, 1)",

@@ -6,7 +6,7 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Timer from "../components/Timer.js";
 import LottieView from "lottie-react-native";
 import { useFonts } from "expo-font";
@@ -17,7 +17,9 @@ import { useFonts } from "expo-font";
 export default function TopicsScreen() {
   const [loaded, error] = useFonts({
     "Silkscreen-Regular": require("../../assets/fonts/Silkscreen-Regular.ttf"),
-  })
+    "AvenirNext-Regular": require("../../assets/fonts/AvenirNext-Regular.ttf"),
+  });
+
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
   const [time, setTime] = useState(0);
@@ -174,7 +176,17 @@ export default function TopicsScreen() {
         left: "19%",
       });
       console.log("Failure.");
-      setPrintableCommandList([]);
+
+      currentFacing = 0;
+      currentX = 0;
+      currentY = 0;
+      setTimeout(() => {
+        renderSprite();
+        setPrintableCommandList(["Try again!"]);
+      }, 1000);
+      setTimeout(() => {
+        setPrintableCommandList([]);
+      }, 2000);
     }
   };
 
@@ -325,48 +337,58 @@ export default function TopicsScreen() {
   };
 
   return (
-    <View style={[styles.container]}>
-      {/* Text Area */}
-      <View style={{ alignItems: "left", width: 375, marginTop: -35 }}>
-        <View style={{ marginBottom: 5 }}>
-          <Text style={styles.chillahChallenge}>Chillah's Challenge</Text>
-        </View>
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+          // height: "90%",
+          // width: "75%",
+        }}
+      >
+        {/* Text Area */}
+        <View style={{ alignItems: "left", width: "85%", marginTop: -35 }}>
+          <View style={{ marginBottom: 5 }}>
+            <Text style={styles.chillahChallenge}>Chillah's Challenge</Text>
+          </View>
 
-        <View style={{ flexDirection: "row" }}>
-          <Image
-            style={{ width: 20, height: 25, marginRight: 10 }}
-            source={{ uri: "https://i.imgur.com/xIbrICe.png" }}
-          />
-          <Timer time={time} />
-          <Pressable>
+          <View style={{ flexDirection: "row" }}>
             <Image
-              style={{ width: 30, height: 30, marginLeft: 10 }}
-              source={{ uri: "https://i.imgur.com/84nbgIQ.png" }}
+              style={{ width: 20, height: 25, marginRight: 10 }}
+              source={{ uri: "https://i.imgur.com/xIbrICe.png" }}
             />
-          </Pressable>
+            <Timer time={time} />
+            <Pressable>
+              <Image
+                style={{ width: 30, height: 30, marginLeft: 10 }}
+                source={{ uri: "https://i.imgur.com/84nbgIQ.png" }}
+              />
+            </Pressable>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              width: 300,
+              marginTop: 10,
+              marginBottom: 15,
+            }}
+          >
+            <Image
+              style={{ width: 7, height: 60 }}
+              source={{ uri: "https://i.imgur.com/2ZSxLdZ.png" }}
+            />
+            <Text style={styles.directions}>
+              Use the control buttons to build a list of commands for Chillah.
+              Get to the flower field to complete the challenge!
+            </Text>
+          </View>
         </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            width: 300,
-            marginTop: 10,
-            marginBottom: 15,
-          }}
-        >
-          <Image
-            style={{ width: 7, height: 60 }}
-            source={{ uri: "https://i.imgur.com/2ZSxLdZ.png" }}
-          />
-          <Text style={styles.directions}>
-            Use the control buttons to build a list of commands for Chillah. Get
-            to the flower field to complete the challenge!
-          </Text>
-        </View>
-      </View>
-
-      {/* Background Gradient */}
-      <Image
+        {/* Background Gradient */}
+        {/* <Image
         style={{
           position: "absolute",
           width: "100%",
@@ -375,130 +397,132 @@ export default function TopicsScreen() {
           zIndex: -1,
         }}
         source={{ uri: "https://i.imgur.com/X8Jcxlu.png" }}
-      />
+      /> */}
 
-      {/* Game Canvas */}
-      <View style={styles.canvas}>
-        <Image
-          style={styles.img}
-          source={{
-            uri: "https://i.ibb.co/c2hJGzR/sample-path.png",
-          }}
-        />
-        <Image style={spriteStyle} source={spriteSource} />
-        <Image style={arrowStyle} source={arrowSource} />
-        <Image
-          style={boulderStyle}
-          source={{
-            uri: "https://i.ibb.co/8K7wCmK/boulder.png",
-          }}
-        />
-        <ScrollView style={styles.commandDisplay}>
-          <Text style={styles.commandTitle}>Commands</Text>
-          {printableCommandList.map((element, index) => {
-            return (
-              <Text style={styles.commandListItems} key={index}>
-                {element}
-              </Text>
-            );
-          })}
-        </ScrollView>
-        <Pressable
-          style={playStyle}
-          onPress={() => {
-            executeCommands();
-          }}
-          onPressIn={() => setPlayStyle({ ...playStyle, opacity: 0.5 })}
-          onPressOut={() => setPlayStyle({ ...playStyle, opacity: 1 })}
-        >
+        {/* Game Canvas */}
+        <View style={styles.canvas}>
           <Image
-            source={{ uri: "https://i.ibb.co/Kzt5W6F/play-button.png" }}
-            style={styles.startButton}
+            style={styles.img}
+            source={{
+              uri: "https://i.ibb.co/c2hJGzR/sample-path.png",
+            }}
           />
-        </Pressable>
-      </View>
+          <Image style={spriteStyle} source={spriteSource} />
+          <Image style={arrowStyle} source={arrowSource} />
+          <Image
+            style={boulderStyle}
+            source={{
+              uri: "https://i.ibb.co/8K7wCmK/boulder.png",
+            }}
+          />
+          <ScrollView style={styles.commandDisplay}>
+            <Text style={styles.commandTitle}>Commands</Text>
+            {printableCommandList.map((element, index) => {
+              return (
+                <Text style={styles.commandListItems} key={index}>
+                  {element}
+                </Text>
+              );
+            })}
+          </ScrollView>
+          <Pressable
+            style={playStyle}
+            onPress={() => {
+              executeCommands();
+            }}
+            onPressIn={() => setPlayStyle({ ...playStyle, opacity: 0.5 })}
+            onPressOut={() => setPlayStyle({ ...playStyle, opacity: 1 })}
+          >
+            <Image
+              source={{ uri: "https://i.ibb.co/Kzt5W6F/play-button.png" }}
+              style={styles.startButton}
+            />
+          </Pressable>
+        </View>
 
-      {/* Command Buttons */}
-      <View style={styles.commandButtonContainer}>
-        <View style={{ gap: 12 }}>
-          <Pressable
-            style={forwardStyle}
-            onPress={() => {
-              setPrintableCommandList([...printableCommandList, "Forward"]);
-            }}
-            onPressIn={() => setForwardStyle({ opacity: 0.5 })}
-            onPressOut={() => setForwardStyle({ opacity: 1 })}
-          >
-            <View>
-              <Image
-                source={{
-                  uri: "https://i.ibb.co/j3z20D8/control-button.png",
-                }}
-                style={styles.controlButton}
-              />
-              <Text style={{ ...styles.controlButtonText, left: "18%" }}>
-                Forward
-              </Text>
-            </View>
-          </Pressable>
-          <Pressable
-            style={leftStyle}
-            onPress={() => {
-              setPrintableCommandList([...printableCommandList, "Turn Left"]);
-            }}
-            onPressIn={() => setLeftStyle({ opacity: 0.5 })}
-            onPressOut={() => setLeftStyle({ opacity: 1 })}
-          >
-            <View>
-              <Image
-                source={{ uri: "https://i.ibb.co/j3z20D8/control-button.png" }}
-                style={styles.controlButton}
-              />
-              <Text style={{ ...styles.controlButtonText, left: "12%" }}>
-                Turn Left
-              </Text>
-            </View>
-          </Pressable>
+        {/* Command Buttons */}
+        <View style={styles.commandButtonContainer}>
+          <View style={{ gap: 12 }}>
+            <Pressable
+              style={forwardStyle}
+              onPress={() => {
+                setPrintableCommandList([...printableCommandList, "Forward"]);
+              }}
+              onPressIn={() => setForwardStyle({ opacity: 0.5 })}
+              onPressOut={() => setForwardStyle({ opacity: 1 })}
+            >
+              <View style={styles.controlButton}>
+                <Image
+                  source={{
+                    uri: "https://i.ibb.co/j3z20D8/control-button.png",
+                  }}
+                  style={styles.controlButton}
+                />
+                <Text style={styles.controlButtonText}>Forward</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              style={leftStyle}
+              onPress={() => {
+                setPrintableCommandList([...printableCommandList, "Turn Left"]);
+              }}
+              onPressIn={() => setLeftStyle({ opacity: 0.5 })}
+              onPressOut={() => setLeftStyle({ opacity: 1 })}
+            >
+              <View style={styles.controlButton}>
+                <Image
+                  source={{
+                    uri: "https://i.ibb.co/j3z20D8/control-button.png",
+                  }}
+                  style={styles.controlButton}
+                />
+                <Text style={styles.controlButtonText}>Turn Left</Text>
+              </View>
+            </Pressable>
+          </View>
+          <View style={{ gap: 12 }}>
+            <Pressable
+              style={rightStyle}
+              onPress={() => {
+                setPrintableCommandList([
+                  ...printableCommandList,
+                  "Turn Right",
+                ]);
+              }}
+              onPressIn={() => setRightStyle({ opacity: 0.5 })}
+              onPressOut={() => setRightStyle({ opacity: 1 })}
+            >
+              <View style={styles.controlButton}>
+                <Image
+                  source={{
+                    uri: "https://i.ibb.co/j3z20D8/control-button.png",
+                  }}
+                  style={styles.controlButton}
+                />
+                <Text style={styles.controlButtonText}>Turn Right</Text>
+              </View>
+            </Pressable>
+            <Pressable
+              style={boomStyle}
+              onPress={() => {
+                setPrintableCommandList([...printableCommandList, "BOOM!"]);
+              }}
+              onPressIn={() => setBoomStyle({ opacity: 0.5 })}
+              onPressOut={() => setBoomStyle({ opacity: 1 })}
+            >
+              <View style={styles.controlButton}>
+                <Image
+                  source={{
+                    uri: "https://i.ibb.co/j3z20D8/control-button.png",
+                  }}
+                  style={styles.controlButton}
+                />
+                <Text style={styles.controlButtonText}>BOOM!</Text>
+              </View>
+            </Pressable>
+          </View>
         </View>
-        <View style={{ gap: 12 }}>
-          <Pressable
-            style={rightStyle}
-            onPress={() => {
-              setPrintableCommandList([...printableCommandList, "Turn Right"]);
-            }}
-            onPressIn={() => setRightStyle({ opacity: 0.5 })}
-            onPressOut={() => setRightStyle({ opacity: 1 })}
-          >
-            <View>
-              <Image
-                source={{ uri: "https://i.ibb.co/j3z20D8/control-button.png" }}
-                style={styles.controlButton}
-              />
-              <Text style={{ ...styles.controlButtonText, left: "8%" }}>
-                Turn Right
-              </Text>
-            </View>
-          </Pressable>
-          <Pressable
-            style={boomStyle}
-            onPress={() => {
-              setPrintableCommandList([...printableCommandList, "BOOM!"]);
-            }}
-            onPressIn={() => setBoomStyle({ opacity: 0.5 })}
-            onPressOut={() => setBoomStyle({ opacity: 1 })}
-          >
-            <View>
-              <Image
-                source={{ uri: "https://i.ibb.co/j3z20D8/control-button.png" }}
-                style={styles.controlButton}
-              />
-              <Text style={{ ...styles.controlButtonText, left: "29%" }}>
-                BOOM!
-              </Text>
-            </View>
-          </Pressable>
-        </View>
-      </View>
+      </ScrollView>
 
       {/* Footer */}
       <Image
@@ -526,16 +550,15 @@ export default function TopicsScreen() {
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
     backgroundColor: "#151716",
+    height: "100%",
   },
   canvas: {
     position: "relative",
-    width: 375,
-    height: 375,
-    borderRadius: 12,
+    width: "85%",
+    aspectRatio: 1,
+    borderRadius: "12px",
   },
   button: {
     borderRadius: 20,
@@ -546,6 +569,7 @@ const styles = StyleSheet.create({
   controlButton: {
     width: 165,
     height: 60,
+    alignItems: "center",
   },
   controlButtonText: {
     fontFamily: "Silkscreen-Regular",
@@ -557,7 +581,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   textStyle: {
-    fontFamily: "Avenir Next",
+    fontFamily: "AvenirNext-Regular",
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
@@ -584,6 +608,7 @@ const styles = StyleSheet.create({
     color: "yellow",
     textAlign: "center",
     marginTop: 5,
+    fontSize: 10,
   },
   commandButtonContainer: {
     display: "flex",
@@ -603,11 +628,12 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     color: "white",
     textAlign: "center",
+    fontSize: 10,
   },
   chillahChallenge: {
     color: "white",
     fontSize: 24,
-    fontFamily: "Avenir Next",
+    fontFamily: "AvenirNext-Regular",
     fontWeight: "600",
     lineHeight: 31.2,
     wordWrap: "break-word",
@@ -616,7 +642,7 @@ const styles = StyleSheet.create({
     width: "100%",
     color: "white",
     fontSize: 16,
-    fontFamily: "Avenir Next",
+    fontFamily: "AvenirNext-Regular",
     fontWeight: "500",
     lineHeight: 20,
     wordWrap: "break-word",
@@ -629,14 +655,5 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 1000,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-    position: "absolute",
-    left: "50%",
-    top: "58%",
   },
 });
