@@ -139,15 +139,14 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     width: "100%",
-    backgroundColor: "white",
-    borderRadius: 24,
+    backgroundColor: "black",
     padding: 16,
     bottom: 0,
   },
   grayRectangle: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: colors.belowPage,
+    backgroundColor: "black",
     borderRadius: 100,
     height: 48,
   },

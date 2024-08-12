@@ -12,6 +12,7 @@ import SearchScreen from "../screens/SearchScreen";
 import { useState, useEffect } from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from "../utils/hooks/supabase";
+import { useFonts } from "expo-font";
 
 import SelectionMenu from "./SelectionMenu";
 const Stack = createStackNavigator();
@@ -20,8 +21,11 @@ export default function Header({ title }) {
   const navigation = useNavigation();
 
   const [profilePicUrl, setProfilePicUrl] = useState(
-    require("../../assets/edwina-pfp.png"),
+    require("../../assets/edwina-pfp.png")
   );
+  const [loaded, error] = useFonts({
+    "AvenirNext-Regular": require("../../assets/fonts/AvenirNext-Regular.ttf"),
+  });
 
   // const { user } = useAuthentication();
 
@@ -132,7 +136,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#FFFFFF",
     fontSize: fontHeader.fontSize,
-    fontFamily: fontHeader.fontFamily,
+    fontFamily: "AvenirNext-Regular",
     fontWeight: fontHeader.fontWeight,
   },
   headerLeft: {
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
-    backgroundColor: "#000000"
+    backgroundColor: "#000000",
   },
   profileImage: {
     width: "100%",

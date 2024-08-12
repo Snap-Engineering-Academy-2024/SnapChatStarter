@@ -1,10 +1,19 @@
-import { Image, Text, View, StyleSheet, Pressable, ImageBackground } from "react-native";
+import {
+  Image,
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  ImageBackground,
+  Dimensions,
+} from "react-native";
 import { supabase } from "../utils/hooks/supabase";
 // import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 // import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 // import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { Button, Icon } from "@rneui/base";
+import { useFonts } from "expo-font";
 
 // const handleSignOut = async () => {
 //   try {
@@ -21,6 +30,10 @@ import { Button, Icon } from "@rneui/base";
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
+  const [loaded, error] = useFonts({
+    "AvenirNext-Regular": require("../../assets/fonts/AvenirNext-Regular.ttf"),
+  });
+
   // const { user } = useAuthentication();
   // const [profile, setProfile] = useState(null);
   // const [astrology, setAstrology] = useState("Pisces");
@@ -57,53 +70,57 @@ export default function ProfileScreen() {
   // };
 
   return (
-    <ImageBackground 
-      style={styles.backgroundImage} 
+    <ImageBackground
+      style={styles.backgroundImage}
       source={require("../../assets/profile-background.png")}
     >
-      <Text
-        style={{
-          fontFamily: "Avenir Next",
-          fontSize: 17,
-          fontWeight: "500",
-          color: "#FFFFFF",
-          marginTop: 538,
-          marginLeft: 82,
-        }}
-      >Brain Bites{"\n"}
+      <View>
         <Text
           style={{
-            fontSize: 13,
-            color: "gray"
+            fontFamily: "AvenirNext-Regular",
+            fontSize: 17,
+            fontWeight: "500",
+            color: "#FFFFFF",
+            marginTop: 538,
+            marginLeft: 82,
           }}
-        >Games for learning!
+        >
+          Brain Bites{"\n"}
+          <Text
+            style={{
+              fontSize: 13,
+              color: "gray",
+            }}
+          >
+            Games for learning!
+          </Text>
         </Text>
-      </Text>
-      <Button 
-        title="Play now"
-        titleStyle={{
-          fontFamily: "Avenir Next",
-          fontSize: 10,
-          fontWeight: "600",
-          color: "#FFFFFF"
-        }}
-        buttonStyle={{
-          backgroundColor: "rgba(15, 173, 255, 1)",
-          // marginTop: 540,
-          borderRadius: 10,
-          marginTop: 544,
-          marginLeft: 94,
-        }}
-        onPress={() => navigation.navigate("Welcome")}
-        accessibilityLabel="Navigate to Welcome screen"
-      />
-      <Icon 
-        name="chevron-right" 
-        color="white"
-        marginTop={547}
-        marginLeft={10}
-      />
-    {/* <View style={{ alignItems: "center" }}>
+        <Button
+          title="Play now"
+          titleStyle={{
+            fontFamily: "AvenirNext-Regular",
+            fontSize: 10,
+            fontWeight: "600",
+            color: "#FFFFFF",
+          }}
+          buttonStyle={{
+            backgroundColor: "rgba(15, 173, 255, 1)",
+            // marginTop: 540,
+            borderRadius: 10,
+            marginTop: 544,
+            marginLeft: 94,
+          }}
+          onPress={() => navigation.navigate("Welcome")}
+          accessibilityLabel="Navigate to Welcome screen"
+        />
+        <Icon
+          name="chevron-right"
+          color="white"
+          marginTop={547}
+          marginLeft={10}
+        />
+      </View>
+      {/* <View style={{ alignItems: "center" }}>
       <Image
         source={{ uri: "https://i.imgur.com/FxsJ3xy.jpg" }}
         style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
@@ -147,7 +164,8 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    height: "100%",
+    width: "100%",
+    aspectRatio: 390 / 863,
     flexDirection: "row",
   },
   // container: {

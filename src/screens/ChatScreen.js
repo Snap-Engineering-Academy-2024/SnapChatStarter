@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 // import Ionicons from "react-native-vector-icons/Ionicons";
@@ -8,11 +14,15 @@ import { supabase } from "../utils/hooks/supabase"; // Import Supabase client
 import { Button, Icon } from "@rneui/base";
 import Header from "../components/Header";
 import { CHATBOTS } from "./ConversationScreen";
+import { useFonts } from "expo-font";
 
 export default function ChatScreen({ navigation }) {
   // const [chats, setChats] = useState([]);
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
+  const [loaded, error] = useFonts({
+    "AvenirNext-Regular": require("../../assets/fonts/AvenirNext-Regular.ttf"),
+  });
 
   // function getChatbots() {
   //   let chatbotsTemp = [];
@@ -58,109 +68,119 @@ export default function ChatScreen({ navigation }) {
       style={[
         styles.container,
         {
+          width: "100%",
           paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-          paddingLeft: insets.left,
-          paddingRight: insets.right,
-          marginBottom: tabBarHeight,
         },
       ]}
     >
-      <Header title="Chat" style={{color: "white"}}/>
+      <Header title="Chat" style={{ color: "white" }} />
       <ImageBackground
-        source={(require("../../assets/chat-background.png"))}
+        source={require("../../assets/chat-background.png")}
         style={styles.backgroundImage}
       >
-        <Text
+        <View
           style={{
-            fontFamily: "Avenir Next",
-            fontSize: 17,
-            fontWeight: "500",
-            color: "#FFFFFF",
-            marginTop: 30,
-            marginLeft: 85,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+            paddingTop: "7.5%",
+            paddingLeft: "22%",
           }}
-        >Brain Bites{"\n"}
+        >
           <Text
             style={{
-              fontSize: 13,
-              color: "gray"
+              fontFamily: "AvenirNext-Regular",
+              fontSize: 17,
+              fontWeight: "500",
+              color: "#FFFFFF",
             }}
-          >Games for learning!
+          >
+            Brain Bites{"\n"}
+            <Text
+              style={{
+                fontSize: 13,
+                color: "gray",
+              }}
+            >
+              Games for learning!
+            </Text>
           </Text>
-        </Text>
-        <Button 
-          title="Play now"
-          titleStyle={{
-            fontFamily: "Avenir Next",
-            fontSize: 10,
-            fontWeight: "600",
-            color: "#FFFFFF"
-          }}
-          buttonStyle={{
-            backgroundColor: "rgba(15, 173, 255, 1)",
-            // marginTop: 540,
-            borderRadius: 10,
-            marginTop: 33,
-            marginLeft: 94,
-          }}
-          onPress={() => navigation.navigate("Welcome")}
-          accessibilityLabel="Navigate to Welcome screen"
-        />
-        <Icon 
-          name="close"  
-          // type="font-awesome"
-          color="white"
-          marginTop={37}
-          marginLeft={10}
-        />
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "10%",
+              justifyContent: "center",
+              marginRight: "8%",
+            }}
+          >
+            <Button
+              title="Play now"
+              titleStyle={{
+                fontFamily: "AvenirNext-Regular",
+                fontSize: 12,
+                fontWeight: "600",
+                color: "#FFFFFF",
+              }}
+              buttonStyle={{
+                backgroundColor: "rgba(15, 173, 255, 1)",
+                borderRadius: 7,
+              }}
+              onPress={() => navigation.navigate("Game")}
+              accessibilityLabel="Navigate to Welcome screen"
+            />
+            <Icon name="close" color="white" marginTop="25%" />
+          </View>
+        </View>
       </ImageBackground>
     </View>
 
-  //     <View>
-  //       {chats?.map((chat) => { */}
-  // {/* //         return ( */}
-  // {/* //           <TouchableOpacity */}
-  //             {/* // style={styles.userButton} */}
-  // {/* //             onPress={() => { */}
-  // {/* //               navigation.navigate("Conversation", { */}
-  // {/* //                 isChatbot: chat.isChatbot, */}
-  // {/* //                 chatId: chat.chatId, */}
-  // {/* //               }); */}
-  // {/* //             }} */}
-  // {/* //             key={chat.chatId} */}
-  // {/* //           > */}
-  // {/* //             <Ionicons */}
-  // {/* //               style={styles.userIcon}
-  // //               name="person-outline"
-  // //               size={36}
-  // //               color="lightgrey"
-  // //             />
-  // //             <Text style={styles.userName}> {chat.chatId} </Text>
-  // //             <Ionicons */}
-  // {/* //               style={styles.userCamera}
-  // //               name="camera-outline"
-  // //               size={24}
-  // //               color="lightgrey"
-  // //             />
-  // //           </TouchableOpacity> */}
-  // {/* //         ); */}
-  // {/* //       })}
-  // //     </View> */}
-  //   </View>
+    //     <View>
+    //       {chats?.map((chat) => { */}
+    // {/* //         return ( */}
+    // {/* //           <TouchableOpacity */}
+    //             {/* // style={styles.userButton} */}
+    // {/* //             onPress={() => { */}
+    // {/* //               navigation.navigate("Conversation", { */}
+    // {/* //                 isChatbot: chat.isChatbot, */}
+    // {/* //                 chatId: chat.chatId, */}
+    // {/* //               }); */}
+    // {/* //             }} */}
+    // {/* //             key={chat.chatId} */}
+    // {/* //           > */}
+    // {/* //             <Ionicons */}
+    // {/* //               style={styles.userIcon}
+    // //               name="person-outline"
+    // //               size={36}
+    // //               color="lightgrey"
+    // //             />
+    // //             <Text style={styles.userName}> {chat.chatId} </Text>
+    // //             <Ionicons */}
+    // {/* //               style={styles.userCamera}
+    // //               name="camera-outline"
+    // //               size={24}
+    // //               color="lightgrey"
+    // //             />
+    // //           </TouchableOpacity> */}
+    // {/* //         ); */}
+    // {/* //       })}
+    // //     </View> */}
+    //   </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#000000",
+    alignItems: "center",
   },
   backgroundImage: {
-    height: 700,
-    width: 430,
-    flexDirection: "row"
-  }
+    width: "100%",
+    height: "auto",
+    aspectRatio: 520 / 852,
+    flexDirection: "row",
+  },
   // userButton: {
   //   padding: 25,
   //   display: "flex",
