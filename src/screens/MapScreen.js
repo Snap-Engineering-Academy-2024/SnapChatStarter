@@ -36,7 +36,7 @@ export default function MapScreen({ navigation }) {
   const locationDetailsModalRef = useRef(null);
   const favoritelocationModalRef = useRef(null);
   const snapPointsLocationList = ["60%", "92%"];
-  const snapPointsLocationDetails = ["50%", "92%"];
+  const snapPointsLocationDetails = ["60%", "92%"];
   const [isSatellite, setIsSatellite] = useState(false);
   const [isIntroModalVisible, setIsIntroModalVisible] = useState(true);
 
@@ -63,6 +63,18 @@ export default function MapScreen({ navigation }) {
     };
     getLocation();
   }, []);
+
+
+  const channels = supabase.channel('custom-all-channel')
+  .on(
+    'postgres_changes',
+    { event: '*', schema: 'public', table: 'favorite_places' },
+    (payload) => {
+      console.log('Change received!', payload)
+    }
+  )
+  .subscribe()
+
 
   const getCityName = async (latitude, longitude) => {
     console.log("call city function!")
@@ -179,37 +191,6 @@ export default function MapScreen({ navigation }) {
       console.error(error);
     }
   };
-
-//   const handleShowSafeHaven = async () => {
-//     if (!location) {
-//         setErrorMsg("Location not available");
-//         return;
-//     }
-//     const iconKeywords = [
-//         "nonprofit organization",
-//         "police hospital emergency",
-//         "free wifi place",
-//         "food bank free food salvation army",
-//         "free shower library"
-//     ];
-//     try {
-//         const places = await fetchNearbyPlaces('housing resources');
-//         const updatedPlaces = places.map(place => {
-//             const randomKeyword = iconKeywords[Math.floor(Math.random() * iconKeywords.length)];
-//             return {
-//                 ...place,
-//                 mapIconImage: getMapIconImage(randomKeyword)
-//             };
-//         });
-//         setPlaces(updatedPlaces);
-//         locationListModalRef.current.present();
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
-
-  
-  
   
   const fetchPlaceDetails = async (placeId) => {
     const apiKey = Constants.expoConfig.extra.GOOGLE_PLACES_API_KEY;
@@ -253,7 +234,7 @@ export default function MapScreen({ navigation }) {
       }
       if (data) {
         const favoritePlaces = data.map(record => record.place_object);
-        console.log(favoritePlaces)
+        // console.log(favoritePlaces)
         setPlaces(favoritePlaces);
         favoritelocationModalRef.current.present();
       }
