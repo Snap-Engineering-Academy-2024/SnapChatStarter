@@ -243,6 +243,21 @@ export default function MapScreen({ navigation }) {
     }
   };
 
+  const insertFavoritePlace = async (placeObject) => {
+    try {
+      const { data, error } = await supabase.from('favorite_places').insert([{ place_object: placeObject }]).single();
+
+      if (error) {
+        console.error('Error inserting favorite place:', error);
+        return null;
+      }
+      return data;
+    } catch (error) {
+      // Handle any unexpected errors
+      console.error('Unexpected error inserting favorite place:', error);
+      return null;
+    }
+  };
 
   return (
     <BottomSheetModalProvider>
@@ -390,6 +405,7 @@ export default function MapScreen({ navigation }) {
             searchFunc={(keyword) => handleShowPlaces(keyword)}
             onClose = {() => locationListModalRef.current.close()}
             getImageCanSee = {getImageCanSee}
+            insertFavoritePlace = {insertFavoritePlace}
           />
         </BottomSheetModal>
         <BottomSheetModal
