@@ -331,6 +331,16 @@ export default function MapScreen({ navigation }) {
             >
               <Ionicons name="navigate" size={15} color="black" />
             </TouchableOpacity>
+
+            {places.length > 0 && (
+              <TouchableOpacity
+                style={[styles.crossClearPlaces, styles.shadow]}
+                onPress={() => setPlaces([])}
+              >
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>X</Text>
+              </TouchableOpacity>
+            )}
+
           </View>
           <View style={styles.buttonsContainer}>
             <ScrollView
@@ -462,9 +472,22 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingBottom: 5,
     alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: "center",
+    gap: 10,
+
   },
   userLocation: {
     backgroundColor: "white",
+    borderRadius: 100,
+    height: 36,
+    width: 36,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 5,
+  },
+  crossClearPlaces: {
+    backgroundColor: "#f94449",
     borderRadius: 100,
     height: 36,
     width: 36,
