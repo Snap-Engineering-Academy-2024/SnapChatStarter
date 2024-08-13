@@ -11,14 +11,14 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-
 const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose, getImageCanSee, insertFavoritePlace }) => {
   const [activeButton, setActiveButton] = useState(null);
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(false);
   const [places, setPlaces] = useState([]);
-  
-  //This image in case there is no image in that place
+  const [favorites, setFavorites] = useState(new Set()); // Use a Set for fast lookup
+
+  // Default image if no image is available
   const defaultImageUrl = 'https://i.postimg.cc/RZctxc7f/shelter-chile-unhcr-web.jpg';
 
   useEffect(() => {
@@ -30,7 +30,19 @@ const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose
           const imageUrl = photoReference ? await getImageCanSee(photoReference) : defaultImageUrl;
           return { ...place, imageUrl };
         }));
-        setPlaces(updatedPlaces);
+
+        // Update state with the unique places and keep track of favorites
+        const uniquePlaces = [];
+        const placeIds = new Set();
+
+        updatedPlaces.forEach(place => {
+          if (!placeIds.has(place.place_id)) {
+            placeIds.add(place.place_id);
+            uniquePlaces.push(place);
+          }
+        });
+
+        setPlaces(uniquePlaces);
       } catch (error) {
         console.error("Error fetching images:", error);
       } finally {
@@ -65,10 +77,26 @@ const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose
     };
   };
 
+  const handleFavoritePress = (place) => {
+    if (favorites.has(place.place_id)) {
+      // Remove from favorites
+      const updatedFavorites = new Set(favorites);
+      updatedFavorites.delete(place.place_id);
+      setFavorites(updatedFavorites);
+    } else {
+      // Add to favorites
+      const updatedFavorites = new Set(favorites);
+      updatedFavorites.add(place.place_id);
+      setFavorites(updatedFavorites);
+      insertFavoritePlace(place);
+    }
+  };
+
   const renderItem = ({ item }) => {
     const isOpen = item.opening_hours ? item.opening_hours.open_now : null;
     const isOpenStatus = isOpen !== null ? (isOpen ? 'Open Now' : 'Closed') : 'Status Not Available';
     const statusColor = isOpen !== null ? (isOpen ? 'green' : 'red') : 'gray';
+    const isFavorite = favorites.has(item.place_id);
     
     return (
       <View style={styles.itemContainer}>
@@ -81,8 +109,15 @@ const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose
               {isOpenStatus}
             </Text>
           </View>
-          <TouchableOpacity style={styles.heartButton} onPress={() => insertFavoritePlace(item)}>
-            <Ionicons name="heart-outline" size={24} color="#000000" />
+          <TouchableOpacity
+            style={styles.heartButton}
+            onPress={() => handleFavoritePress(item)}
+          >
+            <Ionicons
+              name={isFavorite ? "heart" : "heart-outline"}
+              size={24}
+              color={isFavorite ? "red" : "#000000"}
+            />
           </TouchableOpacity>
         </TouchableOpacity>
       </View>
@@ -90,12 +125,9 @@ const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose
   };
 
   return (
-    
     <View style={styles.container}>
-      
       {/* Header Container */}
       <View style={styles.headerContainer}>
-
         <View style={styles.headerContent}>
           <Image 
             source={{ uri: 'https://i.ibb.co/xXLRpyK/Image.png' }} 
@@ -152,7 +184,7 @@ const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose
           </TouchableOpacity>
         </ScrollView>
       </View>
-      
+
       {/* Title and Button Container */}
       <View style={styles.titleAndButtonContainer}>
         <Text style={styles.resourcesTitle}>Resources</Text>
@@ -165,7 +197,7 @@ const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose
           </Text>
         </TouchableOpacity>
       </View>
-      
+
       {/* List Container */}
       <View style={styles.listContainer}>
         {loading ? (
