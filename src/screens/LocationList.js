@@ -98,7 +98,7 @@ const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose
 
         <View style={styles.headerContent}>
           <Image 
-            source={{ uri: 'https://i.ibb.co/r6hnGsF/Image.png' }} 
+            source={{ uri: 'https://i.ibb.co/xXLRpyK/Image.png' }} 
             style={styles.headerImage} 
           />
           <View style={styles.headerTextContainer}>
