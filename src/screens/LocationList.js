@@ -12,7 +12,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 
-const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose, getImageCanSee }) => {
+const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose, getImageCanSee, insertFavoritePlace }) => {
   const [activeButton, setActiveButton] = useState(null);
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -81,7 +81,7 @@ const LocationList = ({ places: initialPlaces, onPlacePress, searchFunc, onClose
               {isOpenStatus}
             </Text>
           </View>
-          <TouchableOpacity style={styles.heartButton}>
+          <TouchableOpacity style={styles.heartButton} onPress={() => insertFavoritePlace(item)}>
             <Ionicons name="heart-outline" size={24} color="#000000" />
           </TouchableOpacity>
         </TouchableOpacity>
