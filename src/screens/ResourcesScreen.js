@@ -1,4 +1,4 @@
-import { SafeAreaView, View, FlatList, Text, Image, StyleSheet } from "react-native";
+import { SafeAreaView, View, FlatList, Text, Image, StyleSheet, Linking, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from '@rneui/themed';
 import { useCallback } from "react";
@@ -25,10 +25,7 @@ export default function ResourcesScreen() {
             <Text style={styles.paragraph}>
                 {item.snippet}
             </Text>
-            {/* <View style={styles.buttonWrapper}> */}
-                <OpenUrlButton></OpenUrlButton>              
-            {/* </View> */}
-
+            <OpenUrlButton url={item.link} />              
         </View>
     )
     const renderItem = ({item}) => {
@@ -40,12 +37,8 @@ export default function ResourcesScreen() {
     }
     const OpenUrlButton = ({url}) => {
         const handlePress = useCallback(async () => {
-            // Checking if the link is supported for links with custom URL scheme.
             const supported = await Linking.canOpenURL(url);
-        
             if (supported) {
-              // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-              // by some browser in the mobile
               await Linking.openURL(url);
             } else {
               Alert.alert(`Don't know how to open this URL: ${url}`);
@@ -61,7 +54,7 @@ export default function ResourcesScreen() {
                 }}
                 iconRight
                 buttonStyle={styles.button}
-                onPress={() => console.log("CHECKING OUT MORE")}
+                onPress={handlePress}
                 accessibilityLabel="Navigate to website"
             />  
           );
@@ -82,9 +75,8 @@ export default function ResourcesScreen() {
                 renderItem={renderItem}
                 keyExtractor={item => item.name}
                 horizontal={true}
-            >
-            </FlatList>
-            <Image style={styles.bitmoji} source={require("../../assets/education-ed.png")}></Image>
+            />
+            <Image style={styles.bitmoji} source={require("../../assets/education-ed.png")} />
         </View>
     );
 }
@@ -133,10 +125,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         padding: 20,
     },
-    // buttonWrapper: {
-    //     alignSelf: "stretch",
-    //     marginBottom: 20, // Adds some space below the button
-    // }
     buttonTitle: {
         color: "#000000",
         fontFamily: "Avenir Next",
@@ -153,9 +141,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 640,
         left: 30,
-        // right: 0,
-        // bottom: 0,
         width: 126,
         height: 248,
     }
-}) 
+})
