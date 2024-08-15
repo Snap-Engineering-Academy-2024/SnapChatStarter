@@ -25,7 +25,7 @@ export default function SnapTogetherHeader() {
         </Pressable>
       </View>
       <View style={styles.headerRight}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.settingsButton}
           onPress={() => {
             setShowAbout(true);
@@ -37,7 +37,7 @@ export default function SnapTogetherHeader() {
             size={22}
             color="white"
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.settingsButton}
           onPress={() => navigation.navigate("Settings")}

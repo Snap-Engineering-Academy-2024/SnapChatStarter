@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView from "react-native-maps";
 import {
   View,
   StyleSheet,
@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-  ImageBackground,
 } from "react-native";
 import { Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
@@ -18,7 +17,6 @@ import { useRoute } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScreenWidth } from "@rneui/base";
 import CompanyPageHeader from "../components/CompanyPageHeader";
-import * as Location from "expo-location";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -26,11 +24,20 @@ const stories = [
   require("../../assets/CompanyContent/AFROTECH/Story/Stories1.png"),
   require("../../assets/CompanyContent/AFROTECH/Story/Stories2.png"),
   require("../../assets/CompanyContent/AFROTECH/Story/Stories3.png"),
+  require("../../assets/CompanyContent/AFROTECH/Story/Stories4.jpg"),
+  require("../../assets/CompanyContent/AFROTECH/Story/Stories5.png"),
+  require("../../assets/CompanyContent/AFROTECH/Story/Stories6.jpg"),
 ];
 const communities = [
   require("../../assets/CompanyContent/AFROTECH/Community/Community1.png"),
   require("../../assets/CompanyContent/AFROTECH/Community/Community2.png"),
   require("../../assets/CompanyContent/AFROTECH/Community/Community3.png"),
+  require("../../assets/CompanyContent/AFROTECH/Community/Community4.jpeg"),
+  require("../../assets/CompanyContent/AFROTECH/Community/Community5.jpg"),
+  require("../../assets/CompanyContent/AFROTECH/Community/Community6.jpg"),
+  require("../../assets/CompanyContent/AFROTECH/Community/Community7.jpg"),
+  require("../../assets/CompanyContent/AFROTECH/Community/Community8.png"),
+  require("../../assets/CompanyContent/AFROTECH/Community/Community9.png"),
 ];
 
 const SelectorButton = ({ title, onPress, isActive }) => {
@@ -39,11 +46,7 @@ const SelectorButton = ({ title, onPress, isActive }) => {
       style={[styles.button, isActive && styles.buttonActive]}
       onPress={onPress}
     >
-      <Text
-        style={[styles.buttonText, isActive && styles.buttonActiveText]}
-        onPress={onPress}
-      />
-      <Text style={[styles.buttonText, !isActive && styles.buttonActiveText]}>
+      <Text style={[styles.buttonText, isActive && styles.buttonActiveText]}>
         {title}
       </Text>
     </TouchableOpacity>
@@ -57,17 +60,13 @@ export default function CompanyPageScreen() {
   const insets = useSafeAreaInsets();
   const sheetRef = useRef(null);
   const [selectedOption, setSelectedOption] = useState("Stories");
-  const [location, setLocation] = useState(null);
 
   const currentRegion = {
-    latitude: selectedCompany.location[0] - .0350,
-    longitude: selectedCompany.location[1] - .0050,
+    latitude: selectedCompany.location[0] - 0.035,
+    longitude: selectedCompany.location[1] - 0.005,
     latitudeDelta: 0.09,
     longitudeDelta: 0.09,
   };
-
-  let text = "Waiting...";
-  text = JSON.stringify(location);
 
   const handlePress = (option) => {
     setSelectedOption(option);
@@ -79,105 +78,93 @@ export default function CompanyPageScreen() {
 
   return (
     <View style={styles.container}>
-      <View
-        style={styles.map}
-        >
-         <MapView
+      <MapView
         style={styles.map}
         region={currentRegion}
         showsUserLocation={true}
-        // scrollEnabled={false} // Disable panning
-        // zoomEnabled={false} // Disable zooming
-      /> 
+      />
+      <Image
+        style={styles.mapIcon}
+        source={{ uri: selectedCompany.logo_url }}
+      />
+      <CompanyPageHeader
+        pageName={pageName}
+        buttonTitle={buttonTitle}
+        companyData={selectedCompany}
+      />
+      <BottomSheet
+        ref={sheetRef}
+        index={3}
+        snapPoints={["35%", "45%", "55%", "65%", "75%", "85%"]}
+      >
+        <View style={styles.logoAndName}>
+          <TouchableOpacity
+            style={styles.title}
+            onPress={() => {
+              navigation.navigate("CompanyPage", { selectedCompany });
+            }}
+          >
+            <View style={styles.bitmojiContainer}>
+              <Image
+                style={styles.bitmojiImage}
+                source={{ uri: selectedCompany.logo_url }}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.title}
+            onPress={() => {
+              navigation.navigate("CompanyPage", { selectedCompany });
+            }}
+          >
+            <Text style={styles.title}>
+              {selectedCompany.username.toUpperCase()}
+            </Text>
+          </TouchableOpacity>
+          <Icon name="stars" size={25} color={"yellow"} />
+        </View>
         <Image
-          style={styles.mapIcon}
-          source={{ uri: selectedCompany.logo_url }}
+          source={require("../../assets/SnapTogether/CompanyFriends.png")}
+          style={styles.companyFriends}
         />
-        <View
-        // style={{ paddingTop: insets.top }}
-        >
-          <CompanyPageHeader
-            pageName={pageName}
-            buttonTitle={buttonTitle}
-            companyData={selectedCompany}
+        <View style={styles.buttons}>
+          <Button buttonStyle={styles.subscribe}>
+            <Icon name="bookmark-add" size={20} color={"white"} />
+            <Text
+              style={{ color: "white", fontSize: 16, fontWeight: "semibold" }}
+            >
+              Subscribe
+            </Text>
+          </Button>
+          <TouchableOpacity style={styles.expand}>
+            <Icon name="expand-circle-down" size={50} color={"lightgray"} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.selectorButtonContainer}>
+          <SelectorButton
+            title="Stories"
+            onPress={() => handlePress("Stories")}
+            isActive={selectedOption === "Stories"}
+          />
+          <SelectorButton
+            title="Communities"
+            onPress={() => handlePress("Communities")}
+            isActive={selectedOption === "Communities"}
           />
         </View>
-        <BottomSheet
-          ref={sheetRef}
-          index={3}
-          snapPoints={["35", "45", "55", "65", "75", "85"]}
-        >
-          <View style={styles.logoAndName}>
-            <TouchableOpacity
-              style={styles.title}
-              onPress={() => {
-                navigation.navigate("CompanyPage", { selectedCompany });
-              }}
-            >
-              <View style={styles.bitmojiContainer}>
-                <Image
-                  style={styles.bitmojiImage}
-                  source={{ uri: selectedCompany.logo_url }}
-                />
-              </View>
+        {selectedCompany.username === "AfroTech" &&
+        <FlatList
+          data={getData()}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity>
+              <Image source={item} style={styles.storyImage} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.title}
-              onPress={() => {
-                navigation.navigate("CompanyPage", { selectedCompany });
-              }}
-            >
-              <Text style={styles.title}>
-                {selectedCompany.username.toUpperCase()}
-              </Text>
-            </TouchableOpacity>
-            <Icon name="stars" size={25} color={"yellow"} />
-          </View>
-          <View>
-            <Image
-              source={require("../../assets/SnapTogether/CompanyFriends.png")}
-              style={styles.companyFriends}
-            />
-          </View>
-          <View style={styles.buttons}>
-            <Button buttonStyle={styles.subscribe}>
-              <Icon name="bookmark-add" size={20} color={"white"} />
-              <Text
-                style={{ color: "white", fontSize: 16, fontWeight: "semibold" }}
-              >
-                Subscribe
-              </Text>
-            </Button>
-            <TouchableOpacity style={styles.expand}>
-              <Icon name="expand-circle-down" size={50} color={"lightgray"} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.selectorButtonContainer}>
-            <SelectorButton
-              title="Stories"
-              onPress={() => handlePress("Stories")}
-              isActive={selectedOption === "Stories"}
-            />
-            <SelectorButton
-              title="Communities"
-              onPress={() => handlePress("Communities")}
-              isActive={selectedOption === "Communities"}
-            />
-          </View>
-          <View style={styles.storyGrid}>
-            <FlatList
-              data={getData()}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <TouchableOpacity>
-                  <Image source={item} style={styles.storyImage} />
-                </TouchableOpacity>
-              )}
-              numColumns={3}
-            />
-          </View>
-        </BottomSheet>
-      </View>
+          )}
+          numColumns={3}
+        />
+}
+      </BottomSheet>
     </View>
   );
 }
@@ -185,18 +172,6 @@ export default function CompanyPageScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  bottomsheet: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0)",
-  },
-  content: {
-    backgroundColor: "white",
-    padding: 25,
-    height: SCREEN_HEIGHT,
-    borderRadius: 25,
-    alignItems: "center",
-    top: SCREEN_HEIGHT / 3.5,
   },
   bitmojiContainer: {
     borderRadius: 100,
@@ -211,7 +186,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   logoAndName: {
-    alignSelf: "flex-start",
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
@@ -234,9 +208,7 @@ const styles = StyleSheet.create({
   subscribe: {
     height: 40,
     width: ScreenWidth / 1.25,
-    paddingHorizontal: 20,
     justifyContent: "center",
-    marginBottom: 16,
     borderRadius: 20,
     backgroundColor: "#10adff",
     gap: 5,
@@ -258,11 +230,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "grey",
   },
   buttonActiveText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "grey",
+    color: "black",
   },
   selectorButtonContainer: {
     flexDirection: "row",
@@ -272,13 +243,6 @@ const styles = StyleSheet.create({
     height: 100,
     width: "100%",
   },
-  storyGrid: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: 4,
-    paddingHorizontal: 10,
-  },
   storyImage: {
     width: SCREEN_WIDTH / 3 - 20,
     height: SCREEN_WIDTH / 1.75 - 20,
@@ -286,7 +250,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   map: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
@@ -300,6 +264,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "white",
     borderRadius: 50,
+    position: "absolute",
     left: 200,
     top: 220,
   },

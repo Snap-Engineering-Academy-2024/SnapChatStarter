@@ -203,8 +203,6 @@ export default function SectionScreen() {
               title={item.username}
               eventImage={item.poster_url}
               selectedCompany={item}
-              pageName={"Section"}
-              buttonTitle={buttonTitle}
               handlePress={() => {
                 setShowAbout(true);
                 setSelectedCompany(item);

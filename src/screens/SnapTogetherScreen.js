@@ -19,6 +19,7 @@ import {
 import { useFilteredData } from "../utils/hooks/useFilteredData";
 import SnapTogetherFeed from "../components/SnapTogetherFeed";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import InfoSheet from "../components/InfoSheet";
 
 export default function SnapTogetherScreen() {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ export default function SnapTogetherScreen() {
   const [story1, setStory1] = useState([]);
   const [story2, setStory2] = useState([]);
   const [story3, setStory3] = useState([]);
-  const [showStory, setShowStory] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
 
   const handleSectionPress = async (buttonTitle) => {
@@ -131,7 +132,6 @@ export default function SnapTogetherScreen() {
             <FlatList
               data={filteredStory1}
               horizontal={true}
-              // numColumns={2}
               ItemSeparatorComponent={() => (
                 <View style={{ width: 30, marginBottom: 350 }} />
               )}
@@ -140,9 +140,8 @@ export default function SnapTogetherScreen() {
                   title={item.username}
                   eventImage={item.poster_url}
                   selectedCompany={item}
-                  pageName={"SnapTogether"}
                   handlePress={() => {
-                    setShowStory(true);
+                    setShowAbout(true);
                     setSelectedCompany(item);
                   }}
                 />
@@ -159,7 +158,6 @@ export default function SnapTogetherScreen() {
             <Text style={styles.buttonText}>See more</Text>
           </Pressable>
         </View>
-
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             title={"Mom & Pops"}
@@ -183,8 +181,9 @@ export default function SnapTogetherScreen() {
                 <SnapTogetherFeed
                   title={item.username}
                   eventImage={item.poster_url}
+                  selectedCompany={item}
                   handlePress={() => {
-                    setShowStory(true);
+                    setShowAbout(true);
                     setSelectedCompany(item);
                   }}
                 />
@@ -223,8 +222,9 @@ export default function SnapTogetherScreen() {
                 <SnapTogetherFeed
                   title={item.username}
                   eventImage={item.poster_url}
+                  selectedCompany={item}
                   handlePress={() => {
-                    setShowStory(true);
+                    setShowAbout(true);
                     setSelectedCompany(item);
                   }}
                 />
@@ -243,6 +243,14 @@ export default function SnapTogetherScreen() {
         </View>
         {/* <View style={{height: 300}}> </View> */}
       </ScrollView>
+      {/* If infosheet is shown */}
+      <View>
+        {/* <InfoSheet
+          showAbout={showAbout}
+          setShowAbout={setShowAbout}
+          selectedCompany={selectedCompany}
+        /> */}
+      </View>
     </SafeAreaView>
   );
 }
