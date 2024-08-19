@@ -15,6 +15,10 @@ export default function CompanyPageHeader({pageName, companyData}) {
 
   const { user } = useAuthentication();
 
+  // const handleShare = () => {
+    
+  // }
+
   return (
     <View style={styles.container}>
     <View style={styles.topContainer}>
@@ -42,6 +46,7 @@ export default function CompanyPageHeader({pageName, companyData}) {
       <View style={styles.headerRight}>
         <TouchableOpacity
           style={styles.buttons}
+          // onPress={}
         >
           <Icon name="ios-share" size={22} color="white"/>
         </TouchableOpacity>
