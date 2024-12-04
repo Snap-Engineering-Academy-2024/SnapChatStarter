@@ -10,7 +10,9 @@ import SettingsScreen from "../screens/SettingsScreen";
 import FriendStory from "../screens/FriendStory";
 import AstrologyScreen from "../screens/AstrologyScreen";
 import MemoryScreen from "../screens/MemoryScreen";
-import EventScreen from "../screens/EventScreen"; //New component by Sona and Christian
+import EventScreen from "../screens/EventScreen";
+import SectionScreen from "../screens/SectionScreen";
+import SnapTogetherScreen from "../screens/SnapTogetherScreen";
 
 const Stack = createStackNavigator();
 
@@ -22,7 +24,7 @@ export default function App() {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ headerShown: true }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="FriendStory"
@@ -68,6 +70,16 @@ export default function App() {
           name="Event"
           component={EventScreen}
           options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="SnapTogether"
+          component={SnapTogetherScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Section"
+          component={SectionScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

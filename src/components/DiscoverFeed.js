@@ -17,14 +17,6 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function DiscoverFeed() {
   const navigation = useNavigation();
-  //  const [discoverCard, setDiscoverCard] = useState(false);
-  //  const handlePress = () => {
-  //   setDiscoverCard(true);
-  // };
-
-  // const handleClose = () => {
-  //   setDiscoverCard(false);
-  // };
   return (
     <View style={styles.FeedContainer}>
       <View style={styles.Square}>
