@@ -52,7 +52,7 @@ export default function StoriesScreen({ route, navigation }) {
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,
-          marginBottom: tabBarHeight,
+          // marginBottom: tabBarHeight,
         },
       ]}
     >
@@ -97,6 +97,7 @@ export default function StoriesScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "black"
   },
   contentContainer: {
     // padding: 12,
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     textAlign: "left",
     paddingVertical: 4,
-    color: colors.primary,
+    color: "white",
     fontSize: fontHeader.fontSize,
     fontFamily: fontHeader.fontFamily,
     fontWeight: fontHeader.fontWeight,

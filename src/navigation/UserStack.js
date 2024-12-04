@@ -11,6 +11,12 @@ import FriendStory from "../screens/FriendStory";
 import AstrologyScreen from "../screens/AstrologyScreen";
 import MemoryScreen from "../screens/MemoryScreen";
 import EventScreen from "../screens/EventScreen"; //New component by Sona and Christian
+import WelcomeScreen from "../screens/WelcomeScreen";
+import TopicsScreen from "../screens/TopicsScreen";
+import ResourcesScreen from "../screens/ResourcesScreen";
+import LevelsScreen from "../screens/LevelsScreen";
+import GameScreen from "../screens/GameScreen";
+import { StyleSheet } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -22,7 +28,7 @@ export default function App() {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ headerShown: true }}
+          options={styles.cleanHeader}
         />
         <Stack.Screen
           name="FriendStory"
@@ -47,7 +53,7 @@ export default function App() {
         <Stack.Screen
           name="Search"
           component={SearchScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="MemoryScreen"
@@ -58,6 +64,31 @@ export default function App() {
           name="Astrology"
           component={AstrologyScreen}
           options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={styles.cleanHeader}
+        />
+        <Stack.Screen
+          name="Topics"
+          component={TopicsScreen}
+          options={styles.cleanHeader}
+        />
+        <Stack.Screen
+          name="Resources"
+          component={ResourcesScreen}
+          options={styles.cleanHeader}
+        />
+        <Stack.Screen
+          name="Levels"
+          component={LevelsScreen}
+          options={styles.cleanHeader}
+        />
+        <Stack.Screen
+          name="Game"
+          component={GameScreen}
+          options={styles.cleanHeader}
         />
         <Stack.Screen
           name="Settings"
@@ -73,3 +104,13 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  cleanHeader: {
+    headerShown: true,
+    headerTransparent: true,
+    headerTitle: "",
+    headerBackTitle: "",
+    headerTintColor: "white",
+  },
+});

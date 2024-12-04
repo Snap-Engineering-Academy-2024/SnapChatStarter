@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     height: 60,
   },
   bitmojiTextContainer: {
-    backgroundColor: "white",
+    backgroundColor: "black",
     borderRadius: 20,
     padding: 4,
   },
@@ -60,11 +60,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 12,
     fontWeight: "700",
+    color: "white"
   },
   usernameText: {
     fontSize: 8,
     fontWeight: "700",
     opacity: 0.5,
+    color: "white"
   },
   Friends: {
     textAlign: "left",

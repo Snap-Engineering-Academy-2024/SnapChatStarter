@@ -10,9 +10,17 @@ export default {
         "expo-camera",
         {
           cameraPermission: "Allow $(PRODUCT_NAME) to access your camera",
-          microphonePermission:
-            "Allow $(PRODUCT_NAME) to access your microphone",
+          microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone",
           recordAudioAndroid: true,
+        },
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Silkscreen-Regular.ttf", 
+            "./assets/fonts/PressStart2P-Regular.ttf",
+          ],
         },
       ],
     ],

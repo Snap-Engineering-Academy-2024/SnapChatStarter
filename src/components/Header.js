@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Button, Image } from "react-native";
+import { Text, View, StyleSheet, Button, Image, Platform } from "react-native";
 import { colors } from "../../assets/themes/colors";
 import { fontHeader } from "../../assets/themes/font";
 import { Followers, More, Search } from "../../assets/snapchat/HeaderIcons";
@@ -12,18 +12,48 @@ import SearchScreen from "../screens/SearchScreen";
 import { useState, useEffect } from "react";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { supabase } from "../utils/hooks/supabase";
+import { useFonts } from "expo-font";
 
 import SelectionMenu from "./SelectionMenu";
 const Stack = createStackNavigator();
 
 export default function Header({ title }) {
   const navigation = useNavigation();
-
-  const [profilePicUrl, setProfilePicUrl] = useState(
-    "https://i.imgur.com/FxsJ3xy.jpg",
-  );
-
   const { user } = useAuthentication();
+  const [profile, setProfile] = useState(null);
+
+  // useEffect(() => {
+  //   if (user) {
+  //     fetchProfiles();
+  //   }
+  // }, [user]);
+
+  //   async function fetchProfiles() {
+  //     // console.log("2 FETCHPROFILES CALLED");
+  //     try {
+  //         const { data, error } = await supabase
+  //             .from('profiles')
+  //             .select('*')
+  //             .eq('username', user.email)
+  //             .single();
+  //         if (error) {
+  //             throw error;
+  //         }
+  //         // console.log("DATA", JSON.stringify(data, null, 4));
+  //         if (data) {
+  //             await setProfile(data);
+  //             // console.log("PROFILE", JSON.stringify(profile, null, 4));
+  //             setProfilePicUrl(profile?.avatar_url);
+  //         }
+  //     }
+  //     catch (error) {
+  //         console.log("Error fetching profiles: ", error.message);
+  //     }
+  // };
+
+  const [profilePicUrl, setProfilePicUrl] = useState(null);
+
+  // const { user } = useAuthentication();
 
   useEffect(() => {
     async function fetchProfilePic() {
@@ -126,12 +156,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: "#000000",
   },
   title: {
     textAlign: "center",
-    color: colors.primary,
+    color: "#FFFFFF",
     fontSize: fontHeader.fontSize,
-    fontFamily: fontHeader.fontFamily,
+    fontFamily: Platform.OS === "ios" ? "Avenir Next" : "Roboto",
     fontWeight: fontHeader.fontWeight,
   },
   headerLeft: {
@@ -146,10 +177,11 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     height: 44,
     width: 44,
-    backgroundColor: colors.interactionGraySubtle,
+    // backgroundColor: colors.interactionGraySubtle,
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
+    backgroundColor: "#000000",
   },
   profileImage: {
     width: "100%",
