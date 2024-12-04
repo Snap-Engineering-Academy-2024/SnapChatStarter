@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Polygon } from "react-native-maps";
 import {
   StyleSheet,
   View,
@@ -8,12 +8,13 @@ import {
   Text,
   TouchableOpacity,
   Pressable,
-} from "react-native";
+} 
+from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import * as Location from "expo-location";
-
+import { supabase } from '../utils/hooks/supabase';
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function MapScreen({ navigation }) {
@@ -37,11 +38,12 @@ export default function MapScreen({ navigation }) {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      setCurrentRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+      
+      let currLocation = await Location.getCurrentPositionAsync({});
+      setLocation(currLocation);
+      const region = {
+        latitude: currLocation.coords.latitude,
+        longitude: currLocation.coords.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
@@ -196,6 +198,16 @@ const styles = StyleSheet.create({
     height: 70,
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttonStyle2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 32,
+    borderRadius: 20,
+    elevation: 3,
+    backgroundColor: '#FFFC00',
   },
   calendarIcon: {},
 });
