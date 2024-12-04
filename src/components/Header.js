@@ -48,13 +48,7 @@ export default function Header({ title }) {
   }, [user]);
 
   const [showMenu, setShowMenu] = useState(false);
-  // console.log(showMenu);
-
-  // const handleClick = () => {
-  //   setShowMenu(true)
-  //   console.log("handleClick")
-  // }
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>
@@ -64,7 +58,8 @@ export default function Header({ title }) {
             navigation.navigate("Profile");
           }}
         >
-          <Image style={styles.profileImage} source={{ uri: profilePicUrl }} />
+          {/* <Image style={styles.profileImage} source={{ uri: profilePicUrl }} /> */}
+          <Image style={styles.profileImage} source={require("../../assets/SnapTogether/JadeBitmojiPicture.png")} />
         </Pressable>
         <Pressable
           style={[styles.search, styles.buttons]}
