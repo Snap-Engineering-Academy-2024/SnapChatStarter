@@ -16,7 +16,7 @@ import { supabase } from "../utils/hooks/supabase";
 import SelectionMenu from "./SelectionMenu";
 const Stack = createStackNavigator();
 
-export default function Header({ title }) {
+export default function CameraHeader() {
   const navigation = useNavigation();
 
   const [profilePicUrl, setProfilePicUrl] = useState(
@@ -48,7 +48,13 @@ export default function Header({ title }) {
   }, [user]);
 
   const [showMenu, setShowMenu] = useState(false);
-  
+  // console.log(showMenu);
+
+  // const handleClick = () => {
+  //   setShowMenu(true)
+  //   console.log("handleClick")
+  // }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>
@@ -70,7 +76,6 @@ export default function Header({ title }) {
           <Search />
         </Pressable>
       </View>
-      <Text style={styles.title}>{title}</Text>
       <View style={styles.headerRight}>
         <Pressable
           style={[styles.followers, styles.buttons]}
@@ -80,14 +85,6 @@ export default function Header({ title }) {
         >
           <Followers />
         </Pressable>
-
-        <Pressable title="Open Bottom Sheet" onPress={() => setShowMenu(true)}>
-          <View style={[styles.more, styles.buttons]}>
-            <More />
-          </View>
-        </Pressable>
-        {/* {showMenu && <SelectionMenu/>} */}
-        <SelectionMenu showMenu={showMenu} setShowMenu={setShowMenu} />
       </View>
     </View>
   );
@@ -122,13 +119,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  title: {
-    textAlign: "center",
-    color: colors.primary,
-    fontSize: fontHeader.fontSize,
-    fontFamily: fontHeader.fontFamily,
-    fontWeight: fontHeader.fontWeight,
-  },
   headerLeft: {
     flexDirection: "row",
     gap: 8,
@@ -136,6 +126,7 @@ const styles = StyleSheet.create({
   headerRight: {
     flexDirection: "row",
     gap: 8,
+    paddingRight: 50
   },
   buttons: {
     borderRadius: 100,
