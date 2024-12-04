@@ -6,11 +6,14 @@ import ProfileScreen from "../screens/ProfileScreen";
 import AddFriendScreen from "../screens/AddFriendScreen";
 import DiscoverCard from "../components/DiscoverCard";
 import SearchScreen from "../screens/SearchScreen";
-import SettingsScreen from "../screens/SettingsScreen";
-import FriendStory from "../screens/FriendStory";
 import AstrologyScreen from "../screens/AstrologyScreen";
 import MemoryScreen from "../screens/MemoryScreen";
-import EventScreen from "../screens/EventScreen"; //New component by Sona and Christian
+import CommSelectionScreen from "../screens/CommSelectionScreen";
+import InterestFormScreen from  "../screens/InterestFormScreen";
+import MeetingConnections from  "../screens/MeetingConnections";
+import ChatScreen from "../screens/ChatScreen";
+import CommunityChatScreen from "../screens/CommunityChatScreen";
+
 
 const Stack = createStackNavigator();
 
@@ -22,11 +25,6 @@ export default function App() {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ headerShown: true }}
-        />
-        <Stack.Screen
-          name="FriendStory"
-          component={FriendStory}
           options={{ headerShown: true }}
         />
         <Stack.Screen
@@ -57,18 +55,35 @@ export default function App() {
         <Stack.Screen
           name="Astrology"
           component={AstrologyScreen}
+          options={{ headerShown: true}}
+
+        />
+        <Stack.Screen
+          name="Identity"
+          component={CommSelectionScreen}
           options={{ headerShown: true }}
         />
         <Stack.Screen
-          name="Settings"
-          component={SettingsScreen}
+          name="Interests"
+          component={InterestFormScreen}
           options={{ headerShown: true }}
         />
         <Stack.Screen
-          name="Event"
-          component={EventScreen}
+          name="Meeting Connections"
+          component={MeetingConnections}
           options={{ headerShown: true }}
         />
+        <Stack.Screen
+          name="Chat"
+          component={ChatScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="CommunityChat"
+          component={CommunityChatScreen}
+          options={{ headerShown: true }}
+        />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
